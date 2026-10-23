@@ -10,54 +10,54 @@
   cited_as: "Li & Sompolinsky 2022"
   title: "Globally Gated Deep Linear Networks"
   year: 2022
-  status: queued
+  status: added
 - id: "2209.04882"
   cited_as: "Pacelli et al. 2023"
   title: "A statistical mechanics framework for Bayesian deep neural networks beyond the infinite-width limit"
   year: 2022
-  status: queued
+  status: added
 - id: "2307.11807"
   cited_as: "Aiudi et al. 2025"
   title: "Local Kernel Renormalization as a mechanism for feature learning in overparametrized Convolutional Neural Networks"
   year: 2023
-  status: queued
+  status: added
 - id: "2401.11004"
   cited_as: "Baglioni et al. 2024a"
   title: "Predictive power of a Bayesian effective action for fully-connected one hidden layer neural networks in the proportional limit"
   year: 2024
-  status: queued
+  status: added
 - id: "2412.15911"
   cited_as: "Baglioni et al. 2024"
   title: "Kernel shape renormalization explains output-output correlations in finite Bayesian one-hidden-layer networks"
   year: 2024
-  status: queued
+  status: added
 - id: "2605.29684"
   cited_as: "Baglioni et al. 2026"
   title: "Kernel Renormalization in Bayesian Deep Neural Networks: the Equivalent Wishart Ansatz in the Proportional Regime"
   year: 2026
-  status: queued
+  status: added
   note: "Cited in the note through a vault link."
 - id: "2406.03260"
   cited_as: "Bassetti Wishart LDP"
   title: "Feature learning in finite-width Bayesian deep linear networks with multiple outputs and convolutional layers"
   year: 2024
-  status: queued
+  status: added
   note: "Also the Wishart large-deviation result cited in open problem op-07."
 - id: "2508.20989"
   cited_as: "Corti et al. 2025"
   title: "Microscopic and collective signatures of feature learning in neural networks"
   year: 2025
-  status: queued
+  status: added
 - id: "2106.04110"
   cited_as: "Naveh & Ringel 2021"
   title: "A self consistent theory of Gaussian Processes captures feature learning effects in finite CNNs"
   year: 2021
-  status: queued
+  status: added
 - id: "2502.03210"
   cited_as: "Rubin et al. 2025"
   title: "From Kernels to Features: A Multi-Scale Adaptive Theory of Feature Learning"
   year: 2025
-  status: queued
+  status: added
 - id: "2512.04165"
   cited_as: "Rubin, Davidovich & Ringel 2025/2026"
   title: "Mitigating the Curse of Detail: Scaling Arguments for Feature Learning and Sample Complexity"
