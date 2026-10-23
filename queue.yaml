@@ -957,52 +957,52 @@
   cited_as: "Pitas & Arbel 2023"
   title: "The fine print on tempered posteriors"
   year: 2023
-  status: queued
+  status: added
 - id: "2403.01272"
   cited_as: "Marek et al. 2024"
   title: "Can a Confident Prior Replace a Cold Posterior?"
   year: 2024
-  status: queued
+  status: added
 - id: "2410.05757"
   cited_as: "Ng et al. 2024"
   title: "Temperature Optimization for Bayesian Deep Learning"
   year: 2024
-  status: queued
+  status: added
 - id: "2102.12108"
   cited_as: "Ober et al. 2021"
   title: "The Promises and Pitfalls of Deep Kernel Learning"
   year: 2021
-  status: queued
+  status: added
 - id: "2104.14421"
   cited_as: "Izmailov et al. 2021"
   title: "What Are Bayesian Neural Network Posteriors Really Like?"
   year: 2021
-  status: queued
+  status: added
 - id: "2405.15926"
   cited_as: "Tiberi et al."
   title: "Dissecting the Interplay of Attention Paths in a Statistical Mechanics Theory of Transformers"
   year: 2024
-  status: queued
+  status: added
 - id: "1202.1510"
   cited_as: "Menz & Schlichting"
   title: "Poincaré and logarithmic Sobolev inequalities by decomposition of the energy landscape"
   year: 2012
-  status: queued
+  status: added
 - id: "2402.07355"
   cited_as: "Kook"
   title: "Sampling from the Mean-Field Stationary Distribution"
   year: 2024
-  status: queued
+  status: added
 - id: "2409.10440"
   cited_as: "Chewi"
   title: "Uniform-in-$N$ log-Sobolev inequality for the mean-field Langevin dynamics with convex energy"
   year: 2024
-  status: queued
+  status: added
 - id: "2306.07221"
   cited_as: "Suzuki, Wu & Nitanda"
   title: "Convergence of mean-field Langevin dynamics: Time and space discretization, stochastic gradient, and variance reduction"
   year: 2023
-  status: queued
+  status: added
 - id: "2212.03050"
   cited_as: "Chen, Ren & Wang"
   title: "Uniform-in-time propagation of chaos for mean field Langevin dynamics"
