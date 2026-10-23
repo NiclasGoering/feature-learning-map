@@ -205,16 +205,56 @@
 </section>
 
 <section id="generalisation">
-  <h2><span class="n">6</span>Generalisation is a variational quantity</h2>
-  <p>$\varepsilon_{\rm gen}(f)=\mathbb E_{x\sim\mu}\big[(f(x)-y(x))^2\big]$ and bad set $B_\varepsilon=\{\theta:\varepsilon_{\rm gen}(f_\theta)\ge\varepsilon\}$.</p>
+  <h2><span class="n">6</span>Generalisation in Bayes</h2>
+  <p>$\varepsilon_{\rm gen}(f)=\mathbb E_{x\sim\mu}\big[(f(x)-y(x))^2\big]$, and the bad set is $B_\varepsilon=\{\theta:\varepsilon_{\rm gen}(f_\theta)\ge\varepsilon\}$. The posterior over completions $f$ (all functions with $f(X)=y$) is a Gibbs measure in function space whose energy is the cost of a function and whose inverse temperature is the width:</p>
   <div class="ov-key">
-  $$p_B(B_\varepsilon\mid D)=\frac{p_0(\mathcal M\cap B_\varepsilon)}{p_0(\mathcal M)}\asymp e^{-N\,\Gamma_D(\varepsilon)},$$
-  $$\Gamma_D(\varepsilon)=\inf\{\mathcal E_\kappa(f):f(X)=y,\ \varepsilon_{\rm gen}(f)\ge\varepsilon\}-\inf\{\mathcal E_\kappa(f):f(X)=y\},$$
-  $$\mathcal E_\kappa(f)=\min\big\{\htmlClass{c-ent}{\textstyle\sum_\ell J_\ell}+\htmlClass{c-kap}{\kappa}\,\htmlClass{c-en}{E(K^L)}:\ K^L(\cdot,X)(K^L)^{-1}y=f\big\}$$
-  $$\htmlClass{c-gd}{p_{GD}(B_\varepsilon\mid D)=p_0\big(\Phi_D^{-1}(B_\varepsilon)\big)\asymp e^{-N\,\Gamma^{GD}_D(\varepsilon)}}$$
+  $$p_B(f\mid D)\asymp e^{-N\,[\mathcal E_\kappa(f)-F_D]},\qquad F_D=\min_{f(X)=y}\mathcal E_\kappa(f),$$
+  $$\mathcal E_\kappa(f)=\min\big\{\htmlClass{c-ent}{\textstyle\sum_\ell J_\ell}+\htmlClass{c-kap}{\kappa}\,\htmlClass{c-en}{E(K^L)}:\ K^L(\cdot,X)(K^L)^{-1}y=f\big\}.$$
   </div>
-  <p>The first line is the classical recipe of statistical learning theory (<a class="cite" href="https://doi.org/10.1103/PhysRevA.45.6056">Seung, Sompolinsky &amp; Tishby 1992</a>; <a class="cite" href="https://doi.org/10.1007/BF00114010">Haussler et al. 1996</a>). $\Gamma_D$ is the bad-completion gap: the extra free energy a bad interpolant pays over the best one. The typical error is $\varepsilon_{\rm gen}(f^\star)$ at the minimiser, $f^\star=K^{L\star}(\cdot,X)(K^{L\star})^{-1}y$. $\Gamma^{GD}_D$ is the same with <span class="c-gd">$C_{GD}$</span> in place of KL <span class="tag">(schematic)</span>.</p>
-  <p class="punch">Bayes generalises by the volume of bad interpolants, GD by the volume of their basins. They agree iff $(\Phi_D)_\sharp\,p_0=p_0(\cdot\mid\mathcal M)$: true for lazy readout-only training, sample-then-optimise (<a class="cite" data-arxiv="2007.05864" href="https://arxiv.org/abs/2007.05864">He et al. 2020</a>), false in the rich regime. How far apart they are is the volume question (<a class="cite" data-arxiv="2006.15191" href="https://arxiv.org/abs/2006.15191">Mingard et al. 2021</a>; <a class="cite" data-arxiv="2407.03848" href="https://arxiv.org/abs/2407.03848">Peleg &amp; Hein 2024</a>).</p>
+  <p>Generalisation in Bayes is then two questions.</p>
+
+  <h3>(a) Which functions are cheap under the prior?</h3>
+  <p>$\mathcal E_\kappa(f)$ is the prior cost of a function, and the posterior sits on the cheapest interpolant $f^\star=K^{L\star}(\cdot,X)(K^{L\star})^{-1}y$; its typical error is $\varepsilon_{\rm gen}(f^\star)$. What is cheap depends on $\kappa$:</p>
+  <ul>
+    <li>$\htmlClass{c-kap}{\kappa\to0}$ (NTK): the cost is the RKHS norm of the fixed prior kernel, so cheap functions are those carried by its top eigenfunctions, and learning curves follow from the kernel spectrum (<a class="cite" data-arxiv="2002.02561" href="https://arxiv.org/abs/2002.02561">Bordelon et al. 2020</a>; <a class="cite" data-arxiv="2006.13198" href="https://arxiv.org/abs/2006.13198">Canatar et al. 2021</a>).</li>
+    <li>$\htmlClass{c-kap}{\kappa=\gamma_0^2}$ (μP): the kernel adapts to the data, which lowers the cost of functions aligned with the target relative to the fixed kernel; no closed form for the resulting error is known (<a href="open-problems.html#op-04">open problem 4</a>).</li>
+    <li>$\htmlClass{c-kap}{\kappa\to\infty}$: the cost becomes a variation norm, or $R_L$ with depth, so cheap functions use few ridge directions and low rank (<a class="cite" data-arxiv="1412.8690" href="https://arxiv.org/abs/1412.8690">Bach 2017</a>; <a class="cite" data-arxiv="2606.14954" href="https://arxiv.org/abs/2606.14954">Ongie &amp; Parhi 2026</a>).</li>
+  </ul>
+
+  <h3>(b) Do bad functions die out exponentially?</h3>
+  <div class="ov-key">
+  $$p_B(B_\varepsilon\mid D)=\frac{p_0(\mathcal M\cap B_\varepsilon)}{p_0(\mathcal M)}\asymp e^{-N\,\Gamma_D(\varepsilon)},\qquad \Gamma_D(\varepsilon)=\inf\{\mathcal E_\kappa(f):f(X)=y,\ \varepsilon_{\rm gen}(f)\ge\varepsilon\}-F_D .$$
+  </div>
+  <p>The first equality is the classical recipe of statistical learning theory (<a class="cite" href="https://doi.org/10.1103/PhysRevA.45.6056">Seung, Sompolinsky &amp; Tishby 1992</a>; <a class="cite" href="https://doi.org/10.1007/BF00114010">Haussler et al. 1996</a>). $\Gamma_D$ is the bad-completion gap: the extra cost a bad interpolant pays over the best one. Bad functions die out exponentially in width exactly when $\Gamma_D(\varepsilon)>0$ for every $\varepsilon>\varepsilon_{\rm gen}(f^\star)$; how $\Gamma_D$ grows with $P$ is the learning curve. Showing $\Gamma_D>0$ for a network posterior, without assuming a sampler mixed, is <a href="open-problems.html#op-02">open problem 2</a>.</p>
+
+  <h3>What width does</h3>
+  <div class="ov-key">
+  <ul>
+    <li><strong>Exchange rate.</strong> $\htmlClass{c-kap}{\kappa=\gamma^2/N}$: in NTK scaling width freezes the features ($\kappa\to0$); in μP it leaves them free ($\kappa=\gamma_0^2$). The parametrisation, not the width alone, decides whether features are learned.</li>
+    <li><strong>Inverse temperature in function space.</strong> At fixed $P$ in μP, $N$ multiplies the cost in $p_B(f\mid D)$: wider networks concentrate on $f^\star$, with fluctuations of order $N^{-1/2}$ (<a class="cite" data-arxiv="2304.03408" href="https://arxiv.org/abs/2304.03408">Bordelon &amp; Pehlevan 2023</a>), and suppress every bad completion at rate $N\,\Gamma_D(\varepsilon)$. In NTK scaling the function-space posterior does not concentrate: it converges to the NNGP posterior, with spread of order one.</li>
+    <li><strong>Data per neuron.</strong> $P/N$ decides which terms survive: $P$ fixed gives the saddle of §3; $P\propto N$ keeps $\tfrac12\log\det K^L$, so in standard scaling only kernel scales move (T1); μP with $P\propto N$ is <a href="open-problems.html#op-07">open problem 7</a>.</li>
+    <li><strong>Is wider better?</strong> In μP Bayes, yes exactly when the cheapest interpolant generalises: width sharpens the posterior around $f^\star$, for better or worse. In NTK scaling, infinite width removes feature learning and the limit is a kernel method (<a class="cite" data-arxiv="1910.08013" href="https://arxiv.org/abs/1910.08013">Aitchison 2020</a>).</li>
+  </ul>
+  </div>
+</section>
+
+<section id="gd-vs-bayes">
+  <h2><span class="n">7</span>Generalisation in GD vs Bayes: equilibrium vs non-equilibrium</h2>
+  <p>Run Langevin dynamics $\theta^T_t$ at temperature $T$ from $\theta_0\sim p_0$. The two learning rules are its two orders of limits:</p>
+  <div class="ov-key gd">
+  $$\underbrace{p_B=\lim_{T\to0}\,\lim_{t\to\infty}\mathrm{Law}(\theta^T_t)}_{\text{equilibrium: a Gibbs measure}}\qquad\text{vs}\qquad \htmlClass{c-gd}{\underbrace{p_{GD}=\lim_{t\to\infty}\,\lim_{T\to0}\mathrm{Law}(\theta^T_t)=(\Phi_D)_\sharp\,p_0}_{\text{non-equilibrium: a quench from the prior}}}$$
+  $$p_B(B_\varepsilon\mid D)=\frac{p_0(\mathcal M\cap B_\varepsilon)}{p_0(\mathcal M)}\qquad\text{vs}\qquad \htmlClass{c-gd}{p_{GD}(B_\varepsilon\mid D)=p_0\big(\Phi_D^{-1}(B_\varepsilon)\big)\asymp e^{-N\,\Gamma^{GD}_D(\varepsilon)}}$$
+  </div>
+  <ul>
+    <li><strong>Bayes is equilibrium.</strong> Generalisation is fixed by the end state alone, through the energy–entropy competition of §3, and the theory is a saddle point (§4) with no dynamics in it.</li>
+    <li><strong>GD is non-equilibrium.</strong> The network is quenched from the prior (infinite temperature) to zero temperature and stops at the first interpolant it reaches. Generalisation is fixed by basin volumes and by the path, so the theory is dynamical (DMFT of training; <a class="cite" data-arxiv="2205.09653" href="https://arxiv.org/abs/2205.09653">Bordelon &amp; Pehlevan 2022</a>), and $C_{GD}$ replaces KL. $\Gamma^{GD}_D$ is the same gap with <span class="c-gd">$C_{GD}$</span> in place of KL <span class="tag">(schematic)</span>.</li>
+    <li><strong>When they coincide.</strong> Lazy readout-only training: the quench is an affine projection that reproduces the equilibrium measure exactly, $(\Phi_D)_\sharp\,p_0=p_0(\cdot\mid\mathcal M)$ (sample-then-optimise; <a class="cite" data-arxiv="2007.05864" href="https://arxiv.org/abs/2007.05864">He et al. 2020</a>).</li>
+    <li><strong>When they split.</strong> In the rich regime the endpoints differ: Bayesian and weight-decay adaptive kernels are different kernels (<a class="cite" data-arxiv="2502.07998" href="https://arxiv.org/abs/2502.07998">Lauditi et al. 2025</a>). Where several saddles compete (T5), equilibrium picks the lowest free energy while the quench lands in whichever basin it falls into: algorithms follow metastable branches and spinodals rather than the thermodynamic transition (<a class="cite" data-arxiv="2510.24616" href="https://arxiv.org/abs/2510.24616">Barbier et al. 2025</a>; <a class="cite" data-arxiv="2507.00629" href="https://arxiv.org/abs/2507.00629">Pérez Ortiz et al. 2025</a>).</li>
+    <li><strong>Averages versus single runs.</strong> GD averaged over initialisations can reach the Bayes-optimal error where single runs do not (<a class="cite" data-arxiv="2408.03733" href="https://arxiv.org/abs/2408.03733">Maillard et al. 2024</a>): the right object to compare with the posterior is the pushforward $(\Phi_D)_\sharp\,p_0$, not one trained network.</li>
+    <li><strong>Width in GD.</strong> In NTK scaling width makes the quench affine (lazy); in μP it makes the flow of the neuron measure deterministic. Either way $N\to\infty$ removes the run-to-run spread of the endpoint; whether bad endpoints are suppressed exponentially in $N$, as in Bayes, is not established.</li>
+    <li><strong>In between.</strong> Finite-time annealing and SGD at a finite learning rate are non-equilibrium steady states, not Gibbs measures; constant-step SGLD targets a biased measure (<a class="cite" data-arxiv="1811.10072" href="https://arxiv.org/abs/1811.10072">Brosse, Durmus &amp; Moulines 2018</a>).</li>
+  </ul>
+  <p class="punch">Bayes generalises by the volume of bad interpolants, GD by the volume of their basins. Whether the two volumes agree, $C_{GD}\approx\mathrm{KL}$, is the volume question: to first order on small Boolean tasks (<a class="cite" data-arxiv="2006.15191" href="https://arxiv.org/abs/2006.15191">Mingard et al. 2021</a>), with a systematic GD advantage at proper initialisation and width (<a class="cite" data-arxiv="2407.03848" href="https://arxiv.org/abs/2407.03848">Peleg &amp; Hein 2024</a>); settling it is <a href="open-problems.html#op-10">open problem 10</a>.</p>
 </section>
 
 </div>

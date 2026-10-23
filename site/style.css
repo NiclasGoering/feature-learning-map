@@ -362,6 +362,8 @@ ul.dict li { padding: 0.6rem 0; border-bottom: 1px solid var(--line); }
 .ov-page li { margin: 0.15rem 0; }
 .ov-key { border-left: 2px solid var(--fg); background: var(--bg-raised); padding: 0.35rem 0.75rem; margin: 0.4rem 0; overflow-x: auto; }
 .ov-key.gd { border-left-color: var(--c-gd); }
+.ov-key ul { margin: 0.2rem 0; }
+.ov-key li { margin: 0.35rem 0; }
 .ov-page .katex-display { margin: 0.4rem 0; overflow-x: auto; overflow-y: hidden; }
 .ov-page .katex-display, .ov-key { scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
 .ov-page h3 { font-size: 1rem; font-style: italic; font-weight: 400; margin: 1rem 0 0.3rem; }
