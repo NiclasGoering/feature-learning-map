@@ -1,0 +1,7 @@
+slug: dense-solution-clusters
+label: "Dense solution clusters"
+types: [T5]
+desc: "The weight law, reweighted by local entropy, concentrates on rare subdominant regions where each solution is surrounded by exponentially many other solutions, instead of on the typical isolated solutions."
+introduced_by: "1509.05753v1"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"

@@ -751,56 +751,56 @@
   cited_as: "Baldassi et al."
   title: "Subdominant Dense Clusters Allow for Simple Learning and High Computational Performance in Neural Networks with Discrete Synapses"
   year: 2015
-  status: queued
+  status: added
   note: "Cited as Baldassi et al. without a year; best match. Alternatives: 1605.06444, 2304.13871."
 - id: "2503.13145"
   cited_as: "Yang et al. 2026"
   title: "High-entropy Advantage in Neural Networks' Generalizability"
   year: 2025
-  status: queued
+  status: added
   note: "Cited in the note through a vault link."
 - id: "1812.10156"
   cited_as: "Palma et al. 2018"
   title: "Random deep neural networks are biased towards simple functions"
   year: 2018
-  status: queued
+  status: added
 - id: "2211.12316"
   cited_as: "Bhattamishra et al. 2022"
   title: "Simplicity Bias in Transformers and their Ability to Learn Sparse Boolean Functions"
   year: 2022
-  status: queued
+  status: added
 - id: "2304.05366"
   cited_as: "Goldblum et al. 2023"
   title: "The No Free Lunch Theorem, Kolmogorov Complexity, and the Role of Inductive Biases in Machine Learning"
   year: 2023
-  status: queued
+  status: added
 - id: "2512.06347"
   cited_as: "Yoshida et al. 2025"
   title: "Zero Generalization Error Theorem for Random Interpolators via Algebraic Geometry"
   year: 2025
-  status: queued
+  status: added
   note: "Cited in the note through a vault link."
 - id: "2608.06597"
   cited_as: "Ladewig et al. 2026"
   title: "Cascading Through the Hierarchy: Regularizer-Induced Feature Detection as Phase Transitions in Deep Linear Neural Networks"
   year: 2026
-  status: queued
+  status: added
   note: "Cited in the note through a vault link."
 - id: "2310.06301"
   cited_as: "Chen et al. 2023"
   title: "Dynamical versus Bayesian Phase Transitions in a Toy Model of Superposition"
   year: 2023
-  status: queued
+  status: added
 - id: "2503.22478"
   cited_as: "Hennick & Baerdemacker 2025"
   title: "Almost Bayesian: The Fractal Dynamics of Stochastic Gradient Descent"
   year: 2025
-  status: queued
+  status: added
 - id: "2512.10427"
   cited_as: "Zhang 2025"
   title: "Renormalizable Spectral-Shell Dynamics as the Origin of Neural Scaling Laws"
   year: 2025
-  status: queued
+  status: added
   note: "Cited in the note through a vault link."
 - id: "2212.00005"
   cited_as: "Gong & Xia 2022"

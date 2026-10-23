@@ -1,0 +1,7 @@
+slug: regularisation-rank-cascade
+label: "regularisation rank cascade"
+types: [T5]
+desc: "In a regularised deep linear network, weight decay turns rank-restricted saddles of the unregularised loss into stable minima. As the decay strength falls, the network matrix gains one singular direction of the data at a time, largest first, at a critical strength for each."
+introduced_by: "2608.06597v1"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"
