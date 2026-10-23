@@ -448,7 +448,7 @@ function setupPanel(details) {
   function ensure() {
     if (rec.inst || !details.open || !FACT[n]) return;
     try {
-      rec.inst = FACT[n](rec.body, { kick: rec.kick, reduced: reduced });
+      rec.inst = FACT[n](rec.body, { kick: rec.kick, reduced: reduced, panel: details });
     } catch (e) {
       rec.body.appendChild(el("p", { class: "an-note", text: "This animation could not start: " + e.message }));
       if (window.console) console.error(e);
@@ -474,13 +474,18 @@ function setupPanel(details) {
   RECS.push(rec);
   return rec;
 }
-function openFromHash(scroll) {
-  var m = /^#anim-(\d)$/.exec(location.hash);
-  if (!m) return;
-  var d = D.getElementById("anim-" + m[1]);
-  if (!d) return;
+function parseHash(h) { var m = /^#anim-(\d)(z?)$/.exec(h || ""); return m ? { id: "anim-" + m[1], tab: m[2] ? "1" : "0" } : null; }
+function openPanel(p) {
+  var d = D.getElementById(p.id);
+  if (!d) return null;
+  d.dataset.tab = p.tab;
   d.open = true;
-  if (scroll) setTimeout(function () { d.scrollIntoView({ block: "start" }); }, 60);
+  d.dispatchEvent(new CustomEvent("anim-tab"));
+  return d;
+}
+function openFromHash(scroll) {
+  var p = parseHash(location.hash), d = p && openPanel(p);
+  if (d && scroll) setTimeout(function () { d.scrollIntoView({ block: "start" }); }, 60);
 }
 function boot() {
   readPalette();
@@ -488,7 +493,7 @@ function boot() {
   if (!panels.length) return;
   for (var i = 0; i < panels.length; i++) setupPanel(panels[i]);
   D.querySelectorAll("a.animlink").forEach(function (a) {
-    a.addEventListener("click", function () { var d = D.getElementById(a.getAttribute("href").slice(1)); if (d) d.open = true; });
+    a.addEventListener("click", function () { var p = parseHash(a.getAttribute("href")); if (p) openPanel(p); });
   });
   new MutationObserver(onPalette).observe(D.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   var tb = D.getElementById("theme");
@@ -496,7 +501,7 @@ function boot() {
   if (MQ.addEventListener) MQ.addEventListener("change", function () { RECS.forEach(function (r) { if (r.inst && r.active()) r.inst.redraw(); }); });
   window.addEventListener("hashchange", function () { openFromHash(true); });
   openFromHash(true);
-  window.addEventListener("load", function () { if (/^#anim-/.test(location.hash)) openFromHash(true); });
+  window.addEventListener("load", function () { if (parseHash(location.hash)) openFromHash(true); });
 }
 
 /* =====================================================================
@@ -915,11 +920,11 @@ FACT[2] = function (root, env) {
 };
 
 /* =====================================================================
-   3  One variational problem: the three costs C_R on one neuron measure
+   4  Where the functional comes from: the three costs C_R on one neuron measure
       neuron (h, a): h in R^2 (P = 2 samples), prior N(0, C0) x N(0,1), phi = ReLU,
       output constraint  E_nu[a phi(h)] = sqrt(kappa) y
    ===================================================================== */
-FACT[3] = function (root, env) {
+FACT[4] = function (root, env) {
   var C0 = [[1, 0.5], [0.5, 1]], Ach = chol(C0), NPT = 260, VR = 3.3;
   var S = new Site(C0, "relu"), Sc = new Site(C0, "relu", 720);
   var st = { kappa: 0.5, y: [0.9, 0.35], mode: "bayes", morph: 1, seed: 5, playing: false };
@@ -1116,11 +1121,11 @@ FACT[3] = function (root, env) {
 };
 
 /* =====================================================================
-   4  The readout is energy, the kernels are entropy
+   5  The readout is energy, the kernels are entropy
       last layer, h in R^2 (P = 2), prior N(0, K^{L-1}); the tilted single-site law
       nu*(h) ∝ N(h;0,K^{L-1}) exp(kappa/2 (v.phi(h))^2),  v = (K^L)^{-1} y
    ===================================================================== */
-FACT[4] = function (root, env) {
+FACT[5] = function (root, env) {
   var C0 = [[1, 0.5], [0.5, 1]], Y = [1.0, 0.3], KMAX = 30, NG = 96;
   var sites = { relu: new Site(C0, "relu"), lin: new Site(C0, "lin") };
   var st = { act: "relu", s: 0.42, playing: false, dir: 1, viewR: 3.4 };
@@ -1167,7 +1172,7 @@ FACT[4] = function (root, env) {
   root.appendChild(ctl);
   var read = el("p", { class: "an-read" }); root.appendChild(read);
   root.appendChild(el("p", { class: "an-cap", html: "<b>What it shows.</b> One neuron's preactivation $h=(h(x_1),h(x_2))$ in the last layer; with ReLU, $\\varphi(h)=h$ on the shaded quadrant. As $\\kappa$ rises from 0 the single-site law (blue density) tilts toward the residual direction $v=(K^L)^{-1}y$ (orange), $K^L$ grows along $y$ (solid ellipse $x^\\top (K^L)^{-1}x=1$) and the energy $E(K^L)$ falls. The dashed ellipse is the small-$\\kappa$ prediction $K^0_\\varphi+\\delta K$." }));
-  root.appendChild(el("p", { class: "an-note", html: "<b>Exact:</b> the tilted law, $K^L$ from the self-consistency $K^Lv=y$ (damped Newton on a concave dual, residual below $10^{-9}$), $J$, $E$ and $\\delta K$ (angular integrals; the radial ones are closed form for ReLU). $K^{L-1}$ is held at its prior value, so this is the last layer's stationarity condition only. With the linear activation the kernel only grows along $y$; collapse onto rays needs ReLU (see §6)." }));
+  root.appendChild(el("p", { class: "an-note", html: "<b>Exact:</b> the tilted law, $K^L$ from the self-consistency $K^Lv=y$ (damped Newton on a concave dual, residual below $10^{-9}$), $J$, $E$ and $\\delta K$ (angular integrals; the radial ones are closed form for ReLU). $K^{L-1}$ is held at its prior value, so this is the last layer's stationarity condition only. With the linear activation the kernel only grows along $y$; collapse onto rays needs ReLU (see §3)." }));
   math(root);
 
   function wake() { inst.redraw(); env.kick(); }
@@ -1245,7 +1250,7 @@ FACT[4] = function (root, env) {
         B  muP, P fixed:                kappa = gamma0^2
         C  NTK, P = alpha N:            kernel moves by a scalar only
    ===================================================================== */
-FACT[5] = function (root, env) {
+var mkExtensive = function (root, env) {
   var C0 = [[1, 0.5], [0.5, 1]], Y = [1.4, 0.49];
   var site = new Site(C0, "relu");
   var st = { lgN: 3, g2: 1, alpha: 0.3, playing: false, dir: 1 };
@@ -1283,7 +1288,7 @@ FACT[5] = function (root, env) {
   root.appendChild(ctl);
   var read = el("p", { class: "an-read" }); root.appendChild(read);
   root.appendChild(el("p", { class: "an-cap", html: "<b>What it shows.</b> The width $N$ drives three tracks. <span class='c-en'>NTK, $P$ fixed</span> ($\\kappa=1/N$): $-\\log Z_D$ stays $O(1)$, so $F_D\\to0$ and the kernel stays at the prior. <span class='c-kap'>μP</span> ($\\kappa=\\gamma_0^2$): $-\\log Z_D\\propto N$ with $F_D=O(1)$, and the kernel tilts toward $y$. <span class='c-ent'>NTK, $P=\\alpha N$</span>: $-\\log Z_D\\propto N$ too, through $\\tfrac12\\log\\det K^L$, but the kernel only changes by a scalar: no rotation toward $y$. The lower panels show the kernel on two probe samples (solid) against the prior (dashed)." }));
-  root.appendChild(el("p", { class: "an-note", html: "<b>Exact:</b> tracks A and B are $N F_D(\\kappa)$ from the solver of §4 (one hidden layer, ReLU, two samples; $F_D=\\min J+\\kappa\\tfrac12 y^\\top K^{-1}y$, $O(\\log N)$ terms dropped). <b>Schematic:</b> track C is the Gaussian toy $K_0=k\\,I_P$ with $K^L=sK_0$ and $s$ optimised (the scalar renormalisation of linear networks); the claim that nothing but the scale moves is the page's, not computed here. The dashed line in the left panel is track C without renormalisation." }));
+  root.appendChild(el("p", { class: "an-note", html: "<b>Exact:</b> tracks A and B are $N F_D(\\kappa)$ from the solver of §5 (one hidden layer, ReLU, two samples; $F_D=\\min J+\\kappa\\tfrac12 y^\\top K^{-1}y$, $O(\\log N)$ terms dropped). <b>Schematic:</b> track C is the Gaussian toy $K_0=k\\,I_P$ with $K^L=sK_0$ and $s$ optimised (the scalar renormalisation of linear networks); the claim that nothing but the scale moves is the page's, not computed here. The dashed line in the left panel is track C without renormalisation." }));
   math(root);
 
   function wake() { inst.redraw(); env.kick(); }
@@ -1353,7 +1358,7 @@ FACT[5] = function (root, env) {
    6  NTK <-> muP: kappa is the exchange rate. Energy-entropy Pareto front
       E(J) = min { E(K) : J(K | K0) <= J } for one hidden layer, two samples
    ===================================================================== */
-FACT[6] = function (root, env) {
+var mkFront = function (root, env) {
   var C0 = [[1, 0.5], [0.5, 1]], Y = [1.0, 0.3], KTOP = 2000, NF = 130;
   var sites = { relu: new Site(C0, "relu"), lin: new Site(C0, "lin") };
   var fronts = {};
@@ -1407,7 +1412,7 @@ FACT[6] = function (root, env) {
   root.appendChild(ctl);
   var read = el("p", { class: "an-read" }); root.appendChild(read);
   root.appendChild(el("p", { class: "an-cap", html: "<b>What it shows.</b> The Pareto front $\\mathcal E(J)$ of a one-hidden-layer, two-sample toy: entropy $J$ spent on the hidden layer (blue axis) against the readout energy $E(K^L)$ it buys (orange axis). The green handle sets $\\kappa$; the optimum is where the tangent has slope $-1/\\kappa$. $\\kappa\\to0$ is the $J=0$ corner (NNGP, all energy); $\\kappa=\\gamma_0^2$ an interior point; as $\\kappa\\to\\infty$ the contact point slides right, $K^L$ aligns with $yy^\\top$ and, for ReLU, the single-site law concentrates on a ray. With the linear activation the kernel only grows along $y$ and nothing collapses." }));
-  root.appendChild(el("p", { class: "an-note", html: "<b>Exact:</b> the front (a sweep of the solver of §4, 130 values of $\\kappa$; $J(K)$ and $E(K)$ are convex, so the sweep traces the whole front), the tangent, $K^L$ and $\\nu^\\star$ at the handle. <b>Schematic:</b> one hidden layer, so $\\sum_\\ell J_\\ell$ is a single $J$; $K^0$, $y$ are my choices; slow collapse onto atoms is real and needs $\\kappa\\sim10^4$ to be near-complete." }));
+  root.appendChild(el("p", { class: "an-note", html: "<b>Exact:</b> the front (a sweep of the solver of §5, 130 values of $\\kappa$; $J(K)$ and $E(K)$ are convex, so the sweep traces the whole front), the tangent, $K^L$ and $\\nu^\\star$ at the handle. <b>Schematic:</b> one hidden layer, so $\\sum_\\ell J_\\ell$ is a single $J$; $K^0$, $y$ are my choices; slow collapse onto atoms is real and needs $\\kappa\\sim10^4$ to be near-complete." }));
   math(root);
 
   function wake() { inst.redraw(); env.kick(); }
@@ -1502,13 +1507,13 @@ FACT[6] = function (root, env) {
 };
 
 /* =====================================================================
-   7  Generalisation is a variational quantity: the bad-completion gap
+   6  Generalisation in Bayes: the bad-completion gap
       one hidden layer with the identity activation, so the entropy J of a kernel is a
       Gaussian KL and every quantity below is closed form:
         E_kappa(f) = min_u { (u - 1 - log u)/2 + a u/2 + kappa r /(2u) },   a = D^2/(s0 r),
       D = f(x*) - f*(x*),  r = y^T A0^-1 y,  s0 = conditional prior variance at x*.
    ===================================================================== */
-FACT[7] = function (root, env) {
+FACT[6] = function (root, env) {
   var XT = [-0.85, -0.35, 0.2, 0.8], ELL = 0.35, NX = 4;
   function yTrue(x) { return 0.9 * Math.sin(4.4 * x + 0.2); }
   var YT = XT.map(yTrue);
@@ -1678,6 +1683,248 @@ FACT[7] = function (root, env) {
     live: function () { return false }
   };
   build();
+  return inst;
+};
+
+/* =====================================================================
+   7  Generalisation in GD vs Bayes: equilibrium vs non-equilibrium
+      Langevin dynamics from the prior at temperature T. Tracked: the mean squared readout
+      weight <th2^2> of the particles, against its value under the GD landing law (quench), the
+      Bayes law and the Gibbs law at T (equilibrium). One data point, two parameters:
+        lazy readout-only:  f = 0.8 th1 + 0.6 th2     (linear: sample-then-optimise)
+        rich:               f = th2 tanh(2 th1)       (nonlinear)
+   ===================================================================== */
+FACT[7] = function (root, env) {
+  var X0 = 2, NP = 1500, NREF = 4000, DT = 0.01, BINS = 40, LO = -3, HI = 3, Y0 = 0.3, BW = (HI - LO) / BINS;
+  var st = { model: "tanh", T: 0.01, speed: 3, playing: !env.reduced(), tau: 0, seed: 21 };
+  var SPEEDS = { 1: 10, 2: 60, 3: 300 };
+  var A = new Float64Array(NP), B = new Float64Array(NP), A0 = new Float64Array(NREF), B0 = new Float64Array(NREF);
+  var noise = rng(77), refs = null, series = null, nextRec = 0;
+
+  function coord(a, b) { return st.model === "tanh" ? a : -0.6 * a + 0.8 * b; }
+  function resid(a, b) { return (st.model === "tanh" ? b * Math.tanh(a * X0) : 0.8 * a + 0.6 * b) - Y0; }
+  function Tfrom(v) { return Math.pow(10, -2.5 + 2.5 * v / 100); }
+
+  function resample() {
+    var g = rng(st.seed), i;
+    for (i = 0; i < NP; i++) { A[i] = g.gauss(); B[i] = g.gauss(); }
+    for (i = 0; i < NREF; i++) { A0[i] = g.gauss(); B0[i] = g.gauss(); }
+    st.tau = 0; series = { t: [], m: [], se: [] }; nextRec = 0.2; record();
+  }
+  function histOf(xs, n, cf) {
+    var h = new Float64Array(BINS), c = 0, i;
+    for (i = 0; i < n; i++) { var s = cf(i); var k = Math.floor((s - LO) / BW); if (k >= 0 && k < BINS) h[k]++; c++; }
+    for (i = 0; i < BINS; i++) h[i] /= Math.max(c, 1) * BW;
+    return h;
+  }
+  function bayesH() {
+    var out = new Float64Array(BINS), sub = 8, tot = 0, i, j;
+    for (i = 0; i < BINS; i++) {
+      var acc = 0;
+      for (j = 0; j < sub; j++) {
+        var s = LO + (i + (j + 0.5) / sub) * BW;
+        if (st.model === "lin") acc += Math.exp(-s * s / 2);
+        else { var t = Math.tanh(s * X0); if (Math.abs(t) > 1e-6) { var th2 = Y0 / t; acc += Math.exp(-(s * s + th2 * th2) / 2) / Math.abs(t); } }
+      }
+      out[i] = acc / sub; tot += out[i] * BW;
+    }
+    for (i = 0; i < BINS; i++) out[i] /= tot;
+    return out;
+  }
+  function gibbsH() {
+    if (st.model === "lin") { var o = new Float64Array(BINS), t0 = 0, i; for (i = 0; i < BINS; i++) { var s = LO + (i + 0.5) * BW; o[i] = Math.exp(-s * s / 2); t0 += o[i] * BW; } for (i = 0; i < BINS; i++) o[i] /= t0; return o; }
+    var out = new Float64Array(BINS), beta = 1 / st.T, tot = 0, j, k, sub = 3, n2 = 1800, h2 = 12 / n2;
+    for (var i2 = 0; i2 < BINS; i2++) {
+      var acc = 0;
+      for (j = 0; j < sub; j++) {
+        var th1 = LO + (i2 + (j + 0.5) / sub) * BW, t = Math.tanh(th1 * X0), sm = 0;
+        for (k = 0; k < n2; k++) { var th2 = -6 + (k + 0.5) * h2, r = th2 * t - Y0; sm += Math.exp(-(th2 * th2) / 2 - beta * r * r / 2); }
+        acc += sm * Math.exp(-th1 * th1 / 2);
+      }
+      out[i2] = acc / sub; tot += out[i2] * BW;
+    }
+    for (var i3 = 0; i3 < BINS; i3++) out[i3] /= tot;
+    return out;
+  }
+  function gdH() {
+    var h = new Float64Array(BINS), n = 0, i, it;
+    for (i = 0; i < NREF; i++) {
+      var a = A0[i], b = B0[i];
+      for (it = 0; it < 6000; it++) {
+        var r = resid(a, b);
+        if (Math.abs(r) < 1e-4) break;
+        if (st.model === "tanh") { var t = Math.tanh(a * X0), s2 = 1 - t * t; a -= DT * r * b * X0 * s2; b -= DT * r * t; } else { a -= DT * r * 0.8; b -= DT * r * 0.6; }
+      }
+      if (Math.abs(resid(a, b)) < 1e-2) { var k = Math.floor((coord(a, b) - LO) / BW); if (k >= 0 && k < BINS) h[k]++; n++; }
+    }
+    for (i = 0; i < BINS; i++) h[i] /= Math.max(n, 1) * BW;
+    return h;
+  }
+  /* observable O = th2^2 (the squared readout weight) under each law */
+  function th2sq(i) { return B[i] * B[i]; }
+  function obsBayes() {
+    var n = 6000, h = 8 / n, tot = 0, acc = 0, i;
+    for (i = 0; i < n; i++) {
+      var s = -4 + (i + 0.5) * h, p, t2;
+      if (st.model === "lin") { p = Math.exp(-s * s / 2); t2 = 0.6 * Y0 + 0.8 * s; }
+      else { var t = Math.tanh(s * X0); if (Math.abs(t) < 1e-6) continue; t2 = Y0 / t; p = Math.exp(-(s * s + t2 * t2) / 2) / Math.abs(t); }
+      tot += p; acc += p * t2 * t2;
+    }
+    return acc / tot;
+  }
+  function obsGibbs() {
+    if (st.model === "lin") { var be = 1 / st.T; return 0.36 * (Math.pow(Y0 * be / (1 + be), 2) + 1 / (1 + be)) + 0.64; }
+    var beta = 1 / st.T, n1 = 600, n2 = 1800, h1 = 8 / n1, h2 = 12 / n2, Z = 0, acc = 0, i, k;
+    for (i = 0; i < n1; i++) {
+      var th1 = -4 + (i + 0.5) * h1, t = Math.tanh(th1 * X0), w1 = Math.exp(-th1 * th1 / 2);
+      for (k = 0; k < n2; k++) { var th2 = -6 + (k + 0.5) * h2, r = th2 * t - Y0, w = w1 * Math.exp(-(th2 * th2) / 2 - beta * r * r / 2); Z += w; acc += w * th2 * th2; }
+    }
+    return acc / Z;
+  }
+  function obsGD() {
+    var n = 0, acc = 0, i, it;
+    for (i = 0; i < NREF; i++) {
+      var a = A0[i], b = B0[i];
+      for (it = 0; it < 6000; it++) {
+        var r = resid(a, b);
+        if (Math.abs(r) < 1e-4) break;
+        if (st.model === "tanh") { var t = Math.tanh(a * X0), s2 = 1 - t * t; a -= DT * r * b * X0 * s2; b -= DT * r * t; } else { a -= DT * r * 0.8; b -= DT * r * 0.6; }
+      }
+      if (Math.abs(resid(a, b)) < 1e-2) { acc += b * b; n++; }
+    }
+    return acc / Math.max(n, 1);
+  }
+  function refresh() { refs = { bayes: bayesH(), gibbs: gibbsH(), gd: gdH() }; refs.o = { bayes: obsBayes(), gibbs: obsGibbs(), gd: obsGD() }; }
+  function record() {
+    if (!refs) return;
+    var m = 0, m2 = 0, i;
+    for (i = 0; i < NP; i++) { var v = th2sq(i); m += v; m2 += v * v; }
+    m /= NP; var sd = Math.sqrt(Math.max(m2 / NP - m * m, 0));
+    series.t.push(st.tau); series.m.push(m); series.se.push(sd / Math.sqrt(NP));
+  }
+  function liveH() { return histOf(null, NP, function (i) { return coord(A[i], B[i]); }); }
+
+  function advance(steps) {
+    var T = st.T, sq = Math.sqrt(2 * T * DT), i, s, tanhM = st.model === "tanh";
+    for (s = 0; s < steps; s++) {
+      for (i = 0; i < NP; i++) {
+        var a = A[i], b = B[i], r = resid(a, b), ga, gb;
+        if (tanhM) { var t = Math.tanh(a * X0), s2 = 1 - t * t; ga = r * b * X0 * s2; gb = r * t; } else { ga = r * 0.8; gb = r * 0.6; }
+        A[i] = a - DT * (ga + T * a) + sq * noise.gauss();
+        B[i] = b - DT * (gb + T * b) + sq * noise.gauss();
+      }
+      st.tau += DT;
+      if (st.tau >= nextRec) { record(); nextRec *= 1.07; }
+    }
+  }
+
+  /* ---- layout ---- */
+  var grid = el("div", { class: "an-grid an-g2" }), p1 = el("div", { class: "an-panel" }), p2 = el("div", { class: "an-panel" });
+  grid.appendChild(p1); grid.appendChild(p2); root.appendChild(grid);
+  var cvH = Canvas(p1, { aspect: 0.92, aria: "Histogram along the interpolating set against the Bayes, Gibbs and GD laws", draw: drawHist });
+  var cvT = Canvas(p2, { aspect: 0.92, aria: "Mean squared readout weight of the particles against time, with its value under the GD, Bayes and Gibbs laws", draw: drawSeries });
+  var ctl = el("div", { class: "an-ctl" }), ctl2 = el("div", { class: "an-ctl" });
+  var modelSeg = segmented({ value: st.model, options: [{ value: "lin", text: "lazy readout only (linear)" }, { value: "tanh", text: "rich (nonlinear)" }], onChange: function (v) { st.model = v; resample(); refresh(); wake(); } });
+  var Tsl = slider({ tex: "T", min: 5, max: 90, step: 1, value: 100 * (Math.log10(st.T) + 2.5) / 2.5, fmt: function (v) { return Tfrom(v).toFixed(3); }, onInput: function (v) { st.T = Tfrom(v); refs.gibbs = gibbsH(); refs.o.gibbs = obsGibbs(); resample(); wake(); } });
+  var spd = segmented({ tex: "\\text{speed}", value: String(st.speed), options: [{ value: "1", text: "×1" }, { value: "2", text: "×6" }, { value: "3", text: "×30" }], onChange: function (v) { st.speed = +v; wake(); } });
+  var playB = button(env.reduced() ? "▶ Advance" : "❚❚ Pause", function () {
+    if (env.reduced()) { advance(6000); inst.redraw(); return; }
+    st.playing = !st.playing; playB.textContent = st.playing ? "❚❚ Pause" : "▶ Run"; wake();
+  });
+  var rs = button("Restart", function () { st.seed++; resample(); wake(); });
+  [modelSeg.row].forEach(function (n) { ctl.appendChild(n); });
+  [Tsl.row, spd.row, playB, rs].forEach(function (n) { ctl2.appendChild(n); });
+  root.appendChild(ctl); root.appendChild(ctl2);
+  var read = el("p", { class: "an-read" }); root.appendChild(read);
+  root.appendChild(el("p", { class: "an-cap", html: "<b>What it shows.</b> Langevin dynamics from the prior at temperature $T$ (time $\\tau$). The quench ($\\tau T\\ll1$) lands where gradient flow lands, $p_{GD}$ (purple); equilibrium ($\\tau T\\gg1$) is the Gibbs law, which tends to Bayes $p_B$ (blue) as $T\\to0$. Right: the mean squared readout weight $\\langle\\theta_2^2\\rangle$ of the particles (band: standard error), against its value under each law. <b>Lazy readout only</b> (a linear model): the three laws are the same, which is sample-then-optimise. <b>Rich</b> (nonlinear): GD sits where basins are large, Bayes where prior volume is large, the particles first sit at the GD value (quench) and only reach the Bayes value after $\\tau\\sim1/T$." }));
+  root.appendChild(el("p", { class: "an-note", html: "<b>Exact:</b> the dynamics (1500 particles, Euler&ndash;Maruyama, step 0.01), the GD law (4000 flows), the Bayes density (coarea formula), the Gibbs marginal; the observable is the squared readout weight, so the comparison is between readout energies. <b>Schematic:</b> a two-parameter caricature of the width-$N$ statements; $C_{GD}$ itself is not computed." }));
+  math(root);
+
+  function wake() { inst.redraw(); env.kick(); }
+
+  /* ---- drawing ---- */
+  function stairs(g, fr, arr, color, w, fill) {
+    var pts = [], i;
+    for (i = 0; i < BINS; i++) { pts.push([fr.X(LO + i * BW), fr.Y(arr[i])]); pts.push([fr.X(LO + (i + 1) * BW), fr.Y(arr[i])]); }
+    if (fill) { path(g, [[fr.X(LO), fr.Y(0)]].concat(pts, [[fr.X(HI), fr.Y(0)]]), true); g.fillStyle = fill; g.fill(); }
+    path(g, pts); stroke(g, color, w);
+  }
+  function drawHist(g, w, h) {
+    var m = 30, live = liveH(), ymax = 0, i;
+    for (i = 0; i < BINS; i++) ymax = Math.max(ymax, refs.bayes[i], refs.gd[i], refs.gibbs[i], live[i]);
+    var fr = Frame(m, 22, w - m - 10, h - 22 - 62, LO, HI, 0, ymax * 1.12);
+    text(g, st.model === "tanh" ? "density along 𝓜, coordinate θ₁" : "density along 𝓜, coordinate s along the line", fr.x, 13, { size: 11.5, color: PAL.muted });
+    stairs(g, fr, live, PAL.fg, 1, rgba(PAL.fg, 0.25));
+    stairs(g, fr, refs.gd, PAL.gd, 1.8, null);
+    var pts = [], th, bwd = BW / 8, tot = 0, bayesFn = function (s) { if (st.model === "lin") return Math.exp(-s * s / 2); var t = Math.tanh(s * X0); if (Math.abs(t) < 1e-6) return 0; var t2 = Y0 / t; return Math.exp(-(s * s + t2 * t2) / 2) / Math.abs(t); };
+    for (th = LO + bwd / 2; th < HI; th += bwd) tot += bayesFn(th) * bwd;
+    for (th = LO + bwd / 2; th < HI; th += bwd) pts.push([fr.X(th), fr.Y(bayesFn(th) / tot)]);
+    path(g, pts); stroke(g, PAL.ent, 2.2);
+    if (st.model === "tanh") { var gp = []; for (i = 0; i < BINS; i++) gp.push([fr.X(LO + (i + 0.5) * BW), fr.Y(refs.gibbs[i])]); path(g, gp); stroke(g, PAL.muted, 1.4, [4, 3]); }
+    axes(g, fr, { xticks: linTicks(-3, 3, 6) });
+    legend(g, [{ t: "― Bayes", c: PAL.ent }, { t: "― GD (quench)", c: PAL.gd }, { t: st.model === "tanh" ? "┅ Gibbs at T" : "(Gibbs = Bayes)", c: PAL.muted }, { t: "▮ particles now", c: PAL.fg }], fr.x, h - 8, fr.w);
+  }
+  function drawSeries(g, w, h) {
+    var ml = 40, o = refs.o, lo = Math.min(o.bayes, o.gd, o.gibbs), ymin = Math.max(0, lo - 0.25 * (1 - lo)), ymax = 1.08;
+    var fr = Frame(ml, 22, w - ml - 12, h - 22 - 62, -0.7, 3.7, ymin, ymax);
+    text(g, "mean squared readout weight ⟨θ₂²⟩", fr.x, 13, { size: 11.5, color: PAL.muted });
+    var xt = [];
+    [0, 1, 2, 3].forEach(function (e) { xt.push({ v: e, s: "10" + "⁰¹²³"[e] }); });
+    axes(g, fr, { xticks: xt, yticks: linTicks(ymin, ymax, 4), xlabel: "time τ" });
+    g.save(); g.beginPath(); g.rect(fr.x, fr.y, fr.w, fr.h); g.clip();
+    var x1 = Math.log10(1 / st.T); g.beginPath(); g.moveTo(fr.X(x1), fr.y); g.lineTo(fr.X(x1), fr.y + fr.h); stroke(g, PAL.line, 1.5, [2, 3]);
+    [["bayes", PAL.ent, []], ["gd", PAL.gd, []], ["gibbs", PAL.muted, [4, 3]]].forEach(function (e) {
+      if (e[0] === "gibbs" && st.model === "lin" && false) return;
+      g.beginPath(); g.moveTo(fr.x, fr.Y(o[e[0]])); g.lineTo(fr.x + fr.w, fr.Y(o[e[0]])); stroke(g, e[1], 1.6, e[2].length ? e[2] : [7, 4]);
+    });
+    var up = [], dn = [], mid = [], i;
+    for (i = 0; i < series.t.length; i++) if (series.t[i] > 0.1) { var X = fr.X(Math.log10(series.t[i])); up.push([X, fr.Y(series.m[i] + series.se[i])]); dn.push([X, fr.Y(series.m[i] - series.se[i])]); mid.push([X, fr.Y(series.m[i])]); }
+    if (mid.length > 1) { path(g, up.concat(dn.reverse()), true); g.fillStyle = rgba(PAL.fg, 0.25); g.fill(); path(g, mid); stroke(g, PAL.fg, 2); }
+    g.restore();
+    text(g, "τ = 1/T", fr.X(x1) + 4, fr.y + 12, { size: 10, color: PAL.faint });
+    legend(g, [{ t: "― particles", c: PAL.fg }, { t: "┅ GD law", c: PAL.gd }, { t: "┅ Bayes law", c: PAL.ent }, { t: "┅ Gibbs at T", c: PAL.muted }], fr.x, h - 8, fr.w);
+  }
+  function readout() {
+    var x = st.tau * st.T, last = series.t.length - 1, o = refs.o;
+    read.innerHTML = "T = " + st.T.toFixed(3) + ", τ = " + st.tau.toFixed(0) + ", τ·T = " + x.toFixed(2) + (x < 0.3 ? " (quench stage)" : x < 3 ? " (crossing over)" : " (equilibrated)") + ";&nbsp; ⟨θ₂²⟩ now " + fmt(series.m[last], 3) + " ± " + fmt(series.se[last], 3) + ";&nbsp; <span class='c-gd'>GD " + fmt(o.gd, 3) + "</span>, <span class='c-ent'>Bayes " + fmt(o.bayes, 3) + "</span>, Gibbs at T " + fmt(o.gibbs, 3);
+  }
+  var inst = {
+    redraw: function () { readout(); cvH.draw(); cvT.draw(); },
+    step: function () { if (st.playing && !env.reduced()) advance(SPEEDS[st.speed]); },
+    live: function () { return st.playing && !env.reduced(); }
+  };
+  refs = null; series = { t: [], m: [], se: [] };
+  resample(); refresh(); record();
+  if (env.reduced()) { advance(6000); }
+  return inst;
+};
+
+/* =====================================================================
+   3  kappa interpolates between NTK and muP: two views in one panel,
+      the Pareto front (#anim-3) and 'feature learning needs an extensive Z' (#anim-3z)
+   ===================================================================== */
+FACT[3] = function (root, env) {
+  var makers = [mkFront, mkExtensive], boxes = [el("div"), el("div")], insts = [null, null], cur = 0;
+  var seg = segmented({
+    value: "0", options: [{ value: "0", text: "Pareto front E(J)" }, { value: "1", text: "extensive Z: the width N" }],
+    onChange: function (v) { show(+v); }
+  });
+  var bar = el("div", { class: "an-ctl" }, [seg.row]);
+  root.appendChild(bar); root.appendChild(boxes[0]); root.appendChild(boxes[1]);
+  function show(i) {
+    cur = i;
+    boxes[0].hidden = i !== 0; boxes[1].hidden = i !== 1;
+    if (!insts[i]) insts[i] = makers[i](boxes[i], env);
+    seg.set(String(i));
+    inst.redraw(); env.kick();
+  }
+  var inst = {
+    redraw: function () { if (insts[cur]) insts[cur].redraw(); },
+    step: function (dt) { var c = insts[cur]; if (c && c.step) c.step(dt); },
+    live: function () { var c = insts[cur]; return !!(c && c.live && c.live()); }
+  };
+  env.panel.addEventListener("anim-tab", function () { show(+env.panel.dataset.tab || 0); });
+  show(+env.panel.dataset.tab || 0);
   return inst;
 };
 
