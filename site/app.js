@@ -140,16 +140,15 @@
   function setupTheme() {
     var btn = $("#theme");
     if (!btn) return;
-    var order = ["auto", "light", "dark"];
-    function current() { return document.documentElement.dataset.theme || "auto"; }
-    function show() { btn.textContent = "Theme: " + current(); }
+    function current() { return document.documentElement.dataset.theme === "light" ? "light" : "dark"; }
+    function show() { btn.textContent = current() === "dark" ? "Light" : "Dark"; }
     btn.addEventListener("click", function () {
-      var next = order[(order.indexOf(current()) + 1) % order.length];
-      if (next === "auto") delete document.documentElement.dataset.theme;
-      else document.documentElement.dataset.theme = next;
+      var next = current() === "dark" ? "light" : "dark";
+      if (next === "light") document.documentElement.dataset.theme = "light";
+      else delete document.documentElement.dataset.theme;
       try {
-        if (next === "auto") localStorage.removeItem("flmap-theme");
-        else localStorage.setItem("flmap-theme", next);
+        if (next === "light") localStorage.setItem("flmap-theme", "light");
+        else localStorage.removeItem("flmap-theme");
       } catch (e) { /* storage unavailable: theme lasts for this page only */ }
       show();
     });
@@ -213,165 +212,156 @@
     return true;
   }
 
-  function cell(cls, labelContent, rows) {
-    var detail = el("div", { class: "detail", hidden: true });
-    var dl = el("dl");
-    rows.forEach(function (row) {
-      if (row[1] === "" || row[1] === null || row[1] === undefined) return;
-      dl.appendChild(el("dt", null, row[0]));
-      dl.appendChild(el("dd", null, row[1]));
-    });
-    if (dl.childNodes.length) detail.appendChild(dl);
-    var td = el("td", { class: cls });
-    var btn = el("button", { class: "cell", type: "button", "aria-expanded": "false" }, labelContent);
-    btn.addEventListener("click", function () {
-      var open = btn.getAttribute("aria-expanded") !== "true";
-      btn.setAttribute("aria-expanded", String(open));
-      detail.hidden = !open;
-      if (open && !detail._typeset) { math(detail); detail._typeset = true; }
-    });
-    td.appendChild(btn);
-    td.appendChild(detail);
-    return { td: td, detail: detail };
+  // Lines under a cell's main label. Blank and empty-state values are left out.
+  function blank(v) {
+    return v === "" || v === null || v === undefined || v === "unknown" || v === "not stated" || v === "n/a";
   }
 
-  function scalingText(view) {
-    var s = view.scaling;
-    return ["N", "L", "P", "D"].map(function (k) { return k + " " + labs(k, s[k]); }).join(", ");
+  function subs(rows) {
+    return rows.filter(function (r) { return !blank(r[1]); }).map(function (r) {
+      return el("div", { class: "sub" }, el("span", { class: "k" }, r[0]), " ", r[1]);
+    });
+  }
+
+  function td(title, cls) {
+    var n = el("td", { class: cls || null, "data-label": title });
+    for (var i = 2; i < arguments.length; i++) append(n, arguments[i]);
+    return n;
+  }
+
+  function main(text) { return el("div", { class: "main" }, blank(text) ? "not stated" : text); }
+
+  function scalingText(p) {
+    var inf = [], fixed = [];
+    ["N", "L", "P", "D"].forEach(function (k) {
+      var v = p.agg[k] || [];
+      if (v.indexOf("to-infinity") >= 0) inf.push(k);
+      if (v.indexOf("fixed") >= 0 && v.indexOf("to-infinity") < 0) fixed.push(k);
+    });
+    return [inf.length ? inf.join(", ") + " → ∞" : "", fixed.length ? fixed.join(", ") + " fixed" : ""]
+      .filter(Boolean).join("; ");
   }
 
   var COLUMNS = [
-    { title: "Paper", cls: "pin-l", render: paperCell },
+    { title: "Paper", width: 15, render: paperCell },
     {
-      title: "Architecture", cls: "c", render: function (p) {
-        return cell("c", labs("architecture", p.agg.architecture), [
+      title: "Architecture", width: 8, render: function (p) {
+        return td("Architecture", null, main(labs("architecture", p.agg.architecture)), subs([
           ["Activation", labs("activation", p.agg.activation)],
-          ["Learned layers", labs("learned_layers", p.agg.learned_layers)]
-        ]).td;
+          ["Learned", labs("learned_layers", p.agg.learned_layers)]
+        ]));
       }
     },
     {
-      title: "Parametrisation / prior", cls: "c", render: function (p) {
-        var label = [labs("parametrisation", p.agg.parametrisation), labs("prior_scale", p.agg.prior_scale)]
-          .filter(function (x) { return x && x !== "not stated" && x !== "unknown"; }).join(" · ") || "not stated";
-        return cell("c", label, [
-          ["Parametrisation", labs("parametrisation", p.agg.parametrisation)],
-          ["Prior / init scale", labs("prior_scale", p.agg.prior_scale)],
-          ["Prior / init family", labs("prior_family", p.agg.prior_family)],
-          ["Likelihood scaled with width", labs("likelihood_scaled", p.agg.likelihood_scaled)],
-          ["Temperature / noise", labs("temperature", p.agg.temperature)]
-        ]).td;
+      title: "Parametri\u00adsation / prior", width: 9, render: function (p) {
+        return td("Parametrisation / prior", null, main(labs("parametrisation", p.agg.parametrisation)), subs([
+          ["Scale", labs("prior_scale", p.agg.prior_scale)],
+          ["Prior", labs("prior_family", p.agg.prior_family)],
+          ["Likelihood ∝ N", labs("likelihood_scaled", p.agg.likelihood_scaled)],
+          ["Temperature", labs("temperature", p.agg.temperature)]
+        ]));
       }
     },
     {
-      title: "Data", cls: "c", render: function (p) {
-        return cell("c", labs("input", p.agg.input), [
-          ["Analytic data class", labs("data_class", p.agg.data_class)],
-          ["Label noise", labs("label_noise", p.agg.label_noise)],
-          ["Datasets", labs("datasets", p.agg.datasets)]
-        ]).td;
+      title: "Data", width: 8, render: function (p) {
+        return td("Data", null, main(labs("input", p.agg.input)), subs([
+          ["Class", labs("data_class", p.agg.data_class)],
+          ["Datasets", labs("datasets", p.agg.datasets)],
+          ["Label noise", labs("label_noise", p.agg.label_noise)]
+        ]));
       }
     },
     {
-      title: "Target", cls: "c", render: function (p) {
+      title: "Target", width: 8, render: function (p) {
         var tp = p.data.target_params;
-        return cell("c", labs("target", p.agg.target), [
+        return td("Target", null, main(labs("target", p.agg.target)), subs([
           ["k", text(tp.k)],
           ["Degree", text(tp.degree)],
           ["Exponent", text(tp.exponent)],
-          ["Teacher width", text(tp.teacher_width)],
-          ["Target amplitude", labs("amplitude", p.agg.amplitude)]
-        ]).td;
+          ["Teacher", text(tp.teacher_width)],
+          ["Amplitude", labs("amplitude", p.agg.amplitude)]
+        ]));
       }
     },
     {
-      title: "Method", cls: "c", render: function (p) {
-        var c = cell("c", labs("method", p.agg.method), [
-          ["Saddle solver", labs("solver", p.agg.solver)],
-          ["Approximations", labs("approximations", p.agg.approximations)],
+      title: "Method", width: 9, render: function (p) {
+        return td("Method", null, main(labs("method", p.agg.method)), subs([
+          ["Solver", labs("solver", p.agg.solver)],
+          ["Approx.", labs("approximations", p.agg.approximations)],
           ["Closure", labs("closure", p.agg.closure)],
-          ["Scaling", scalingText(p)],
-          ["Scaling relations", text(p.scaling.relations)],
-          ["Order of limits", labs("order_of_limits", p.agg.order_of_limits)],
-          ["GD step size", labs("gd_step_size", p.agg.gd_step_size)],
+          ["Limit", scalingText(p)],
+          ["Order", labs("order_of_limits", p.agg.order_of_limits)],
+          ["GD step", labs("gd_step_size", p.agg.gd_step_size)],
           ["GD time", labs("gd_time", p.agg.gd_time)]
-        ]);
-        return c.td;
+        ]));
       }
     },
-    { title: "Status", cls: "c", render: statusCell },
-    { title: "Main result", cls: "c-wide", render: resultCell },
-    { title: "Empirics", cls: "c", render: empiricsCell },
-    { title: "FL mechanism", cls: "pin-r", render: mechanismCell }
+    { title: "Status", width: 6, render: statusCell },
+    { title: "Main result", width: 16, render: resultCell },
+    { title: "Empirics", width: 9, render: empiricsCell },
+    { title: "FL mechanism", width: 12, render: mechanismCell }
   ];
 
   function paperCell(p) {
     var flag = p.provenance.status === "verified" ? null :
       el("span", { class: "entry-flag", title: desc("provenance_status", p.provenance.status) }, p.provenance.status);
-    return el("td", { class: "pin-l" },
-      el("button", { class: "title-btn", type: "button", onclick: function () { openPanel(p.key); } }, p.title),
+    return td("Paper", "paper",
+      el("button", { class: "title-btn", type: "button", title: "Full entry", onclick: function () { openPanel(p.key); } }, p.title),
       el("div", { class: "paper-meta" },
         authorShort(p), " · ", String(p.year), " · ",
         extLink(p.links.abs, p.id.indexOf("doi:") === 0 ? "doi" : "arXiv"),
         p.links.pdf !== "not-available" ? [" · ", extLink(p.links.pdf, "pdf")] : null,
-        flag));
+        flag ? [" · ", flag] : null),
+      el("div", { class: "oneline" }, p.one_line));
   }
 
   function statusCell(p) {
-    var r1 = p.results[0];
-    var label = el("span", null, statusPill(r1.status), el("span", { class: "grade" }, "grade " + lab("grade", r1.grade)));
-    var rows = p.results.map(function (r) {
-      return [r.id + " · " + labs("quantity", r.quantity),
-        el("span", null, statusPill(r.status), el("span", { class: "grade" }, "grade " + lab("grade", r.grade)))];
-    });
-    return cell("c", label, rows).td;
+    return td("Status", null, p.results.map(function (r) {
+      return el("div", { class: "status-line", title: labs("quantity", r.quantity) },
+        el("span", { class: "rid" }, r.id), " ", statusPill(r.status), " ",
+        el("span", { class: "grade", title: desc("grade", r.grade) }, lab("grade", r.grade)));
+    }));
   }
 
   function resultCell(p) {
     var r1 = p.results[0];
-    var c = cell("c-wide", labs("quantity", r1.quantity), []);
-    c.detail.appendChild(el("p", null, r1.statement));
-    c.detail.appendChild(el("div", { class: "src" }, sourceLink(r1)));
-    if (p.results.length > 1) {
-      c.detail.appendChild(el("p", null, el("button", {
+    var more = p.results.length - 1;
+    return td("Main result", null,
+      el("div", { class: "qty" }, labs("quantity", r1.quantity)),
+      el("div", { class: "stmt" }, r1.statement),
+      el("div", { class: "src" }, sourceLink(r1)),
+      more ? el("div", { class: "sub" }, el("button", {
         class: "linklike", type: "button", onclick: function () { openPanel(p.key); }
-      }, "All " + p.results.length + " results →")));
-    }
-    return c.td;
+      }, "+ " + more + " more result" + (more === 1 ? "" : "s"))) : null);
   }
 
   function empiricsCell(p) {
-    var label = el("span", null, labs("sampler", p.agg.sampler), " ",
-      (p.agg.mixing || []).filter(function (m) { return !(m in EMPTY_LABEL); }).map(mixingPill));
-    return cell("c", label, [
-      ["Temperature", text(p.empirics.temperature)],
-      ["Chains", text(p.empirics.chains)],
-      ["Diagnostics", labs("diagnostics", p.agg.diagnostics)],
-      ["Mixing dependence", labs("mixing", p.agg.mixing)],
-      ["Datasets", labs("datasets", p.agg.datasets)],
-      ["Scale", text(p.empirics.scale)]
-    ]).td;
+    var mix = (p.agg.mixing || []).filter(function (m) { return !(m in EMPTY_LABEL); });
+    return td("Empirics", null, main(labs("sampler", p.agg.sampler)),
+      mix.length ? el("div", { class: "pills" }, mix.map(mixingPill)) : null,
+      subs([
+        ["T", text(p.empirics.temperature)],
+        ["Chains", text(p.empirics.chains)],
+        ["Diagnostics", labs("diagnostics", p.agg.diagnostics)],
+        ["Scale", text(p.empirics.scale)]
+      ]));
   }
 
   function mechLabel(m) { return m.type + " · " + lab("mechanism_label", m.label); }
 
   function mechanismCell(p) {
     var m = p.results[0].mechanism;
-    var c = cell("pin-r", mechLabel(m), [
-      ["Paper's term", text(m.paper_term)],
-      ["Moves the mean predictor", lab("moves_mean", m.moves_mean)]
-    ]);
-    c.detail.insertBefore(el("p", null, m.explanation), c.detail.firstChild);
     var others = p.results.slice(1).filter(function (r) {
       return r.mechanism.type !== m.type || r.mechanism.label !== m.label;
     });
-    if (others.length) {
-      c.detail.appendChild(el("p", { class: "muted" }, "Also: " + others.map(function (r) {
-        return mechLabel(r.mechanism) + " (" + r.id + ")";
-      }).join("; ")));
-    }
-    c.detail.appendChild(el("p", null, el("a", { href: "mechanisms.html#" + m.type }, lab("mechanism_type", m.type) + " on the Mechanisms page →")));
-    return c.td;
+    return td("FL mechanism", "mech",
+      el("div", { class: "main" }, el("a", { href: "mechanisms.html#" + m.type, title: desc("mechanism_type", m.type) }, mechLabel(m))),
+      el("div", { class: "expl" }, m.explanation),
+      subs([
+        ["Paper's term", text(m.paper_term)],
+        ["Moves mean", lab("moves_mean", m.moves_mean)],
+        ["Also", others.map(function (r) { return mechLabel(r.mechanism) + " (" + r.id + ")"; }).join("; ")]
+      ]));
   }
 
   function groupRow(level, key, title, meta) {
@@ -392,9 +382,8 @@
     var visible = D.papers.filter(matches);
     var table = $("#map");
     table.textContent = "";
-    var thead = el("thead", null, el("tr", null, COLUMNS.map(function (c) {
-      return el("th", { class: c.cls, scope: "col" }, c.title);
-    })));
+    var colgroup = el("colgroup", null, COLUMNS.map(function (c) { return el("col", { style: "width:" + c.width + "%" }); }));
+    var thead = el("thead", null, el("tr", null, COLUMNS.map(function (c) { return el("th", { scope: "col" }, c.title); })));
     var tbody = el("tbody");
 
     function inGroup(list, prefix) {
@@ -406,7 +395,8 @@
     RULES.forEach(function (rule) {
       var k1 = rule;
       var n1 = inGroup(visible, k1).length;
-      tbody.appendChild(groupRow(1, k1, lab("learning_rule", rule), n1 + " paper" + (n1 === 1 ? "" : "s")));
+      tbody.appendChild(groupRow(1, k1, lab("learning_rule", rule) === "Bayes" ? "Bayesian posteriors" : "Gradient-based training",
+        n1 + " paper" + (n1 === 1 ? "" : "s")));
       if (S.collapsed[k1]) return;
       DEPTHS.forEach(function (depth) {
         var k2 = rule + "|" + depth;
@@ -427,13 +417,15 @@
             return;
           }
           rows.forEach(function (p) {
-            tbody.appendChild(el("tr", { "data-key": p.key }, COLUMNS.map(function (c) { return c.render(p); })));
+            tbody.appendChild(el("tr", { class: "paper-row", "data-key": p.key }, COLUMNS.map(function (c) { return c.render(p); })));
           });
         });
       });
     });
+    table.appendChild(colgroup);
     table.appendChild(thead);
     table.appendChild(tbody);
+    math(tbody);
     var n = visible.length;
     $("#result-count").textContent = n === D.papers.length ? n + " papers" : n + " of " + D.papers.length + " papers";
     renderChips();

@@ -3,12 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
 <title>Mechanisms · Feature-learning map</title>
 <meta name="description" content="Feature-learning mechanisms (types T0 to T6) and the results that show them.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
 <link rel="stylesheet" href="style.css">
-<script>try { var t = localStorage.getItem("flmap-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+<script>try { if (localStorage.getItem("flmap-theme") === "light") document.documentElement.dataset.theme = "light"; } catch (e) {}</script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script defer src="app.js"></script>
@@ -25,7 +29,7 @@
   <div class="head-tools">
     <a id="add-paper" href="#" hidden>Suggest a paper</a>
     <a id="repo-link" href="#" hidden>GitHub</a>
-    <button id="theme" type="button" aria-label="Colour theme">Theme: auto</button>
+    <button id="theme" type="button" aria-label="Switch colour theme">Light</button>
   </div>
 </header>
 <main id="content" class="prose-page">

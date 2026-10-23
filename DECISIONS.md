@@ -47,10 +47,11 @@ One line per choice made where SPEC.md left room.
 ## Website
 
 - Clicking a title opens the side panel; the arXiv abstract and PDF links sit under the title, because the brief asks both for the title linked to arXiv and for the title to open the panel.
-- The table lives in its own scroll box so the header row and both pinned columns stay in view.
-- Below 640 px the FL-mechanism column is unpinned and the Paper column narrows, so the table stays usable on a phone.
-- One typeface family: the system UI font stack, no web font.
-- Light and dark mode follow the system, with a toggle remembered in local storage.
+- At the team's request (2026-10-23) the table fits the window instead of scrolling sideways between pinned columns: fixed layout, percentage column widths, wrapped text; the page is the only scroll area and the header row stays on top.
+- At the team's request, cells show their details directly instead of expanding on click; the title still opens the side panel with the full entry.
+- Below 900 px each paper is shown as a block of label–value lines, because ten columns cannot fit a phone.
+- Academic look at the team's request: one serif family (Source Serif 4 from Google Fonts, serif fallbacks), small caps for headers and group titles, booktabs rules (heavy top and bottom rule, thin rule under the header, hairlines between papers).
+- Black background by default at the team's request; a light paper theme is one click away and remembered in local storage.
 - Filters exist for every vocabulary field (OR within a field, AND across fields, a paper matches if any result matches); free-text fields are covered by search.
 - URL state: `q` (search), `f.<field>` (filters), `c` (collapsed groups), `p` (open paper).
 - A cell shows the union of values over a paper's results; empty states are hidden when another result has a real value.
