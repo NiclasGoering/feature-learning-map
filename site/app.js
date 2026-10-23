@@ -87,7 +87,9 @@
             { left: "$$", right: "$$", display: true },
             { left: "$", right: "$", display: false }
           ],
-          throwOnError: false
+          throwOnError: false,
+          strict: false,
+          trust: function (ctx) { return ctx.command === "\\htmlClass"; }
         });
       } catch (e) { /* leave the TeX source visible */ }
     }
@@ -781,6 +783,31 @@
     if (location.hash) { var target = document.getElementById(location.hash.slice(1)); if (target) target.scrollIntoView(); }
   }
 
+  // -------------------------------------------------------------- overview
+
+  // Citations point to the paper's entry in the map when it has one.
+  function initOverview() {
+    document.querySelectorAll("a.cite[data-arxiv]").forEach(function (a) {
+      var p = byBase[a.getAttribute("data-arxiv")];
+      if (p) {
+        a.href = "./?p=" + encodeURIComponent(p.key);
+        a.classList.add("in-map");
+        a.title = "Entry in the map: " + p.title;
+      } else {
+        a.title = "arXiv (not in the map yet)";
+      }
+    });
+  }
+
+  function setupFlip() {
+    var flip = document.getElementById("gibbs");
+    if (!flip) return;
+    document.querySelectorAll(".fliplink").forEach(function (a) {
+      a.addEventListener("click", function () { flip.open = true; });
+    });
+    if (location.hash === "#gibbs") flip.open = true;
+  }
+
   // ------------------------------------------------------------------- start
 
   function start(data) {
@@ -791,9 +818,11 @@
     if (PAGE === "table") initTable();
     else if (PAGE === "mechanisms") initMechanisms();
     else if (PAGE === "open-problems") initOpenProblems();
+    else if (PAGE === "overview") initOverview();
   }
 
   setupTheme();
+  if (PAGE === "overview") { setupFlip(); math(document.getElementById("content")); }
   fetch("data.json", { cache: "no-cache" })
     .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
     .then(start)

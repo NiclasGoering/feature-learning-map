@@ -22,6 +22,10 @@
   --mx-low: #85cfc4;
   --mx-high: #efae73;
   --mx-crit: #f08f8f;
+  --c-ent: #8ab4f8;   /* overview: entropy */
+  --c-en: #f2b366;    /* overview: energy */
+  --c-kap: #8fd6a2;   /* overview: exchange rate */
+  --c-gd: #c8a2f0;    /* overview: gradient descent */
   color-scheme: dark;
 }
 
@@ -45,6 +49,10 @@
   --mx-low: #1d5f57;
   --mx-high: #8a4710;
   --mx-crit: #9a2222;
+  --c-ent: #1f5fbf;
+  --c-en: #b0620a;
+  --c-kap: #1e7a3c;
+  --c-gd: #6b3fa0;
   color-scheme: light;
 }
 
@@ -334,6 +342,44 @@ ul.dict li { padding: 0.6rem 0; border-bottom: 1px solid var(--line); }
 .op-body p { margin: 0.55rem 0; }
 .op-papers { font-size: 0.95rem; }
 .op-papers ul { margin: 0.3rem 0; padding-left: 1.2rem; }
+
+/* ---------------------------------------------------------------- overview */
+
+.ov-page { max-width: 72rem; margin: 0 auto; }
+.ov-head { text-align: center; border-bottom: 1.5px solid var(--rule); padding-bottom: 0.7rem; margin-bottom: 1.1rem; }
+.ov-head h1 { font-size: 2rem; font-weight: 600; font-variant: small-caps; letter-spacing: 0.04em; margin: 0.4rem 0 0.2rem; }
+.ov-head .lede { margin: 0 auto 0.5rem; }
+.ov-notation, .ov-legend { font-size: 0.88rem; color: var(--fg-muted); margin: 0.2rem 0; }
+.ov-legend span { margin: 0 0.45rem; white-space: nowrap; }
+.ov-cols { column-count: 2; column-gap: 2.2rem; column-rule: 1px solid var(--line); }
+.ov-page section { break-inside: avoid; margin: 0 0 1.1rem; overflow-wrap: break-word; min-width: 0; }
+.ov-page h2 { font-size: 1.05rem; font-weight: 600; font-variant: small-caps; letter-spacing: 0.04em; margin: 0 0 0.3rem; }
+.ov-page h2 .n { color: var(--fg-faint); margin-right: 0.35rem; }
+.ov-page p { margin: 0.3rem 0; }
+.ov-page ul { margin: 0.25rem 0; padding-left: 1.1rem; }
+.ov-page li { margin: 0.15rem 0; }
+.ov-key { border-left: 2px solid var(--fg); background: var(--bg-raised); padding: 0.35rem 0.75rem; margin: 0.4rem 0; overflow-x: auto; }
+.ov-key.gd { border-left-color: var(--c-gd); }
+.ov-page .katex-display { margin: 0.4rem 0; overflow-x: auto; overflow-y: hidden; }
+.ov-page .katex-display, .ov-key { scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
+.c-ent { color: var(--c-ent); }
+.c-en { color: var(--c-en); }
+.c-kap { color: var(--c-kap); }
+.c-gd { color: var(--c-gd); }
+.ov-page .tag { font-size: 0.8rem; color: var(--fg-faint); font-style: italic; }
+.ov-page .punch { font-style: italic; }
+.ov-page a.cite { color: var(--fg-muted); font-size: 0.92em; }
+.ov-page a.cite.in-map { color: var(--fg); }
+.ov-flip { border: 1px dashed var(--line-strong); padding: 0.25rem 0.7rem; margin: 0.4rem 0; }
+.ov-flip > summary { cursor: pointer; color: var(--fg-muted); font-style: italic; }
+.ov-flip[open] { background: var(--bg-raised); }
+.ov-status { border-top: 1.5px solid var(--rule); padding-top: 0.5rem; margin-top: 0.4rem; font-size: 0.85rem; color: var(--fg-muted); font-style: italic; }
+@media (max-width: 900px) { .ov-cols { column-count: 1; } .ov-head h1 { font-size: 1.6rem; } }
+@media print {
+  header.site, .site-foot, .ov-flip, .fliplink { display: none; }
+  body { font-size: 8.6pt; }
+  main { padding: 0; }
+}
 
 /* ---------------------------------------------------- narrow screens */
 /* Ten columns cannot fit a phone: each paper becomes a block of

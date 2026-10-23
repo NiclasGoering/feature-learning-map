@@ -17,7 +17,7 @@ A public map of the theory literature on feature learning in neural networks, fo
 | `scripts/validate.py` | Checks papers, open problems and the queue against the schema, the vocabulary, the length limits and the public-site rule. |
 | `scripts/build.py` | Runs the validator, then builds the static site into `_site/` with one `data.json`. |
 | `scripts/flmap.py` | Loading code shared by both scripts. |
-| `site/` | The front end: three HTML pages, one stylesheet, one script. No framework. |
+| `site/` | The front end: four HTML pages (table, mechanisms, open problems, a one-page overview), one stylesheet, one script. No framework. |
 | `.github/workflows/` | `deploy.yml` builds and deploys to GitHub Pages on every push to `main`; `validate.yml` runs the validator and a build on every pull request. |
 | `.github/ISSUE_TEMPLATE/add-paper.yml` | Issue form for suggesting a paper (label `add-paper`). |
 | `INGEST.md` | Step-by-step instructions for ingest sessions that add papers. |
