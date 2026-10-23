@@ -1,0 +1,7 @@
+slug: block-circulant-features
+label: "block-circulant features"
+types: [T6]
+desc: "On modular arithmetic the learned feature matrix (the average gradient outer product, or the first-layer weight covariance) acquires block-circulant structure that grows gradually while train and test loss stay flat. A kernel with such circulant features implements the Fourier multiplication algorithm."
+introduced_by: "2407.20199v3"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"
