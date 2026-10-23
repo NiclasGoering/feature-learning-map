@@ -857,52 +857,52 @@
   cited_as: "Kobialka et al. 2026"
   title: "On the Interplay of Priors and Overparametrization in Bayesian Neural Network Posteriors"
   year: 2026
-  status: queued
+  status: added
 - id: "2304.02902"
   cited_as: "Wiese et al. 2023"
   title: "Towards Efficient MCMC Sampling in Bayesian Neural Networks by Exploiting Symmetry"
   year: 2023
-  status: queued
+  status: added
 - id: "2310.08287"
   cited_as: "Laurent et al. 2023"
   title: "A Symmetry-Aware Exploration of Bayesian Neural Network Posteriors"
   year: 2023
-  status: queued
+  status: added
 - id: "2209.07157"
   cited_as: "Kurle et al. 2022"
   title: "On the detrimental effect of invariances in the likelihood for variational inference"
   year: 2022
-  status: queued
+  status: added
 - id: "2202.03038"
   cited_as: "Pittorino et al. 2022"
   title: "Deep Networks on Toroids: Removing Symmetries Reveals the Structure of Flat Regions in the Landscape Geometry"
   year: 2022
-  status: queued
+  status: added
 - id: "2610.20020"
   cited_as: "Smola 2026"
   title: "MCMC Can See Can't See"
   year: 2026
-  status: queued
+  status: added
 - id: "2609.37352"
   cited_as: "Gu et al. 2026"
   title: "The MCMC convergence graph: a diagnostic for multimodal posteriors"
   year: 2026
-  status: queued
+  status: added
 - id: "2407.16627"
   cited_as: "Alaoui & Gamarnik 2024"
   title: "Hardness of sampling solutions from the Symmetric Binary Perceptron"
   year: 2024
-  status: queued
+  status: added
 - id: "2503.10428"
   cited_as: "Kumar et al. 2025"
   title: "Langevin Monte-Carlo Provably Learns Depth Two Neural Nets at Any Size and Data"
   year: 2025
-  status: queued
+  status: added
 - id: "2410.09697"
   cited_as: "Chehab et al. 2024"
   title: "Provable Convergence and Limitations of Geometric Tempering for Langevin Dynamics"
   year: 2024
-  status: queued
+  status: added
 - id: "1811.10072"
   cited_as: "Brosse et al. 2018"
   title: "The promises and pitfalls of Stochastic Gradient Langevin Dynamics"
