@@ -450,42 +450,42 @@
   cited_as: "Kunin et al. 2024"
   title: "Get rich quick: exact solutions reveal how unbalanced initializations promote rapid feature learning"
   year: 2024
-  status: queued
+  status: added
 - id: "2409.14623"
   cited_as: "Dominé et al. 2024"
   title: "From Lazy to Rich: Exact Learning Dynamics in Deep Linear Networks"
   year: 2024
-  status: queued
+  status: added
 - id: "2402.03220"
   cited_as: "Dandi et al. 2024"
   title: "The Benefits of Reusing Batches for Gradient Descent in Two-Layer Networks: Breaking the Curse of Information and Leap Exponents"
   year: 2024
-  status: queued
+  status: added
 - id: "2405.15459"
   cited_as: "Arnaboldi et al. 2024"
   title: "Repetita Iuvant: Data Repetition Allows SGD to Learn High-Dimensional Multi-Index Functions"
   year: 2024
-  status: queued
+  status: added
 - id: "2406.01581"
   cited_as: "Lee et al. 2024"
   title: "Neural network learns low-dimensional polynomials with SGD near the information-theoretic limit"
   year: 2024
-  status: queued
+  status: added
 - id: "2602.02431"
   cited_as: "Kovačević et al. 2026"
   title: "Full-Batch Gradient Descent Outperforms One-Pass SGD: Sample Complexity Separation in Single-Index Learning"
   year: 2026
-  status: queued
+  status: added
 - id: "2605.17767"
   cited_as: "Moniri & Hassani 2026"
   title: "Feature Learning in Linear-Width Two-Layer Networks: Two vs. One Step of Gradient Descent"
   year: 2026
-  status: queued
+  status: added
 - id: "2305.10633"
   cited_as: "Damian et al. 2023"
   title: "Smoothing the Landscape Boosts the Signal for SGD: Optimal Sample Complexity for Learning Single Index Models"
   year: 2023
-  status: queued
+  status: added
 - id: "2403.05529"
   cited_as: "Damian et al. 2024"
   title: "Computational-Statistical Gaps in Gaussian Single-Index Models"
@@ -500,12 +500,12 @@
   cited_as: "Tsiolis et al. 2025"
   title: "From Information to Generative Exponent: Learning Rate Induces Phase Transitions in SGD"
   year: 2025
-  status: queued
+  status: added
 - id: "2405.15480"
   cited_as: "Troiani et al. 2024"
   title: "Fundamental computational limits of weak learnability in high-dimensional multi-index models"
   year: 2024
-  status: queued
+  status: added
 - id: "2310.19793"
   cited_as: "Bietti et al. 2023"
   title: "On Learning Gaussian Multi-index Models with Gradient Flow"
