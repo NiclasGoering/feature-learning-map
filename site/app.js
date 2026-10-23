@@ -800,12 +800,12 @@
   }
 
   function setupFlip() {
-    var flip = document.getElementById("gibbs");
-    if (!flip) return;
     document.querySelectorAll(".fliplink").forEach(function (a) {
-      a.addEventListener("click", function () { flip.open = true; });
+      var flip = document.getElementById((a.getAttribute("href") || "").slice(1));
+      if (flip) a.addEventListener("click", function () { flip.open = true; });
     });
-    if (location.hash === "#gibbs") flip.open = true;
+    var target = location.hash && document.getElementById(location.hash.slice(1));
+    if (target && target.classList.contains("ov-flip") && !target.classList.contains("ov-anim")) target.open = true;
   }
 
   // Cards: clicking one opens its panel below the row and closes the others;

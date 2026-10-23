@@ -88,6 +88,22 @@
   <div class="ov-key">
   $$-\tfrac1N\log Z_D(P)\;\longrightarrow\;F_D=\min_{K^1,\dots,K^L}\ \htmlClass{c-ent}{\sum_{\ell=1}^L J_\ell(K^\ell\mid K^{\ell-1})}\;+\;\htmlClass{c-kap}{\kappa}\,\htmlClass{c-en}{\tfrac12\,y^\top (K^L)^{-1}y},\qquad \htmlClass{c-kap}{\kappa=\tfrac{\gamma^2}{N}}$$
   </div>
+  <p><a class="fliplink" href="#ld-derivation">Derivation of the large-deviation formula ▸</a></p>
+  <details class="ov-flip" id="ld-derivation">
+    <summary>Derivation of the large-deviation formula</summary>
+    <p><strong>1. Integrate out the readout.</strong> Given the hidden weights, $f(X)=\tfrac{1}{\gamma\sqrt N}\Phi a$ with $\Phi=\varphi(h^L(X))$ and $a\sim\mathcal N(0,I_N)$, so $f(X)$ is Gaussian with covariance $K^L/\gamma^2$. For exact conditioning $Z_D(P)=p_0(\mathcal M)$ is the prior density of $f(X)$ at $y$:</p>
+    $$\begin{aligned}Z_D(P)&=\mathbb E_{W^1,\dots,W^L}\Big[\mathcal N\big(y;\,0,\,K^L/\gamma^2\big)\Big]\\&=\mathbb E\Big[\exp\Big(-N\,\htmlClass{c-kap}{\kappa}\,\htmlClass{c-en}{\tfrac12y^\top(K^L)^{-1}y}-\tfrac12\log\det\big(2\pi K^L/\gamma^2\big)\Big)\Big],\qquad \htmlClass{c-kap}{\kappa=\tfrac{\gamma^2}{N}} .\end{aligned}$$
+    <p>The energy is exact: it is the readout's own Gaussian cost of fitting $y$ with the features $\Phi$.</p>
+    <p><strong>2. Each kernel is an average over neurons.</strong> Given layer $\ell-1$, the preactivation vectors $h^\ell_j(X)\in\mathbb R^P$ of the $N$ neurons are iid $\mathcal N(0,K^{\ell-1})$, and $K^\ell=\tfrac1N\sum_{j}\varphi(h^\ell_j)\varphi(h^\ell_j)^\top$ is their empirical second moment. Cramér's theorem (equivalently Sanov's theorem plus contraction) gives a large-deviation principle at speed $N$:</p>
+    $$\Pr\big(K^\ell\approx K\mid K^{\ell-1}\big)\asymp e^{-N\,\htmlClass{c-ent}{J_\ell(K\mid K^{\ell-1})}},$$
+    $$\htmlClass{c-ent}{J_\ell(K\mid K')}=\sup_{\hat K}\Big\{-\tfrac12\operatorname{Tr}K\hat K-\log\mathbb E_{h\sim\mathcal N(0,K')}\,e^{-\frac12\varphi(h)^\top\hat K\varphi(h)}\Big\}=\min_{\nu:\ \mathbb E_\nu[\varphi\varphi^\top]=K}\mathrm{KL}\big(\nu\Vert\mathcal N(0,K')\big).$$
+    <p><strong>3. Chain the layers.</strong> The covariance of layer $\ell$ depends on the layers below only through $K^{\ell-1}$, so $K^0=XX^\top/d\to K^1\to\dots\to K^L$ is a Markov chain and a whole kernel path has probability $\asymp\exp\big(-N\sum_\ell J_\ell(K^\ell\mid K^{\ell-1})\big)$.</p>
+    <p><strong>4. Laplace / Varadhan.</strong> Insert step 3 into step 1. At fixed $P$ the log-determinant is $O(P\log N)$ and drops at speed $N$; with $\kappa=O(1)$ the energy competes with the entropies, and</p>
+    $$-\tfrac1N\log Z_D(P)\;\longrightarrow\;\min_{K^1,\dots,K^L}\Big\{\htmlClass{c-ent}{\textstyle\sum_\ell J_\ell(K^\ell\mid K^{\ell-1})}+\htmlClass{c-kap}{\kappa}\,\htmlClass{c-en}{\tfrac12y^\top(K^L)^{-1}y}\Big\}=F_D .$$
+    <p>The minimising path is where the posterior concentrates; the optimal dual variables $\hat K^\ell$ give the tilted single-site laws of §5.</p>
+    <p><strong>The corners.</strong> NTK ($\gamma=1$, $\kappa=1/N$): the energy is $O(1)$ in the exponent, so at speed $N$ only the entropies remain; their minimum $0$ sits at the prior kernels and $-\log Z_D=\tfrac12y^\top K_0^{-1}y+\tfrac12\log\det(2\pi K_0)+o(1)$. $P\propto N$: the log-determinant is $O(N)$ and stays, which gives the scale renormalisation in the extensive-$Z$ box below (T1). Label noise of variance $1/\beta$: $K^L\to K^L+\eta I$ with $\eta=\gamma^2/\beta$.</p>
+    <p class="tag">Rigorous versions: the prior rate (<a class="cite" data-arxiv="2401.01611" href="https://arxiv.org/abs/2401.01611">Macci et al. 2024</a>) and posterior, kernel-level large deviations at fixed $P$ (<a class="cite" data-arxiv="2602.22925" href="https://arxiv.org/abs/2602.22925">Papagiannouli et al. 2026</a>; <a class="cite" data-arxiv="2505.08062" href="https://arxiv.org/abs/2505.08062">Andreis et al. 2025</a>). The deep-path form is the μP Bayesian action (<a class="cite" data-arxiv="2205.09653" href="https://arxiv.org/abs/2205.09653">Bordelon &amp; Pehlevan 2022</a>; <a class="cite" data-arxiv="2502.07998" href="https://arxiv.org/abs/2502.07998">Lauditi et al. 2025</a>).</p>
+  </details>
   <p>The output scale sets the exchange rate between the two bills. Writing $\gamma=\gamma_0N^{s}$ interpolates continuously between the parametrisations:</p>
   <div class="ov-key">
   $$\htmlClass{c-kap}{\kappa=\gamma_0^2\,N^{2s-1}}:\qquad s=0\ \text{(NTK)}:\ \kappa=\tfrac{\gamma_0^2}{N}\to0,\qquad s=\tfrac12\ \text{(μP)}:\ \kappa=\gamma_0^2,\qquad s>\tfrac12:\ \kappa\to\infty .$$
