@@ -1,0 +1,7 @@
+slug: relevant-subspace-alignment
+label: "relevant subspace alignment"
+types: [T6]
+desc: "A gradient step from a symmetric random initialisation moves each first-layer weight along the target's average Hessian times the weight, so the weights span the low-dimensional subspace the target depends on. Later layers then fit on features that vary only along those directions."
+introduced_by: "2206.15144v1"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"

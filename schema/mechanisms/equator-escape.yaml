@@ -1,0 +1,7 @@
+slug: equator-escape
+label: "equator escape"
+types: [T6]
+desc: "From a random start the weight vector has correlation of order $N^{-1/2}$ with the target direction, on the equator of the sphere. Online SGD leaves it by a drift set by the first non-zero Taylor term of the population loss, whose order is the information exponent, after which the correlation rises quickly to a macroscopic value."
+introduced_by: "2003.10409v4"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"

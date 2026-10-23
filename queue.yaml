@@ -350,52 +350,52 @@
   cited_as: "Geiger et al. 2019"
   title: "Disentangling feature and lazy training in deep neural networks"
   year: 2019
-  status: queued
+  status: added
 - id: "2203.03466"
   cited_as: "Yang et al. 2022"
   title: "Tensor Programs V: Tuning Large Neural Networks via Zero-Shot Hyperparameter Transfer"
   year: 2022
-  status: queued
+  status: added
 - id: "2302.11055"
   cited_as: "Abbe, Boix-Adserà & Misiakiewicz 2023"
   title: "SGD learning on neural networks: leap complexity and saddle-to-saddle dynamics"
   year: 2023
-  status: queued
+  status: added
 - id: "2206.15144"
   cited_as: "Damian et al. 2022"
   title: "Neural Networks can Learn Representations with Gradient Descent"
   year: 2022
-  status: queued
+  status: added
 - id: "2305.18270"
   cited_as: "Dandi et al. 2023"
   title: "How Two-Layer Neural Networks Learn, One (Giant) Step at a Time"
   year: 2023
-  status: queued
+  status: added
 - id: "2402.04980"
   cited_as: "Cui et al. 2024"
   title: "Asymptotics of feature learning in two-layer networks after one gradient-step"
   year: 2024
-  status: queued
+  status: added
 - id: "2310.07891"
   cited_as: "Moniri et al. 2023"
   title: "A Theory of Non-Linear Feature Learning with One Gradient Step in Two-Layer Neural Networks"
   year: 2023
-  status: queued
+  status: added
 - id: "2003.10409"
   cited_as: "Arous et al. 2020"
   title: "Online stochastic gradient descent on non-convex losses from high-dimensional inference"
   year: 2020
-  status: queued
+  status: added
 - id: "2111.00034"
   cited_as: "Atanasov et al. 2021"
   title: "Neural Networks as Kernel Learners: The Silent Alignment Effect"
   year: 2021
-  status: queued
+  status: added
 - id: "2206.12314"
   cited_as: "Petrini et al. 2022"
   title: "Learning sparse features can lead to overfitting in neural networks"
   year: 2022
-  status: queued
+  status: added
 - id: "2309.15111"
   cited_as: "Glasgow 2024"
   title: "SGD Finds then Tunes Features in Two-Layer Neural Networks with near-Optimal Sample Complexity: A Case Study in the XOR problem"
