@@ -364,6 +364,24 @@ ul.dict li { padding: 0.6rem 0; border-bottom: 1px solid var(--line); }
 .ov-key.gd { border-left-color: var(--c-gd); }
 .ov-page .katex-display { margin: 0.4rem 0; overflow-x: auto; overflow-y: hidden; }
 .ov-page .katex-display, .ov-key { scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
+.ov-page h3 { font-size: 1rem; font-style: italic; font-weight: 400; margin: 1rem 0 0.3rem; }
+.ov-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.7rem; margin: 0.7rem 0 0.2rem; }
+.ov-card {
+  display: flex; flex-direction: column; gap: 0.3rem; text-align: left;
+  border: 1px solid var(--line-strong); border-radius: 2px; background: var(--bg-raised);
+  padding: 0.65rem 0.8rem; font-size: 0.95rem; color: var(--fg); cursor: pointer;
+}
+.ov-card:hover { border-color: var(--c-gd); }
+.ov-card[aria-selected="true"] { border-color: var(--c-gd); box-shadow: inset 0 -2px 0 var(--c-gd); }
+.ov-card-k { font-variant: small-caps; letter-spacing: 0.04em; font-weight: 600; font-size: 1.02rem; }
+.ov-card-f { color: var(--c-gd); }
+.ov-card-s { color: var(--fg-muted); font-style: italic; font-size: 0.88rem; }
+.ov-card-more { margin-top: auto; color: var(--fg-faint); font-size: 0.8rem; }
+.ov-card[aria-selected="true"] .ov-card-more { color: var(--c-gd); }
+.ov-card-panel { border-left: 2px solid var(--c-gd); background: var(--bg-raised); padding: 0.6rem 1rem 0.7rem; margin: 0.7rem 0 0.3rem; }
+.ov-card-panel h4 { font-size: 1.02rem; font-weight: 600; margin: 0.1rem 0 0.3rem; }
+.ov-card-panel .ov-pl { font-variant: small-caps; letter-spacing: 0.04em; color: var(--fg-muted); margin: 0.7rem 0 0.15rem; }
+@media (max-width: 700px) { .ov-cards { grid-template-columns: 1fr; } }
 .c-ent { color: var(--c-ent); }
 .c-en { color: var(--c-en); }
 .c-kap { color: var(--c-kap); }
@@ -378,7 +396,8 @@ ul.dict li { padding: 0.6rem 0; border-bottom: 1px solid var(--line); }
 .ov-status { border-top: 1.5px solid var(--rule); padding-top: 0.5rem; margin-top: 0.4rem; font-size: 0.85rem; color: var(--fg-muted); font-style: italic; }
 @media (max-width: 900px) { .ov-head h1 { font-size: 1.6rem; } .ov-page { font-size: 1rem; } }
 @media print {
-  header.site, .site-foot, .ov-flip, .fliplink { display: none; }
+  header.site, .site-foot, .ov-flip, .fliplink, .ov-card-more { display: none; }
+  .ov-card-panel[hidden] { display: none; }
   body { font-size: 8.6pt; }
   main { padding: 0; }
 }

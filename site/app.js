@@ -808,6 +808,26 @@
     if (location.hash === "#gibbs") flip.open = true;
   }
 
+  // Cards: clicking one opens its panel below the row and closes the others;
+  // clicking it again closes it. #<panel-id> in the URL opens that card.
+  function setupCards() {
+    var cards = Array.prototype.slice.call(document.querySelectorAll(".ov-card[aria-controls]"));
+    function show(card, open) {
+      cards.forEach(function (c) {
+        var on = open && c === card;
+        c.setAttribute("aria-selected", String(on));
+        var more = c.querySelector(".ov-card-more");
+        if (more) more.textContent = on ? "Close ▴" : "When is it exact? ▾";
+        document.getElementById(c.getAttribute("aria-controls")).hidden = !on;
+      });
+    }
+    cards.forEach(function (c) {
+      c.addEventListener("click", function () { show(c, c.getAttribute("aria-selected") !== "true"); });
+    });
+    var target = location.hash.slice(1);
+    cards.forEach(function (c) { if (c.getAttribute("aria-controls") === target) show(c, true); });
+  }
+
   // ------------------------------------------------------------------- start
 
   function start(data) {
@@ -822,7 +842,7 @@
   }
 
   setupTheme();
-  if (PAGE === "overview") { setupFlip(); math(document.getElementById("content")); }
+  if (PAGE === "overview") { setupFlip(); setupCards(); math(document.getElementById("content")); }
   fetch("data.json", { cache: "no-cache" })
     .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
     .then(start)
