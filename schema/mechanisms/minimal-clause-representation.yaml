@@ -1,0 +1,7 @@
+slug: minimal-clause-representation
+label: "minimal clause representation"
+types: [T4]
+desc: "In a depth-two discrete network each hidden unit is a logical clause, so the l1 weight norm equals the length of the equivalent DNF formula. Weight decay multiplies the posterior by a factor exponentially small in this length, which concentrates it on the shortest formula that fits the data, with sparse clause-detecting first-layer rows."
+introduced_by: "2505.24060v1"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"
