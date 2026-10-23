@@ -1,0 +1,7 @@
+slug: attention-pattern-switch
+label: "attention pattern switch"
+types: [T5]
+desc: "The posterior over an attention matrix moves from uniform pooling to a structured copy pattern as data grows. The switch is a jump between competing minima for softmax attention, and a symmetry breaking followed by a crossover for linear attention."
+introduced_by: "2606.12058v1"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"
