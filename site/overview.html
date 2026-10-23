@@ -83,7 +83,7 @@
 </section>
 
 <section id="kappa">
-  <h2><span class="n">3</span>$\kappa$ interpolates between NTK and μP <a class="animlink" href="#anim-3">▶ Animation</a></h2>
+  <h2><span class="n">3</span>$\kappa$ interpolates between NTK and μP <a class="animlink" href="#anim-3a">▶ Animation</a></h2>
   <p>At large width the posterior concentrates on the minimiser of one functional (derived in §4). The hidden layers pay <span class="c-ent">entropy</span> to reshape their kernels; the readout pays <span class="c-en">energy</span> to fit $y$ with the features it is given:</p>
   <div class="ov-key">
   $$-\tfrac1N\log Z_D(P)\;\longrightarrow\;F_D=\min_{K^1,\dots,K^L}\ \htmlClass{c-ent}{\sum_{\ell=1}^L J_\ell(K^\ell\mid K^{\ell-1})}\;+\;\htmlClass{c-kap}{\kappa}\,\htmlClass{c-en}{\tfrac12\,y^\top (K^L)^{-1}y},\qquad \htmlClass{c-kap}{\kappa=\tfrac{\gamma^2}{N}}$$
@@ -100,7 +100,12 @@
   $$\mathcal E(J)=\min\big\{\htmlClass{c-en}{\tfrac12y^\top(K^L)^{-1}y}:\ \htmlClass{c-ent}{\textstyle\sum_\ell J_\ell}\le J\big\}$$
   <p>On this Pareto front the optimum sits where the slope is $-1/\kappa$: NTK is the $J=0$ corner, μP an interior point, $\kappa\to\infty$ the far end. The GD counterpart is the lazy-to-rich transition driven by output or initialisation scale (<a class="cite" data-arxiv="1812.07956" href="https://arxiv.org/abs/1812.07956">Chizat et al. 2019</a>; <a class="cite" data-arxiv="2002.09277" href="https://arxiv.org/abs/2002.09277">Woodworth et al. 2020</a>).</p>
 
-  <h3>Feature learning needs an extensive $Z$ <a class="animlink" href="#anim-3z">▶ Animation</a></h3>
+  <details class="ov-flip ov-anim" id="anim-3a">
+    <summary>Animation: the energy–entropy Pareto front</summary>
+    <div class="an-body"></div>
+  </details>
+
+  <h3>Feature learning needs an extensive $Z$ <a class="animlink" href="#anim-3b">▶ Animation</a></h3>
   <div class="ov-key">
   $$-\log Z_D(P)=N\,F_D+o(N):\qquad \text{features move by }O(1)\iff -\log Z_D(P)=\Theta(N).$$
   </div>
@@ -110,8 +115,8 @@
     <li>μP: $\Theta(N)$ through $\htmlClass{c-kap}{\kappa=\gamma_0^2}$: the full tilt (T3; <a class="cite" data-arxiv="2502.07998" href="https://arxiv.org/abs/2502.07998">Lauditi et al. 2025</a>).</li>
     <li>NTK, $P\propto N$: $\Theta(N)$ through $\tfrac12\log\det K^L$: only the kernel scale moves (T1; <a class="cite" data-arxiv="2012.04030" href="https://arxiv.org/abs/2012.04030">Li &amp; Sompolinsky 2021</a>).</li>
   </ul>
-  <details class="ov-flip ov-anim" id="anim-3">
-    <summary>Animation: the energy–entropy Pareto front, and which scalings make −log Z extensive</summary>
+  <details class="ov-flip ov-anim" id="anim-3b">
+    <summary>Animation: which scalings make −log Z extensive</summary>
     <div class="an-body"></div>
   </details>
 </section>
@@ -281,7 +286,7 @@
   </ul>
   <p class="punch">Bayes generalises by the volume of bad interpolants, GD by the volume of their basins. Whether the two volumes agree, $C_{GD}\approx\mathrm{KL}$, is the volume question: to first order on small Boolean tasks (<a class="cite" data-arxiv="2006.15191" href="https://arxiv.org/abs/2006.15191">Mingard et al. 2021</a>), with a systematic GD advantage at proper initialisation and width (<a class="cite" data-arxiv="2407.03848" href="https://arxiv.org/abs/2407.03848">Peleg &amp; Hein 2024</a>); settling it is <a href="open-problems.html#op-10">open problem 10</a>.</p>
   <details class="ov-flip ov-anim" id="anim-7">
-    <summary>Animation: quench from the prior against equilibrium</summary>
+    <summary>Animation: Bayes against GD, and the quench against equilibrium</summary>
     <div class="an-body"></div>
   </details>
 </section>

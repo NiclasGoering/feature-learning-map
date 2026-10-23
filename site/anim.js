@@ -433,7 +433,7 @@ function onPalette() {
   RECS.forEach(function (r) { r.dirty = true; if (r.inst && r.active()) r.inst.redraw(); });
 }
 function setupPanel(details) {
-  var n = +details.id.replace("anim-", "");
+  var n = details.id.replace("anim-", "");
   var rec = { n: n, d: details, body: details.querySelector(".an-body"), inst: null, visible: false, raf: 0, last: 0, dirty: true };
   rec.active = function () { return details.open && rec.visible && !D.hidden; };
   function frame(t) {
@@ -448,7 +448,7 @@ function setupPanel(details) {
   function ensure() {
     if (rec.inst || !details.open || !FACT[n]) return;
     try {
-      rec.inst = FACT[n](rec.body, { kick: rec.kick, reduced: reduced, panel: details });
+      rec.inst = FACT[n](rec.body, { kick: rec.kick, reduced: reduced });
     } catch (e) {
       rec.body.appendChild(el("p", { class: "an-note", text: "This animation could not start: " + e.message }));
       if (window.console) console.error(e);
@@ -474,15 +474,8 @@ function setupPanel(details) {
   RECS.push(rec);
   return rec;
 }
-function parseHash(h) { var m = /^#anim-(\d)(z?)$/.exec(h || ""); return m ? { id: "anim-" + m[1], tab: m[2] ? "1" : "0" } : null; }
-function openPanel(p) {
-  var d = D.getElementById(p.id);
-  if (!d) return null;
-  d.dataset.tab = p.tab;
-  d.open = true;
-  d.dispatchEvent(new CustomEvent("anim-tab"));
-  return d;
-}
+function parseHash(h) { var m = /^#anim-(\d[ab]?)$/.exec(h || ""); return m ? { id: "anim-" + (m[1] === "3" ? "3a" : m[1]) } : null; }
+function openPanel(p) { var d = D.getElementById(p.id); if (d) d.open = true; return d || null; }
 function openFromHash(scroll) {
   var p = parseHash(location.hash), d = p && openPanel(p);
   if (d && scroll) setTimeout(function () { d.scrollIntoView({ block: "start" }); }, 60);
@@ -1513,7 +1506,8 @@ var mkFront = function (root, env) {
         E_kappa(f) = min_u { (u - 1 - log u)/2 + a u/2 + kappa r /(2u) },   a = D^2/(s0 r),
       D = f(x*) - f*(x*),  r = y^T A0^-1 y,  s0 = conditional prior variance at x*.
    ===================================================================== */
-FACT[6] = function (root, env) {
+var mkGap = function (root, env, opts) {
+  opts = opts || {};
   var XT = [-0.85, -0.35, 0.2, 0.8], ELL = 0.35, NX = 4;
   function yTrue(x) { return 0.9 * Math.sin(4.4 * x + 0.2); }
   var YT = XT.map(yTrue);
@@ -1524,7 +1518,7 @@ FACT[6] = function (root, env) {
   var A0 = gram(k0), AT = gram(kT);
   var w0 = solveSPD(A0, YT), wT = solveSPD(AT, YT), r = 0;
   YT.forEach(function (y, i) { r += y * w0[i]; });
-  var st = { kappa: 0.5, lgN: 2, xs: 0.5, dlt: -0.3, gd: "off" };
+  var st = { kappa: opts.kappa != null ? opts.kappa : 0.5, lgN: 2, xs: 0.5, dlt: -0.3, gd: opts.gd ? "readout" : "off" };
   var model = null;
 
   function fPrior(x) { var s = 0; for (var i = 0; i < NX; i++) s += k0(x, XT[i]) * w0[i]; return s; }
@@ -1565,12 +1559,17 @@ FACT[6] = function (root, env) {
   var nS = slider({ tex: "N", min: 1, max: 3, step: 0.01, value: st.lgN, fmt: function (v) { return Math.round(Math.pow(10, v)); }, onInput: function (v) { st.lgN = v; wake(); } });
   var gdSeg = segmented({ tex: "\\text{GD}", value: st.gd, options: [{ value: "off", text: "off" }, { value: "readout", text: "lazy, readout only", cls: "o-gd" }, { value: "ntk", text: "lazy, all layers (NTK)", cls: "o-gd" }, { value: "rich", text: "rich (schematic)", cls: "o-gd" }], onChange: function (v) { st.gd = v; wake(); } });
   var rst = button("Reset", function () { st.dlt = -0.3; st.xs = 0.5; build(); wake(); });
-  [kS.row, nS.row, rst].forEach(function (n) { ctl.appendChild(n); }); ctl2.appendChild(gdSeg.row);
-  root.appendChild(ctl); root.appendChild(ctl2);
+  [kS.row, nS.row, rst].forEach(function (n) { ctl.appendChild(n); }); root.appendChild(ctl);
+  if (opts.gd) { ctl2.appendChild(gdSeg.row); root.appendChild(ctl2); }
   var read = el("p", { class: "an-read" }); root.appendChild(read);
-  var gdNote = el("p", { class: "an-note" }); root.appendChild(gdNote);
-  root.appendChild(el("p", { class: "an-cap", html: "<b>What it shows.</b> Left: four pinned training points, the optimal interpolant $f^\\star$ and a draggable test point $x_\\ast$; pulling $f(x_\\ast)$ away from the truth bends $f$ near $x_\\ast$ and nowhere else it is pinned. Right: the cost $\\mathcal E_\\kappa(f)$ against $\\varepsilon_{\\rm gen}=(f(x_\\ast)-y(x_\\ast))^2$; the bracket is $\\Gamma_D(\\varepsilon)$, split into entropy (blue) and $\\kappa\\times$energy (orange), and the meter is $p_B(B_\\varepsilon\\mid D)\\asymp e^{-N\\Gamma_D}$. Purple: gradient descent, in three precisely labelled cases." }));
-  root.appendChild(el("p", { class: "an-note", html: "<b>Exact:</b> everything for Bayes (identity activation, one hidden layer, RBF prior kernel; $\\mathcal E_\\kappa$ is closed form), the lazy readout-only curve ($\\tfrac12\\log(1+a)$: features sampled from the prior, readout optimised), and the all-layers lazy curve $\\kappa\\Delta^2/2s_\\Theta$ with a toy NTK $\\Theta=K_0+0.6\\,K_{0.8}$. <b>Schematic:</b> the rich-regime curve, which only shows that it splits. The readout's own Gaussian fluctuation is not included, as on the page." }));
+  var gdNote = el("p", { class: "an-note" }); if (opts.gd) root.appendChild(gdNote);
+  if (!opts.gd) {
+    root.appendChild(el("p", { class: "an-cap", html: "<b>What it shows.</b> Left: four pinned training points, the optimal interpolant $f^\\star$ and a draggable test point $x_\\ast$; pulling $f(x_\\ast)$ away from the truth bends $f$ near $x_\\ast$ and nowhere else it is pinned. Right: the cost $\\mathcal E_\\kappa(f)$ against $\\varepsilon_{\\rm gen}=(f(x_\\ast)-y(x_\\ast))^2$; the bracket is $\\Gamma_D(\\varepsilon)$, split into entropy (blue) and $\\kappa\\times$energy (orange), and the meter is $p_B(B_\\varepsilon\\mid D)\\asymp e^{-N\\Gamma_D}$: the width slider sharpens it." }));
+    root.appendChild(el("p", { class: "an-note", html: "<b>Exact:</b> everything shown (identity activation, one hidden layer, RBF prior kernel; $\\mathcal E_\\kappa$ is closed form). With this activation the optimal interpolant is the NNGP one at every $\\kappa$; $\\kappa$ changes what bending costs and how the cost splits. The readout's own Gaussian fluctuation is not included, as on the page." }));
+  } else {
+    root.appendChild(el("p", { class: "an-cap", html: "<b>What it shows.</b> The function-space picture of §6 with gradient descent added (purple). <b>Lazy readout only:</b> the features keep their prior law and only the readout is optimised (sample-then-optimise); the cost is Bayes with the tilt $\\kappa E$ switched off, so it coincides with Bayes as $\\kappa\\to0$ and separates as $\\kappa$ grows. <b>Lazy, all layers:</b> the NTK, not the NNGP kernel, sets the typical interpolant and the curvature. <b>Rich:</b> the curves split; the purple curve is schematic." }));
+    root.appendChild(el("p", { class: "an-note", html: "<b>Exact:</b> the Bayes curve (closed form), the lazy readout-only curve ($\\tfrac12\\log(1+a)$) and the all-layers lazy curve $\\kappa\\Delta^2/2s_\\Theta$ with a toy NTK $\\Theta=K_0+0.6\\,K_{0.8}$. <b>Schematic:</b> the rich-regime curve, which only shows that it splits. The readout's own Gaussian fluctuation is not included, as on the page." }));
+  }
   math(root);
 
   function wake() { inst.redraw(); env.kick(); }
@@ -1636,8 +1635,8 @@ FACT[6] = function (root, env) {
     path(g, branch(1)); stroke(g, PAL.muted, 1, [2, 3]); path(g, branch(-1)); stroke(g, PAL.muted, 1, [2, 3]);
     var env = [], genv = [];
     for (i = 0; i <= 120; i++) { eps = EMAX * i / 120; env.push([fr.X(eps), fr.Y(base + envelope(gamB, model.fs, eps).v)]); if (gd) genv.push([fr.X(eps), fr.Y(base + envelope(gd.g, gd.c, eps).v)]); }
-    if (gd) { path(g, genv); stroke(g, PAL.gd, 2.4, st.gd === "rich" ? [5, 3] : []); }
     path(g, env); stroke(g, PAL.fg, 2.2);
+    if (gd) { path(g, genv); stroke(g, PAL.gd, 2.4, st.gd === "readout" || st.gd === "rich" ? [7, 5] : []); }
     var ec = Math.pow(curY() - model.yst, 2), here = envelope(gamB, model.fs, Math.min(ec, EMAX)), p = parts(here.f - model.fs), p0 = parts(0);
     var dS = p.S - p0.S, dE = p.Eg - p0.Eg, bx = fr.X(Math.min(ec, EMAX)) + 9;
     var yb = fr.Y(base), yS = fr.Y(base + dS), yT = fr.Y(base + dS + dE);
@@ -1694,7 +1693,7 @@ FACT[6] = function (root, env) {
         lazy readout-only:  f = 0.8 th1 + 0.6 th2     (linear: sample-then-optimise)
         rich:               f = th2 tanh(2 th1)       (nonlinear)
    ===================================================================== */
-FACT[7] = function (root, env) {
+var mkQuench = function (root, env) {
   var X0 = 2, NP = 1500, NREF = 4000, DT = 0.01, BINS = 40, LO = -3, HI = 3, Y0 = 0.3, BW = (HI - LO) / BINS;
   var st = { model: "tanh", T: 0.01, speed: 3, playing: !env.reduced(), tau: 0, seed: 21 };
   var SPEEDS = { 1: 10, 2: 60, 3: 300 };
@@ -1899,18 +1898,17 @@ FACT[7] = function (root, env) {
   return inst;
 };
 
-/* =====================================================================
-   3  kappa interpolates between NTK and muP: two views in one panel,
-      the Pareto front (#anim-3) and 'feature learning needs an extensive Z' (#anim-3z)
-   ===================================================================== */
-FACT[3] = function (root, env) {
-  var makers = [mkFront, mkExtensive], boxes = [el("div"), el("div")], insts = [null, null], cur = 0;
+/* panel ids: 3a Pareto front, 3b extensive Z, 6 Bayes gap, 7 two views (GD overlay / quench against equilibrium) */
+FACT["3a"] = mkFront;
+FACT["3b"] = mkExtensive;
+FACT["6"] = function (root, env) { return mkGap(root, env, {}); };
+FACT["7"] = function (root, env) {
+  var makers = [function (r, e) { return mkGap(r, e, { gd: true, kappa: 0 }); }, mkQuench], boxes = [el("div"), el("div")], insts = [null, null], cur = 0;
   var seg = segmented({
-    value: "0", options: [{ value: "0", text: "Pareto front E(J)" }, { value: "1", text: "extensive Z: the width N" }],
+    value: "0", options: [{ value: "0", text: "Γ: Bayes against GD" }, { value: "1", text: "quench against equilibrium" }],
     onChange: function (v) { show(+v); }
   });
-  var bar = el("div", { class: "an-ctl" }, [seg.row]);
-  root.appendChild(bar); root.appendChild(boxes[0]); root.appendChild(boxes[1]);
+  root.appendChild(el("div", { class: "an-ctl" }, [seg.row])); root.appendChild(boxes[0]); root.appendChild(boxes[1]);
   function show(i) {
     cur = i;
     boxes[0].hidden = i !== 0; boxes[1].hidden = i !== 1;
@@ -1923,8 +1921,7 @@ FACT[3] = function (root, env) {
     step: function (dt) { var c = insts[cur]; if (c && c.step) c.step(dt); },
     live: function () { var c = insts[cur]; return !!(c && c.live && c.live()); }
   };
-  env.panel.addEventListener("anim-tab", function () { show(+env.panel.dataset.tab || 0); });
-  show(+env.panel.dataset.tab || 0);
+  show(0);
   return inst;
 };
 
