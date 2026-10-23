@@ -1,0 +1,7 @@
+slug: posterior-kernel-reweighting
+label: "posterior kernel reweighting"
+types: [T3]
+desc: "The infinite-width kernel is random under the prior; conditioning on data reweights its law, so the posterior is a Gaussian mixture with data-selected covariances and means, with output coordinates dependent and not identically distributed."
+introduced_by: "2507.22095v5"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"

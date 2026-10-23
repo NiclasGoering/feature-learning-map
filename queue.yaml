@@ -214,7 +214,7 @@
   cited_as: "Yaida 2020"
   title: "Non-Gaussian processes and neural networks at finite widths"
   year: 2019
-  status: queued
+  status: added
 - id: "2106.10165"
   cited_as: "Roberts, Yaida & Hanin 2022"
   title: "The Principles of Deep Learning Theory"
@@ -229,17 +229,17 @@
   cited_as: "Zavatone-Veth, Tong & Pehlevan 2022"
   title: "Contrasting random and learned features in deep Bayesian linear regression"
   year: 2022
-  status: queued
+  status: added
 - id: "2104.11734"
   cited_as: "Zavatone-Veth & Pehlevan 2021"
   title: "Exact marginal prior distributions of finite Bayesian neural networks"
   year: 2021
-  status: queued
+  status: added
 - id: "2111.11954"
   cited_as: "Zavatone-Veth & Pehlevan 2021"
   title: "Depth induces scale-averaging in overparameterized linear Bayesian neural networks"
   year: 2021
-  status: queued
+  status: added
 - id: "2106.06615"
   cited_as: "Noci et al. 2021"
   title: "Precise characterization of the prior predictive distribution of deep ReLU networks"
@@ -249,17 +249,17 @@
   cited_as: "Hanin & Zlokapa 2024"
   title: "Bayesian Inference with Deep Weakly Nonlinear Networks"
   year: 2024
-  status: queued
+  status: added
 - id: "2502.04247"
   cited_as: "Caporali et al. 2025"
   title: "Student-t processes as infinite-width limits of posterior Bayesian neural networks"
   year: 2025
-  status: queued
+  status: added
 - id: "2507.22095"
   cited_as: "Apollonio et al. 2025"
   title: "Posterior Bayesian Neural Networks with Dependent Weights"
   year: 2025
-  status: queued
+  status: added
 - id: "2401.01611"
   cited_as: "Macci, Pacchiarotti & Torrisi"
   title: "Large and moderate deviations for Gaussian neural networks"
