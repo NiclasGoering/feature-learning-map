@@ -34,10 +34,18 @@ Run from the repository root:
 
 ```bash
 git checkout main && git pull --ff-only
-git checkout -b ingest/$(date +%Y-%m-%d)      # if the branch exists, append -2, -3, ...
-python3 -m venv .venv && .venv/bin/pip install -q -r requirements.txt
+[ -d .venv ] || python3 -m venv .venv
+.venv/bin/pip install -q -r requirements.txt
 .venv/bin/python scripts/validate.py          # must print OK before you start
 gh auth status                                # must be logged in
+```
+
+Create this run's branch, `ingest/<date>-<n>` with the first free number `n` (earlier runs may still have open pull requests):
+
+```bash
+D=$(date +%Y-%m-%d); N=1
+while git show-ref --quiet "refs/heads/ingest/$D-$N" || git ls-remote --exit-code --heads origin "ingest/$D-$N" >/dev/null 2>&1; do N=$((N+1)); done
+git checkout -b "ingest/$D-$N"
 ```
 
 If the validator fails on `main` or `gh` is not logged in: STOP.
@@ -55,6 +63,14 @@ gh issue list --label add-paper --state open --limit 100 --json number,title,bod
 Keep issues whose `author.login` is in the ALLOWLIST. Sort them oldest first. From each, take the first arXiv ID in the body: match `arxiv.org/(abs|pdf|html)/([0-9]{4}\.[0-9]{4,5})` (ignore any version suffix). An issue with no arXiv ID: comment `No arXiv URL found; please edit the issue.` and skip it.
 
 **2b. Queue only if there are no usable issues.** If 2a gave zero papers, take entries from `queue.yaml` with `status: queued`, top to bottom.
+
+**2c. Skip papers another run is already adding.** Earlier runs may have open pull requests that are not merged yet. List the paper files in them:
+
+```bash
+gh pr list --state open --limit 100 --json files --jq '.[].files[].path' | grep '^papers/' | sort -u
+```
+
+Leave out any paper whose arXiv ID (without version) appears in that list. It does not count toward the 10; do not comment on its issue or change its queue entry.
 
 Process at most **10** papers in total.
 
@@ -311,9 +327,10 @@ Never commit `_site/` or `.venv/` (both are git-ignored).
 
 ```bash
 git add papers/ queue.yaml
-git commit -m "Ingest $(date +%Y-%m-%d): N papers"
+RUN=$(git branch --show-current | sed 's#^ingest/##')    # e.g. 2026-10-24-2
+git commit -m "Ingest $RUN: <k> papers"
 git push -u origin HEAD
-gh pr create --base main --title "Ingest $(date +%Y-%m-%d): N papers" --body-file /tmp/pr-body.md
+gh pr create --base main --title "Ingest $RUN: <k> papers" --body-file /tmp/pr-body.md
 ```
 
 Write `/tmp/pr-body.md` as a short digest, in exactly these sections (write "None." where empty):
@@ -348,4 +365,6 @@ gh issue comment <n> --body "Added in <PR URL> as papers/<key>.md (status: extra
 
 or, for a skip, the reason. Do not close issues; `Closes #<n>` in the PR closes them on merge.
 
-**7d. Report** in your final message: the PR URL, papers added, papers skipped and why.
+**7d. Return to main** so the next run starts clean: `git checkout main`.
+
+**7e. Report** in your final message: the PR URL, papers added, papers skipped and why.
