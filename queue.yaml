@@ -219,12 +219,12 @@
   cited_as: "Roberts, Yaida & Hanin 2022"
   title: "The Principles of Deep Learning Theory"
   year: 2021
-  status: queued
+  status: added
 - id: "2204.01058"
   cited_as: "Hanin 2024"
   title: "Random Fully Connected Neural Networks as Perturbatively Solvable Hierarchies"
   year: 2022
-  status: queued
+  status: added
 - id: "2203.00573"
   cited_as: "Zavatone-Veth, Tong & Pehlevan 2022"
   title: "Contrasting random and learned features in deep Bayesian linear regression"
@@ -244,7 +244,7 @@
   cited_as: "Noci et al. 2021"
   title: "Precise characterization of the prior predictive distribution of deep ReLU networks"
   year: 2021
-  status: queued
+  status: added
 - id: "2405.16630"
   cited_as: "Hanin & Zlokapa 2024"
   title: "Bayesian Inference with Deep Weakly Nonlinear Networks"
@@ -264,38 +264,38 @@
   cited_as: "Macci, Pacchiarotti & Torrisi"
   title: "Large and moderate deviations for Gaussian neural networks"
   year: 2024
-  status: queued
+  status: added
 - id: "2405.16958"
   cited_as: "Vogel 2026"
   title: "Large Deviations of Gaussian Neural Networks with ReLU activation"
   year: 2024
-  status: queued
+  status: added
 - id: "2603.06023"
   cited_as: "Bassetti, De Palma & Ladelli"
   title: "Large deviation principles for convolutional Bayesian neural networks"
   year: 2026
-  status: queued
+  status: added
 - id: "2309.09814"
   cited_as: "Milsom et al. 2024"
   title: "Convolutional Deep Kernel Machines"
   year: 2023
-  status: queued
+  status: added
 - id: "2010.01590"
   cited_as: "Aitchison, Yang & Ober 2021"
   title: "Deep kernel processes"
   year: 2020
-  status: queued
+  status: added
 - id: "2510.15174"
   cited_as: "Göring 2025"
   title: "A simple mean field model of feature learning"
   year: 2025
-  status: queued
+  status: added
   note: "Cited as Göring 2025 (sparse-parity critical sample size, SGLD critical-noise law)."
 - id: "2307.05635"
   cited_as: "Camilli et al. 2023"
   title: "Fundamental limits of overparametrized shallow neural networks for supervised learning"
   year: 2023
-  status: queued
+  status: added
 - id: "1806.05451"
   cited_as: "Aubin et al. 2018"
   title: "The committee machine: Computational to statistical gaps in learning a two-layers neural network"
