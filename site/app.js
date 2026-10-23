@@ -747,7 +747,7 @@
             el("div", { class: "setting" }, "In: " + settingLine(x.r.view)),
             el("div", { class: "stmt" }, x.r.statement),
             el("div", { class: "cite" },
-              el("a", { href: "./?p=" + encodeURIComponent(x.p.key) }, authorShort(x.p) + " " + x.p.year), ", ",
+              el("a", { href: "table.html?p=" + encodeURIComponent(x.p.key) }, authorShort(x.p) + " " + x.p.year), ", ",
               sourceLink(x.r), " · ", statusPill(x.r.status), " · ",
               "moves the mean predictor: " + lab("moves_mean", x.r.mechanism.moves_mean)));
         })));
@@ -773,7 +773,7 @@
         el("div", { class: "op-papers" },
           el("strong", null, "Papers in the map that touch it: "),
           papers.length ? el("ul", null, papers.map(function (p) {
-            return el("li", null, el("a", { href: "./?p=" + encodeURIComponent(p.key) }, p.title),
+            return el("li", null, el("a", { href: "table.html?p=" + encodeURIComponent(p.key) }, p.title),
               " (" + authorShort(p) + " " + p.year + ")",
               o.answered_by.indexOf(p.key) >= 0 ? el("span", { class: "muted" }, " · answers part of it") : null);
           })) : el("span", { class: "muted" }, "none yet.")),
@@ -790,7 +790,7 @@
     document.querySelectorAll("a.cite[data-arxiv]").forEach(function (a) {
       var p = byBase[a.getAttribute("data-arxiv")];
       if (p) {
-        a.href = "./?p=" + encodeURIComponent(p.key);
+        a.href = "table.html?p=" + encodeURIComponent(p.key);
         a.classList.add("in-map");
         a.title = "Entry in the map: " + p.title;
       } else {
@@ -808,6 +808,26 @@
     if (location.hash === "#gibbs") flip.open = true;
   }
 
+  // Cards: clicking one opens its panel below the row and closes the others;
+  // clicking it again closes it. #<panel-id> in the URL opens that card.
+  function setupCards() {
+    var cards = Array.prototype.slice.call(document.querySelectorAll(".ov-card[aria-controls]"));
+    function show(card, open) {
+      cards.forEach(function (c) {
+        var on = open && c === card;
+        c.setAttribute("aria-selected", String(on));
+        var more = c.querySelector(".ov-card-more");
+        if (more) more.textContent = on ? "Close ▴" : "When is it exact? ▾";
+        document.getElementById(c.getAttribute("aria-controls")).hidden = !on;
+      });
+    }
+    cards.forEach(function (c) {
+      c.addEventListener("click", function () { show(c, c.getAttribute("aria-selected") !== "true"); });
+    });
+    var target = location.hash.slice(1);
+    cards.forEach(function (c) { if (c.getAttribute("aria-controls") === target) show(c, true); });
+  }
+
   // ------------------------------------------------------------------- start
 
   function start(data) {
@@ -821,8 +841,13 @@
     else if (PAGE === "overview") initOverview();
   }
 
+  if (PAGE === "overview" && /(^|[?&])(p|q|c|f\.[^=]+)=/.test(location.search)) {
+    location.replace("table.html" + location.search + location.hash);
+    return;
+  }
+
   setupTheme();
-  if (PAGE === "overview") { setupFlip(); math(document.getElementById("content")); }
+  if (PAGE === "overview") { setupFlip(); setupCards(); math(document.getElementById("content")); }
   fetch("data.json", { cache: "no-cache" })
     .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
     .then(start)
