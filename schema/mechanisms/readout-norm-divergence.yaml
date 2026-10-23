@@ -1,0 +1,7 @@
+slug: readout-norm-divergence
+label: "readout norm divergence"
+types: [T5]
+desc: "Past a critical load, strong coupling of the shared hidden weights to their old values keeps them nearly fixed, and the new task's readout norm diverges to compensate. The network then fits the new task by memorisation and fails to generalise (anterograde interference)."
+introduced_by: "2407.10315v2"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"

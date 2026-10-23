@@ -164,52 +164,52 @@
   cited_as: "Trevisan 2023"
   title: "Wide Deep Neural Networks with Gaussian Weights are Very Close to Gaussian Processes"
   year: 2023
-  status: queued
+  status: added
 - id: "1711.00165"
   cited_as: "Lee et al. 2018"
   title: "Deep Neural Networks as Gaussian Processes"
   year: 2017
-  status: queued
+  status: added
 - id: "1804.11271"
   cited_as: "Matthews et al. 2018"
   title: "Gaussian Process Behaviour in Wide Deep Neural Networks"
   year: 2018
-  status: queued
+  status: added
 - id: "2304.03408"
   cited_as: "Bordelon & Pehlevan 2023"
   title: "Dynamics of Finite Width Kernel and Prediction Fluctuations in Mean Field Neural Networks"
   year: 2023
-  status: queued
+  status: added
 - id: "2407.18807"
   cited_as: "Zhang & Sompolinsky 2024"
   title: "When narrower is better: the narrow width limit of Bayesian parallel branching neural networks"
   year: 2024
-  status: queued
+  status: added
 - id: "2407.07168"
   cited_as: "Ingrosso et al. 2024"
   title: "Statistical mechanics of transfer learning in fully-connected networks in the proportional limit"
   year: 2024
-  status: queued
+  status: added
 - id: "2407.10315"
   cited_as: "Shan et al. 2024"
   title: "Order parameters and phase transitions of continual learning in deep neural networks"
   year: 2024
-  status: queued
+  status: added
 - id: "2405.06008"
   cited_as: "Howard et al. 2025"
   title: "Wilsonian Renormalization of Neural Network Gaussian Processes"
   year: 2024
-  status: queued
+  status: added
 - id: "2510.25553"
   cited_as: "Peraza Coppola et al. 2025"
   title: "Renormalization group for deep neural networks: Universality of learning and scaling laws"
   year: 2025
-  status: queued
+  status: added
 - id: "2307.16695"
   cited_as: "Lindner et al. 2023"
   title: "A theory of data variability in Neural Network Bayesian inference"
   year: 2023
-  status: queued
+  status: added
 - id: "1910.00019"
   cited_as: "Yaida 2020"
   title: "Non-Gaussian processes and neural networks at finite widths"
