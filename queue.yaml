@@ -490,12 +490,12 @@
   cited_as: "Damian et al. 2024"
   title: "Computational-Statistical Gaps in Gaussian Single-Index Models"
   year: 2024
-  status: queued
+  status: added
 - id: "2506.05500"
   cited_as: "Damian et al. 2025"
   title: "The Generative Leap: Sharp Sample Complexity for Efficiently Learning Gaussian Multi-Index Models"
   year: 2025
-  status: queued
+  status: added
 - id: "2510.21020"
   cited_as: "Tsiolis et al. 2025"
   title: "From Information to Generative Exponent: Learning Rate Induces Phase Transitions in SGD"
@@ -510,42 +510,42 @@
   cited_as: "Bietti et al. 2023"
   title: "On Learning Gaussian Multi-index Models with Gradient Flow"
   year: 2023
-  status: queued
+  status: added
 - id: "2303.00055"
   cited_as: "Berthier et al. 2023"
   title: "Learning time-scales in two-layers neural networks"
   year: 2023
-  status: queued
+  status: added
 - id: "2407.05622"
   cited_as: "Joshi et al. 2024"
   title: "On the Complexity of Learning Sparse Functions with Statistical and Gradient Queries"
   year: 2024
-  status: queued
+  status: added
 - id: "2103.01210"
   cited_as: "Malach et al. 2021"
   title: "Quantifying the Benefit of Using Differentiable Learning over Tangent Kernels"
   year: 2021
-  status: queued
+  status: added
 - id: "2202.07626"
   cited_as: "Frei et al. 2022"
   title: "Random Feature Amplification: Feature Learning and Generalization in Neural Networks"
   year: 2022
-  status: queued
+  status: added
 - id: "2206.01717"
   cited_as: "Shi et al. 2022"
   title: "A Theoretical Analysis on Feature Learning in Neural Networks: Emergence from Inputs and Advantage over Fixed Features"
   year: 2022
-  status: queued
+  status: added
 - id: "2102.11742"
   cited_as: "Refinetti et al. 2021"
   title: "Classifying high-dimensional Gaussian mixtures: Where kernel methods fail and neural networks succeed"
   year: 2021
-  status: queued
+  status: added
 - id: "2202.12846"
   cited_as: "Abbe et al. 2022"
   title: "An initial alignment between neural network and target is needed for gradient descent to learn"
   year: 2022
-  status: queued
+  status: added
 - id: "2301.13833"
   cited_as: "Cornacchia & Mossel 2023"
   title: "A Mathematical Model for Curriculum Learning for Parities"

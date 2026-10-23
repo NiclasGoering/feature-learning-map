@@ -1,0 +1,7 @@
+slug: random-feature-amplification
+label: "random feature amplification"
+types: [T6]
+desc: "Most first-layer neurons start as weak random features with normalised correlation of order $d^{-1/2}$ to a cluster mean, and one large gradient step raises this to order one. Aligned neurons then grow in norm and become orthogonal to the opposing cluster, so the network acts as a low-complexity classifier."
+introduced_by: "2202.07626v4"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"
