@@ -1,0 +1,7 @@
+slug: teacher-equivalent-collapse
+label: "Teacher-equivalent collapse"
+types: [T4]
+desc: "A law uniform on the interpolating parameters concentrates on the set of parameters that compute the teacher function once the number of samples exceeds the dimension gap between the parameter space and that set. The collapse is onto a lower-dimensional analytic set, not onto a few atoms."
+introduced_by: "2512.06347v1"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"

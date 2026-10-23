@@ -1,0 +1,7 @@
+slug: accessibility-tempering
+label: "accessibility tempering"
+types: [T6]
+desc: "The late-time weight law of SGD is the Bayesian posterior with its likelihood raised to a power set by the local learning coefficient. Degenerate regions that the diffusion reaches only slowly are down-weighted relative to the posterior."
+introduced_by: "2503.22478v2"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"
