@@ -747,7 +747,7 @@
             el("div", { class: "setting" }, "In: " + settingLine(x.r.view)),
             el("div", { class: "stmt" }, x.r.statement),
             el("div", { class: "cite" },
-              el("a", { href: "./?p=" + encodeURIComponent(x.p.key) }, authorShort(x.p) + " " + x.p.year), ", ",
+              el("a", { href: "table.html?p=" + encodeURIComponent(x.p.key) }, authorShort(x.p) + " " + x.p.year), ", ",
               sourceLink(x.r), " · ", statusPill(x.r.status), " · ",
               "moves the mean predictor: " + lab("moves_mean", x.r.mechanism.moves_mean)));
         })));
@@ -773,7 +773,7 @@
         el("div", { class: "op-papers" },
           el("strong", null, "Papers in the map that touch it: "),
           papers.length ? el("ul", null, papers.map(function (p) {
-            return el("li", null, el("a", { href: "./?p=" + encodeURIComponent(p.key) }, p.title),
+            return el("li", null, el("a", { href: "table.html?p=" + encodeURIComponent(p.key) }, p.title),
               " (" + authorShort(p) + " " + p.year + ")",
               o.answered_by.indexOf(p.key) >= 0 ? el("span", { class: "muted" }, " · answers part of it") : null);
           })) : el("span", { class: "muted" }, "none yet.")),
@@ -790,7 +790,7 @@
     document.querySelectorAll("a.cite[data-arxiv]").forEach(function (a) {
       var p = byBase[a.getAttribute("data-arxiv")];
       if (p) {
-        a.href = "./?p=" + encodeURIComponent(p.key);
+        a.href = "table.html?p=" + encodeURIComponent(p.key);
         a.classList.add("in-map");
         a.title = "Entry in the map: " + p.title;
       } else {
@@ -839,6 +839,11 @@
     else if (PAGE === "mechanisms") initMechanisms();
     else if (PAGE === "open-problems") initOpenProblems();
     else if (PAGE === "overview") initOverview();
+  }
+
+  if (PAGE === "overview" && /(^|[?&])(p|q|c|f\.[^=]+)=/.test(location.search)) {
+    location.replace("table.html" + location.search + location.hash);
+    return;
   }
 
   setupTheme();

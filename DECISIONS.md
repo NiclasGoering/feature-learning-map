@@ -62,6 +62,7 @@ One line per choice made where SPEC.md left room.
 - At the team's explicit request the Overview page publishes the team's own unpublished framing (the bad-completion gap $\Gamma_D$, the energy–entropy reading, the extensivity criterion), overriding SPEC.md section 2 for that page only; paper entries, the queue and open problems still follow section 2.
 - The Overview is one flowing column about 62rem wide (sized for a laptop screen, so display formulas fit), at the team's request.
 - At the team's request the Overview leads with how $\kappa$ interpolates NTK and μP (§3, with the output scale $\gamma=\gamma_0N^s$ giving $\kappa=\gamma_0^2N^{2s-1}$ and the extensive-$Z$ criterion), before the derivation (§4); the three exact cases of the GD cost are clickable cards that open a panel on when each is exact, what it means for Bayes and when it breaks.
+- At the team's request the Overview is the landing page: the build publishes `site/overview.html` as `index.html`, the table lives at `table.html`, and old table links with `?p=`, `?q=`, `?f.…` or `?c=` redirect there.
 - Overview citations link to the paper's entry in the map when it has one and to arXiv (or the DOI) otherwise, so they switch to map entries as papers are ingested.
 - The Mechanisms page lists every result under its FL type, then its mechanism label, as "In: setting · statement · paper, location".
 - Rows flag `gold` or `extracted` entries next to the arXiv links; `verified` entries carry no flag.

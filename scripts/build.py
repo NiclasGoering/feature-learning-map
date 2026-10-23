@@ -3,7 +3,8 @@
 
     python scripts/build.py
 
-Runs the validator first and stops if it fails. Then copies site/ and writes
+Runs the validator first and stops if it fails. Then copies site/ (publishing
+overview.html also as the landing page index.html) and writes
 _site/data.json, compiled from papers/*.md, open-problems/*.md and queue.yaml.
 Preview locally with:  python -m http.server -d _site 8000
 """
@@ -142,6 +143,7 @@ def main():
     if OUT.exists():
         shutil.rmtree(OUT)
     shutil.copytree(SITE, OUT)
+    shutil.copyfile(OUT / "overview.html", OUT / "index.html")   # the overview is the landing page
     (OUT / "data.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(f"Built {OUT.relative_to(flmap.ROOT)}/ with {len(papers)} paper(s).")
     return 0
