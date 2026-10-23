@@ -1,0 +1,7 @@
+slug: activation-partition-alignment
+label: "activation partition alignment"
+types: [T6]
+desc: "In a piecewise linear network started near zero output, the first layer learns faster than the rest (upstream initialisation) and each neuron's active halfspace rotates to a data-dependent direction while the output stays near zero. The kernel changes through the activation pattern, with little movement in parameter space."
+introduced_by: "2406.06158v2"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"

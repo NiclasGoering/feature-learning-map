@@ -1,0 +1,7 @@
+slug: hidden-progress
+label: "hidden progress"
+types: [T6]
+desc: "When the same batch is reused, the first gradient step adds to each pre-activation a term along the same sample's gradient, so pre-activations become correlated with the target before the weights overlap with the target subspace. The next step then gets a gradient signal along directions that one-pass SGD cannot see."
+introduced_by: "2402.03220v3"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"
