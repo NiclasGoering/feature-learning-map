@@ -1,0 +1,7 @@
+slug: finite-sample-noise-spike
+label: "finite-sample noise spike"
+types: [T6]
+desc: "With finite source data the learned feature kernel gains, besides the signal spike, a spike along the source sample's own noise direction and a cross term. It can make the kernel fit the sample rather than the task."
+introduced_by: "2507.04448v2"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"

@@ -62,54 +62,54 @@
   cited_as: "Rubin, Davidovich & Ringel 2025/2026"
   title: "Mitigating the Curse of Detail: Scaling Arguments for Feature Learning and Sample Complexity"
   year: 2025
-  status: queued
+  status: added
   note: "Cited in the note through a vault link."
 - id: "2405.10761"
   cited_as: "Fischer et al. 2024"
   title: "Critical feature learning in deep neural networks"
   year: 2024
-  status: queued
+  status: added
 - id: "2106.00651"
   cited_as: "Zavatone-Veth, Canatar, Ruben & Pehlevan 2021"
   title: "Asymptotics of representation learning in finite Bayesian neural networks"
   year: 2021
-  status: queued
+  status: added
 - id: "2205.09653"
   cited_as: "Bordelon & Pehlevan 2022"
   title: "Self-Consistent Dynamical Field Theory of Kernel Evolution in Wide Neural Networks"
   year: 2022
-  status: queued
+  status: added
 - id: "2507.04448"
   cited_as: "Lauditi et al. 2026"
   title: "Transfer Learning in Infinite Width Feature Learning Networks"
   year: 2025
-  status: queued
+  status: added
   note: "Cited as Lauditi et al. 2026; resolved to the 2025 transfer-learning follow-up on adaptive kernels (medium confidence)."
 - id: "2108.13097"
   cited_as: "Yang et al. 2023 (DKM)"
   title: "A theory of representation learning gives a deep generalisation of kernel methods"
   year: 2021
-  status: queued
+  status: added
 - id: "2406.16689"
   cited_as: "van Meegen & Sompolinsky 2025"
   title: "Coding schemes in neural networks learning classification tasks"
   year: 2024
-  status: queued
+  status: added
 - id: "2403.14917"
   cited_as: "Takakura & Suzuki 2024"
   title: "Mean-field Analysis on Two-layer Neural Networks from a Kernel Perspective"
   year: 2024
-  status: queued
+  status: added
 - id: "2606.31429"
   cited_as: "Shang et al. 2026"
   title: "The Geometry of Statistical Feature Learning in Mean-Field Langevin Dynamics"
   year: 2026
-  status: queued
+  status: added
 - id: "2606.12058"
   cited_as: "Lavie et al. 2026"
   title: "Phase Transitions in Attention: A Bayesian Theory of Copy Head Emergence"
   year: 2026
-  status: queued
+  status: added
 - id: "2602.22925"
   cited_as: "Papagiannouli, Trevisan & Zitto 2026"
   title: "Beyond NNGP: Large Deviations and Feature Learning in Bayesian Neural Networks"

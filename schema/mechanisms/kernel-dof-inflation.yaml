@@ -1,0 +1,7 @@
+slug: kernel-dof-inflation
+label: "kernel dimension inflation"
+types: [T3]
+desc: "Noise in the labels biases the learned first-layer kernel towards a large effective dimension (degrees of freedom), so the kernel fits the noise as well as the target. Injecting label noise during training penalises this."
+introduced_by: "2403.14917v2"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"
