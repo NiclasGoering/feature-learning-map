@@ -114,52 +114,52 @@
   cited_as: "Papagiannouli, Trevisan & Zitto 2026"
   title: "Beyond NNGP: Large Deviations and Feature Learning in Bayesian Neural Networks"
   year: 2026
-  status: queued
+  status: added
 - id: "2505.08062"
   cited_as: "Andreis, Bassetti & Hirsch 2026"
   title: "LDP for the covariance process in fully connected neural networks"
   year: 2025
-  status: queued
+  status: added
 - id: "2607.05735"
   cited_as: "Vaintrob & Hänni 2026"
   title: "Width-Robust Learnability in Mean-Field Bayesian Neural Networks"
   year: 2026
-  status: queued
+  status: added
 - id: "2507.00629"
   cited_as: "Ortiz et al. 2025"
   title: "Generalization performance of narrow one-hidden layer networks in the teacher-student setting"
   year: 2025
-  status: queued
+  status: added
 - id: "2510.24616"
   cited_as: "Barbier et al. 2026"
   title: "Statistical physics of deep learning: Optimal learning of a multi-layer perceptron near interpolation"
   year: 2025
-  status: queued
+  status: added
 - id: "2408.03733"
   cited_as: "Maillard et al. 2024"
   title: "Bayes-optimal learning of an extensive-width neural network from quadratically many samples"
   year: 2024
-  status: queued
+  status: added
 - id: "2605.10395"
   cited_as: "Nguyen & Barbier 2026"
   title: "Sharp feature-learning transitions and Bayes-optimal neural scaling laws in extensive-width networks"
   year: 2026
-  status: queued
+  status: added
 - id: "2602.15593"
   cited_as: "Bauer et al. 2026"
   title: "A unified theory of feature learning in RNNs and DNNs"
   year: 2026
-  status: queued
+  status: added
 - id: "1910.08013"
   cited_as: "Aitchison 2020"
   title: "Why bigger is not always better: on finite and infinite neural networks"
   year: 2019
-  status: queued
+  status: added
 - id: "2206.07673"
   cited_as: "Hron et al. 2022"
   title: "Wide Bayesian neural networks have a simple weight posterior: theory and accelerated sampling"
   year: 2022
-  status: queued
+  status: added
 - id: "2312.11737"
   cited_as: "Trevisan 2023"
   title: "Wide Deep Neural Networks with Gaussian Weights are Very Close to Gaussian Processes"

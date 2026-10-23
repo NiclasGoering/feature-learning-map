@@ -1,0 +1,7 @@
+slug: temporal-kernel-coherence      # equals the file name
+label: "temporal kernel coherence"   # 1 to 4 words, lowercase except names
+types: [T5]
+desc: "In a weight-shared recurrent network, a strong enough learning signal makes the incoherent minimum of the kernel objective unstable, and the representation kernel acquires off-diagonal correlations between timesteps. The kernel eigenvectors align with the task, which an unrolled network with independent layers cannot do."
+introduced_by: "2602.15593v1"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"
