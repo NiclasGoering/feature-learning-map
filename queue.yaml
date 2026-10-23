@@ -806,53 +806,53 @@
   cited_as: "Gong & Xia 2022"
   title: "Interpreting Deep Learning by Establishing a Rigorous Corresponding Relationship with Renormalization Group"
   year: 2022
-  status: queued
+  status: added
   note: "Cited in the note through a vault link."
 - id: "1412.8690"
   cited_as: "Bach 2017"
   title: "Breaking the Curse of Dimensionality with Convex Neural Networks"
   year: 2014
-  status: queued
+  status: added
 - id: "1902.05040"
   cited_as: "Savarese et al. 2019"
   title: "How do infinite width bounded norm networks look in function space?"
   year: 2019
-  status: queued
+  status: added
 - id: "1910.01635"
   cited_as: "Ongie et al. 2020"
   title: "A Function Space View of Bounded Norm Infinite Width ReLU Nets: The Multivariate Case"
   year: 2019
-  status: queued
+  status: added
 - id: "2006.05626"
   cited_as: "Parhi & Nowak 2021"
   title: "Banach Space Representer Theorems for Neural Networks and Ridge Splines"
   year: 2020
-  status: queued
+  status: added
 - id: "2002.10553"
   cited_as: "Pilanci & Ergen 2020"
   title: "Neural Networks are Convex Regularizers: Exact Polynomial-time Convex Optimization Formulations for Two-layer Networks"
   year: 2020
-  status: queued
+  status: added
 - id: "2209.15055"
   cited_as: "Jacot 2022"
   title: "Implicit Bias of Large Depth Networks: a Notion of Rank for Nonlinear Functions"
   year: 2022
-  status: queued
+  status: added
 - id: "2305.19008"
   cited_as: "Jacot 2023"
   title: "Bottleneck Structure in Learned Features: Low-Dimension vs Regularity Tradeoff"
   year: 2023
-  status: queued
+  status: added
 - id: "2606.14954"
   cited_as: "Ongie & Parhi 2026"
   title: "Representation Costs in Data Science: Foundations and the Quasi-Banach Spaces of Deep Neural Networks"
   year: 2026
-  status: queued
+  status: added
 - id: "2508.13346"
   cited_as: "Hsu"
   title: "Dimension lower bounds for linear approaches to function approximation"
   year: 2025
-  status: queued
+  status: added
 - id: "2603.22030"
   cited_as: "Kobialka et al. 2026"
   title: "On the Interplay of Priors and Overparametrization in Bayesian Neural Network Posteriors"

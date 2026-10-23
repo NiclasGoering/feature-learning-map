@@ -1,0 +1,7 @@
+slug: bottleneck-rank-bias
+label: "bottleneck rank bias"
+types: [T4]
+desc: "In deep homogeneous networks with weight decay, the cost of representing a function tends, per layer, to a notion of rank. Global minima then pass the data through a layer whose representation is nearly rank one, so the learned features are a low-dimensional bottleneck."
+introduced_by: "2209.15055v4"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"
