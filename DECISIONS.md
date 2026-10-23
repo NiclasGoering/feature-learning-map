@@ -60,6 +60,7 @@ One line per choice made where SPEC.md left room.
 - Group headers count papers matching the current filters; empty width groups show "no papers yet", or "no papers match the filters" when filtering hid them.
 - At the team's request (2026-10-23) the site has a third secondary page, Overview: a one-page summary of the variational picture (who pays for interpolation), beyond the two pages SPEC.md allows.
 - At the team's explicit request the Overview page publishes the team's own unpublished framing (the bad-completion gap $\Gamma_D$, the energy–entropy reading, the extensivity criterion), overriding SPEC.md section 2 for that page only; paper entries, the queue and open problems still follow section 2.
+- The Overview is one flowing column about 62rem wide (sized for a laptop screen, so display formulas fit), at the team's request.
 - Overview citations link to the paper's entry in the map when it has one and to arXiv (or the DOI) otherwise, so they switch to map entries as papers are ingested.
 - The Mechanisms page lists every result under its FL type, then its mechanism label, as "In: setting · statement · paper, location".
 - Rows flag `gold` or `extracted` entries next to the arXiv links; `verified` entries carry no flag.

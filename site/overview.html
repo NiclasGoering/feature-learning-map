@@ -86,7 +86,8 @@
   $$\htmlClass{c-ent}{J_\ell(K\mid K')}=\min\big\{\mathrm{KL}(\nu\Vert\mathcal N(0,K')):\ \mathbb E_\nu[\varphi(h)\varphi(h)^\top]=K\big\}.$$
   <p>Both rules fit one template on the neuron measure $\nu$ (prior $\nu_0$):</p>
   <div class="ov-key gd">
-  $$\nu^\star_R=\arg\min_{\nu:\ f_\nu(X)=y}\ C_R(\nu\mid\nu_0),\qquad C_B=\mathrm{KL}(\nu\Vert\nu_0),\qquad \htmlClass{c-gd}{C_{GD}(\nu\mid\nu_0)=\text{cost of reaching }\nu\text{ by gradient flow from }\nu_0}$$
+  $$\nu^\star_R=\arg\min_{\nu:\ f_\nu(X)=y}\ C_R(\nu\mid\nu_0)$$
+  $$C_B=\mathrm{KL}(\nu\Vert\nu_0),\qquad \htmlClass{c-gd}{C_{GD}(\nu\mid\nu_0)=\text{cost of reaching }\nu\text{ by gradient flow from }\nu_0}$$
   </div>
   <p>$C_{GD}$ is exact in three cases. Lazy: $\tfrac12\mathbb E\Vert\theta-\theta_0\Vert^2$ ($\approx W_2^2$, kernel frozen at the NTK; <a class="cite" data-arxiv="1812.07956" href="https://arxiv.org/abs/1812.07956">Chizat et al. 2019</a>).
   Weight decay: $\mathbb E_\nu\Vert\theta\Vert^2$, giving variation and $R_L$ norms (<a class="cite" data-arxiv="1412.8690" href="https://arxiv.org/abs/1412.8690">Bach 2017</a>; <a class="cite" data-arxiv="2606.14954" href="https://arxiv.org/abs/2606.14954">Ongie &amp; Parhi 2026</a>) and a different adaptive kernel from Bayes (<a class="cite" data-arxiv="2502.07998" href="https://arxiv.org/abs/2502.07998">Lauditi et al. 2025</a>).

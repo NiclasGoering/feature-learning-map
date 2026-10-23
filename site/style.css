@@ -345,14 +345,16 @@ ul.dict li { padding: 0.6rem 0; border-bottom: 1px solid var(--line); }
 
 /* ---------------------------------------------------------------- overview */
 
-.ov-page { max-width: 72rem; margin: 0 auto; }
+.ov-page { max-width: 62rem; margin: 0 auto; font-size: 1.04rem; }
 .ov-head { text-align: center; border-bottom: 1.5px solid var(--rule); padding-bottom: 0.7rem; margin-bottom: 1.1rem; }
 .ov-head h1 { font-size: 2rem; font-weight: 600; font-variant: small-caps; letter-spacing: 0.04em; margin: 0.4rem 0 0.2rem; }
 .ov-head .lede { margin: 0 auto 0.5rem; }
 .ov-notation, .ov-legend { font-size: 0.88rem; color: var(--fg-muted); margin: 0.2rem 0; }
 .ov-legend span { margin: 0 0.45rem; white-space: nowrap; }
-.ov-cols { column-count: 2; column-gap: 2.2rem; column-rule: 1px solid var(--line); }
-.ov-page section { break-inside: avoid; margin: 0 0 1.1rem; overflow-wrap: break-word; min-width: 0; }
+/* One flowing column, sized for a laptop screen: display formulas fit without scrolling. */
+.ov-cols { }
+.ov-cols > section + section { border-top: 1px solid var(--line); padding-top: 0.9rem; }
+.ov-page section { margin: 0 0 1.2rem; overflow-wrap: break-word; min-width: 0; }
 .ov-page h2 { font-size: 1.05rem; font-weight: 600; font-variant: small-caps; letter-spacing: 0.04em; margin: 0 0 0.3rem; }
 .ov-page h2 .n { color: var(--fg-faint); margin-right: 0.35rem; }
 .ov-page p { margin: 0.3rem 0; }
@@ -374,7 +376,7 @@ ul.dict li { padding: 0.6rem 0; border-bottom: 1px solid var(--line); }
 .ov-flip > summary { cursor: pointer; color: var(--fg-muted); font-style: italic; }
 .ov-flip[open] { background: var(--bg-raised); }
 .ov-status { border-top: 1.5px solid var(--rule); padding-top: 0.5rem; margin-top: 0.4rem; font-size: 0.85rem; color: var(--fg-muted); font-style: italic; }
-@media (max-width: 900px) { .ov-cols { column-count: 1; } .ov-head h1 { font-size: 1.6rem; } }
+@media (max-width: 900px) { .ov-head h1 { font-size: 1.6rem; } .ov-page { font-size: 1rem; } }
 @media print {
   header.site, .site-foot, .ov-flip, .fliplink { display: none; }
   body { font-size: 8.6pt; }
