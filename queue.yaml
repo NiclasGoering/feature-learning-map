@@ -907,52 +907,52 @@
   cited_as: "Brosse et al. 2018"
   title: "The promises and pitfalls of Stochastic Gradient Langevin Dynamics"
   year: 2018
-  status: queued
+  status: added
 - id: "2505.19087"
   cited_as: "Harel et al. 2025"
   title: "Temperature is All You Need for Generalization in Langevin Dynamics and other Markov Processes"
   year: 2025
-  status: queued
+  status: added
 - id: "2510.06028"
   cited_as: "Maurer et al. 2025"
   title: "Generalization of Gibbs and Langevin Monte Carlo Algorithms in the Interpolation Regime"
   year: 2025
-  status: queued
+  status: added
 - id: "2507.21449"
   cited_as: "Hitchcock & Hoogland 2025"
   title: "From Global to Local: A Scalable Benchmark for Local Posterior Sampling"
   year: 2025
-  status: queued
+  status: added
 - id: "2609.15894"
   cited_as: "Yallup 2026"
   title: "Quenched Ensemble Sampling"
   year: 2026
-  status: queued
+  status: added
 - id: "1904.04154"
   cited_as: "Baldock & Marzari 2019"
   title: "Bayesian Neural Networks at Finite Temperature"
   year: 2019
-  status: queued
+  status: added
 - id: "2608.20183"
   cited_as: "Sergeant-Perthuis et al. 2026"
   title: "Exact Algebraic Computation of Learning Coefficients for Two-Dimensional Singular Models"
   year: 2026
-  status: queued
+  status: added
 - id: "2106.06596"
   cited_as: "Noci et al. 2021"
   title: "Disentangling the Roles of Curation, Data-Augmentation and the Prior in the Cold Posterior Effect"
   year: 2021
-  status: queued
+  status: added
 - id: "2106.05586"
   cited_as: "Nabarro et al. 2021"
   title: "Data augmentation in Bayesian neural networks and the cold posterior effect"
   year: 2021
-  status: queued
+  status: added
 - id: "2203.16481"
   cited_as: "Kapoor et al. 2022"
   title: "On Uncertainty, Tempering, and Data Augmentation in Bayesian Classification"
   year: 2022
-  status: queued
+  status: added
 - id: "2309.05292"
   cited_as: "Pitas & Arbel 2023"
   title: "The fine print on tempered posteriors"
