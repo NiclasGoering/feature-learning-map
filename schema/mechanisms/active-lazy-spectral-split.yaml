@@ -1,0 +1,7 @@
+slug: active-lazy-spectral-split      # equals the file name
+label: "active-lazy spectral split"   # 1 to 4 words, lowercase except names
+types: [T3]
+desc: "In a mean-field Bayesian network only a low-dimensional active subspace of each layer's feature-kernel spectrum carries data-dependent statistics. The remaining lazy bulk stays at its prior law and can be resampled from the prior without changing the output."
+introduced_by: "2607.05735v1"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"

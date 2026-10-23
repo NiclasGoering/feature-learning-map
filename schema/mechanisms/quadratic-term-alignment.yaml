@@ -1,0 +1,7 @@
+slug: quadratic-term-alignment      # equals the file name
+label: "quadratic-term alignment"   # 1 to 4 words, lowercase except names
+types: [T2]
+desc: "With quadratically many samples the network (for a quadratic activation, exactly) aligns its second-order (quadratic) component, the matrix $W^\\top \\mathrm{diag}(v) W$, with the target's, without recovering individual weight vectors. The network then acts as the best quadratic approximation of the target and is independent of the law of the target's hidden weights."
+introduced_by: "2408.03733v1"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"
