@@ -1,0 +1,1146 @@
+# Papers cited by the reference note that are not yet in papers/, in ingest priority order:
+# Bayesian feature-learning theory, GD feature learning, generalisation theory, data structure
+# and simplicity bias, representation costs, sampling and mixing, classical statistical mechanics;
+# entries without an arXiv ID (status needs-id) last.
+#
+# status: queued (ready for ingest) | needs-id (no arXiv ID found) | added (entry exists in papers/) | skipped
+# Quote every id. Ingest sessions take `queued` entries from the top (INGEST.md).
+
+- id: "2210.17449"
+  cited_as: "Li & Sompolinsky 2022"
+  title: "Globally Gated Deep Linear Networks"
+  year: 2022
+  status: queued
+- id: "2209.04882"
+  cited_as: "Pacelli et al. 2023"
+  title: "A statistical mechanics framework for Bayesian deep neural networks beyond the infinite-width limit"
+  year: 2022
+  status: queued
+- id: "2307.11807"
+  cited_as: "Aiudi et al. 2025"
+  title: "Local Kernel Renormalization as a mechanism for feature learning in overparametrized Convolutional Neural Networks"
+  year: 2023
+  status: queued
+- id: "2401.11004"
+  cited_as: "Baglioni et al. 2024a"
+  title: "Predictive power of a Bayesian effective action for fully-connected one hidden layer neural networks in the proportional limit"
+  year: 2024
+  status: queued
+- id: "2412.15911"
+  cited_as: "Baglioni et al. 2024"
+  title: "Kernel shape renormalization explains output-output correlations in finite Bayesian one-hidden-layer networks"
+  year: 2024
+  status: queued
+- id: "2605.29684"
+  cited_as: "Baglioni et al. 2026"
+  title: "Kernel Renormalization in Bayesian Deep Neural Networks: the Equivalent Wishart Ansatz in the Proportional Regime"
+  year: 2026
+  status: queued
+  note: "Cited in the note through a vault link."
+- id: "2406.03260"
+  cited_as: "Bassetti Wishart LDP"
+  title: "Feature learning in finite-width Bayesian deep linear networks with multiple outputs and convolutional layers"
+  year: 2024
+  status: queued
+  note: "Also the Wishart large-deviation result cited in open problem op-07."
+- id: "2508.20989"
+  cited_as: "Corti et al. 2025"
+  title: "Microscopic and collective signatures of feature learning in neural networks"
+  year: 2025
+  status: queued
+- id: "2106.04110"
+  cited_as: "Naveh & Ringel 2021"
+  title: "A self consistent theory of Gaussian Processes captures feature learning effects in finite CNNs"
+  year: 2021
+  status: queued
+- id: "2502.03210"
+  cited_as: "Rubin et al. 2025"
+  title: "From Kernels to Features: A Multi-Scale Adaptive Theory of Feature Learning"
+  year: 2025
+  status: queued
+- id: "2512.04165"
+  cited_as: "Rubin, Davidovich & Ringel 2025/2026"
+  title: "Mitigating the Curse of Detail: Scaling Arguments for Feature Learning and Sample Complexity"
+  year: 2025
+  status: queued
+  note: "Cited in the note through a vault link."
+- id: "2405.10761"
+  cited_as: "Fischer et al. 2024"
+  title: "Critical feature learning in deep neural networks"
+  year: 2024
+  status: queued
+- id: "2106.00651"
+  cited_as: "Zavatone-Veth, Canatar, Ruben & Pehlevan 2021"
+  title: "Asymptotics of representation learning in finite Bayesian neural networks"
+  year: 2021
+  status: queued
+- id: "2205.09653"
+  cited_as: "Bordelon & Pehlevan 2022"
+  title: "Self-Consistent Dynamical Field Theory of Kernel Evolution in Wide Neural Networks"
+  year: 2022
+  status: queued
+- id: "2507.04448"
+  cited_as: "Lauditi et al. 2026"
+  title: "Transfer Learning in Infinite Width Feature Learning Networks"
+  year: 2025
+  status: queued
+  note: "Cited as Lauditi et al. 2026; resolved to the 2025 transfer-learning follow-up on adaptive kernels (medium confidence)."
+- id: "2108.13097"
+  cited_as: "Yang et al. 2023 (DKM)"
+  title: "A theory of representation learning gives a deep generalisation of kernel methods"
+  year: 2021
+  status: queued
+- id: "2406.16689"
+  cited_as: "van Meegen & Sompolinsky 2025"
+  title: "Coding schemes in neural networks learning classification tasks"
+  year: 2024
+  status: queued
+- id: "2403.14917"
+  cited_as: "Takakura & Suzuki 2024"
+  title: "Mean-field Analysis on Two-layer Neural Networks from a Kernel Perspective"
+  year: 2024
+  status: queued
+- id: "2606.31429"
+  cited_as: "Shang et al. 2026"
+  title: "The Geometry of Statistical Feature Learning in Mean-Field Langevin Dynamics"
+  year: 2026
+  status: queued
+- id: "2606.12058"
+  cited_as: "Lavie et al. 2026"
+  title: "Phase Transitions in Attention: A Bayesian Theory of Copy Head Emergence"
+  year: 2026
+  status: queued
+- id: "2602.22925"
+  cited_as: "Papagiannouli, Trevisan & Zitto 2026"
+  title: "Beyond NNGP: Large Deviations and Feature Learning in Bayesian Neural Networks"
+  year: 2026
+  status: queued
+- id: "2505.08062"
+  cited_as: "Andreis, Bassetti & Hirsch 2026"
+  title: "LDP for the covariance process in fully connected neural networks"
+  year: 2025
+  status: queued
+- id: "2607.05735"
+  cited_as: "Vaintrob & Hänni 2026"
+  title: "Width-Robust Learnability in Mean-Field Bayesian Neural Networks"
+  year: 2026
+  status: queued
+- id: "2507.00629"
+  cited_as: "Ortiz et al. 2025"
+  title: "Generalization performance of narrow one-hidden layer networks in the teacher-student setting"
+  year: 2025
+  status: queued
+- id: "2510.24616"
+  cited_as: "Barbier et al. 2026"
+  title: "Statistical physics of deep learning: Optimal learning of a multi-layer perceptron near interpolation"
+  year: 2025
+  status: queued
+- id: "2408.03733"
+  cited_as: "Maillard et al. 2024"
+  title: "Bayes-optimal learning of an extensive-width neural network from quadratically many samples"
+  year: 2024
+  status: queued
+- id: "2605.10395"
+  cited_as: "Nguyen & Barbier 2026"
+  title: "Sharp feature-learning transitions and Bayes-optimal neural scaling laws in extensive-width networks"
+  year: 2026
+  status: queued
+- id: "2602.15593"
+  cited_as: "Bauer et al. 2026"
+  title: "A unified theory of feature learning in RNNs and DNNs"
+  year: 2026
+  status: queued
+- id: "1910.08013"
+  cited_as: "Aitchison 2020"
+  title: "Why bigger is not always better: on finite and infinite neural networks"
+  year: 2019
+  status: queued
+- id: "2206.07673"
+  cited_as: "Hron et al. 2022"
+  title: "Wide Bayesian neural networks have a simple weight posterior: theory and accelerated sampling"
+  year: 2022
+  status: queued
+- id: "2312.11737"
+  cited_as: "Trevisan 2023"
+  title: "Wide Deep Neural Networks with Gaussian Weights are Very Close to Gaussian Processes"
+  year: 2023
+  status: queued
+- id: "1711.00165"
+  cited_as: "Lee et al. 2018"
+  title: "Deep Neural Networks as Gaussian Processes"
+  year: 2017
+  status: queued
+- id: "1804.11271"
+  cited_as: "Matthews et al. 2018"
+  title: "Gaussian Process Behaviour in Wide Deep Neural Networks"
+  year: 2018
+  status: queued
+- id: "2304.03408"
+  cited_as: "Bordelon & Pehlevan 2023"
+  title: "Dynamics of Finite Width Kernel and Prediction Fluctuations in Mean Field Neural Networks"
+  year: 2023
+  status: queued
+- id: "2407.18807"
+  cited_as: "Zhang & Sompolinsky 2024"
+  title: "When narrower is better: the narrow width limit of Bayesian parallel branching neural networks"
+  year: 2024
+  status: queued
+- id: "2407.07168"
+  cited_as: "Ingrosso et al. 2024"
+  title: "Statistical mechanics of transfer learning in fully-connected networks in the proportional limit"
+  year: 2024
+  status: queued
+- id: "2407.10315"
+  cited_as: "Shan et al. 2024"
+  title: "Order parameters and phase transitions of continual learning in deep neural networks"
+  year: 2024
+  status: queued
+- id: "2405.06008"
+  cited_as: "Howard et al. 2025"
+  title: "Wilsonian Renormalization of Neural Network Gaussian Processes"
+  year: 2024
+  status: queued
+- id: "2510.25553"
+  cited_as: "Peraza Coppola et al. 2025"
+  title: "Renormalization group for deep neural networks: Universality of learning and scaling laws"
+  year: 2025
+  status: queued
+- id: "2307.16695"
+  cited_as: "Lindner et al. 2023"
+  title: "A theory of data variability in Neural Network Bayesian inference"
+  year: 2023
+  status: queued
+- id: "1910.00019"
+  cited_as: "Yaida 2020"
+  title: "Non-Gaussian processes and neural networks at finite widths"
+  year: 2019
+  status: queued
+- id: "2106.10165"
+  cited_as: "Roberts, Yaida & Hanin 2022"
+  title: "The Principles of Deep Learning Theory"
+  year: 2021
+  status: queued
+- id: "2204.01058"
+  cited_as: "Hanin 2024"
+  title: "Random Fully Connected Neural Networks as Perturbatively Solvable Hierarchies"
+  year: 2022
+  status: queued
+- id: "2203.00573"
+  cited_as: "Zavatone-Veth, Tong & Pehlevan 2022"
+  title: "Contrasting random and learned features in deep Bayesian linear regression"
+  year: 2022
+  status: queued
+- id: "2104.11734"
+  cited_as: "Zavatone-Veth & Pehlevan 2021"
+  title: "Exact marginal prior distributions of finite Bayesian neural networks"
+  year: 2021
+  status: queued
+- id: "2111.11954"
+  cited_as: "Zavatone-Veth & Pehlevan 2021"
+  title: "Depth induces scale-averaging in overparameterized linear Bayesian neural networks"
+  year: 2021
+  status: queued
+- id: "2106.06615"
+  cited_as: "Noci et al. 2021"
+  title: "Precise characterization of the prior predictive distribution of deep ReLU networks"
+  year: 2021
+  status: queued
+- id: "2405.16630"
+  cited_as: "Hanin & Zlokapa 2024"
+  title: "Bayesian Inference with Deep Weakly Nonlinear Networks"
+  year: 2024
+  status: queued
+- id: "2502.04247"
+  cited_as: "Caporali et al. 2025"
+  title: "Student-t processes as infinite-width limits of posterior Bayesian neural networks"
+  year: 2025
+  status: queued
+- id: "2507.22095"
+  cited_as: "Apollonio et al. 2025"
+  title: "Posterior Bayesian Neural Networks with Dependent Weights"
+  year: 2025
+  status: queued
+- id: "2401.01611"
+  cited_as: "Macci, Pacchiarotti & Torrisi"
+  title: "Large and moderate deviations for Gaussian neural networks"
+  year: 2024
+  status: queued
+- id: "2405.16958"
+  cited_as: "Vogel 2026"
+  title: "Large Deviations of Gaussian Neural Networks with ReLU activation"
+  year: 2024
+  status: queued
+- id: "2603.06023"
+  cited_as: "Bassetti, De Palma & Ladelli"
+  title: "Large deviation principles for convolutional Bayesian neural networks"
+  year: 2026
+  status: queued
+- id: "2309.09814"
+  cited_as: "Milsom et al. 2024"
+  title: "Convolutional Deep Kernel Machines"
+  year: 2023
+  status: queued
+- id: "2010.01590"
+  cited_as: "Aitchison, Yang & Ober 2021"
+  title: "Deep kernel processes"
+  year: 2020
+  status: queued
+- id: "2510.15174"
+  cited_as: "Göring 2025"
+  title: "A simple mean field model of feature learning"
+  year: 2025
+  status: queued
+  note: "Cited as Göring 2025 (sparse-parity critical sample size, SGLD critical-noise law)."
+- id: "2307.05635"
+  cited_as: "Camilli et al. 2023"
+  title: "Fundamental limits of overparametrized shallow neural networks for supervised learning"
+  year: 2023
+  status: queued
+- id: "1806.05451"
+  cited_as: "Aubin et al. 2018"
+  title: "The committee machine: Computational to statistical gaps in learning a two-layers neural network"
+  year: 2018
+  status: queued
+- id: "2503.14121"
+  cited_as: "Xu et al. 2025"
+  title: "Fundamental Limits of Matrix Sensing: Exact Asymptotics, Universality, and Applications"
+  year: 2025
+  status: queued
+- id: "1905.07769"
+  cited_as: "Hu, Ren, Šiška & Szpruch 2021"
+  title: "Mean-Field Langevin Dynamics and Energy Landscape of Neural Networks"
+  year: 2019
+  status: queued
+- id: "2201.10469"
+  cited_as: "Nitanda, Wu & Suzuki 2022"
+  title: "Convex Analysis of the Mean Field Langevin Dynamics"
+  year: 2022
+  status: queued
+- id: "2202.01009"
+  cited_as: "Chizat 2022"
+  title: "Mean-Field Langevin Dynamics: Exponential Convergence and Annealing"
+  year: 2022
+  status: queued
+- id: "1902.06015"
+  cited_as: "Mei et al. 2019"
+  title: "Mean-field theory of two-layers neural networks: dimension-free bounds and kernel limit"
+  year: 2019
+  status: queued
+- id: "1805.09545"
+  cited_as: "Chizat & Bach 2018"
+  title: "On the Global Convergence of Gradient Descent for Over-parameterized Models using Optimal Transport"
+  year: 2018
+  status: queued
+- id: "1805.00915"
+  cited_as: "Rotskoff & Vanden-Eijnden 2018"
+  title: "Trainability and Accuracy of Neural Networks: An Interacting Particle System Approach"
+  year: 2018
+  status: queued
+- id: "1812.07956"
+  cited_as: "Chizat et al. 2018"
+  title: "On Lazy Training in Differentiable Programming"
+  year: 2018
+  status: queued
+- id: "2002.09277"
+  cited_as: "Woodworth et al. 2020"
+  title: "Kernel and Rich Regimes in Overparametrized Models"
+  year: 2020
+  status: queued
+- id: "1906.08034"
+  cited_as: "Geiger et al. 2019"
+  title: "Disentangling feature and lazy training in deep neural networks"
+  year: 2019
+  status: queued
+- id: "2203.03466"
+  cited_as: "Yang et al. 2022"
+  title: "Tensor Programs V: Tuning Large Neural Networks via Zero-Shot Hyperparameter Transfer"
+  year: 2022
+  status: queued
+- id: "2302.11055"
+  cited_as: "Abbe, Boix-Adserà & Misiakiewicz 2023"
+  title: "SGD learning on neural networks: leap complexity and saddle-to-saddle dynamics"
+  year: 2023
+  status: queued
+- id: "2206.15144"
+  cited_as: "Damian et al. 2022"
+  title: "Neural Networks can Learn Representations with Gradient Descent"
+  year: 2022
+  status: queued
+- id: "2305.18270"
+  cited_as: "Dandi et al. 2023"
+  title: "How Two-Layer Neural Networks Learn, One (Giant) Step at a Time"
+  year: 2023
+  status: queued
+- id: "2402.04980"
+  cited_as: "Cui et al. 2024"
+  title: "Asymptotics of feature learning in two-layer networks after one gradient-step"
+  year: 2024
+  status: queued
+- id: "2310.07891"
+  cited_as: "Moniri et al. 2023"
+  title: "A Theory of Non-Linear Feature Learning with One Gradient Step in Two-Layer Neural Networks"
+  year: 2023
+  status: queued
+- id: "2003.10409"
+  cited_as: "Arous et al. 2020"
+  title: "Online stochastic gradient descent on non-convex losses from high-dimensional inference"
+  year: 2020
+  status: queued
+- id: "2111.00034"
+  cited_as: "Atanasov et al. 2021"
+  title: "Neural Networks as Kernel Learners: The Silent Alignment Effect"
+  year: 2021
+  status: queued
+- id: "2206.12314"
+  cited_as: "Petrini et al. 2022"
+  title: "Learning sparse features can lead to overfitting in neural networks"
+  year: 2022
+  status: queued
+- id: "2309.15111"
+  cited_as: "Glasgow 2024"
+  title: "SGD Finds then Tunes Features in Two-Layer Neural Networks with near-Optimal Sample Complexity: A Case Study in the XOR problem"
+  year: 2023
+  status: queued
+- id: "2207.08799"
+  cited_as: "Barak et al. 2022"
+  title: "Hidden Progress in Deep Learning: SGD Learns Parities Near the Computational Limit"
+  year: 2022
+  status: queued
+- id: "2002.07400"
+  cited_as: "Daniely & Malach 2020"
+  title: "Learning Parities with Neural Networks"
+  year: 2020
+  status: queued
+- id: "2108.10573"
+  cited_as: "Abbe et al. 2021"
+  title: "The staircase property: How hierarchical structure can guide deep learning"
+  year: 2021
+  status: queued
+- id: "2307.02129"
+  cited_as: "Cagnetta et al. 2023"
+  title: "How Deep Neural Networks Learn Compositional Data: The Random Hierarchy Model"
+  year: 2023
+  status: queued
+- id: "2502.21269"
+  cited_as: "Montanari & Urbani 2025"
+  title: "Dynamical Decoupling of Generalization and Overfitting in Large Two-Layer Networks"
+  year: 2025
+  status: queued
+- id: "2602.01434"
+  cited_as: "Montanari & Wang 2026"
+  title: "Phase Transitions for Feature Learning in Neural Networks"
+  year: 2026
+  status: queued
+- id: "2409.17858"
+  cited_as: "Bordelon et al. 2024"
+  title: "How Feature Learning Can Improve Neural Scaling Laws"
+  year: 2024
+  status: queued
+- id: "2212.12147"
+  cited_as: "Atanasov et al. 2022"
+  title: "The Onset of Variance-Limited Behavior for Networks in the Lazy and Rich Regimes"
+  year: 2022
+  status: queued
+- id: "2305.18411"
+  cited_as: "Vyas et al. 2023"
+  title: "Feature-Learning Networks Are Consistent Across Widths At Realistic Scales"
+  year: 2023
+  status: queued
+- id: "2406.06158"
+  cited_as: "Kunin et al. 2024"
+  title: "Get rich quick: exact solutions reveal how unbalanced initializations promote rapid feature learning"
+  year: 2024
+  status: queued
+- id: "2409.14623"
+  cited_as: "Dominé et al. 2024"
+  title: "From Lazy to Rich: Exact Learning Dynamics in Deep Linear Networks"
+  year: 2024
+  status: queued
+- id: "2402.03220"
+  cited_as: "Dandi et al. 2024"
+  title: "The Benefits of Reusing Batches for Gradient Descent in Two-Layer Networks: Breaking the Curse of Information and Leap Exponents"
+  year: 2024
+  status: queued
+- id: "2405.15459"
+  cited_as: "Arnaboldi et al. 2024"
+  title: "Repetita Iuvant: Data Repetition Allows SGD to Learn High-Dimensional Multi-Index Functions"
+  year: 2024
+  status: queued
+- id: "2406.01581"
+  cited_as: "Lee et al. 2024"
+  title: "Neural network learns low-dimensional polynomials with SGD near the information-theoretic limit"
+  year: 2024
+  status: queued
+- id: "2602.02431"
+  cited_as: "Kovačević et al. 2026"
+  title: "Full-Batch Gradient Descent Outperforms One-Pass SGD: Sample Complexity Separation in Single-Index Learning"
+  year: 2026
+  status: queued
+- id: "2605.17767"
+  cited_as: "Moniri & Hassani 2026"
+  title: "Feature Learning in Linear-Width Two-Layer Networks: Two vs. One Step of Gradient Descent"
+  year: 2026
+  status: queued
+- id: "2305.10633"
+  cited_as: "Damian et al. 2023"
+  title: "Smoothing the Landscape Boosts the Signal for SGD: Optimal Sample Complexity for Learning Single Index Models"
+  year: 2023
+  status: queued
+- id: "2403.05529"
+  cited_as: "Damian et al. 2024"
+  title: "Computational-Statistical Gaps in Gaussian Single-Index Models"
+  year: 2024
+  status: queued
+- id: "2506.05500"
+  cited_as: "Damian et al. 2025"
+  title: "The Generative Leap: Sharp Sample Complexity for Efficiently Learning Gaussian Multi-Index Models"
+  year: 2025
+  status: queued
+- id: "2510.21020"
+  cited_as: "Tsiolis et al. 2025"
+  title: "From Information to Generative Exponent: Learning Rate Induces Phase Transitions in SGD"
+  year: 2025
+  status: queued
+- id: "2405.15480"
+  cited_as: "Troiani et al. 2024"
+  title: "Fundamental computational limits of weak learnability in high-dimensional multi-index models"
+  year: 2024
+  status: queued
+- id: "2310.19793"
+  cited_as: "Bietti et al. 2023"
+  title: "On Learning Gaussian Multi-index Models with Gradient Flow"
+  year: 2023
+  status: queued
+- id: "2303.00055"
+  cited_as: "Berthier et al. 2023"
+  title: "Learning time-scales in two-layers neural networks"
+  year: 2023
+  status: queued
+- id: "2407.05622"
+  cited_as: "Joshi et al. 2024"
+  title: "On the Complexity of Learning Sparse Functions with Statistical and Gradient Queries"
+  year: 2024
+  status: queued
+- id: "2103.01210"
+  cited_as: "Malach et al. 2021"
+  title: "Quantifying the Benefit of Using Differentiable Learning over Tangent Kernels"
+  year: 2021
+  status: queued
+- id: "2202.07626"
+  cited_as: "Frei et al. 2022"
+  title: "Random Feature Amplification: Feature Learning and Generalization in Neural Networks"
+  year: 2022
+  status: queued
+- id: "2206.01717"
+  cited_as: "Shi et al. 2022"
+  title: "A Theoretical Analysis on Feature Learning in Neural Networks: Emergence from Inputs and Advantage over Fixed Features"
+  year: 2022
+  status: queued
+- id: "2102.11742"
+  cited_as: "Refinetti et al. 2021"
+  title: "Classifying high-dimensional Gaussian mixtures: Where kernel methods fail and neural networks succeed"
+  year: 2021
+  status: queued
+- id: "2202.12846"
+  cited_as: "Abbe et al. 2022"
+  title: "An initial alignment between neural network and target is needed for gradient descent to learn"
+  year: 2022
+  status: queued
+- id: "2301.13833"
+  cited_as: "Cornacchia & Mossel 2023"
+  title: "A Mathematical Model for Curriculum Learning for Parities"
+  year: 2023
+  status: queued
+- id: "2504.19983"
+  cited_as: "Ren et al. 2025"
+  title: "Emergence and scaling laws in SGD learning of shallow neural networks"
+  year: 2025
+  status: queued
+- id: "2508.03688"
+  cited_as: "Arous et al. 2025"
+  title: "Learning quadratic neural networks in high dimensions: SGD dynamics and scaling laws"
+  year: 2025
+  status: queued
+- id: "2407.20199"
+  cited_as: "Mallinar et al. 2024"
+  title: "Emergence in non-neural models: grokking modular arithmetic via average gradient outer product"
+  year: 2024
+  status: queued
+- id: "1906.08632"
+  cited_as: "Goldt et al. 2019"
+  title: "Dynamics of stochastic gradient descent for two-layer neural networks in the teacher-student setup"
+  year: 2019
+  status: queued
+- id: "2002.02561"
+  cited_as: "Bordelon et al. 2020"
+  title: "Spectrum Dependent Learning Curves in Kernel Regression and Wide Neural Networks"
+  year: 2020
+  status: queued
+- id: "2006.13198"
+  cited_as: "Canatar et al. 2020"
+  title: "Spectral Bias and Task-Model Alignment Explain Generalization in Kernel Regression and Infinitely Wide Neural Networks"
+  year: 2020
+  status: queued
+- id: "2110.03922"
+  cited_as: "Simon et al. 2021"
+  title: "The Eigenlearning Framework: A Conservation Law Perspective on Kernel Regression and Wide Neural Networks"
+  year: 2021
+  status: queued
+- id: "2102.08127"
+  cited_as: "Loureiro et al. 2021"
+  title: "Learning curves of generic features maps for realistic datasets with a teacher-student model"
+  year: 2021
+  status: queued
+- id: "2105.15004"
+  cited_as: "Cui et al. 2021"
+  title: "Generalization Error Rates in Kernel Regression: The Crossover from the Noiseless to Noisy Regime"
+  year: 2021
+  status: queued
+- id: "2201.12655"
+  cited_as: "Cui et al. 2022"
+  title: "Error Scaling Laws for Kernel Classification under Source and Capacity Conditions"
+  year: 2022
+  status: queued
+- id: "2006.09796"
+  cited_as: "Jacot et al. 2020"
+  title: "Kernel Alignment Risk Estimator: Risk Prediction from Training Data"
+  year: 2020
+  status: queued
+- id: "2203.06176"
+  cited_as: "Wei et al. 2022"
+  title: "More Than a Toy: Random Matrix Models Predict How Real-World Neural Representations Generalize"
+  year: 2022
+  status: queued
+- id: "1908.05355"
+  cited_as: "Mei & Montanari 2019"
+  title: "The generalization error of random features regression: Precise asymptotics and double descent curve"
+  year: 2019
+  status: queued
+- id: "2308.13431"
+  cited_as: "Misiakiewicz & Montanari 2023"
+  title: "Six Lectures on Linearized Neural Networks"
+  year: 2023
+  status: queued
+- id: "2405.15699"
+  cited_as: "Defilippis et al. 2024"
+  title: "Dimension-free deterministic equivalents and scaling laws for random feature regression"
+  year: 2024
+  status: queued
+- id: "2405.00592"
+  cited_as: "Atanasov et al. 2024"
+  title: "Scaling and renormalization in high-dimensional regression"
+  year: 2024
+  status: queued
+- id: "2102.06701"
+  cited_as: "Bahri et al. 2021"
+  title: "Explaining Neural Scaling Laws"
+  year: 2021
+  status: queued
+- id: "2210.16859"
+  cited_as: "Maloney et al. 2022"
+  title: "A Solvable Model of Neural Scaling Laws"
+  year: 2022
+  status: queued
+- id: "2402.01092"
+  cited_as: "Bordelon et al. 2024"
+  title: "A Dynamical Model of Neural Scaling Laws"
+  year: 2024
+  status: queued
+- id: "2405.15074"
+  cited_as: "Paquette et al. 2024"
+  title: "4+3 Phases of Compute-Optimal Neural Scaling Laws"
+  year: 2024
+  status: queued
+- id: "2502.00901"
+  cited_as: "Troiani et al. 2025"
+  title: "Fundamental limits of learning in sequence multi-index models and deep attention networks: High-dimensional asymptotics and sharp thresholds"
+  year: 2025
+  status: queued
+- id: "2506.01582"
+  cited_as: "Boncoraglio et al. 2025"
+  title: "Bayes optimal learning of attention-indexed models"
+  year: 2025
+  status: queued
+- id: "1708.03395"
+  cited_as: "Barbier et al. 2019"
+  title: "Optimal Errors and Phase Transitions in High-Dimensional Generalized Linear Models"
+  year: 2017
+  status: queued
+- id: "1511.02476"
+  cited_as: "Zdeborová & Krzakala 2016"
+  title: "Statistical physics of inference: Thresholds and algorithms"
+  year: 2015
+  status: queued
+- id: "1612.09057"
+  cited_as: "Mossel 2016"
+  title: "Deep Learning and Hierarchal Generative Models"
+  year: 2016
+  status: queued
+- id: "2404.10727"
+  cited_as: "Tomasini & Wyart 2024"
+  title: "How Deep Networks Learn Sparse and Hierarchical Data: the Sparse Random Hierarchy Model"
+  year: 2024
+  status: queued
+- id: "2406.00048"
+  cited_as: "Cagnetta & Wyart 2024"
+  title: "Towards a theory of how the structure of language is acquired by deep neural networks"
+  year: 2024
+  status: queued
+- id: "2402.16991"
+  cited_as: "Sclocchi et al. 2024"
+  title: "A Phase Transition in Diffusion Models Reveals the Hierarchical Nature of Data"
+  year: 2024
+  status: queued
+- id: "2305.06986"
+  cited_as: "Nichani et al. 2023"
+  title: "Provable Guarantees for Nonlinear Feature Learning in Three-Layer Neural Networks"
+  year: 2023
+  status: queued
+- id: "2311.13774"
+  cited_as: "Wang et al. 2023"
+  title: "Learning Hierarchical Polynomials with Three-Layer Neural Networks"
+  year: 2023
+  status: queued
+- id: "2502.13961"
+  cited_as: "Dandi et al. 2025"
+  title: "The Computational Advantage of Depth: Learning High-Dimensional Hierarchical Functions with Gradient Descent"
+  year: 2025
+  status: queued
+- id: "2605.14567"
+  cited_as: "Wortsman-Zurich et al. 2026"
+  title: "Scaling Laws from Sequential Feature Recovery: A Solvable Hierarchical Model"
+  year: 2026
+  status: queued
+- id: "2202.00565"
+  cited_as: "Ingrosso & Goldt 2022"
+  title: "Data-driven emergence of convolutional structure in neural networks"
+  year: 2022
+  status: queued
+- id: "2006.15191"
+  cited_as: "Mingard et al. 2021"
+  title: "Is SGD a Bayesian sampler? Well, almost"
+  year: 2020
+  status: queued
+- id: "2304.06670"
+  cited_as: "Mingard et al. 2025"
+  title: "Deep neural networks have an inbuilt Occam's razor"
+  year: 2023
+  status: queued
+  note: "Cited as Mingard et al. 2025 (Nat. Commun. 2025); first arXiv version 2023."
+- id: "2505.24060"
+  cited_as: "Mingard et al. 2025"
+  title: "Characterising the Inductive Biases of Neural Networks on Boolean Data"
+  year: 2025
+  status: queued
+- id: "2402.06323"
+  cited_as: "Buzaglo et al. 2024"
+  title: "How Uniform Random Weights Induce Non-uniform Bias: Typical Interpolating Neural Networks Generalize with Narrow Teachers"
+  year: 2024
+  status: queued
+- id: "2407.03848"
+  cited_as: "Peleg & Hein"
+  title: "Bias of Stochastic Gradient Descent or the Architecture: Disentangling the Effects of Overparameterization of Neural Networks"
+  year: 2024
+  status: queued
+- id: "2606.31282"
+  cited_as: "Pakman"
+  title: "Revisiting the Volume Hypothesis"
+  year: 2026
+  status: queued
+- id: "1509.05753"
+  cited_as: "Baldassi et al."
+  title: "Subdominant Dense Clusters Allow for Simple Learning and High Computational Performance in Neural Networks with Discrete Synapses"
+  year: 2015
+  status: queued
+  note: "Cited as Baldassi et al. without a year; best match. Alternatives: 1605.06444, 2304.13871."
+- id: "2503.13145"
+  cited_as: "Yang et al. 2026"
+  title: "High-entropy Advantage in Neural Networks' Generalizability"
+  year: 2025
+  status: queued
+  note: "Cited in the note through a vault link."
+- id: "1812.10156"
+  cited_as: "Palma et al. 2018"
+  title: "Random deep neural networks are biased towards simple functions"
+  year: 2018
+  status: queued
+- id: "2211.12316"
+  cited_as: "Bhattamishra et al. 2022"
+  title: "Simplicity Bias in Transformers and their Ability to Learn Sparse Boolean Functions"
+  year: 2022
+  status: queued
+- id: "2304.05366"
+  cited_as: "Goldblum et al. 2023"
+  title: "The No Free Lunch Theorem, Kolmogorov Complexity, and the Role of Inductive Biases in Machine Learning"
+  year: 2023
+  status: queued
+- id: "2512.06347"
+  cited_as: "Yoshida et al. 2025"
+  title: "Zero Generalization Error Theorem for Random Interpolators via Algebraic Geometry"
+  year: 2025
+  status: queued
+  note: "Cited in the note through a vault link."
+- id: "2608.06597"
+  cited_as: "Ladewig et al. 2026"
+  title: "Cascading Through the Hierarchy: Regularizer-Induced Feature Detection as Phase Transitions in Deep Linear Neural Networks"
+  year: 2026
+  status: queued
+  note: "Cited in the note through a vault link."
+- id: "2310.06301"
+  cited_as: "Chen et al. 2023"
+  title: "Dynamical versus Bayesian Phase Transitions in a Toy Model of Superposition"
+  year: 2023
+  status: queued
+- id: "2503.22478"
+  cited_as: "Hennick & Baerdemacker 2025"
+  title: "Almost Bayesian: The Fractal Dynamics of Stochastic Gradient Descent"
+  year: 2025
+  status: queued
+- id: "2512.10427"
+  cited_as: "Zhang 2025"
+  title: "Renormalizable Spectral-Shell Dynamics as the Origin of Neural Scaling Laws"
+  year: 2025
+  status: queued
+  note: "Cited in the note through a vault link."
+- id: "2212.00005"
+  cited_as: "Gong & Xia 2022"
+  title: "Interpreting Deep Learning by Establishing a Rigorous Corresponding Relationship with Renormalization Group"
+  year: 2022
+  status: queued
+  note: "Cited in the note through a vault link."
+- id: "1412.8690"
+  cited_as: "Bach 2017"
+  title: "Breaking the Curse of Dimensionality with Convex Neural Networks"
+  year: 2014
+  status: queued
+- id: "1902.05040"
+  cited_as: "Savarese et al. 2019"
+  title: "How do infinite width bounded norm networks look in function space?"
+  year: 2019
+  status: queued
+- id: "1910.01635"
+  cited_as: "Ongie et al. 2020"
+  title: "A Function Space View of Bounded Norm Infinite Width ReLU Nets: The Multivariate Case"
+  year: 2019
+  status: queued
+- id: "2006.05626"
+  cited_as: "Parhi & Nowak 2021"
+  title: "Banach Space Representer Theorems for Neural Networks and Ridge Splines"
+  year: 2020
+  status: queued
+- id: "2002.10553"
+  cited_as: "Pilanci & Ergen 2020"
+  title: "Neural Networks are Convex Regularizers: Exact Polynomial-time Convex Optimization Formulations for Two-layer Networks"
+  year: 2020
+  status: queued
+- id: "2209.15055"
+  cited_as: "Jacot 2022"
+  title: "Implicit Bias of Large Depth Networks: a Notion of Rank for Nonlinear Functions"
+  year: 2022
+  status: queued
+- id: "2305.19008"
+  cited_as: "Jacot 2023"
+  title: "Bottleneck Structure in Learned Features: Low-Dimension vs Regularity Tradeoff"
+  year: 2023
+  status: queued
+- id: "2606.14954"
+  cited_as: "Ongie & Parhi 2026"
+  title: "Representation Costs in Data Science: Foundations and the Quasi-Banach Spaces of Deep Neural Networks"
+  year: 2026
+  status: queued
+- id: "2508.13346"
+  cited_as: "Hsu"
+  title: "Dimension lower bounds for linear approaches to function approximation"
+  year: 2025
+  status: queued
+- id: "2603.22030"
+  cited_as: "Kobialka et al. 2026"
+  title: "On the Interplay of Priors and Overparametrization in Bayesian Neural Network Posteriors"
+  year: 2026
+  status: queued
+- id: "2304.02902"
+  cited_as: "Wiese et al. 2023"
+  title: "Towards Efficient MCMC Sampling in Bayesian Neural Networks by Exploiting Symmetry"
+  year: 2023
+  status: queued
+- id: "2310.08287"
+  cited_as: "Laurent et al. 2023"
+  title: "A Symmetry-Aware Exploration of Bayesian Neural Network Posteriors"
+  year: 2023
+  status: queued
+- id: "2209.07157"
+  cited_as: "Kurle et al. 2022"
+  title: "On the detrimental effect of invariances in the likelihood for variational inference"
+  year: 2022
+  status: queued
+- id: "2202.03038"
+  cited_as: "Pittorino et al. 2022"
+  title: "Deep Networks on Toroids: Removing Symmetries Reveals the Structure of Flat Regions in the Landscape Geometry"
+  year: 2022
+  status: queued
+- id: "2610.20020"
+  cited_as: "Smola 2026"
+  title: "MCMC Can See Can't See"
+  year: 2026
+  status: queued
+- id: "2609.37352"
+  cited_as: "Gu et al. 2026"
+  title: "The MCMC convergence graph: a diagnostic for multimodal posteriors"
+  year: 2026
+  status: queued
+- id: "2407.16627"
+  cited_as: "Alaoui & Gamarnik 2024"
+  title: "Hardness of sampling solutions from the Symmetric Binary Perceptron"
+  year: 2024
+  status: queued
+- id: "2503.10428"
+  cited_as: "Kumar et al. 2025"
+  title: "Langevin Monte-Carlo Provably Learns Depth Two Neural Nets at Any Size and Data"
+  year: 2025
+  status: queued
+- id: "2410.09697"
+  cited_as: "Chehab et al. 2024"
+  title: "Provable Convergence and Limitations of Geometric Tempering for Langevin Dynamics"
+  year: 2024
+  status: queued
+- id: "1811.10072"
+  cited_as: "Brosse et al. 2018"
+  title: "The promises and pitfalls of Stochastic Gradient Langevin Dynamics"
+  year: 2018
+  status: queued
+- id: "2505.19087"
+  cited_as: "Harel et al. 2025"
+  title: "Temperature is All You Need for Generalization in Langevin Dynamics and other Markov Processes"
+  year: 2025
+  status: queued
+- id: "2510.06028"
+  cited_as: "Maurer et al. 2025"
+  title: "Generalization of Gibbs and Langevin Monte Carlo Algorithms in the Interpolation Regime"
+  year: 2025
+  status: queued
+- id: "2507.21449"
+  cited_as: "Hitchcock & Hoogland 2025"
+  title: "From Global to Local: A Scalable Benchmark for Local Posterior Sampling"
+  year: 2025
+  status: queued
+- id: "2609.15894"
+  cited_as: "Yallup 2026"
+  title: "Quenched Ensemble Sampling"
+  year: 2026
+  status: queued
+- id: "1904.04154"
+  cited_as: "Baldock & Marzari 2019"
+  title: "Bayesian Neural Networks at Finite Temperature"
+  year: 2019
+  status: queued
+- id: "2608.20183"
+  cited_as: "Sergeant-Perthuis et al. 2026"
+  title: "Exact Algebraic Computation of Learning Coefficients for Two-Dimensional Singular Models"
+  year: 2026
+  status: queued
+- id: "2106.06596"
+  cited_as: "Noci et al. 2021"
+  title: "Disentangling the Roles of Curation, Data-Augmentation and the Prior in the Cold Posterior Effect"
+  year: 2021
+  status: queued
+- id: "2106.05586"
+  cited_as: "Nabarro et al. 2021"
+  title: "Data augmentation in Bayesian neural networks and the cold posterior effect"
+  year: 2021
+  status: queued
+- id: "2203.16481"
+  cited_as: "Kapoor et al. 2022"
+  title: "On Uncertainty, Tempering, and Data Augmentation in Bayesian Classification"
+  year: 2022
+  status: queued
+- id: "2309.05292"
+  cited_as: "Pitas & Arbel 2023"
+  title: "The fine print on tempered posteriors"
+  year: 2023
+  status: queued
+- id: "2403.01272"
+  cited_as: "Marek et al. 2024"
+  title: "Can a Confident Prior Replace a Cold Posterior?"
+  year: 2024
+  status: queued
+- id: "2410.05757"
+  cited_as: "Ng et al. 2024"
+  title: "Temperature Optimization for Bayesian Deep Learning"
+  year: 2024
+  status: queued
+- id: "2102.12108"
+  cited_as: "Ober et al. 2021"
+  title: "The Promises and Pitfalls of Deep Kernel Learning"
+  year: 2021
+  status: queued
+- id: "2104.14421"
+  cited_as: "Izmailov et al. 2021"
+  title: "What Are Bayesian Neural Network Posteriors Really Like?"
+  year: 2021
+  status: queued
+- id: "2405.15926"
+  cited_as: "Tiberi et al."
+  title: "Dissecting the Interplay of Attention Paths in a Statistical Mechanics Theory of Transformers"
+  year: 2024
+  status: queued
+- id: "1202.1510"
+  cited_as: "Menz & Schlichting"
+  title: "Poincaré and logarithmic Sobolev inequalities by decomposition of the energy landscape"
+  year: 2012
+  status: queued
+- id: "2402.07355"
+  cited_as: "Kook"
+  title: "Sampling from the Mean-Field Stationary Distribution"
+  year: 2024
+  status: queued
+- id: "2409.10440"
+  cited_as: "Chewi"
+  title: "Uniform-in-$N$ log-Sobolev inequality for the mean-field Langevin dynamics with convex energy"
+  year: 2024
+  status: queued
+- id: "2306.07221"
+  cited_as: "Suzuki, Wu & Nitanda"
+  title: "Convergence of mean-field Langevin dynamics: Time and space discretization, stochastic gradient, and variance reduction"
+  year: 2023
+  status: queued
+- id: "2212.03050"
+  cited_as: "Chen, Ren & Wang"
+  title: "Uniform-in-time propagation of chaos for mean field Langevin dynamics"
+  year: 2022
+  status: queued
+- id: "2202.11678"
+  cited_as: "Lotfi et al."
+  title: "Bayesian Model Selection, the Marginal Likelihood, and Generalization"
+  year: 2022
+  status: queued
+- id: "2107.13656"
+  cited_as: "Aminian et al."
+  title: "Characterizing the Generalization Error of Gibbs Algorithm with Symmetrized KL information"
+  year: 2021
+  status: queued
+  note: "Cited as Aminian et al. without a year; an extended version with the same result is 2210.09864."
+- id: "2608.01833"
+  cited_as: "Chan et al. 2026"
+  title: "Tunneling the Loss Landscape: Bypassing Memorization with Monte Carlo Parameter Swapping"
+  year: 2026
+  status: queued
+  note: "Cited in the note through a vault link."
+- id: "cond-mat/9501082"
+  cited_as: "Monasson & Zecchina 1995"
+  title: "Weight Space Structure and Internal Representations: a Direct Approach to Learning and Generalization in Multilayer Neural Network"
+  year: 1995
+  status: queued
+- id: null
+  cited_as: "Suzuki 2023 (Suzuki, Wu, Oko, Nitanda)"
+  title: "Feature learning via mean-field Langevin dynamics: classifying sparse parities and beyond"
+  year: 2023
+  status: needs-id
+  note: "No arXiv version found; https://proceedings.neurips.cc/paper_files/paper/2023/hash/6cc321baf0a8611b1d1bdbd18822667b-Abstract-Conference.html"
+- id: null
+  cited_as: "Nitanda 2024"
+  title: "Nitanda 2024 (mean-field Langevin dynamics)"
+  year: 2024
+  status: needs-id
+  note: "Ambiguous: 2405.15767 (Nitanda, particle approximation) or Nitanda, Oko, Suzuki & Wu, ICLR 2024 (no arXiv)."
+- id: null
+  cited_as: "Neal 1996"
+  title: "Bayesian Learning for Neural Networks"
+  year: 1996
+  status: needs-id
+  doi: "10.1007/978-1-4612-0745-0"
+  note: "No arXiv version found."
+- id: null
+  cited_as: "Chiang et al. 2023"
+  title: "Loss Landscapes Are All You Need: Neural Network Generalization Can Be Explained Without the Implicit Bias of Gradient Descent"
+  year: 2023
+  status: needs-id
+  note: "No arXiv version found; https://openreview.net/forum?id=QC10RmRbZy9"
+- id: null
+  cited_as: "Dziugaite & Roy 2025"
+  title: "The Size of Teachers as a Measure of Data Complexity: PAC-Bayes Excess Risk Bounds and Scaling Laws"
+  year: 2025
+  status: needs-id
+  note: "No arXiv version found; https://proceedings.mlr.press/v258/dziugaite25a.html"
+- id: null
+  cited_as: "Dai, Karzand & Srebro 2021"
+  title: "Representation Costs of Linear Neural Networks: Analysis and Design"
+  year: 2021
+  status: needs-id
+  note: "No arXiv version found; https://proceedings.neurips.cc/paper/2021/hash/e22cb9d6bbb4c290a94e4fff4d68a831-Abstract.html"
+- id: null
+  cited_as: "Gardner 1988"
+  title: "The space of interactions in neural network models"
+  year: 1988
+  status: needs-id
+  doi: "10.1088/0305-4470/21/1/030"
+  note: "No arXiv version found."
+- id: null
+  cited_as: "Seung, Sompolinsky & Tishby 1992"
+  title: "Statistical mechanics of learning from examples"
+  year: 1992
+  status: needs-id
+  doi: "10.1103/PhysRevA.45.6056"
+  note: "No arXiv version found."
+- id: null
+  cited_as: "Haussler, Kearns, Seung & Tishby 1996"
+  title: "Rigorous learning curve bounds from statistical mechanics"
+  year: 1996
+  status: needs-id
+  doi: "10.1007/BF00114010"
+  note: "No arXiv version found."
+- id: null
+  cited_as: "Haussler, Kearns & Schapire 1994"
+  title: "Bounds on the sample complexity of Bayesian learning using information theory and the VC dimension"
+  year: 1994
+  status: needs-id
+  doi: "10.1007/BF00993163"
+  note: "No arXiv version found."
+- id: null
+  cited_as: "Györgyi 1990"
+  title: "First-order transition to perfect generalization in a neural network with binary synapses"
+  year: 1990
+  status: needs-id
+  doi: "10.1103/PhysRevA.41.7097"
+  note: "No arXiv version found."
+- id: null
+  cited_as: "Schwarze & Hertz 1992"
+  title: "Generalization in a Large Committee Machine"
+  year: 1992
+  status: needs-id
+  doi: "10.1209/0295-5075/20/4/015"
+  note: "No arXiv version found."
+- id: null
+  cited_as: "Barkai, Hansel & Sompolinsky 1992"
+  title: "Broken symmetries in multilayered perceptrons"
+  year: 1992
+  status: needs-id
+  doi: "10.1103/PhysRevA.45.4146"
+  note: "No arXiv version found."
+- id: null
+  cited_as: "Opper & Haussler 1991"
+  title: "Generalization performance of Bayes optimal classification algorithm for learning a perceptron"
+  year: 1991
+  status: needs-id
+  doi: "10.1103/PhysRevLett.66.2677"
+  note: "No arXiv version found."
+- id: null
+  cited_as: "Opper & Winther 1996"
+  title: "Mean Field Approach to Bayes Learning in Feed-Forward Neural Networks"
+  year: 1996
+  status: needs-id
+  doi: "10.1103/PhysRevLett.76.1964"
+  note: "No arXiv version found."
+- id: null
+  cited_as: "Levin, Tishby & Solla 1990"
+  title: "A statistical approach to learning and generalization in layered neural networks"
+  year: 1990
+  status: needs-id
+  doi: "10.1109/5.58339"
+  note: "No arXiv version found."
+- id: null
+  cited_as: "Dingle, Camargo & Louis 2018"
+  title: "Input–output maps are strongly biased towards simple outputs"
+  year: 2018
+  status: needs-id
+  doi: "10.1038/s41467-018-03101-6"
+  note: "No arXiv version found."

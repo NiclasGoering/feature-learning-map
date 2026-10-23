@@ -1,0 +1,24 @@
+name: Add a paper
+description: Suggest a paper for the feature-learning map.
+title: "Add paper: "
+labels: ["add-paper"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Paste the arXiv link. Ingest runs pick up issues from the maintainers and open a pull request with the new entry.
+  - type: input
+    id: arxiv
+    attributes:
+      label: arXiv URL
+      description: The abstract page, e.g. https://arxiv.org/abs/2302.00375
+      placeholder: https://arxiv.org/abs/XXXX.XXXXX
+    validations:
+      required: true
+  - type: textarea
+    id: note
+    attributes:
+      label: Note
+      description: Optional. Which result matters, or where the paper sits.
+    validations:
+      required: false

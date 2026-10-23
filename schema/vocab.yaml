@@ -1,0 +1,680 @@
+# Controlled vocabulary for papers/*.md.
+#
+# Every categorical field in a paper entry takes its values from this file, and
+# scripts/validate.py rejects anything else. Ingest sessions never edit this file;
+# they propose new values in the pull-request description (see INGEST.md).
+#
+# Per field:
+#   label     column / filter name shown on the site
+#   band      where the field lives in a paper entry
+#   multi     true: the field is a YAML list (one or more values)
+#             false: the field is a single value
+#   empty     true (default): `unknown` and `not-stated` are allowed
+#   na        true: `not-applicable` is also allowed (rules in `desc`)
+#   values    slug -> display label, or slug -> {label, desc}
+#
+# Write slugs in entries, never display labels. In a list, an empty state
+# (`unknown`, `not-stated`, `not-applicable`) must be the only item.
+
+empty_states:
+  unknown: "not checked by the extractor"
+  not-stated: "checked; the paper leaves it implicit"
+  not-applicable: "the field does not apply (only where a field has na: true)"
+
+fields:
+
+  # ---------------------------------------------------------------- grouping
+  # These three fields decide where a paper sits in the table. No empty states.
+
+  learning_rule:
+    label: Learning rule
+    band: grouping
+    multi: true
+    empty: false
+    values:
+      bayes:
+        label: Bayes
+        desc: "Posteriors, Bayes-optimal inference, stationary laws of mean-field Langevin dynamics, Langevin run to equilibrium."
+      gd:
+        label: GD
+        desc: "GD, SGD, gradient flow, dynamical mean-field theory of training, Langevin studied as dynamics."
+
+  depth:
+    label: Depth
+    band: grouping
+    multi: true
+    empty: false
+    values:
+      one-hidden-layer:
+        label: One hidden layer
+        desc: "At most one hidden layer. Perceptrons, GLMs, committee machines and single attention layers go here."
+      deep:
+        label: Deep
+        desc: "Two or more hidden layers."
+
+  width_limit:
+    label: Width / limit
+    band: grouping
+    multi: true
+    empty: false
+    values:
+      inf-kernel:
+        label: "∞ width, kernel"
+        desc: "Infinite width, lazy / NNGP / NTK (regime R0). GD: lazy or NTK scaling."
+      inf-meanfield-fixedP:
+        label: "∞ width, mean-field, fixed P"
+        desc: "Infinite width with μP or mean-field scaling at fixed P (R3). Exact conditioning (R4) and amplitude limits (R5) are tags here."
+      inf-meanfield-propP:
+        label: "∞ width, mean-field, P ∝ N"
+        desc: "μP or mean-field scaling with P proportional to N (R3′)."
+      large-width-1/N:
+        label: "Large width, 1/N"
+        desc: "Perturbative finite-width corrections in 1/N (R2)."
+      finite-proportional:
+        label: "Finite, P ∝ N"
+        desc: "P proportional to N in standard scaling; kernel renormalisation (R1)."
+      finite-exact:
+        label: "Finite, exact"
+        desc: "Exact or non-asymptotic results at finite width."
+      high-dim:
+        label: "High-dim, P ~ D^k"
+        desc: "Input dimension D → ∞ with P ~ D^k: teacher–student, Bayes-optimal and classical thermodynamic settings (R6). GD: single- and multi-index learning."
+      inf-depth:
+        label: "∞ depth"
+        desc: "Depth L → ∞. Only with depth: deep."
+
+  # ------------------------------------------------------------------- paper
+
+  contribution:
+    label: Contribution
+    band: paper
+    multi: false
+    empty: false
+    values:
+      theory: Theory
+      theory-experiments: "Theory + experiments"
+      empirical: Empirical
+      method: Method
+      review: Review
+
+  threads:
+    label: Thread
+    band: paper
+    multi: true
+    empty: false
+    # Curated lines of work. May be an empty list []. Add values only by team decision.
+    values:
+      nngp-lazy: "NNGP and lazy limits"
+      kernel-learning-curves: "Kernel learning curves"
+      kernel-renormalisation: "Kernel renormalisation (P ∝ N)"
+      adaptive-kernels-1/N: "Adaptive kernels at order 1/N"
+      mup-bayes: "μP Bayesian saddle and deep kernel machines"
+      width-ldp: "Rigorous width large deviations"
+      mean-field-langevin: "Mean-field Langevin dynamics"
+      bayes-optimal: "Bayes-optimal teacher–student"
+      classical-gibbs: "Classical Gibbs learning"
+      representation-costs: "Representation costs and norms"
+      lazy-vs-rich: "Lazy versus rich training"
+      mup-tensor-programs: "μP and tensor programs"
+      training-dmft: "DMFT of training"
+      one-step-spike: "One-step and few-step spikes"
+      exponents-leaps: "Information, leap and generative exponents"
+      parity: "Sparse parity"
+      hierarchical-data: "Hierarchical data"
+      scaling-laws: "Scaling laws"
+      sampling-mixing: "Sampling and mixing"
+      cold-posterior: "Cold posteriors"
+      volume-simplicity: "Prior volume and simplicity bias"
+      deep-linear: "Deep linear networks"
+
+  tags:
+    label: Tag
+    band: paper
+    multi: true
+    empty: false
+    # May be an empty list []. Bayes papers carry at least one regime tag (R0–R6).
+    values:
+      R0: {label: "R0 lazy", desc: "Likelihood O(1), P fixed: posterior rate = prior rate, NNGP posterior."}
+      R1: {label: "R1 proportional", desc: "Likelihood O(1), P = αN: log-det survives, only the kernel scale moves."}
+      R2: {label: "R2 perturbative", desc: "Finite width expanded in 1/N: directional O(1/N) kernel adaptation."}
+      R3: {label: "R3 μP Bayesian", desc: "Likelihood scaled with N, fixed P: full tilt, deterministic adaptive kernel."}
+      R3prime: {label: "R3′ μP, P ∝ N", desc: "Likelihood scaled with N and P = αN."}
+      R4: {label: "R4 exact conditioning", desc: "R3 with noise η → 0: minimum-KL interpolant."}
+      R5: {label: "R5 amplitude limits", desc: "Amplitude → 0 or → ∞ inside R3: NNGP corrections, deep kernel machine, norms."}
+      R6: {label: "R6 classical thermodynamic", desc: "Likelihood O(1), P = α · #params: quenched free energy over overlaps."}
+      grokking: Grokking
+      specialisation: "Specialisation transition"
+      first-order-transition: "First-order transition"
+      hyperparameter-transfer: "Hyperparameter transfer"
+      planted-vs-random-init: "Planted vs random initialisation"
+      exact-rejection-sampling: "Exact rejection sampling"
+      multi-output: "Multi-output networks"
+      convolutional-blocks: "Per-patch / per-channel blocks"
+      transfer-learning: "Transfer learning"
+      continual-learning: "Continual learning"
+      rigorous-ldp: "Rigorous large deviations"
+      finite-width-fluctuations: "Finite-width fluctuations"
+
+  # ----------------------------------------------------------------- setting
+
+  architecture:
+    label: Architecture
+    band: setting
+    multi: true
+    values:
+      linear: Linear
+      deep-linear: "Deep linear"
+      mlp: MLP
+      committee-machine: "Committee machine"
+      random-features: "Random features"
+      cnn: CNN
+      resnet: ResNet
+      attention: Attention
+      other: Other
+
+  activation:
+    label: Activation
+    band: setting
+    multi: true
+    values:
+      linear: Linear
+      relu: ReLU
+      erf: erf
+      tanh: tanh
+      sigmoid: Sigmoid
+      gelu: GELU
+      quadratic: Quadratic
+      polynomial: Polynomial
+      sign: Sign
+      softmax: Softmax
+      generic: {label: Generic, desc: "Any activation meeting the paper's stated assumptions."}
+      other: Other
+
+  learned_layers:
+    label: Learned layers
+    band: setting
+    multi: true
+    values:
+      all: All layers
+      first-layer-only: "First layer only"
+      readout-only: "Readout only"
+      all-but-readout: "All but readout"
+      other: Other
+
+  parametrisation:
+    label: Parametrisation
+    band: setting
+    multi: true
+    values:
+      sp: SP
+      ntk: NTK
+      mup: μP
+      mean-field: Mean-field
+      depth-mup: depth-μP
+      other: Other
+
+  prior_scale:
+    label: Prior / init scale
+    band: setting
+    multi: true
+    values:
+      nngp-scaling: {label: "NNGP scaling", desc: "Readout variance ∝ 1/N (outputs O(1) at init)."}
+      mean-field-scaling: {label: "Mean-field scaling", desc: "Readout ∝ 1/N (outputs vanish at init)."}
+      other: Other
+
+  prior_family:
+    label: Prior / init family
+    band: setting
+    multi: true
+    values:
+      gaussian-iid: "Gaussian iid"
+      scale-mixture: "Gaussian scale mixture"
+      heavy-tailed: "Heavy-tailed"
+      spherical: Spherical
+      binary: "Binary / Ising"
+      teacher-matched: {label: "Matched to teacher", desc: "Bayes-optimal: prior equals the teacher's distribution."}
+      other: Other
+
+  # ------------------------------------------------------------------- dials
+  # From the note's five dials. na: only when the paper (or result) is GD-only.
+
+  likelihood_scaled:
+    label: Likelihood scaled with width
+    band: dials
+    multi: true
+    na: true
+    values:
+      "yes": "Yes (rich)"
+      "no": "No (lazy)"
+
+  p_vs_n:
+    label: P relative to N
+    band: dials
+    multi: true
+    values:
+      fixed: Fixed
+      proportional: Proportional
+      other: Other
+
+  amplitude:
+    label: Target amplitude
+    band: dials
+    multi: true
+    values:
+      small: Small
+      order-one: "Order one"
+      large: Large
+      to-infinity: "→ ∞"
+
+  temperature:
+    label: Temperature / noise
+    band: dials
+    multi: true
+    na: true
+    values:
+      fixed: Fixed
+      inverse-width: "~1/N"
+      to-zero: "→ 0"
+
+  closure:
+    label: Closure of the single-site law
+    band: dials
+    multi: true
+    na: true
+    values:
+      exact: Exact
+      scalar-rescaling: "Scalar rescaling"
+      gaussian: Gaussian
+      gaussian-mixture: "Gaussian mixture"
+      one-loop: "One-loop / perturbative"
+      gartner-ellis: "Gärtner–Ellis"
+      equivalent-wishart: "Equivalent-Wishart"
+      gaussian-equivalence: "Gaussian equivalence"
+      none: None
+
+  # ----------------------------------------------------------------- scaling
+
+  N:
+    label: "N (width)"
+    band: scaling
+    multi: true
+    values: {fixed: Fixed, to-infinity: "→ ∞"}
+
+  L:
+    label: "L (depth)"
+    band: scaling
+    multi: true
+    values: {fixed: Fixed, to-infinity: "→ ∞"}
+
+  P:
+    label: "P (samples)"
+    band: scaling
+    multi: true
+    values: {fixed: Fixed, to-infinity: "→ ∞"}
+
+  D:
+    label: "D (input dim.)"
+    band: scaling
+    multi: true
+    values: {fixed: Fixed, to-infinity: "→ ∞"}
+
+  order_of_limits:
+    label: Order of limits
+    band: scaling
+    multi: true
+    values:
+      none: {label: "None (non-asymptotic)", desc: "Nothing is sent to infinity."}
+      single-limit: {label: "Single limit", desc: "Only one quantity diverges."}
+      joint: {label: "Joint", desc: "Several quantities diverge together at fixed ratios."}
+      width-first: {label: "Width first", desc: "N → ∞ before P, D or training time."}
+      data-first: {label: "Data first", desc: "P or D → ∞ before N."}
+      other: Other
+
+  gd_step_size:
+    label: GD step size
+    band: scaling
+    multi: true
+    na: true
+    values:
+      gradient-flow: "Gradient flow"
+      constant: Constant
+      large-single-step: "Large single step"
+      width-scaled: "Scaled with width"
+      dimension-scaled: "Scaled with dimension"
+      other: Other
+
+  gd_time:
+    label: GD time scaling
+    band: scaling
+    multi: true
+    na: true
+    values:
+      one-step: "One step"
+      few-steps: "Few steps"
+      constant: "O(1)"
+      log-dimension: "~log D"
+      poly-dimension: "poly(D)"
+      to-convergence: "To convergence"
+      other: Other
+
+  # -------------------------------------------------------------------- data
+
+  input:
+    label: Input distribution
+    band: data
+    multi: true
+    values:
+      isotropic-gaussian: "Isotropic Gaussian"
+      structured-gaussian: "Structured Gaussian"
+      sphere: Sphere
+      boolean-cube: "Boolean cube"
+      gaussian-mixture: "Gaussian mixture"
+      hierarchical: {label: Hierarchical, desc: "E.g. the random hierarchy model."}
+      real-data: "Real data"
+      arbitrary: {label: Arbitrary, desc: "Result holds for any (finite) input set."}
+      other: Other
+
+  target:
+    label: Target
+    band: data
+    multi: true
+    values:
+      linear: Linear
+      single-index: "Single-index"
+      multi-index: "Multi-index"
+      sparse-parity: "k-sparse parity"
+      polynomial: Polynomial
+      teacher-network: "Teacher network"
+      modular-addition: "Modular addition"
+      copy-task: "Copy task"
+      real-labels: "Real labels"
+      arbitrary: {label: Arbitrary, desc: "Result holds for any target."}
+      other: Other
+
+  label_noise:
+    label: Label noise
+    band: data
+    multi: true
+    values:
+      none: None
+      gaussian: Gaussian
+      other: Other
+
+  data_class:
+    label: Analytic data class
+    band: data
+    multi: true
+    values:
+      deep-linear: {label: "Deep linear", desc: "Deep linear networks, exact at any α = P/N."}
+      gaussian-teacher: {label: "Gaussian + low-index / random teacher", desc: "Gaussian inputs with a low-index or random-network teacher."}
+      boolean-parity: {label: "Boolean cube / parity", desc: "Boolean cube and sparse parity: bounds and transitions."}
+      synthetic-transition: {label: "Synthetic transition", desc: "Modular addition, an attention copy task and similar toy transitions."}
+      real-data-gram: {label: "Real data via Gram matrix", desc: "Real data entering only through the empirical Gram matrix."}
+      data-agnostic: {label: "Data-agnostic", desc: "The result does not depend on the data class."}
+      other: Other
+
+  # ------------------------------------------------------------------ method
+
+  method:
+    label: Method
+    band: method
+    multi: true
+    values:
+      gp-kernel-limit: "GP / kernel limit"
+      saddle-point-ld: {label: "Saddle point / large deviations", desc: "Sanov, Cramér, Gärtner–Ellis."}
+      replica: Replica
+      cavity: Cavity
+      dmft: DMFT
+      mean-field-pde: "Mean-field PDE / Wasserstein flow"
+      random-matrix-theory: "Random matrix theory"
+      perturbative-1/N: "Perturbative 1/N"
+      amp-state-evolution: "AMP / state evolution"
+      information-theoretic: "Information-theoretic"
+      spectral-eigenlearning: "Spectral / eigenlearning"
+      bounds: "PAC-Bayes or other bounds"
+      rigorous-probability: "Rigorous probability"
+      tensor-programs: "Tensor programs"
+      other: Other
+
+  solver:
+    label: Saddle solver
+    band: method
+    multi: true
+    values:
+      algebraic: {label: Algebraic, desc: "Closed form or a small set of scalar / matrix equations, possibly solved numerically."}
+      importance-sampling: "Importance sampling"
+      normalizing-flows: "Normalizing flows"
+      perturbative: Perturbative
+      amp: AMP
+      gradient-flow: "Gradient flow"
+      none: None
+      other: Other
+
+  approximations:
+    label: Approximations
+    band: method
+    multi: true
+    values:
+      none: {label: "None (rigorous)", desc: "No uncontrolled approximation."}
+      replica-symmetric: "Replica symmetric"
+      saddle-point: "Saddle point"
+      gaussian-equivalence: "Gaussian equivalence"
+      gaussian-closure: "Gaussian closure"
+      large-width: "Large width"
+      large-dimension: "Large dimension"
+      linearisation: Linearisation
+      online-sgd: "Online SGD"
+      spherical-weights: "Spherical weights"
+      other: Other
+
+  # ------------------------------------------------------------------ result
+
+  quantity:
+    label: Quantity
+    band: result
+    multi: true
+    values:
+      generalisation-error: "Generalisation error / learning curve"
+      posterior-predictive: "Posterior predictive"
+      kernel-representation: "Kernel / representation"
+      weight-statistics: "Weight statistics"
+      free-energy-evidence: "Free energy / evidence"
+      phase-diagram: "Phase diagram"
+      sample-complexity: "Sample complexity"
+      optimal-hyperparameter: "Optimal hyperparameter"
+      time-to-learn: "Time to learn"
+      mixing-convergence: "Mixing / convergence"
+      learning-rule-comparison: "Comparison of learning rules"
+
+  status:
+    label: Status
+    band: result
+    multi: false
+    empty: false
+    values:
+      thm: {label: thm, desc: "Published theorem."}
+      phys: {label: phys, desc: "Replica, saddle-point or other physics result without proof."}
+      num: {label: num, desc: "Numerical only."}
+      conjecture: {label: conjecture, desc: "Stated as a conjecture by the paper."}
+
+  grade:
+    label: Prediction grade
+    band: result
+    multi: false
+    values:
+      A: {label: A, desc: "Closed form from data statistics alone (kernel spectrum, α, teacher)."}
+      B: {label: B, desc: "Self-consistent equations that need the empirical Gram matrix."}
+      C: {label: C, desc: "Saddle solved by inner Monte Carlo (importance sampling, flows)."}
+      D: {label: D, desc: "Closure chosen or fit to match sampled histograms."}
+      none: {label: "–", desc: "Not a prediction (an algorithm, a bound with no numbers, a method)."}
+
+  compared_other_rule:
+    label: Compared with other rule
+    band: result
+    multi: false
+    empty: false
+    values:
+      "yes": "Yes"
+      "no": "No"
+
+  # ------------------------------------------------------------ FL mechanism
+
+  mechanism_type:
+    label: FL type
+    band: mechanism
+    multi: false
+    empty: false
+    values:
+      T0: {label: "T0 none", desc: "No feature learning: the single-site law stays at the prior (NNGP / lazy); the mean predictor is the kernel predictor."}
+      T1: {label: "T1 scale renormalisation", desc: "Only the scale of each layer's kernel moves (one scalar per layer, a D×D matrix per output set, or one scalar per patch or branch)."}
+      T2: {label: "T2 directional adaptation", desc: "An order-1/N tilt per neuron that adds up to an O(1) kernel change along the target when P ~ N (adaptive kernels, a spike along the teacher)."}
+      T3: {label: "T3 full tilt", desc: "The whole kernel adapts deterministically at infinite width; the single-site law is non-Gaussian (μP Bayesian, deep kernel machines, MFLD)."}
+      T4: {label: "T4 sparsification onto atoms", desc: "At large amplitude or low temperature the single-site law collapses onto a few ridge directions; costs become variation or weight-decay norms."}
+      T5: {label: "T5 symmetry breaking between saddles", desc: "Several local minima of the rate compete: mixed or droplet phases, codes, grokking, specialisation."}
+      T6: {label: "T6 GD dynamical", desc: "Feature learning produced by the training dynamics rather than a posterior: spikes after large steps, staircases, kernel evolution."}
+
+  mechanism_label:
+    label: Mechanism
+    band: mechanism
+    multi: false
+    # A growing controlled list. Each label is at most 4 words. `types` lists the
+    # FL types the label usually goes with; the validator only warns on a mismatch.
+    values:
+      kernel-fixed-at-init: {label: "kernel fixed at init", types: [T0]}
+      weights-at-prior: {label: "weights stay at prior", types: [T0]}
+      kernel-scale-renormalised: {label: "kernel scale renormalised", types: [T1]}
+      output-block-renormalised: {label: "output-block renormalisation", types: [T1]}
+      patch-scale-renormalised: {label: "per-patch kernel renormalisation", types: [T1]}
+      kernel-grows-along-target: {label: "kernel grows along target", types: [T2, T3]}
+      adaptive-kernel: {label: "deterministic adaptive kernel", types: [T3]}
+      ridge-atoms: {label: "sparse ridge atoms", types: [T4]}
+      mixed-phase: {label: "first-order mixed phase", types: [T5]}
+      specialisation: {label: "hidden-unit specialisation", types: [T5]}
+      competing-codes: {label: "competing coding schemes", types: [T5]}
+      rank-one-spike: {label: "rank-one spike", types: [T6]}
+      staircase-of-directions: {label: "staircase of directions", types: [T6]}
+      hidden-kernel-outlier: {label: "hidden-kernel outlier", types: [T6]}
+      kernel-evolves-in-training: {label: "kernel evolves in training", types: [T6]}
+      silent-alignment: {label: "silent kernel alignment", types: [T6]}
+      no-advantage-over-kernel: {label: "no advantage over kernels", types: [T0]}
+      not-analysed: {label: "mechanism not analysed", types: [T0, T1, T2, T3, T4, T5, T6]}
+      other: {label: "other (see explanation)", types: [T0, T1, T2, T3, T4, T5, T6]}
+
+  moves_mean:
+    label: Moves the mean predictor
+    band: mechanism
+    multi: false
+    empty: false
+    values:
+      "yes": "Yes"
+      "no": "No"
+      unknown: Unknown
+
+  # ----------------------------------------------------------------- empirics
+
+  sampler:
+    label: Validation sampler
+    band: empirics
+    multi: true
+    values:
+      exact-rejection: "Exact / rejection"
+      hmc: HMC
+      nuts: NUTS
+      mala: MALA
+      pcn: pCN
+      ula: "Unadjusted Langevin"
+      sgld: SGLD
+      noisy-sgd: "Noisy SGD"
+      mile: MILE
+      amp: AMP
+      gd-simulation: {label: "GD simulation", desc: "Networks trained with plain GD / SGD; no posterior sampling."}
+      none: None
+      other: Other
+
+  diagnostics:
+    label: Diagnostics
+    band: empirics
+    multi: true
+    values:
+      rhat-ess: "R-hat / ESS"
+      planted-vs-random: "Planted vs random init"
+      none-reported: "None reported"
+      other: Other
+
+  mixing:
+    label: Mixing dependence
+    band: empirics
+    multi: true
+    values:
+      none: {label: none, desc: "Theorem, exact sampler, or no sampling claim."}
+      low: {label: low, desc: "T = O(1) with autocorrelation analysis or Metropolis correction."}
+      high: {label: high, desc: "Unadjusted Langevin at T ≤ 1e-2, equilibrium declared by agreement with the theory."}
+      critical: {label: critical, desc: "Regime where the theory itself predicts coexisting phases."}
+
+  datasets:
+    label: Datasets
+    band: empirics
+    multi: true
+    values:
+      none: "None"
+      synthetic: Synthetic
+      mnist: MNIST
+      fashion-mnist: "Fashion-MNIST"
+      cifar-10: "CIFAR-10"
+      cifar-100: "CIFAR-100"
+      imagenet: ImageNet
+      text: Text
+      other-real: "Other real data"
+
+  # ---------------------------------------------------------------- relations
+
+  relation_type:
+    label: Relation
+    band: relations
+    multi: false
+    empty: false
+    values:
+      extends: Extends
+      special-case-of: "Special case of"
+      same-result-as: "Same result as"
+      contradicts: Contradicts
+      uses-method-of: "Uses method of"
+      tests-empirically: "Tests empirically"
+      answers: {label: Answers, desc: "Target is an open-problem id (op-NN)."}
+
+  # --------------------------------------------------------------- provenance
+
+  provenance_status:
+    label: Entry status
+    band: provenance
+    multi: false
+    empty: false
+    values:
+      gold: {label: gold, desc: "Hand-written worked example."}
+      extracted: {label: extracted, desc: "Written by an ingest session; not yet checked by a person."}
+      verified: {label: verified, desc: "Checked against the paper by a team member (verified_by)."}
+
+# Free-text fields: not vocabulary-controlled, but every one has a limit and
+# none may be blank. `unknown` / `not-stated` are allowed where marked.
+# Words are whitespace-separated tokens; each $…$ math span counts as one word.
+free_text:
+  title: {max_words: 40}
+  authors: {note: "List of names as on arXiv, at least one."}
+  venue: {max_words: 12, empty: true, note: "Journal or conference; `preprint` if none."}
+  one_line: {max_words: 25}
+  summary: {max_sentences: 5}
+  scaling.relations: {max_words: 25, empty: true, na: true, note: "e.g. $P/N\\to\\alpha$, $P\\sim D^2$."}
+  data.target_params.k: {max_words: 8, empty: true, na: true}
+  data.target_params.degree: {max_words: 8, empty: true, na: true}
+  data.target_params.exponent: {max_words: 8, empty: true, na: true, note: "Information, leap or generative exponent."}
+  data.target_params.teacher_width: {max_words: 8, empty: true, na: true}
+  empirics.temperature: {max_words: 10, empty: true, na: true}
+  empirics.chains: {max_words: 10, empty: true, na: true}
+  empirics.scale: {max_words: 20, empty: true, na: true, note: "Largest P, N, D or dataset size used."}
+  results.statement: {max_words: 40, note: "LaTeX allowed."}
+  results.source.loc: {max_words: 12, note: "Theorem, equation, section or figure in the version read."}
+  results.source.anchor: {note: "Element id in arXiv's HTML version (after #), or `none`."}
+  results.mechanism.paper_term: {max_words: 8, empty: true}
+  results.mechanism.explanation: {max_sentences: 3}
+  relations.note: {max_words: 25}
+  provenance.added_by: {note: "GitHub username or model id."}

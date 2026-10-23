@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "paper.schema.json",
+  "title": "Paper entry (YAML front matter of papers/<key>.md)",
+  "description": "Structure of a paper entry. A node {\"x-vocab\": \"<field>\"} is expanded by scripts/validate.py from schema/vocab.yaml: a list of allowed slugs if the field is multi, a single slug otherwise, plus the empty states the field allows. Text limits (words, sentences) are checked by the validator.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id", "title", "authors", "year", "venue", "links", "one_line", "summary",
+    "threads", "contribution", "tags",
+    "learning_rule", "depth", "width_limit",
+    "setting", "dials", "scaling", "data", "method", "empirics",
+    "results", "relations", "open_problems", "provenance"
+  ],
+  "properties": {
+    "id": {
+      "description": "arXiv ID with version (2302.00375v3, cond-mat/9501082v1), or doi:<DOI> when there is no arXiv version. Must match the file name.",
+      "type": "string",
+      "pattern": "^([0-9]{4}\\.[0-9]{4,5}v[0-9]+|[a-z-]+(\\.[A-Z]{2})?/[0-9]{7}v[0-9]+|doi:10\\.[0-9]{4,9}/\\S+)$"
+    },
+    "title": {"$ref": "#/$defs/text"},
+    "authors": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/text"}},
+    "year": {"type": "integer", "minimum": 1940, "maximum": 2100},
+    "venue": {"$ref": "#/$defs/text"},
+    "links": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["abs", "pdf", "html"],
+      "properties": {
+        "abs": {"type": "string", "pattern": "^https://"},
+        "pdf": {"type": "string", "pattern": "^(https://|not-available$)"},
+        "html": {"type": "string", "pattern": "^(https://|not-available$)"}
+      }
+    },
+    "one_line": {"$ref": "#/$defs/text"},
+    "summary": {"$ref": "#/$defs/text"},
+    "threads": {"x-vocab": "threads"},
+    "contribution": {"x-vocab": "contribution"},
+    "tags": {"x-vocab": "tags"},
+
+    "learning_rule": {"x-vocab": "learning_rule"},
+    "depth": {"x-vocab": "depth"},
+    "width_limit": {"x-vocab": "width_limit"},
+
+    "setting": {"allOf": [{"$ref": "#/$defs/setting"}, {"required": ["architecture", "activation", "learned_layers", "parametrisation", "prior_scale", "prior_family"]}]},
+    "dials": {"allOf": [{"$ref": "#/$defs/dials"}, {"required": ["likelihood_scaled", "p_vs_n", "amplitude", "temperature", "closure"]}]},
+    "scaling": {"allOf": [{"$ref": "#/$defs/scaling"}, {"required": ["N", "L", "P", "D", "relations", "order_of_limits", "gd_step_size", "gd_time"]}]},
+    "data": {"allOf": [{"$ref": "#/$defs/data"}, {"required": ["input", "target", "target_params", "label_noise", "data_class"]}]},
+    "method": {"allOf": [{"$ref": "#/$defs/method"}, {"required": ["method", "solver", "approximations"]}]},
+    "empirics": {"allOf": [{"$ref": "#/$defs/empirics"}, {"required": ["sampler", "temperature", "chains", "diagnostics", "mixing", "datasets", "scale"]}]},
+
+    "results": {"type": "array", "minItems": 1, "maxItems": 5, "items": {"$ref": "#/$defs/result"}},
+    "relations": {"type": "array", "items": {"$ref": "#/$defs/relation"}},
+    "open_problems": {"type": "array", "items": {"type": "string", "pattern": "^op-[0-9]{2}$"}},
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["added_by", "status", "verified_by", "version_read", "date_added"],
+      "properties": {
+        "added_by": {"$ref": "#/$defs/text"},
+        "status": {"x-vocab": "provenance_status"},
+        "verified_by": {
+          "description": "List of GitHub usernames who checked the entry; [] until someone has.",
+          "type": "array", "items": {"$ref": "#/$defs/text"}
+        },
+        "version_read": {"type": "string", "pattern": "^(v[0-9]+|published)$"},
+        "date_added": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"}
+      }
+    }
+  },
+
+  "$defs": {
+    "text": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "shorttext": {"type": ["string", "number"], "minLength": 1},
+
+    "setting": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "architecture": {"x-vocab": "architecture"},
+        "activation": {"x-vocab": "activation"},
+        "learned_layers": {"x-vocab": "learned_layers"},
+        "parametrisation": {"x-vocab": "parametrisation"},
+        "prior_scale": {"x-vocab": "prior_scale"},
+        "prior_family": {"x-vocab": "prior_family"}
+      }
+    },
+    "dials": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "likelihood_scaled": {"x-vocab": "likelihood_scaled"},
+        "p_vs_n": {"x-vocab": "p_vs_n"},
+        "amplitude": {"x-vocab": "amplitude"},
+        "temperature": {"x-vocab": "temperature"},
+        "closure": {"x-vocab": "closure"}
+      }
+    },
+    "scaling": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "N": {"x-vocab": "N"},
+        "L": {"x-vocab": "L"},
+        "P": {"x-vocab": "P"},
+        "D": {"x-vocab": "D"},
+        "relations": {"$ref": "#/$defs/text"},
+        "order_of_limits": {"x-vocab": "order_of_limits"},
+        "gd_step_size": {"x-vocab": "gd_step_size"},
+        "gd_time": {"x-vocab": "gd_time"}
+      }
+    },
+    "data": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "input": {"x-vocab": "input"},
+        "target": {"x-vocab": "target"},
+        "target_params": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["k", "degree", "exponent", "teacher_width"],
+          "properties": {
+            "k": {"$ref": "#/$defs/shorttext"},
+            "degree": {"$ref": "#/$defs/shorttext"},
+            "exponent": {"$ref": "#/$defs/shorttext"},
+            "teacher_width": {"$ref": "#/$defs/shorttext"}
+          }
+        },
+        "label_noise": {"x-vocab": "label_noise"},
+        "data_class": {"x-vocab": "data_class"}
+      }
+    },
+    "method": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "method": {"x-vocab": "method"},
+        "solver": {"x-vocab": "solver"},
+        "approximations": {"x-vocab": "approximations"}
+      }
+    },
+    "empirics": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sampler": {"x-vocab": "sampler"},
+        "temperature": {"$ref": "#/$defs/shorttext"},
+        "chains": {"$ref": "#/$defs/shorttext"},
+        "diagnostics": {"x-vocab": "diagnostics"},
+        "mixing": {"x-vocab": "mixing"},
+        "datasets": {"x-vocab": "datasets"},
+        "scale": {"$ref": "#/$defs/shorttext"}
+      }
+    },
+
+    "overrides": {
+      "description": "Fields of this result that differ from the paper defaults. Same shape as the paper bands; a value given here replaces the paper value (lists are replaced, not merged).",
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "learning_rule": {"x-vocab": "learning_rule"},
+        "depth": {"x-vocab": "depth"},
+        "width_limit": {"x-vocab": "width_limit"},
+        "setting": {"$ref": "#/$defs/setting", "minProperties": 1},
+        "dials": {"$ref": "#/$defs/dials", "minProperties": 1},
+        "scaling": {"$ref": "#/$defs/scaling", "minProperties": 1},
+        "data": {"$ref": "#/$defs/data", "minProperties": 1},
+        "method": {"$ref": "#/$defs/method", "minProperties": 1},
+        "empirics": {"$ref": "#/$defs/empirics", "minProperties": 1}
+      }
+    },
+
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "quantity", "statement", "status", "grade", "source", "compared_other_rule", "mechanism"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^r[1-5]$"},
+        "quantity": {"x-vocab": "quantity"},
+        "statement": {"$ref": "#/$defs/text"},
+        "status": {"x-vocab": "status"},
+        "grade": {"x-vocab": "grade"},
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["loc", "version", "anchor"],
+          "properties": {
+            "loc": {"$ref": "#/$defs/text"},
+            "version": {"type": "string", "pattern": "^(v[0-9]+|published)$"},
+            "anchor": {"type": "string", "pattern": "^(none|[A-Za-z0-9._:-]+)$"}
+          }
+        },
+        "compared_other_rule": {"x-vocab": "compared_other_rule"},
+        "mechanism": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "label", "paper_term", "moves_mean", "explanation"],
+          "properties": {
+            "type": {"x-vocab": "mechanism_type"},
+            "label": {"x-vocab": "mechanism_label"},
+            "paper_term": {"$ref": "#/$defs/text"},
+            "moves_mean": {"x-vocab": "moves_mean"},
+            "explanation": {"$ref": "#/$defs/text"}
+          }
+        },
+        "overrides": {"$ref": "#/$defs/overrides"}
+      }
+    },
+
+    "relation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "target"],
+      "properties": {
+        "type": {"x-vocab": "relation_type"},
+        "target": {
+          "description": "arXiv ID without version (quoted), doi:<DOI>, or an open-problem id op-NN for type answers.",
+          "type": "string",
+          "pattern": "^([0-9]{4}\\.[0-9]{4,5}|[a-z-]+(\\.[A-Z]{2})?/[0-9]{7}|doi:10\\.[0-9]{4,9}/\\S+|op-[0-9]{2})$"
+        },
+        "note": {"$ref": "#/$defs/text"}
+      }
+    }
+  }
+}
