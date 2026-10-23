@@ -16,6 +16,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script defer src="app.js"></script>
+<script defer src="anim.js"></script>
 </head>
 <body data-page="overview">
 <a class="skip" href="#content">Skip to content</a>
@@ -50,15 +51,19 @@
 <div class="ov-cols">
 
 <section>
-  <h2><span class="n">1</span>Setup</h2>
+  <h2><span class="n">1</span>Setup <a class="animlink" href="#anim-1">▶ Animation</a></h2>
   $$h^1=\tfrac{1}{\sqrt d}W^1x,\qquad h^\ell=\tfrac{1}{\sqrt N}W^\ell\varphi(h^{\ell-1}),\qquad f_\theta(x)=\tfrac{1}{\gamma\sqrt N}\,a^\top\varphi\big(h^L(x)\big),$$
   <p>prior $p_0$ iid $\mathcal N(0,1)$ on $\theta=(W^1,\dots,W^L,a)$; $\gamma=1$ is NTK/standard, $\gamma=\gamma_0\sqrt N$ is μP
   (<a class="cite" data-arxiv="1806.07572" href="https://arxiv.org/abs/1806.07572">Jacot et al. 2018</a>; <a class="cite" data-arxiv="2011.14522" href="https://arxiv.org/abs/2011.14522">Yang &amp; Hu 2021</a>). Interpolating set and layer kernels:</p>
   $$\mathcal M=\{\theta:f_\theta(x_i)=y_i\ \forall i\le P\},\qquad K^\ell=\tfrac1N\,\varphi(h^\ell(X))\,\varphi(h^\ell(X))^\top\in\mathbb R^{P\times P},\quad K^0=\tfrac1d XX^\top .$$
+  <details class="ov-flip ov-anim" id="anim-1">
+    <summary>Animation: kernels and outputs of a sampled network</summary>
+    <div class="an-body"></div>
+  </details>
 </section>
 
 <section>
-  <h2><span class="n">2</span>Two learning rules are conditioned priors</h2>
+  <h2><span class="n">2</span>Two learning rules are conditioned priors <a class="animlink" href="#anim-2">▶ Animation</a></h2>
   <div class="ov-key">
   $$p_B(\theta\mid D)=\frac{p_0(\theta)\,\mathbb 1_{\mathcal M}(\theta)}{Z_D(P)},\qquad Z_D(P)=p_0(\mathcal M)$$
   $$\htmlClass{c-gd}{p_{GD}(\theta_\infty\mid D)=\int d\theta_0\;p_0(\theta_0)\,\mathbb 1_{\mathcal M}(\theta_\infty)\,\delta\big(\theta_\infty-\Phi_D(\theta_0)\big)}$$
@@ -71,10 +76,14 @@
     $$p_\beta=\arg\min_q\big\{\mathrm{KL}(q\Vert p_0)+\beta\,\mathbb E_q[L_D]\big\},\qquad \min=-\log Z_\beta .$$
     <p>At large $N$ the functional of §3 is unchanged except $K^L\to K^L+\eta I$ with $\eta=\gamma^2/\beta$: in μP a finite $\eta$ needs $\beta\propto N$, a likelihood scaled with width.</p>
   </details>
+  <details class="ov-flip ov-anim" id="anim-2">
+    <summary>Animation: Bayes, gradient flow and Langevin on a curved interpolating set</summary>
+    <div class="an-body"></div>
+  </details>
 </section>
 
 <section id="kappa">
-  <h2><span class="n">3</span>$\kappa$ interpolates between NTK and μP</h2>
+  <h2><span class="n">3</span>$\kappa$ interpolates between NTK and μP <a class="animlink" href="#anim-3a">▶ Animation</a></h2>
   <p>At large width the posterior concentrates on the minimiser of one functional (derived in §4). The hidden layers pay <span class="c-ent">entropy</span> to reshape their kernels; the readout pays <span class="c-en">energy</span> to fit $y$ with the features it is given:</p>
   <div class="ov-key">
   $$-\tfrac1N\log Z_D(P)\;\longrightarrow\;F_D=\min_{K^1,\dots,K^L}\ \htmlClass{c-ent}{\sum_{\ell=1}^L J_\ell(K^\ell\mid K^{\ell-1})}\;+\;\htmlClass{c-kap}{\kappa}\,\htmlClass{c-en}{\tfrac12\,y^\top (K^L)^{-1}y},\qquad \htmlClass{c-kap}{\kappa=\tfrac{\gamma^2}{N}}$$
@@ -91,7 +100,12 @@
   $$\mathcal E(J)=\min\big\{\htmlClass{c-en}{\tfrac12y^\top(K^L)^{-1}y}:\ \htmlClass{c-ent}{\textstyle\sum_\ell J_\ell}\le J\big\}$$
   <p>On this Pareto front the optimum sits where the slope is $-1/\kappa$: NTK is the $J=0$ corner, μP an interior point, $\kappa\to\infty$ the far end. The GD counterpart is the lazy-to-rich transition driven by output or initialisation scale (<a class="cite" data-arxiv="1812.07956" href="https://arxiv.org/abs/1812.07956">Chizat et al. 2019</a>; <a class="cite" data-arxiv="2002.09277" href="https://arxiv.org/abs/2002.09277">Woodworth et al. 2020</a>).</p>
 
-  <h3>Feature learning needs an extensive $Z$</h3>
+  <details class="ov-flip ov-anim" id="anim-3a">
+    <summary>Animation: the energy–entropy Pareto front</summary>
+    <div class="an-body"></div>
+  </details>
+
+  <h3>Feature learning needs an extensive $Z$ <a class="animlink" href="#anim-3b">▶ Animation</a></h3>
   <div class="ov-key">
   $$-\log Z_D(P)=N\,F_D+o(N):\qquad \text{features move by }O(1)\iff -\log Z_D(P)=\Theta(N).$$
   </div>
@@ -101,10 +115,14 @@
     <li>μP: $\Theta(N)$ through $\htmlClass{c-kap}{\kappa=\gamma_0^2}$: the full tilt (T3; <a class="cite" data-arxiv="2502.07998" href="https://arxiv.org/abs/2502.07998">Lauditi et al. 2025</a>).</li>
     <li>NTK, $P\propto N$: $\Theta(N)$ through $\tfrac12\log\det K^L$: only the kernel scale moves (T1; <a class="cite" data-arxiv="2012.04030" href="https://arxiv.org/abs/2012.04030">Li &amp; Sompolinsky 2021</a>).</li>
   </ul>
+  <details class="ov-flip ov-anim" id="anim-3b">
+    <summary>Animation: which scalings make −log Z extensive</summary>
+    <div class="an-body"></div>
+  </details>
 </section>
 
 <section id="functional">
-  <h2><span class="n">4</span>Where the functional comes from</h2>
+  <h2><span class="n">4</span>Where the functional comes from <a class="animlink" href="#anim-4">▶ Animation</a></h2>
   <p>Bayes is an I-projection (Csiszár); its minimum is the log prior volume of the interpolants:</p>
   $$p_B=\arg\min_q\{\mathrm{KL}(q\Vert p_0):q(\mathcal M)=1\},\qquad \min=-\log Z_D(P).$$
   <p>Neurons are exchangeable, so Sanov applies layer by layer and gives the functional of §3
@@ -191,21 +209,29 @@
     <p class="ov-pl">Breaks when</p>
     <p>Run time is finite: mixing times grow like $e^{\text{barrier}/T}$, and where several saddles compete (T5) chains stay in one basin (<a href="open-problems.html#op-03">open problem 3</a>). Constant-step unadjusted Langevin or SGLD has a biased stationary law (<a class="cite" data-arxiv="1811.10072" href="https://arxiv.org/abs/1811.10072">Brosse, Durmus &amp; Moulines 2018</a>). Mini-batch SGD noise is neither isotropic nor at a fixed temperature, so plain SGD is not this dynamics.</p>
   </div>
+  <details class="ov-flip ov-anim" id="anim-4">
+    <summary>Animation: three costs for one neuron measure</summary>
+    <div class="an-body"></div>
+  </details>
 </section>
 
 
 <section id="energy-entropy">
-  <h2><span class="n">5</span>The readout is energy, the kernels are entropy</h2>
+  <h2><span class="n">5</span>The readout is energy, the kernels are entropy <a class="animlink" href="#anim-5">▶ Animation</a></h2>
   <p>Given features $\Phi=\varphi(h^L(X))$ the readout is Gaussian, so its cost of interpolating is a quadratic form:</p>
   $$\min_m\Big\{\mathrm{KL}\big(\mathcal N(m,I)\Vert\mathcal N(0,I)\big):\tfrac{1}{\gamma\sqrt N}\Phi m=y\Big\}=\tfrac{\gamma^2}{2}\,\htmlClass{c-en}{y^\top (K^L)^{-1}y}=N\,\htmlClass{c-kap}{\kappa}\,\htmlClass{c-en}{E(K^L)},$$
   <p>the squared RKHS norm of the interpolant in the last-layer kernel: the cost of fitting with fixed features (lazy GD gives the same with $\tfrac12|a-a_0|^2$ and $y\to y-f_0$). Hidden layers are non-Gaussian after conditioning, so they pay a genuine entropy. The stationary point is a tilted single-site law,</p>
   $$\nu^\star_L(h)\propto\mathcal N(h;0,K^{L-1})\,e^{\frac{\htmlClass{c-kap}{\kappa}}{2}\,(v^\top\varphi(h))^2},\qquad v=(K^L)^{-1}y,$$
   <p>so neurons aligned with the residual direction $v$ are up-weighted and <em>the kernel grows along the target</em>. For small $\kappa$ (the adaptive-kernel corrections of <a class="cite" data-arxiv="2106.04110" href="https://arxiv.org/abs/2106.04110">Naveh &amp; Ringel 2021</a>; <a class="cite" data-arxiv="2112.15383" href="https://arxiv.org/abs/2112.15383">Seroussi et al. 2023</a>):</p>
   $$\delta K^L\approx\tfrac{\htmlClass{c-kap}{\kappa}}{2}\,\mathrm{Cov}_0\big(\varphi\varphi^\top,(v^\top\varphi)^2\big).$$
+  <details class="ov-flip ov-anim" id="anim-5">
+    <summary>Animation: the tilted single-site law as κ grows</summary>
+    <div class="an-body"></div>
+  </details>
 </section>
 
 <section id="generalisation">
-  <h2><span class="n">6</span>Generalisation in Bayes</h2>
+  <h2><span class="n">6</span>Generalisation in Bayes <a class="animlink" href="#anim-6">▶ Animation</a></h2>
   <p>$\varepsilon_{\rm gen}(f)=\mathbb E_{x\sim\mu}\big[(f(x)-y(x))^2\big]$, and the bad set is $B_\varepsilon=\{\theta:\varepsilon_{\rm gen}(f_\theta)\ge\varepsilon\}$. The posterior over completions $f$ (all functions with $f(X)=y$) is a Gibbs measure in function space whose energy is the cost of a function and whose inverse temperature is the width:</p>
   <div class="ov-key">
   $$p_B(f\mid D)\asymp e^{-N\,[\mathcal E_\kappa(f)-F_D]},\qquad F_D=\min_{f(X)=y}\mathcal E_\kappa(f),$$
@@ -236,10 +262,14 @@
     <li><strong>Is wider better?</strong> In μP Bayes, yes exactly when the cheapest interpolant generalises: width sharpens the posterior around $f^\star$, for better or worse. In NTK scaling, infinite width removes feature learning and the limit is a kernel method (<a class="cite" data-arxiv="1910.08013" href="https://arxiv.org/abs/1910.08013">Aitchison 2020</a>).</li>
   </ul>
   </div>
+  <details class="ov-flip ov-anim" id="anim-6">
+    <summary>Animation: the bad-completion gap Γ</summary>
+    <div class="an-body"></div>
+  </details>
 </section>
 
 <section id="gd-vs-bayes">
-  <h2><span class="n">7</span>Generalisation in GD vs Bayes: equilibrium vs non-equilibrium</h2>
+  <h2><span class="n">7</span>Generalisation in GD vs Bayes: equilibrium vs non-equilibrium <a class="animlink" href="#anim-7">▶ Animation</a></h2>
   <p>Run Langevin dynamics $\theta^T_t$ at temperature $T$ from $\theta_0\sim p_0$. The two learning rules are its two orders of limits:</p>
   <div class="ov-key gd">
   $$\underbrace{p_B=\lim_{T\to0}\,\lim_{t\to\infty}\mathrm{Law}(\theta^T_t)}_{\text{equilibrium: a Gibbs measure}}\qquad\text{vs}\qquad \htmlClass{c-gd}{\underbrace{p_{GD}=\lim_{t\to\infty}\,\lim_{T\to0}\mathrm{Law}(\theta^T_t)=(\Phi_D)_\sharp\,p_0}_{\text{non-equilibrium: a quench from the prior}}}$$
@@ -255,6 +285,10 @@
     <li><strong>In between.</strong> Finite-time annealing and SGD at a finite learning rate are non-equilibrium steady states, not Gibbs measures; constant-step SGLD targets a biased measure (<a class="cite" data-arxiv="1811.10072" href="https://arxiv.org/abs/1811.10072">Brosse, Durmus &amp; Moulines 2018</a>).</li>
   </ul>
   <p class="punch">Bayes generalises by the volume of bad interpolants, GD by the volume of their basins. Whether the two volumes agree, $C_{GD}\approx\mathrm{KL}$, is the volume question: to first order on small Boolean tasks (<a class="cite" data-arxiv="2006.15191" href="https://arxiv.org/abs/2006.15191">Mingard et al. 2021</a>), with a systematic GD advantage at proper initialisation and width (<a class="cite" data-arxiv="2407.03848" href="https://arxiv.org/abs/2407.03848">Peleg &amp; Hein 2024</a>); settling it is <a href="open-problems.html#op-10">open problem 10</a>.</p>
+  <details class="ov-flip ov-anim" id="anim-7">
+    <summary>Animation: Bayes against GD, and the quench against equilibrium</summary>
+    <div class="an-body"></div>
+  </details>
 </section>
 
 </div>
