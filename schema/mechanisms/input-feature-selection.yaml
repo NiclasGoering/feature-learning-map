@@ -1,0 +1,7 @@
+slug: input-feature-selection
+label: "input feature selection"
+types: [T4]
+desc: "Neurons whose input weights already align with the target get larger updates and, by lowering the shared residual, starve the others; the first-layer weight law grows heavy tails on the task-relevant input coordinates and shrinks on the rest. A coordinate-wise learnable prior variance reproduces this in a mean-field posterior."
+introduced_by: "2510.15174v1"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"
