@@ -550,52 +550,52 @@
   cited_as: "Cornacchia & Mossel 2023"
   title: "A Mathematical Model for Curriculum Learning for Parities"
   year: 2023
-  status: queued
+  status: added
 - id: "2504.19983"
   cited_as: "Ren et al. 2025"
   title: "Emergence and scaling laws in SGD learning of shallow neural networks"
   year: 2025
-  status: queued
+  status: added
 - id: "2508.03688"
   cited_as: "Arous et al. 2025"
   title: "Learning quadratic neural networks in high dimensions: SGD dynamics and scaling laws"
   year: 2025
-  status: queued
+  status: added
 - id: "2407.20199"
   cited_as: "Mallinar et al. 2024"
   title: "Emergence in non-neural models: grokking modular arithmetic via average gradient outer product"
   year: 2024
-  status: queued
+  status: added
 - id: "1906.08632"
   cited_as: "Goldt et al. 2019"
   title: "Dynamics of stochastic gradient descent for two-layer neural networks in the teacher-student setup"
   year: 2019
-  status: queued
+  status: added
 - id: "2002.02561"
   cited_as: "Bordelon et al. 2020"
   title: "Spectrum Dependent Learning Curves in Kernel Regression and Wide Neural Networks"
   year: 2020
-  status: queued
+  status: added
 - id: "2006.13198"
   cited_as: "Canatar et al. 2020"
   title: "Spectral Bias and Task-Model Alignment Explain Generalization in Kernel Regression and Infinitely Wide Neural Networks"
   year: 2020
-  status: queued
+  status: added
 - id: "2110.03922"
   cited_as: "Simon et al. 2021"
   title: "The Eigenlearning Framework: A Conservation Law Perspective on Kernel Regression and Wide Neural Networks"
   year: 2021
-  status: queued
+  status: added
 - id: "2102.08127"
   cited_as: "Loureiro et al. 2021"
   title: "Learning curves of generic features maps for realistic datasets with a teacher-student model"
   year: 2021
-  status: queued
+  status: added
 - id: "2105.15004"
   cited_as: "Cui et al. 2021"
   title: "Generalization Error Rates in Kernel Regression: The Crossover from the Noiseless to Noisy Regime"
   year: 2021
-  status: queued
+  status: added
 - id: "2201.12655"
   cited_as: "Cui et al. 2022"
   title: "Error Scaling Laws for Kernel Classification under Source and Capacity Conditions"
