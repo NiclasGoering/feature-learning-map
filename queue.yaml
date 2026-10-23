@@ -600,52 +600,52 @@
   cited_as: "Cui et al. 2022"
   title: "Error Scaling Laws for Kernel Classification under Source and Capacity Conditions"
   year: 2022
-  status: queued
+  status: added
 - id: "2006.09796"
   cited_as: "Jacot et al. 2020"
   title: "Kernel Alignment Risk Estimator: Risk Prediction from Training Data"
   year: 2020
-  status: queued
+  status: added
 - id: "2203.06176"
   cited_as: "Wei et al. 2022"
   title: "More Than a Toy: Random Matrix Models Predict How Real-World Neural Representations Generalize"
   year: 2022
-  status: queued
+  status: added
 - id: "1908.05355"
   cited_as: "Mei & Montanari 2019"
   title: "The generalization error of random features regression: Precise asymptotics and double descent curve"
   year: 2019
-  status: queued
+  status: added
 - id: "2308.13431"
   cited_as: "Misiakiewicz & Montanari 2023"
   title: "Six Lectures on Linearized Neural Networks"
   year: 2023
-  status: queued
+  status: added
 - id: "2405.15699"
   cited_as: "Defilippis et al. 2024"
   title: "Dimension-free deterministic equivalents and scaling laws for random feature regression"
   year: 2024
-  status: queued
+  status: added
 - id: "2405.00592"
   cited_as: "Atanasov et al. 2024"
   title: "Scaling and renormalization in high-dimensional regression"
   year: 2024
-  status: queued
+  status: added
 - id: "2102.06701"
   cited_as: "Bahri et al. 2021"
   title: "Explaining Neural Scaling Laws"
   year: 2021
-  status: queued
+  status: added
 - id: "2210.16859"
   cited_as: "Maloney et al. 2022"
   title: "A Solvable Model of Neural Scaling Laws"
   year: 2022
-  status: queued
+  status: added
 - id: "2402.01092"
   cited_as: "Bordelon et al. 2024"
   title: "A Dynamical Model of Neural Scaling Laws"
   year: 2024
-  status: queued
+  status: added
 - id: "2405.15074"
   cited_as: "Paquette et al. 2024"
   title: "4+3 Phases of Compute-Optimal Neural Scaling Laws"
