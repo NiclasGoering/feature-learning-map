@@ -300,52 +300,52 @@
   cited_as: "Aubin et al. 2018"
   title: "The committee machine: Computational to statistical gaps in learning a two-layers neural network"
   year: 2018
-  status: queued
+  status: added
 - id: "2503.14121"
   cited_as: "Xu et al. 2025"
   title: "Fundamental Limits of Matrix Sensing: Exact Asymptotics, Universality, and Applications"
   year: 2025
-  status: queued
+  status: added
 - id: "1905.07769"
   cited_as: "Hu, Ren, Šiška & Szpruch 2021"
   title: "Mean-Field Langevin Dynamics and Energy Landscape of Neural Networks"
   year: 2019
-  status: queued
+  status: added
 - id: "2201.10469"
   cited_as: "Nitanda, Wu & Suzuki 2022"
   title: "Convex Analysis of the Mean Field Langevin Dynamics"
   year: 2022
-  status: queued
+  status: added
 - id: "2202.01009"
   cited_as: "Chizat 2022"
   title: "Mean-Field Langevin Dynamics: Exponential Convergence and Annealing"
   year: 2022
-  status: queued
+  status: added
 - id: "1902.06015"
   cited_as: "Mei et al. 2019"
   title: "Mean-field theory of two-layers neural networks: dimension-free bounds and kernel limit"
   year: 2019
-  status: queued
+  status: added
 - id: "1805.09545"
   cited_as: "Chizat & Bach 2018"
   title: "On the Global Convergence of Gradient Descent for Over-parameterized Models using Optimal Transport"
   year: 2018
-  status: queued
+  status: added
 - id: "1805.00915"
   cited_as: "Rotskoff & Vanden-Eijnden 2018"
   title: "Trainability and Accuracy of Neural Networks: An Interacting Particle System Approach"
   year: 2018
-  status: queued
+  status: added
 - id: "1812.07956"
   cited_as: "Chizat et al. 2018"
   title: "On Lazy Training in Differentiable Programming"
   year: 2018
-  status: queued
+  status: added
 - id: "2002.09277"
   cited_as: "Woodworth et al. 2020"
   title: "Kernel and Rich Regimes in Overparametrized Models"
   year: 2020
-  status: queued
+  status: added
 - id: "1906.08034"
   cited_as: "Geiger et al. 2019"
   title: "Disentangling feature and lazy training in deep neural networks"
