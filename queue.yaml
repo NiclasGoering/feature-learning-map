@@ -665,52 +665,52 @@
   cited_as: "Barbier et al. 2019"
   title: "Optimal Errors and Phase Transitions in High-Dimensional Generalized Linear Models"
   year: 2017
-  status: queued
+  status: added
 - id: "1511.02476"
   cited_as: "Zdeborová & Krzakala 2016"
   title: "Statistical physics of inference: Thresholds and algorithms"
   year: 2015
-  status: queued
+  status: added
 - id: "1612.09057"
   cited_as: "Mossel 2016"
   title: "Deep Learning and Hierarchal Generative Models"
   year: 2016
-  status: queued
+  status: added
 - id: "2404.10727"
   cited_as: "Tomasini & Wyart 2024"
   title: "How Deep Networks Learn Sparse and Hierarchical Data: the Sparse Random Hierarchy Model"
   year: 2024
-  status: queued
+  status: added
 - id: "2406.00048"
   cited_as: "Cagnetta & Wyart 2024"
   title: "Towards a theory of how the structure of language is acquired by deep neural networks"
   year: 2024
-  status: queued
+  status: added
 - id: "2402.16991"
   cited_as: "Sclocchi et al. 2024"
   title: "A Phase Transition in Diffusion Models Reveals the Hierarchical Nature of Data"
   year: 2024
-  status: queued
+  status: added
 - id: "2305.06986"
   cited_as: "Nichani et al. 2023"
   title: "Provable Guarantees for Nonlinear Feature Learning in Three-Layer Neural Networks"
   year: 2023
-  status: queued
+  status: added
 - id: "2311.13774"
   cited_as: "Wang et al. 2023"
   title: "Learning Hierarchical Polynomials with Three-Layer Neural Networks"
   year: 2023
-  status: queued
+  status: added
 - id: "2502.13961"
   cited_as: "Dandi et al. 2025"
   title: "The Computational Advantage of Depth: Learning High-Dimensional Hierarchical Functions with Gradient Descent"
   year: 2025
-  status: queued
+  status: added
 - id: "2605.14567"
   cited_as: "Wortsman-Zurich et al. 2026"
   title: "Scaling Laws from Sequential Feature Recovery: A Solvable Hierarchical Model"
   year: 2026
-  status: queued
+  status: added
 - id: "2202.00565"
   cited_as: "Ingrosso & Goldt 2022"
   title: "Data-driven emergence of convolutional structure in neural networks"

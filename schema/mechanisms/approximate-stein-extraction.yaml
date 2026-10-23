@@ -1,0 +1,7 @@
+slug: approximate-stein-extraction
+label: "approximate Stein extraction"
+types: [T6]
+desc: "Training the inner layer to fit the best degree-k polynomial of a composed target g∘p makes the inner layer output proportional to the hidden feature p, because the degree-k Hermite part of g∘p is approximately a multiple of p (an approximate Stein's lemma, from near-Gaussianity of p). The outer layers then fit the link function g on this one-dimensional feature."
+introduced_by: "2311.13774v1"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"

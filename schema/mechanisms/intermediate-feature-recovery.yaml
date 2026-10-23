@@ -1,0 +1,7 @@
+slug: intermediate-feature-recovery
+label: "intermediate feature recovery"
+types: [T6]
+desc: "After the first layer has projected onto the target's low-dimensional subspace, one pre-conditioned gradient step makes the second-layer pre-activations equal, up to a constant, to the target's non-linear intermediate feature, by projecting the target onto the first-layer feature kernel. Each layer thus lowers the effective dimension seen by the next."
+introduced_by: "2502.13961v4"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"
