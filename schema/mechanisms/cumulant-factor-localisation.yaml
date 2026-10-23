@@ -1,0 +1,7 @@
+slug: cumulant-factor-localisation
+label: "cumulant factor localisation"
+types: [T6]
+desc: "After a stage driven by second-order input statistics, first-layer weights align with the dominant CP factors of the input's fourth-order cumulant. For translation-invariant non-Gaussian data these factors are localised and tile the input, so neurons develop localised, space-tiling receptive fields."
+introduced_by: "2202.00565v2"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"

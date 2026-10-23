@@ -650,17 +650,17 @@
   cited_as: "Paquette et al. 2024"
   title: "4+3 Phases of Compute-Optimal Neural Scaling Laws"
   year: 2024
-  status: queued
+  status: added
 - id: "2502.00901"
   cited_as: "Troiani et al. 2025"
   title: "Fundamental limits of learning in sequence multi-index models and deep attention networks: High-dimensional asymptotics and sharp thresholds"
   year: 2025
-  status: queued
+  status: added
 - id: "2506.01582"
   cited_as: "Boncoraglio et al. 2025"
   title: "Bayes optimal learning of attention-indexed models"
   year: 2025
-  status: queued
+  status: added
 - id: "1708.03395"
   cited_as: "Barbier et al. 2019"
   title: "Optimal Errors and Phase Transitions in High-Dimensional Generalized Linear Models"
@@ -715,38 +715,38 @@
   cited_as: "Ingrosso & Goldt 2022"
   title: "Data-driven emergence of convolutional structure in neural networks"
   year: 2022
-  status: queued
+  status: added
 - id: "2006.15191"
   cited_as: "Mingard et al. 2021"
   title: "Is SGD a Bayesian sampler? Well, almost"
   year: 2020
-  status: queued
+  status: added
 - id: "2304.06670"
   cited_as: "Mingard et al. 2025"
   title: "Deep neural networks have an inbuilt Occam's razor"
   year: 2023
-  status: queued
+  status: added
   note: "Cited as Mingard et al. 2025 (Nat. Commun. 2025); first arXiv version 2023."
 - id: "2505.24060"
   cited_as: "Mingard et al. 2025"
   title: "Characterising the Inductive Biases of Neural Networks on Boolean Data"
   year: 2025
-  status: queued
+  status: added
 - id: "2402.06323"
   cited_as: "Buzaglo et al. 2024"
   title: "How Uniform Random Weights Induce Non-uniform Bias: Typical Interpolating Neural Networks Generalize with Narrow Teachers"
   year: 2024
-  status: queued
+  status: added
 - id: "2407.03848"
   cited_as: "Peleg & Hein"
   title: "Bias of Stochastic Gradient Descent or the Architecture: Disentangling the Effects of Overparameterization of Neural Networks"
   year: 2024
-  status: queued
+  status: added
 - id: "2606.31282"
   cited_as: "Pakman"
   title: "Revisiting the Volume Hypothesis"
   year: 2026
-  status: queued
+  status: added
 - id: "1509.05753"
   cited_as: "Baldassi et al."
   title: "Subdominant Dense Clusters Allow for Simple Learning and High Computational Performance in Neural Networks with Discrete Synapses"
