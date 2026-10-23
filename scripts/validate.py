@@ -56,6 +56,7 @@ FREE_TEXT_NA = {"scaling.relations", "data.target_params.k", "data.target_params
 QUEUE_STATUSES = {"queued", "needs-id", "added", "skipped"}
 QUEUE_KEYS = {"id", "cited_as", "title", "year", "status", "doi", "note", "source", "pr"}
 OP_STATUSES = {"open", "partly-solved", "solved"}
+MECH_KEYS = {"slug", "label", "types", "desc", "introduced_by", "added_by", "date_added"}
 
 
 def count_words(text):
@@ -205,7 +206,8 @@ def check_paper(path, meta, body, ctx, report):
         if types and mech["type"] not in types:
             report.warn(where, f"{loc}.mechanism", f"label {mech['label']} usually goes with {', '.join(types)}, not {mech['type']}")
         if mech["label"] == "other":
-            report.warn(where, f"{loc}.mechanism.label", "label is `other`; propose a new label in the pull request")
+            report.warn(where, f"{loc}.mechanism.label",
+                        "label is `other`; add a label file in schema/mechanisms/ instead (INGEST.md section 4)")
         overrides = res.get("overrides") or {}
         for band, val in overrides.items():
             if band in flmap.BANDS:
@@ -304,6 +306,52 @@ def check_open_problems(report):
     return ids
 
 
+def check_mechanism_files(vocab, used_by, report):
+    """New mechanism labels live one per file in schema/mechanisms/<slug>.yaml."""
+    base = flmap.load_yaml(flmap.VOCAB.read_text(encoding="utf-8"))["fields"]["mechanism_label"]["values"]
+    types = set(vocab["fields"]["mechanism_type"]["values"])
+    labels = {}
+    for slug, v in base.items():
+        labels[str(v["label"] if isinstance(v, dict) else v).strip().lower()] = f"vocab.yaml `{slug}`"
+    for path, spec in flmap.mechanism_files():
+        where = rel(path)
+        scan_forbidden(where, path.read_text(encoding="utf-8"), report)
+        if not isinstance(spec, dict):
+            report.error(where, None, f"cannot parse: {spec}")
+            continue
+        for key in sorted(MECH_KEYS - set(spec)):
+            report.error(where, key, "missing")
+        for key in sorted(set(spec) - MECH_KEYS):
+            report.error(where, key, f"unknown key (allowed: {', '.join(sorted(MECH_KEYS))})")
+        slug = path.stem
+        if spec.get("slug") != slug:
+            report.error(where, "slug", f"must equal the file name ({slug})")
+        if not re.fullmatch(r"[a-z0-9]+(-[a-z0-9]+)*", slug):
+            report.error(where, "slug", "lowercase words joined by hyphens, e.g. fourier-gap-amplification")
+        if slug in base:
+            report.error(where, "slug", "already a label in schema/vocab.yaml; use it instead of a new file")
+        label = str(spec.get("label", "")).strip()
+        if not label or count_words(label) > 4:
+            report.error(where, "label", "one label of 1 to 4 words")
+        elif label.lower() in labels:
+            report.error(where, "label", f"same text as {labels[label.lower()]}; reuse that label")
+        else:
+            labels[label.lower()] = f"`{slug}`"
+        tl = spec.get("types")
+        if not isinstance(tl, list) or not tl or any(x not in types for x in tl):
+            report.error(where, "types", f"a non-empty list of FL types from {', '.join(sorted(types))}")
+        desc = str(spec.get("desc", "")).strip()
+        if not desc or count_sentences(desc) > 2:
+            report.error(where, "desc", "one or two sentences saying what changes in the features or kernel")
+        users = used_by.get(slug, set())
+        if not users:
+            report.error(where, None, "no paper uses this label; use it in an entry or delete the file")
+        elif spec.get("introduced_by") not in users:
+            report.error(where, "introduced_by", f"must be the id of a paper that uses the label ({', '.join(sorted(users))})")
+        if not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}", str(spec.get("date_added", ""))):
+            report.error(where, "date_added", 'quoted date, e.g. "2026-10-24"')
+
+
 def check_queue(paper_bases, report):
     where = "queue.yaml"
     if not flmap.QUEUE.exists():
@@ -359,7 +407,7 @@ def main(argv):
     for name, field in vocab["fields"].items():
         if name == "mechanism_label":
             for slug, v in field["values"].items():
-                if count_words(v["label"]) > 4:
+                if not v.get("added") and count_words(v["label"]) > 4:
                     report.error("schema/vocab.yaml", f"mechanism_label.{slug}", "label longer than 4 words")
     ctx = {"vocab": vocab, "validator": Draft202012Validator(flmap.load_schema(vocab))}
     ctx["op_ids"] = check_open_problems(report)
@@ -373,6 +421,7 @@ def main(argv):
             report.error(rel(p), None, "papers/ holds only <id>.md files")
 
     bases = {}
+    used_by = {}
     for name in sorted(files):
         path = files[name]
         where = rel(path)
@@ -385,12 +434,17 @@ def main(argv):
             continue
         check_paper(path, meta, body, ctx, report)
         pid = meta.get("id")
+        for res in meta.get("results") or []:
+            label = (res.get("mechanism") or {}).get("label") if isinstance(res, dict) else None
+            if isinstance(label, str) and isinstance(pid, str):
+                used_by.setdefault(label, set()).add(pid)
         if isinstance(pid, str):
             b = flmap.base_id(pid)
             if b in bases:
                 report.error(where, "id", f"{b} is already present as {bases[b]} (one file per paper, any version)")
             bases[b] = where
 
+    check_mechanism_files(vocab, used_by, report)
     check_queue(set(bases), report)
 
     for line in report.lines:

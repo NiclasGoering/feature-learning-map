@@ -28,6 +28,8 @@ One line per choice made where SPEC.md left room.
 - Depth `one-hidden-layer` covers every network with at most one hidden layer (perceptrons, GLMs, committee machines, single attention layers).
 - Regime codes are tags `R0`…`R6` plus `R3prime` for R3′; Bayes papers need at least one, each must match a width group of some result, and GD-only papers carry none.
 - Mixing dependence of GD papers is `none` (no sampling claim), so no extra value was added.
+- At the team's request, ingest sessions add a new mechanism label when a paper explains a mechanism no label covers; each lives in its own file `schema/mechanisms/<slug>.yaml` so back-to-back pull requests never conflict, and the validator merges them into `mechanism_label`, rejecting duplicates of existing label text and labels no paper uses.
+- Ingest sessions never add FL types (T0–T6 are the note's taxonomy); a mechanism that fits none is filed under the closest type and flagged in the pull request.
 - New values of brief fields: `other` in most categorical fields; input `arbitrary`; target `arbitrary`; data class `data-agnostic` and `other`; method `tensor-programs`; sampler `gd-simulation`; grade `none` (not a prediction).
 - Fields the brief named without values got controlled lists: activation, learned layers, prior family, label noise, approximations, datasets, order of limits, GD step size, GD time.
 - Free-text fields with limits: scaling relations, target parameters (k, degree, exponent, teacher width), empirics temperature, chains and scale, paper's term, relation note.
@@ -81,6 +83,6 @@ One line per choice made where SPEC.md left room.
 
 - Allowlisted issues take precedence; the queue is used only when there are no usable issues; at most 10 papers per run.
 - If the allowlist still holds the placeholders USER1–USER3, ingest treats it as empty and uses the queue only.
-- Ingest sessions may change only new files in `papers/` and `queue.yaml`; vocabulary proposals go in the pull-request description.
+- Ingest sessions may change only new files in `papers/`, new files in `schema/mechanisms/` and `queue.yaml`; other vocabulary proposals go in the pull-request description.
 - The pull-request body includes `Closes #n` for every added issue, so issues close when the pull request is merged.
 - Issue form: arXiv URL (required) and note (optional), label `add-paper`, which is created in the repository.

@@ -739,6 +739,7 @@
         var group = items.filter(function (x) { return x.r.mechanism.label === l; });
         if (!group.length) return;
         sec.appendChild(el("h3", null, lab("mechanism_label", l), " ", el("span", { class: "muted" }, "(" + group.length + ")")));
+        if (desc("mechanism_label", l)) sec.appendChild(el("p", { class: "type-desc" }, desc("mechanism_label", l)));
         sec.appendChild(el("ul", { class: "dict" }, group.map(function (x) {
           return el("li", null,
             el("div", { class: "setting" }, "In: " + settingLine(x.r.view)),

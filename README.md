@@ -9,7 +9,8 @@ A public map of the theory literature on feature learning in neural networks, fo
 | Path | What it holds |
 |---|---|
 | `papers/<arxiv-id>v<N>.md` | One entry per paper: front matter (setting, dials, scaling, data, method, 1–5 results, FL mechanism, empirics, relations, provenance) and optional notes for checkers. |
-| `schema/vocab.yaml` | Every allowed value of every categorical field, with labels and definitions. The only place vocabulary is defined. |
+| `schema/vocab.yaml` | Every allowed value of every categorical field, with labels and definitions; new mechanism labels may also come from `schema/mechanisms/`. |
+| `schema/mechanisms/<slug>.yaml` | Mechanism labels added by ingest sessions, one file each, merged into the `mechanism_label` vocabulary by the validator and the build. |
 | `schema/paper.schema.json` | JSON Schema for the front matter. Nodes marked `x-vocab` take their allowed values from `vocab.yaml`. |
 | `open-problems/op-NN-*.md` | One file per open problem. Papers point at them by id. |
 | `queue.yaml` | Papers waiting to be added, in priority order, with status `queued`, `needs-id`, `added` or `skipped`. |

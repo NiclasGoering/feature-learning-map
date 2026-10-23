@@ -13,6 +13,7 @@ OPEN_PROBLEMS = ROOT / "open-problems"
 QUEUE = ROOT / "queue.yaml"
 VOCAB = ROOT / "schema" / "vocab.yaml"
 SCHEMA = ROOT / "schema" / "paper.schema.json"
+MECHANISMS = ROOT / "schema" / "mechanisms"   # one file per mechanism label added by ingest
 
 GROUPING = ["learning_rule", "depth", "width_limit"]
 BANDS = ["setting", "dials", "scaling", "data", "method", "empirics"]
@@ -113,7 +114,25 @@ def load_vocab():
             "na": bool(spec.get("na", False)),
             "values": values,
         }
+    # Mechanism labels added by ingest sessions, one file each (see INGEST.md).
+    # Files that do not parse are skipped here and reported by the validator.
+    labels = fields["mechanism_label"]["values"]
+    for path, spec in mechanism_files():
+        if isinstance(spec, dict) and spec.get("slug") == path.stem and path.stem not in labels:
+            labels[path.stem] = {"label": str(spec.get("label", path.stem)), "desc": str(spec.get("desc", "")),
+                                 "types": spec.get("types") or [], "added": True}
     return {"fields": fields, "empty_states": raw["empty_states"], "free_text": raw.get("free_text", {})}
+
+
+def mechanism_files():
+    """[(path, parsed YAML or the exception)] for schema/mechanisms/*.yaml."""
+    out = []
+    for path in sorted(MECHANISMS.glob("*.yaml")) if MECHANISMS.exists() else []:
+        try:
+            out.append((path, load_yaml(path.read_text(encoding="utf-8"))))
+        except Exception as e:  # noqa: BLE001
+            out.append((path, e))
+    return out
 
 
 def allowed_values(field):
