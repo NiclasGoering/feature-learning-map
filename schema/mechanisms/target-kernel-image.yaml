@@ -1,0 +1,7 @@
+slug: target-kernel-image
+label: "target kernel image"
+types: [T6]
+desc: "One gradient step on a middle layer started at zero makes the network a function of a single learned feature, the target pushed through the random-feature kernel operator. This feature keeps the low-frequency part of the target and can be nonlinear in the input."
+introduced_by: "2305.06986v3"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"
