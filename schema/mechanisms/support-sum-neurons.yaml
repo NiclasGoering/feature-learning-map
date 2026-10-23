@@ -1,0 +1,7 @@
+slug: support-sum-neurons
+label: "support-sum neurons"
+types: [T6]
+desc: "After the first gradient step a subset of first-layer neurons has weights proportional to the sum of the target's support coordinates, because irrelevant coordinates receive almost no gradient. Each such neuron is a ReLU of the sum of the relevant bits, and the readout combines them into the parity."
+introduced_by: "2002.07400v2"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"

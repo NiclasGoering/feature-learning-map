@@ -1,0 +1,7 @@
+slug: fourier-gap-amplification
+label: "Fourier gap amplification"
+types: [T6]
+desc: "The population gradient on each input coordinate is a Fourier coefficient of the target, larger by a gap for the coordinates in the sparse support than for the others. The weights on the support coordinates therefore grow faster than the rest, and this gap widens during training."
+introduced_by: "2207.08799v3"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"

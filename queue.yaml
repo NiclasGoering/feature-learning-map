@@ -400,52 +400,52 @@
   cited_as: "Glasgow 2024"
   title: "SGD Finds then Tunes Features in Two-Layer Neural Networks with near-Optimal Sample Complexity: A Case Study in the XOR problem"
   year: 2023
-  status: queued
+  status: added
 - id: "2207.08799"
   cited_as: "Barak et al. 2022"
   title: "Hidden Progress in Deep Learning: SGD Learns Parities Near the Computational Limit"
   year: 2022
-  status: queued
+  status: added
 - id: "2002.07400"
   cited_as: "Daniely & Malach 2020"
   title: "Learning Parities with Neural Networks"
   year: 2020
-  status: queued
+  status: added
 - id: "2108.10573"
   cited_as: "Abbe et al. 2021"
   title: "The staircase property: How hierarchical structure can guide deep learning"
   year: 2021
-  status: queued
+  status: added
 - id: "2307.02129"
   cited_as: "Cagnetta et al. 2023"
   title: "How Deep Neural Networks Learn Compositional Data: The Random Hierarchy Model"
   year: 2023
-  status: queued
+  status: added
 - id: "2502.21269"
   cited_as: "Montanari & Urbani 2025"
   title: "Dynamical Decoupling of Generalization and Overfitting in Large Two-Layer Networks"
   year: 2025
-  status: queued
+  status: added
 - id: "2602.01434"
   cited_as: "Montanari & Wang 2026"
   title: "Phase Transitions for Feature Learning in Neural Networks"
   year: 2026
-  status: queued
+  status: added
 - id: "2409.17858"
   cited_as: "Bordelon et al. 2024"
   title: "How Feature Learning Can Improve Neural Scaling Laws"
   year: 2024
-  status: queued
+  status: added
 - id: "2212.12147"
   cited_as: "Atanasov et al. 2022"
   title: "The Onset of Variance-Limited Behavior for Networks in the Lazy and Rich Regimes"
   year: 2022
-  status: queued
+  status: added
 - id: "2305.18411"
   cited_as: "Vyas et al. 2023"
   title: "Feature-Learning Networks Are Consistent Across Widths At Realistic Scales"
   year: 2023
-  status: queued
+  status: added
 - id: "2406.06158"
   cited_as: "Kunin et al. 2024"
   title: "Get rich quick: exact solutions reveal how unbalanced initializations promote rapid feature learning"

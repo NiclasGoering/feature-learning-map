@@ -1,0 +1,7 @@
+slug: hessian-outlier-alignment
+label: "Hessian outlier alignment"
+types: [T6]
+desc: "After the easy directions are learned the gradient is small, and above a sample-size threshold the Hessian develops a negative outlier eigenvalue detached from its bulk. Its eigenvector overlaps the hard latent directions, so gradient descent leaves the saddle along it and learns them."
+introduced_by: "2602.01434v2"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"
