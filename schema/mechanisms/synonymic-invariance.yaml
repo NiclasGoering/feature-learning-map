@@ -1,0 +1,7 @@
+slug: synonymic-invariance
+label: "synonymic invariance"
+types: [T6]
+desc: "Hidden layers learn to map groups of equivalent lower-level feature tuples (synonyms) to the same representation, one hierarchy level per layer. This happens once the training set is large enough for the class-conditional statistics of each tuple to be separated from sampling noise, and it lowers the effective dimension of the representation."
+introduced_by: "2307.02129v5"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"

@@ -1,0 +1,7 @@
+slug: eigenfunction-deformation
+label: "eigenfunction deformation"
+types: [T2]
+desc: "Finite-width corrections of order 1/N change the eigenfunctions of the ensemble-averaged kernel while leaving its eigenvalue spectrum nearly unchanged. A larger part of the target then lies on small-eigenvalue modes that are learned more slowly."
+introduced_by: "2305.18411v2"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"

@@ -1,0 +1,7 @@
+slug: feature-unlearning
+label: "feature unlearning"
+types: [T6]
+desc: "After first-layer weights align with the latent target subspace, the readout weights keep growing towards the scale needed to interpolate noise. The overlap of the first-layer weights with the latent space then decays to its random-initialisation size and the predictor returns to a data-independent kernel one."
+introduced_by: "2502.21269v3"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"

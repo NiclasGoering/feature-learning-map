@@ -1,0 +1,7 @@
+slug: signal-readout-feedback
+label: "signal-readout feedback"
+types: [T6]
+desc: "Neurons whose weights have found the target direction raise their own readout weight, which in turn speeds the growth of their signal component. A small fraction of neurons then grows exponentially and dominates the output, which keeps the signal dominant while the other neurons grow at most linearly."
+introduced_by: "2309.15111v2"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-23"
