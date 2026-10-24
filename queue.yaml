@@ -1007,29 +1007,29 @@
   cited_as: "Chen, Ren & Wang"
   title: "Uniform-in-time propagation of chaos for mean field Langevin dynamics"
   year: 2022
-  status: queued
+  status: added
 - id: "2202.11678"
   cited_as: "Lotfi et al."
   title: "Bayesian Model Selection, the Marginal Likelihood, and Generalization"
   year: 2022
-  status: queued
+  status: added
 - id: "2107.13656"
   cited_as: "Aminian et al."
   title: "Characterizing the Generalization Error of Gibbs Algorithm with Symmetrized KL information"
   year: 2021
-  status: queued
+  status: added
   note: "Cited as Aminian et al. without a year; an extended version with the same result is 2210.09864."
 - id: "2608.01833"
   cited_as: "Chan et al. 2026"
   title: "Tunneling the Loss Landscape: Bypassing Memorization with Monte Carlo Parameter Swapping"
   year: 2026
-  status: queued
+  status: added
   note: "Cited in the note through a vault link."
 - id: "cond-mat/9501082"
   cited_as: "Monasson & Zecchina 1995"
   title: "Weight Space Structure and Internal Representations: a Direct Approach to Learning and Generalization in Multilayer Neural Network"
   year: 1995
-  status: queued
+  status: added
 - id: null
   cited_as: "Suzuki 2023 (Suzuki, Wu, Oko, Nitanda)"
   title: "Feature learning via mean-field Langevin dynamics: classifying sparse parities and beyond"
