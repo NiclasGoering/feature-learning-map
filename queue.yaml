@@ -1035,13 +1035,13 @@
   cited_as: "Suzuki 2023 (Suzuki, Wu, Oko, Nitanda)"
   title: "Feature learning via mean-field Langevin dynamics: classifying sparse parities and beyond"
   year: 2023
-  status: queued
+  status: added
   note: "No arXiv version or DOI; official page https://proceedings.neurips.cc/paper_files/paper/2023/hash/6cc321baf0a8611b1d1bdbd18822667b-Abstract-Conference.html (INGEST.md 3.3b)."
 - id: "2405.15767"
   cited_as: "Nitanda 2024"
   title: "Improved Particle Approximation Error for Mean Field Neural Networks"
   year: 2024
-  status: queued
+  status: added
   note: "Resolved to the paper the source report cites as Nitanda 2024; the ICLR 2024 paper by Nitanda, Oko, Suzuki & Wu (no arXiv) is the alternative."
 - id: "doi:10.1007/978-1-4612-0745-0"
   cited_as: "Neal 1996"
@@ -1060,13 +1060,13 @@
   cited_as: "Dziugaite & Roy 2025"
   title: "The Size of Teachers as a Measure of Data Complexity: PAC-Bayes Excess Risk Bounds and Scaling Laws"
   year: 2025
-  status: queued
+  status: added
   note: "No arXiv version or DOI; official page https://proceedings.mlr.press/v258/dziugaite25a.html (INGEST.md 3.3b)."
 - id: "ref:dai-2021-linear-representation-costs"
   cited_as: "Dai, Karzand & Srebro 2021"
   title: "Representation Costs of Linear Neural Networks: Analysis and Design"
   year: 2021
-  status: queued
+  status: added
   note: "No arXiv version or DOI; official page https://proceedings.neurips.cc/paper/2021/hash/e22cb9d6bbb4c290a94e4fff4d68a831-Abstract.html (INGEST.md 3.3b)."
 - id: "doi:10.1088/0305-4470/21/1/030"
   cited_as: "Gardner 1988"
@@ -1079,21 +1079,21 @@
   cited_as: "Seung, Sompolinsky & Tishby 1992"
   title: "Statistical mechanics of learning from examples"
   year: 1992
-  status: queued
+  status: added
   doi: "10.1103/PhysRevA.45.6056"
   note: "No arXiv version; ingest from the published version (INGEST.md 3.3b)."
 - id: "doi:10.1007/BF00114010"
   cited_as: "Haussler, Kearns, Seung & Tishby 1996"
   title: "Rigorous learning curve bounds from statistical mechanics"
   year: 1996
-  status: queued
+  status: added
   doi: "10.1007/BF00114010"
   note: "No arXiv version; ingest from the published version (INGEST.md 3.3b)."
 - id: "doi:10.1007/BF00993163"
   cited_as: "Haussler, Kearns & Schapire 1994"
   title: "Bounds on the sample complexity of Bayesian learning using information theory and the VC dimension"
   year: 1994
-  status: queued
+  status: added
   doi: "10.1007/BF00993163"
   note: "No arXiv version; ingest from the published version (INGEST.md 3.3b)."
 - id: "doi:10.1103/PhysRevA.41.7097"
@@ -1142,6 +1142,6 @@
   cited_as: "Dingle, Camargo & Louis 2018"
   title: "Input–output maps are strongly biased towards simple outputs"
   year: 2018
-  status: queued
+  status: added
   doi: "10.1038/s41467-018-03101-6"
   note: "No arXiv version; ingest from the published version (INGEST.md 3.3b)."
