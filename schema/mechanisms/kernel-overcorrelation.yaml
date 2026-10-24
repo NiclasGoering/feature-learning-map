@@ -1,0 +1,7 @@
+slug: kernel-overcorrelation
+label: "kernel over-correlation"
+types: [T3]
+desc: "When many kernel hyperparameters (a network feature extractor) are fitted by maximising the marginal likelihood, the learned Gram matrix is driven towards near-unit correlation between all data points. This lowers the log-determinant complexity term while the data-fit term stays near -N/2, so the kernel fits noise and the predictor overfits."
+introduced_by: "2102.12108v2"
+added_by: claude-sonnet-5-5
+date_added: "2026-10-24"
