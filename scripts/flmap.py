@@ -170,15 +170,17 @@ def load_schema(vocab):
 
 
 def key_to_filename(pid):
-    """Paper id -> file stem: 2302.00375v2, cond-mat_9501082v1, doi-10.1103_PhysRevA.45.6056."""
+    """Paper id -> file stem: 2302.00375v2, cond-mat_9501082v1, doi-10.1103_PhysRevA.45.6056, ref-<slug>."""
     if pid.startswith("doi:"):
         return "doi-" + pid[4:].replace("/", "_")
+    if pid.startswith("ref:"):
+        return "ref-" + pid[4:]
     return pid.replace("/", "_")
 
 
 def base_id(pid):
-    """Strip the arXiv version: 2302.00375v2 -> 2302.00375. DOIs are returned unchanged."""
-    if pid.startswith("doi:"):
+    """Strip the arXiv version: 2302.00375v2 -> 2302.00375. doi: and ref: keys are returned unchanged."""
+    if pid.startswith(("doi:", "ref:")):
         return pid
     return re.sub(r"v[0-9]+$", "", pid)
 

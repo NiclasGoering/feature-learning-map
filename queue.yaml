@@ -3,7 +3,8 @@
 # and simplicity bias, representation costs, sampling and mixing, classical statistical mechanics;
 # entries without an arXiv ID (status needs-id) last.
 #
-# status: queued (ready for ingest) | needs-id (no arXiv ID found) | added (entry exists in papers/) | skipped
+# status: queued (ready for ingest) | needs-id (no key found yet) | added (entry exists in papers/) | skipped
+# id: arXiv ID without version; doi:<DOI> when there is no arXiv version; ref:<slug> when there is neither.
 # Quote every id. Ingest sessions take `queued` entries from the top (INGEST.md).
 
 - id: "2210.17449"
@@ -1030,117 +1031,117 @@
   title: "Weight Space Structure and Internal Representations: a Direct Approach to Learning and Generalization in Multilayer Neural Network"
   year: 1995
   status: added
-- id: null
+- id: "ref:suzuki-2023-mfld-sparse-parities"
   cited_as: "Suzuki 2023 (Suzuki, Wu, Oko, Nitanda)"
   title: "Feature learning via mean-field Langevin dynamics: classifying sparse parities and beyond"
   year: 2023
-  status: needs-id
-  note: "No arXiv version found; https://proceedings.neurips.cc/paper_files/paper/2023/hash/6cc321baf0a8611b1d1bdbd18822667b-Abstract-Conference.html"
-- id: null
+  status: queued
+  note: "No arXiv version or DOI; official page https://proceedings.neurips.cc/paper_files/paper/2023/hash/6cc321baf0a8611b1d1bdbd18822667b-Abstract-Conference.html (INGEST.md 3.3b)."
+- id: "2405.15767"
   cited_as: "Nitanda 2024"
-  title: "Nitanda 2024 (mean-field Langevin dynamics)"
+  title: "Improved Particle Approximation Error for Mean Field Neural Networks"
   year: 2024
-  status: needs-id
-  note: "Ambiguous: 2405.15767 (Nitanda, particle approximation) or Nitanda, Oko, Suzuki & Wu, ICLR 2024 (no arXiv)."
-- id: null
+  status: queued
+  note: "Resolved to the paper the source report cites as Nitanda 2024; the ICLR 2024 paper by Nitanda, Oko, Suzuki & Wu (no arXiv) is the alternative."
+- id: "doi:10.1007/978-1-4612-0745-0"
   cited_as: "Neal 1996"
   title: "Bayesian Learning for Neural Networks"
   year: 1996
-  status: needs-id
+  status: queued
   doi: "10.1007/978-1-4612-0745-0"
-  note: "No arXiv version found."
-- id: null
+  note: "No arXiv version; ingest from the published version (INGEST.md 3.3b)."
+- id: "ref:chiang-2023-loss-landscapes"
   cited_as: "Chiang et al. 2023"
   title: "Loss Landscapes Are All You Need: Neural Network Generalization Can Be Explained Without the Implicit Bias of Gradient Descent"
   year: 2023
-  status: needs-id
-  note: "No arXiv version found; https://openreview.net/forum?id=QC10RmRbZy9"
-- id: null
+  status: queued
+  note: "No arXiv version or DOI; official page https://openreview.net/forum?id=QC10RmRbZy9 (INGEST.md 3.3b)."
+- id: "ref:dziugaite-2025-teacher-size"
   cited_as: "Dziugaite & Roy 2025"
   title: "The Size of Teachers as a Measure of Data Complexity: PAC-Bayes Excess Risk Bounds and Scaling Laws"
   year: 2025
-  status: needs-id
-  note: "No arXiv version found; https://proceedings.mlr.press/v258/dziugaite25a.html"
-- id: null
+  status: queued
+  note: "No arXiv version or DOI; official page https://proceedings.mlr.press/v258/dziugaite25a.html (INGEST.md 3.3b)."
+- id: "ref:dai-2021-linear-representation-costs"
   cited_as: "Dai, Karzand & Srebro 2021"
   title: "Representation Costs of Linear Neural Networks: Analysis and Design"
   year: 2021
-  status: needs-id
-  note: "No arXiv version found; https://proceedings.neurips.cc/paper/2021/hash/e22cb9d6bbb4c290a94e4fff4d68a831-Abstract.html"
-- id: null
+  status: queued
+  note: "No arXiv version or DOI; official page https://proceedings.neurips.cc/paper/2021/hash/e22cb9d6bbb4c290a94e4fff4d68a831-Abstract.html (INGEST.md 3.3b)."
+- id: "doi:10.1088/0305-4470/21/1/030"
   cited_as: "Gardner 1988"
   title: "The space of interactions in neural network models"
   year: 1988
-  status: needs-id
+  status: queued
   doi: "10.1088/0305-4470/21/1/030"
-  note: "No arXiv version found."
-- id: null
+  note: "No arXiv version; ingest from the published version (INGEST.md 3.3b)."
+- id: "doi:10.1103/PhysRevA.45.6056"
   cited_as: "Seung, Sompolinsky & Tishby 1992"
   title: "Statistical mechanics of learning from examples"
   year: 1992
-  status: needs-id
+  status: queued
   doi: "10.1103/PhysRevA.45.6056"
-  note: "No arXiv version found."
-- id: null
+  note: "No arXiv version; ingest from the published version (INGEST.md 3.3b)."
+- id: "doi:10.1007/BF00114010"
   cited_as: "Haussler, Kearns, Seung & Tishby 1996"
   title: "Rigorous learning curve bounds from statistical mechanics"
   year: 1996
-  status: needs-id
+  status: queued
   doi: "10.1007/BF00114010"
-  note: "No arXiv version found."
-- id: null
+  note: "No arXiv version; ingest from the published version (INGEST.md 3.3b)."
+- id: "doi:10.1007/BF00993163"
   cited_as: "Haussler, Kearns & Schapire 1994"
   title: "Bounds on the sample complexity of Bayesian learning using information theory and the VC dimension"
   year: 1994
-  status: needs-id
+  status: queued
   doi: "10.1007/BF00993163"
-  note: "No arXiv version found."
-- id: null
+  note: "No arXiv version; ingest from the published version (INGEST.md 3.3b)."
+- id: "doi:10.1103/PhysRevA.41.7097"
   cited_as: "Györgyi 1990"
   title: "First-order transition to perfect generalization in a neural network with binary synapses"
   year: 1990
-  status: needs-id
+  status: queued
   doi: "10.1103/PhysRevA.41.7097"
-  note: "No arXiv version found."
-- id: null
+  note: "No arXiv version; ingest from the published version (INGEST.md 3.3b)."
+- id: "doi:10.1209/0295-5075/20/4/015"
   cited_as: "Schwarze & Hertz 1992"
   title: "Generalization in a Large Committee Machine"
   year: 1992
-  status: needs-id
+  status: queued
   doi: "10.1209/0295-5075/20/4/015"
-  note: "No arXiv version found."
-- id: null
+  note: "No arXiv version; ingest from the published version (INGEST.md 3.3b)."
+- id: "doi:10.1103/PhysRevA.45.4146"
   cited_as: "Barkai, Hansel & Sompolinsky 1992"
   title: "Broken symmetries in multilayered perceptrons"
   year: 1992
-  status: needs-id
+  status: queued
   doi: "10.1103/PhysRevA.45.4146"
-  note: "No arXiv version found."
-- id: null
+  note: "No arXiv version; ingest from the published version (INGEST.md 3.3b)."
+- id: "doi:10.1103/PhysRevLett.66.2677"
   cited_as: "Opper & Haussler 1991"
   title: "Generalization performance of Bayes optimal classification algorithm for learning a perceptron"
   year: 1991
-  status: needs-id
+  status: queued
   doi: "10.1103/PhysRevLett.66.2677"
-  note: "No arXiv version found."
-- id: null
+  note: "No arXiv version; ingest from the published version (INGEST.md 3.3b)."
+- id: "doi:10.1103/PhysRevLett.76.1964"
   cited_as: "Opper & Winther 1996"
   title: "Mean Field Approach to Bayes Learning in Feed-Forward Neural Networks"
   year: 1996
-  status: needs-id
+  status: queued
   doi: "10.1103/PhysRevLett.76.1964"
-  note: "No arXiv version found."
-- id: null
+  note: "No arXiv version; ingest from the published version (INGEST.md 3.3b)."
+- id: "doi:10.1109/5.58339"
   cited_as: "Levin, Tishby & Solla 1990"
   title: "A statistical approach to learning and generalization in layered neural networks"
   year: 1990
-  status: needs-id
+  status: queued
   doi: "10.1109/5.58339"
-  note: "No arXiv version found."
-- id: null
+  note: "No arXiv version; ingest from the published version (INGEST.md 3.3b)."
+- id: "doi:10.1038/s41467-018-03101-6"
   cited_as: "Dingle, Camargo & Louis 2018"
   title: "Input–output maps are strongly biased towards simple outputs"
   year: 2018
-  status: needs-id
+  status: queued
   doi: "10.1038/s41467-018-03101-6"
-  note: "No arXiv version found."
+  note: "No arXiv version; ingest from the published version (INGEST.md 3.3b)."

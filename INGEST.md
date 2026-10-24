@@ -88,6 +88,8 @@ ls papers/ | grep -F "${BASE}v"
 
 If a file exists (any version), skip the paper. If it came from an issue, comment there: `Already in the map as papers/<file>.` Set its queue entry (if any) to `status: added`.
 
+Queue entries whose id starts with `doi:` or `ref:` have no arXiv version: check for their file instead (`papers/doi-<DOI with / replaced by _>.md` or `papers/ref-<slug>.md`), then skip 3.2 and 3.3 and follow 3.3b.
+
 ### 3.2 Get metadata
 
 ```bash
@@ -101,6 +103,14 @@ The entry's key is `${BASE}vN`, the version you read. The file is `papers/${BASE
 ### 3.3 Read the full text
 
 Try `https://arxiv.org/html/${BASE}vN` first. If it does not exist (404 or "HTML is not available"), use `https://arxiv.org/pdf/${BASE}vN`. Read the whole paper, including appendices that state the main theorems. The abstract alone is never enough.
+
+### 3.3b Papers without an arXiv version (`doi:` and `ref:` keys)
+
+- **Key and file.** Use the queue id as the key: `doi:10.1103/PhysRevA.45.6056` gives `papers/doi-10.1103_PhysRevA.45.6056.md` (replace `/` with `_`); `ref:dai-2021-linear-representation-costs` gives `papers/ref-dai-2021-linear-representation-costs.md`.
+- **Metadata.** For a DOI, `curl -s https://api.crossref.org/works/<DOI>` gives title, authors, year and journal; for a `ref:` key, the official page in the queue note. `year` is the publication year.
+- **Full text.** Read the published version where it is open (Nature Communications, NeurIPS, ICLR, PMLR, OpenReview); otherwise an author-hosted or institutional copy of the published paper (author's page, university repository, CiteSeerX). For a book, read the chapters that state the results you cite. If you cannot find the full text, skip the paper with the reason `full text not accessible` and leave its queue entry `queued`; never write an entry from the abstract.
+- **Links.** `abs`: `https://doi.org/<DOI>` for a `doi:` key, the official page for a `ref:` key. `pdf`: an open PDF URL if there is one, else `not-available`. `html`: `not-available`.
+- **Versions and anchors.** `version_read: published`, every `source.version: published`, every `anchor: none`. Cite locations as printed in the published version (`Eq. (12)`, `Fig. 3`, `Sec. IV`).
 
 ### 3.4 Write the entry
 
@@ -234,7 +244,7 @@ Every list field is a YAML list. Quote `"yes"` and `"no"`, IDs and dates.
 
 ```yaml
 ---
-id: 2302.00375v2
+id: 2302.00375v2               # or doi:<DOI> / ref:<slug> for papers without arXiv (3.3b)
 title: "Exact title as on arXiv"
 authors: ["First Author", "Second Author"]
 year: 2023

@@ -311,7 +311,7 @@
       el("button", { class: "title-btn", type: "button", title: "Full entry", onclick: function () { openPanel(p.key); } }, p.title),
       el("div", { class: "paper-meta" },
         authorShort(p), " · ", String(p.year), " · ",
-        extLink(p.links.abs, p.id.indexOf("doi:") === 0 ? "doi" : "arXiv"),
+        extLink(p.links.abs, p.id.indexOf("doi:") === 0 ? "doi" : p.id.indexOf("ref:") === 0 ? "paper" : "arXiv"),
         p.links.pdf !== "not-available" ? [" · ", extLink(p.links.pdf, "pdf")] : null,
         flag ? [" · ", flag] : null),
       el("div", { class: "oneline" }, p.one_line));
@@ -537,6 +537,7 @@
         p.title + " (" + authorShort(p) + " " + p.year + ")");
     }
     if (target.indexOf("doi:") === 0) return extLink("https://doi.org/" + target.slice(4), target);
+    if (target.indexOf("ref:") === 0) return document.createTextNode(target.slice(4));
     return extLink("https://arxiv.org/abs/" + target, "arXiv:" + target);
   }
 
@@ -552,7 +553,7 @@
     var body = $("#panel-body");
     body.textContent = "";
     var links = el("div", { class: "links" },
-      extLink(p.links.abs, p.id.indexOf("doi:") === 0 ? "DOI page" : "arXiv abstract"),
+      extLink(p.links.abs, p.id.indexOf("doi:") === 0 ? "DOI page" : p.id.indexOf("ref:") === 0 ? "Paper page" : "arXiv abstract"),
       p.links.pdf !== "not-available" ? extLink(p.links.pdf, "PDF") : null,
       p.links.html !== "not-available" ? extLink(p.links.html, "HTML") : null,
       D.repo ? extLink(D.repo + "/blob/main/" + p.file, "Edit entry on GitHub") : null);

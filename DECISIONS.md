@@ -22,7 +22,9 @@ One line per choice made where SPEC.md left room.
 - Results are numbered `r1`…`r5` in order; `r1` is the primary result and feeds the Status, Main result and FL mechanism columns.
 - `version_read` and every result's `source.version` must equal the version in the key.
 - Result sources store an HTML anchor id; the site links to `https://arxiv.org/html/<id>#<anchor>`, or to the PDF when there is no HTML version.
-- DOI-only papers use id `doi:<DOI>` and file `papers/doi-<DOI with / replaced by _>.md`; old-style arXiv ids replace `/` with `_` in the file name.
+- DOI-only papers use id `doi:<DOI>` and file `papers/doi-<DOI with / replaced by _>.md`; papers with neither arXiv nor DOI (proceedings, OpenReview) use id `ref:<slug>` and file `papers/ref-<slug>.md` with the official page as `links.abs`; old-style arXiv ids replace `/` with `_` in the file name.
+- Papers without an arXiv version may link an open PDF; their version is `published` and their sources carry no HTML anchor.
+- At the team's request (2026-10-24) the 17 papers without an arXiv ID were queued with `doi:` or `ref:` keys; "Nitanda 2024" was resolved to arXiv 2405.15767, the paper the source report cites under that name.
 - Relation targets are arXiv ids without version, so relations survive version bumps; `answers` targets an open-problem id `op-NN`.
 - Open problems touched are a paper-level list `open_problems`; the `answers` relation marks a partial resolution.
 - Depth `one-hidden-layer` covers every network with at most one hidden layer (perceptrons, GLMs, committee machines, single attention layers).

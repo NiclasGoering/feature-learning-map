@@ -145,10 +145,18 @@ def check_paper(path, meta, body, ctx, report):
         report.error(where, "provenance.verified_by", "status verified needs at least one name in verified_by")
 
     has_html = meta["links"]["html"] != "not-available"
-    want = flmap.expected_links(pid, has_html)
-    for k, v in want.items():
-        if meta["links"][k] != v:
-            report.error(where, f"links.{k}", f"must be {v}")
+    if pid.startswith(("doi:", "ref:")):
+        # No arXiv version: abs is the DOI resolver (doi:) or the official page (ref:),
+        # pdf an open copy or not-available, and there is no HTML to anchor into.
+        if pid.startswith("doi:") and meta["links"]["abs"] != "https://doi.org/" + pid[4:]:
+            report.error(where, "links.abs", f"must be https://doi.org/{pid[4:]}")
+        if meta["links"]["html"] != "not-available":
+            report.error(where, "links.html", "must be not-available for a paper without an arXiv version")
+    else:
+        want = flmap.expected_links(pid, has_html)
+        for k, v in want.items():
+            if meta["links"][k] != v:
+                report.error(where, f"links.{k}", f"must be {v}")
 
     # Free-text limits.
     def check_text(loc, value, kind, limit, na_ok):
@@ -385,8 +393,8 @@ def check_queue(paper_bases, report):
             continue
         if status not in QUEUE_STATUSES:
             report.error(where, loc, f"status must be one of {', '.join(sorted(QUEUE_STATUSES))}")
-        if qid is not None and not re.fullmatch(r"[0-9]{4}\.[0-9]{4,5}|[a-z-]+(\.[A-Z]{2})?/[0-9]{7}", str(qid)):
-            report.error(where, loc, f"id {qid!r} must be an arXiv ID without version, or null")
+        if qid is not None and not re.fullmatch(r"[0-9]{4}\.[0-9]{4,5}|[a-z-]+(\.[A-Z]{2})?/[0-9]{7}|doi:10\.[0-9]{4,9}/\S+|ref:[a-z0-9]+(-[a-z0-9]+)*", str(qid)):
+            report.error(where, loc, f"id {qid!r} must be an arXiv ID without version, doi:<DOI>, ref:<slug>, or null")
         if status == "needs-id" and qid is not None:
             report.error(where, loc, "status needs-id must have id: null")
         if status in ("queued", "added") and qid is None:

@@ -71,7 +71,7 @@ def repo_url():
 
 def source_url(meta, res):
     pid = meta["id"]
-    if pid.startswith("doi:"):
+    if pid.startswith(("doi:", "ref:")):
         return meta["links"]["abs"]
     anchor = res["source"]["anchor"]
     if meta["links"]["html"] != "not-available" and anchor != "none":

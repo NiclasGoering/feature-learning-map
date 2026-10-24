@@ -14,9 +14,9 @@
   ],
   "properties": {
     "id": {
-      "description": "arXiv ID with version (2302.00375v3, cond-mat/9501082v1), or doi:<DOI> when there is no arXiv version. Must match the file name.",
+      "description": "arXiv ID with version (2302.00375v3, cond-mat/9501082v1); doi:<DOI> when there is no arXiv version; ref:<slug> when there is neither. Must match the file name.",
       "type": "string",
-      "pattern": "^([0-9]{4}\\.[0-9]{4,5}v[0-9]+|[a-z-]+(\\.[A-Z]{2})?/[0-9]{7}v[0-9]+|doi:10\\.[0-9]{4,9}/\\S+)$"
+      "pattern": "^([0-9]{4}\\.[0-9]{4,5}v[0-9]+|[a-z-]+(\\.[A-Z]{2})?/[0-9]{7}v[0-9]+|doi:10\\.[0-9]{4,9}/\\S+|ref:[a-z0-9]+(-[a-z0-9]+)*)$"
     },
     "title": {"$ref": "#/$defs/text"},
     "authors": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/text"}},
@@ -218,7 +218,7 @@
         "target": {
           "description": "arXiv ID without version (quoted), doi:<DOI>, or an open-problem id op-NN for type answers.",
           "type": "string",
-          "pattern": "^([0-9]{4}\\.[0-9]{4,5}|[a-z-]+(\\.[A-Z]{2})?/[0-9]{7}|doi:10\\.[0-9]{4,9}/\\S+|op-[0-9]{2})$"
+          "pattern": "^([0-9]{4}\\.[0-9]{4,5}|[a-z-]+(\\.[A-Z]{2})?/[0-9]{7}|doi:10\\.[0-9]{4,9}/\\S+|ref:[a-z0-9]+(-[a-z0-9]+)*|op-[0-9]{2})$"
         },
         "note": {"$ref": "#/$defs/text"}
       }
