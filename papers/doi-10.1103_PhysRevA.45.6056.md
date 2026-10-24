@@ -6,7 +6,7 @@ year: 1992
 venue: "Physical Review A 45, 6056"
 links:
   abs: https://doi.org/10.1103/PhysRevA.45.6056
-  pdf: https://www.gwern.net/doc/ai/nn/1992-seung.pdf
+  pdf: not-available
   html: not-available
 one_line: "Gibbs learning at temperature $T$ yields learning curves with $P\\propto N$ examples, inverse power laws for smooth networks and discontinuous transitions for nonsmooth ones."
 summary: "The paper treats training as sampling from a Gibbs distribution over weights at temperature $T$ and studies the generalisation curve $\\epsilon_g(\\alpha)$ with $P=\\alpha N$ examples. It develops the high-temperature limit and the annealed approximation and compares them with the replica theory. For smooth networks the errors approach their optimum as an inverse power law in $\\alpha$. For nonsmooth networks learning realizable rules, such as discrete-weight perceptrons, a discontinuous transition from poor to perfect generalisation can occur, and a classification of curves by the small-error entropy is proposed. For unrealizable rules the approximations fail, the optimal temperature can be nonzero and spin-glass phases appear."

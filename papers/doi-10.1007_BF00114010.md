@@ -6,7 +6,7 @@ year: 1996
 venue: "Machine Learning 25, 195-236"
 links:
   abs: https://doi.org/10.1007/BF00114010
-  pdf: https://www.gwern.net/doc/ai/scaling/1996-haussler.pdf
+  pdf: not-available
   html: not-available
 one_line: "Error-shell decomposition and a rigorous thermodynamic limit turn entropy-energy competition into learning-curve bounds with phase transitions that VC bounds cannot show."
 summary: "The paper gives a mathematically rigorous version of the annealed-approximation and thermodynamic-limit methods of statistical mechanics for finite function classes. Splitting the class into shells of equal generalisation error gives a bound for any consistent learner. In the limit where the sample size is a fixed multiple $\\alpha$ of a scaling function $t(N)$, the bound becomes the rightmost crossing of an entropy curve $s(\\epsilon)$ and an energy curve $-\\alpha\\log(1-\\epsilon)$. For the Ising perceptron this predicts perfect learning above $\\alpha\\approx1.448$, where VC bounds need $m\\sim N^{3/2}$. A matching lower-bound construction and an extension to unrealizable targets with large-$\\alpha$ asymptotics follow."
