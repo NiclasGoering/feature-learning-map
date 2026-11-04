@@ -436,6 +436,8 @@ One file per statement, checked against `schema/statement.schema.json`. Ids are 
 id: S04
 slug: deep-linear-scalar-renormalisation
 title: "Deep linear networks at P ∝ N: one scalar renormalises the kernel"   # at most 14 words
+kind: collapse                     # collapse: the members are one formula under a mapping of symbols; grouping: a shared object, no equivalence proof
+family: rg                         # optional: literature family (e.g. rg for the renormalisation-group papers)
 claim: "..."                       # one line, at most 45 words, LaTeX allowed
 formula: '$$\rho=1-\alpha+\alpha\bar r\,\rho^{-L}$$'   # the master formula, LaTeX; required
 formula_note: "..."                # what the symbols are, at most 70 words (optional)
@@ -453,13 +455,15 @@ members:                           # at least one
     equations: "Eq. (27)"          # as numbered in the version read (optional)
     role: master                   # master | special-case | variant | extension | rate | check
 reduces_to:                        # optional: this statement, in a limit, becomes another
-  - {target: S02, limit: "$\alpha\to0$: $\rho\to1$, the NNGP posterior"}
+  - {target: S02, limit: "$\alpha\to0$: $\rho\to1$, the NNGP posterior"}       # add conjectural: true when the connection lies outside the cited theorems (drawn dashed)
 disagreements:                     # optional: papers that disagree about it, with the equations
   - {papers: ["2405.10761", "2012.04030"], note: "..."}
+links:                             # optional: relations other than reduces_to (analogy, same object in another language)
+  - {target: S09, relation: same-object, note: "..."}
 open_problems: [op-07]             # optional: open problems that sit next to it
 ```
 
-`reduces_to` must be acyclic. A `(paper, result)` pair is a member of at most one statement.
+`reduces_to` must be acyclic. `kind` is `collapse` when the members' results are shown to be one formula under a mapping of symbols (the Graph draws a filled dot) and `grouping` when they share an object or a setting without an equivalence proof (a ring). A `(paper, result)` pair is a member of at most one statement.
 
 ### 8.2 The `canonical:` block of a result
 

@@ -64,6 +64,7 @@ STATEMENT_TEXT_LIMITS = [
     ("members.mapping", "words", 45),
     ("members.equations", "words", 14),
     ("reduces_to.limit", "words", 30),
+    ("links.note", "words", 40),
     ("disagreements.note", "words", 70),
 ]
 PAPER_REF = re.compile(r"[0-9]{4}\.[0-9]{4,5}|[a-z-]+(?:\.[A-Z]{2})?/[0-9]{7}|doi:10\.[0-9]{4,9}/\S+|ref:[a-z0-9]+(?:-[a-z0-9]+)*")
@@ -425,7 +426,7 @@ def check_statements(vocab, papers, op_ids, report):
         where = rel(path)
         for dotted, kind, limit in STATEMENT_TEXT_LIMITS:
             head, _, tail = dotted.partition(".")
-            if head in ("members", "reduces_to", "disagreements"):
+            if head in ("members", "reduces_to", "disagreements", "links"):
                 for i, item in enumerate(meta.get(head) or []):
                     if tail in item:
                         check_text(where, f"{head}[{i}].{tail}", item[tail], kind, limit)
@@ -476,6 +477,11 @@ def check_statements(vocab, papers, op_ids, report):
                 report.error(where, f"reduces_to[{i}]", "a statement cannot reduce to itself")
             elif r["target"] not in stmts:
                 report.error(where, f"reduces_to[{i}].target", f"{r['target']} is not a statement in statements/")
+        for i, l in enumerate(meta.get("links") or []):
+            if l["target"] == sid:
+                report.error(where, f"links[{i}]", "a statement cannot link to itself")
+            elif l["target"] not in stmts:
+                report.error(where, f"links[{i}].target", f"{l['target']} is not a statement in statements/")
         member_papers = {m["paper"] for m in meta["members"]}
         for i, d in enumerate(meta.get("disagreements") or []):
             for pid in d["papers"]:

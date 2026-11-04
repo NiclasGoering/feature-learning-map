@@ -143,14 +143,14 @@ def compile_statements(stmts, papers):
             members.append(rec)
         keys = {mem["paper"] for mem in members}
         rec = {
-            "id": m["id"], "slug": m["slug"], "title": m["title"], "claim": m["claim"], "formula": m["formula"],
+            "id": m["id"], "slug": m["slug"], "title": m["title"], "kind": m["kind"], "claim": m["claim"], "formula": m["formula"],
             "width_limit": m["regime"]["width_limit"], "learning_rule": m["regime"]["learning_rule"],
             "conditions": m["regime"]["conditions"], "status": m["status"], "members": members,
             "papers": sorted(keys), "n_papers": len(keys),
             "reduces_to": list(m.get("reduces_to") or []),
-            "disagreements": [], "open_problems": m.get("open_problems") or [],
+            "disagreements": [], "open_problems": m.get("open_problems") or [], "links": list(m.get("links") or []),
         }
-        for key in ("formula_note", "status_note"):
+        for key in ("formula_note", "status_note", "family"):
             if m.get(key):
                 rec[key] = m[key]
         for d in m.get("disagreements") or []:
