@@ -527,7 +527,7 @@ fields:
     empty: false
     values:
       T0: {label: "T0 none", desc: "No feature learning: the single-site law stays at the prior (NNGP / lazy); the mean predictor is the kernel predictor."}
-      T1: {label: "T1 scale renormalisation", desc: "Only the scale of each layer's kernel moves (one scalar per layer, a D×D matrix per output set, or one scalar per patch or branch)."}
+      T1: {label: "T1 scale renormalisation", desc: "Only the scale of the predictor's kernel moves (one scalar per layer, a D×D matrix per output set, or one scalar per patch or branch); the mean hidden kernel also gains an O(α) spike along the target."}
       T2: {label: "T2 directional adaptation", desc: "An order-1/N tilt per neuron that adds up to an O(1) kernel change along the target when P ~ N (adaptive kernels, a spike along the teacher)."}
       T3: {label: "T3 full tilt", desc: "The whole kernel adapts deterministically at infinite width; the single-site law is non-Gaussian (μP Bayesian, deep kernel machines, MFLD)."}
       T4: {label: "T4 sparsification onto atoms", desc: "At large amplitude or low temperature the single-site law collapses onto a few ridge directions; costs become variation or weight-decay norms."}
