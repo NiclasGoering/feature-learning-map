@@ -1,6 +1,6 @@
 # Feature-learning literature map
 
-A public map of the theory literature on feature learning in neural networks, for two learning rules: Bayesian posteriors and gradient-based training. Every paper is one Markdown file with structured YAML front matter. A static site compiles them into one table grouped by learning rule, depth and width/limit, a mechanisms page (the first version of a feature-learning dictionary) and a list of open problems.
+A public map of the theory literature on feature learning in neural networks, for two learning rules: Bayesian posteriors and gradient-based training. Every paper is one Markdown file with structured YAML front matter. A static site compiles them into one table grouped by learning rule, depth and width/limit, a graph of results placed by limit, a mechanisms page (the first version of a feature-learning dictionary) and a list of open problems.
 
 **Site:** https://niclasgoering.github.io/feature-learning-map/
 
@@ -17,7 +17,7 @@ A public map of the theory literature on feature learning in neural networks, fo
 | `scripts/validate.py` | Checks papers, open problems and the queue against the schema, the vocabulary, the length limits and the public-site rule. |
 | `scripts/build.py` | Runs the validator, then builds the static site into `_site/` with one `data.json`. |
 | `scripts/flmap.py` | Loading code shared by both scripts. |
-| `site/` | The front end: four HTML pages (`overview.html`, published as the landing page; `table.html`; mechanisms; open problems), one stylesheet, two scripts (`app.js`, and `anim.js` for the overview animations). No framework. |
+| `site/` | The front end: five HTML pages (`overview.html`, published as the landing page; `table.html`; `graph.html`; mechanisms; open problems), one stylesheet, three scripts (`app.js`; `anim.js` for the overview animations; `graph.js` for the graph, with d3). No framework. |
 | `.github/workflows/` | `deploy.yml` builds and deploys to GitHub Pages on every push to `main`; `validate.yml` runs the validator and a build on every pull request. |
 | `.github/ISSUE_TEMPLATE/add-paper.yml` | Issue form for suggesting a paper (label `add-paper`). |
 | `INGEST.md` | Step-by-step instructions for ingest sessions that add papers. |

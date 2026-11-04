@@ -1,5 +1,6 @@
 /* Feature-learning map: renders data.json (built by scripts/build.py) into the
-   table, the mechanisms page and the open-problems page. No framework. */
+   table, the mechanisms page and the open-problems page (the graph page is
+   site/graph.js). No framework. */
 (function () {
   "use strict";
 
@@ -556,6 +557,7 @@
       extLink(p.links.abs, p.id.indexOf("doi:") === 0 ? "DOI page" : p.id.indexOf("ref:") === 0 ? "Paper page" : "arXiv abstract"),
       p.links.pdf !== "not-available" ? extLink(p.links.pdf, "PDF") : null,
       p.links.html !== "not-available" ? extLink(p.links.html, "HTML") : null,
+      el("a", { href: "graph.html#p:" + encodeURIComponent(p.key) }, "Show its results in the graph"),
       D.repo ? extLink(D.repo + "/blob/main/" + p.file, "Edit entry on GitHub") : null);
     append(body, [
       el("h2", { id: "panel-title" }, p.title),
@@ -840,6 +842,12 @@
     else if (PAGE === "mechanisms") initMechanisms();
     else if (PAGE === "open-problems") initOpenProblems();
     else if (PAGE === "overview") initOverview();
+    else if (PAGE === "graph" && window.FLGraph) {
+      window.FLGraph.init(D, {
+        vocab: V, el: el, lab: lab, labs: labs, desc: desc, authorShort: authorShort, math: math,
+        extLink: extLink, statusPill: statusPill, sourceLink: sourceLink
+      });
+    }
   }
 
   if (PAGE === "overview" && /(^|[?&])(p|q|c|f\.[^=]+)=/.test(location.search)) {
@@ -849,6 +857,7 @@
 
   setupTheme();
   if (PAGE === "overview") { setupFlip(); setupCards(); math(document.getElementById("content")); }
+  if (PAGE === "graph") math(document.querySelector(".gr-head"));
   fetch("data.json", { cache: "no-cache" })
     .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
     .then(start)
