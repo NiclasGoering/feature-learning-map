@@ -1,0 +1,26 @@
+id: S15
+slug: linear-mup-extensive-data
+title: "Linear networks in μP with $P\\propto N$: no finite limit"
+kind: collapse
+claim: "For deep linear networks in μP ($\\kappa=\\gamma_0^2$) at $P\\propto N$ the scalar equation of S06 has no finite limit: $\\rho$ grows as $N^{1/(L+1)}$, unless the output scale is tuned to $1/P$, which returns S06."
+formula: '$$\rho\simeq\big(\gamma_0^2\,P\,\bar r\big)^{\frac1{L+1}}\ \sim\ N^{\frac1{L+1}}\qquad(\kappa P=\gamma_0^2\,\alpha N\to\infty)$$'
+regime:
+  width_limit: inf-meanfield-propP
+  learning_rule: [bayes]
+  conditions: "Linear activation; $\\kappa=\\gamma_0^2$, $P/N=\\alpha>0$ fixed, $L$ fixed. The energy $\\gamma_0^2NP$ couples only to the target-direction Schur complements, so the bulk of the $P\\times P$ kernel never moves. The nonlinear case is open (op-07)."
+status: phys
+status_note: "This map’s own statement of op-07 (linear case), checked numerically ($N=4000$, $L=1,2$: the exact scale posterior over $(\\gamma_0^2P\\bar r)^{1/(L+1)}$ tends to 1). van Meegen–Sompolinsky print the branch $\\rho^{L+1}=\\kappa P\\bar r$ and $U=O(P^{1/(L+1)})$ without rescaling (text after A22)."
+members:
+  - paper: "2605.29684"
+    statement: "μP numerics of the equivalent Wishart ansatz ($\\kappa=\\gamma_0^2=1$, $P=1000$, $N$ up to 4000, $\\beta\\propto N$): $q^*$ large and growing, outside the window the ansatz was checked in; Aiudi et al. state the formalism cannot describe μP."
+    mapping: "as in the statement text"
+    role: check
+  - paper: "2406.16689"
+    statement: "Mean-field linear network at $P\\propto N$: finite only because the readout prior is rescaled, $\\sigma_a^2=P^{-1/L}$ ($\\kappa\\to\\infty$ in their variables)."
+    mapping: "as in the statement text"
+    role: master
+  - paper: "2502.07998"
+    statement: "The fixed-$P$ ($\\alpha=0$) side of the same equation: deep linear μP, Eq. 48."
+    mapping: "as in the statement text"
+    role: special-case
+open_problems: [op-07]

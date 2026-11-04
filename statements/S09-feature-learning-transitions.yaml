@@ -1,0 +1,94 @@
+id: S09
+slug: feature-learning-transitions
+title: "Feature-learning transitions: bifurcations of the saddle"
+kind: grouping
+claim: "In mean-field Bayesian networks the symmetric (prior-kernel) saddle of $F$ loses stability at a critical value of a control parameter (data amount, noise, target amplitude); a symmetry-broken saddle takes over, continuously or by a jump between coexisting minima."
+formula: '$$\tilde F(m)=F_0+\tfrac12\,a(g)\,m^2+\tfrac14\,b\,m^4+\cdots,\qquad a\propto g_c-g:\ \ b>0\ \text{second order};\ \ \text{coexisting minima: first order}$$'
+regime:
+  width_limit: inf-meanfield-fixedP
+  learning_rule: [bayes]
+  conditions: "$g$ is the paper’s control parameter: data amount $P^*$ (Lavie), noise $\\eta/P$ (Göring–Mingard, closed-form $\\kappa_c$ Eq. 93, $b>0$), target amplitude $\\lambda_c=8$ (Bauer Eq. 41, exponent $\\frac12$), $\\kappa$ or $T$ (Rubin–Seroussi, van Meegen). Rubin: $m$ is a per-neuron coordinate of the single-site action, first order, mixed phase. Softmax attention: no symmetry breaking."
+status: phys
+status_note: "Physics: exact for each paper’s closed saddle equations and validated by simulation; the common Landau form is Bauer’s Eq. 41 verbatim and this map’s reading elsewhere. van Meegen–Sompolinsky give broken-symmetry saddles and a numerical critical temperature for the sigmoid, no critical $\\kappa$; the ReLU sparse code has no transition."
+members:
+  - paper: "2310.03789"
+    result: r1
+    statement: "One hidden layer, erf, teacher $H_1+\\epsilon H_3$: the fixed-$P$ single-site law $\\nu\\propto\\nu_0\\,e^{\\frac\\kappa2(v^\\top\\varphi)^2}$ (no log-det) reduces to $D\\,\\hat S(\\Phi)$, $\\Phi=w\\cdot w^*$; a second minimum $\\Phi\\approx\\pm1$ reaches the global value at $u_c\\approx30.2$ and a neuron fraction holds it degenerate on $[u_c,u_c+\\Delta u]$: first order, mixed phase."
+    mapping: "$\\sigma_a^2/N\\to1/(\\gamma^2N)$, so $\\kappa=1/(\\sigma_a^2N)$; $\\sigma^2\\to\\eta/\\gamma^2$, $\\eta=\\sigma^2/\\sigma_a^2$; $t=(Q+\\sigma^2)^{-1}y\\to v/\\sigma_a^2$; $Q\\to\\sigma_a^2K^1$; $n,d\\to P,D$; $u=n^2\\sigma_a^2/(\\sigma^4dN)=\\kappa(P/\\eta)^2/D$; order parameter $m\\to\\Phi$ per neuron."
+    equations: "Eqs. (7)-(13), Claims I-IV Sec. 3.1; App. A.1 Eqs. (1)-(2); App. A.2 Eqs. (5)-(8)"
+    role: master
+  - paper: "2310.03789"
+    result: r2
+    statement: "Quadratic student, addition modulo prime $P_{\\rm mod}$ (all $P_{\\rm mod}^2$ pairs), sextic weight decay: the single-site action splits into Fourier modes with one discrepancy mode $a=-\\sigma^2/(\\lambda(a)+\\sigma^2)$; a two-point mixture saddle gives a first-order transition with mixed phase for $0.175\\lesssim\\sigma^2\\lesssim0.227$ ($P_{\\rm mod}=401$, $N=1000$), $|a|$: $1\\to0.7$."
+    mapping: "Data size $P=P_{\\rm mod}^2$; $\\sigma^2\\to\\eta/\\gamma^2$; $u=2\\sigma_a^2P_{\\rm mod}^2/(N\\sigma^4)$; order parameter $\\Phi=w_kw_{-k}=\\Psi=v_kv_{-k}$ per Fourier mode; paper $\\gamma$ is the sextic coefficient, not the output scale."
+    equations: "Eqs. (14)-(16), Claims I-IV Sec. 3.2, Sec. 3.2.1, Fig. 3"
+    role: master
+  - paper: "2310.03789"
+    result: r3
+    statement: "Conjecture: past the transition the adapted kernel carries $H_3(w^*\\cdot x)$, so a finite network learns the cubic component with $P\\propto D$ where the NNGP needs $P\\propto D^3$; at $P=3000$, $D=150$ it is learned where the NNGP would need $\\sim5\\times10^5$ samples."
+    mapping: "$n,d\\to P,D$; the theory controls $n_{\\rm eff}=n/\\tilde\\sigma^2\\propto D$, not $n$ itself; proving $n\\propto D$ needs $\\sqrt\\beta/\\alpha$ corrections to the equivalent-kernel limit."
+    equations: "Sec. 3.1.1; App. A.1 (end, conjecture)"
+    role: check
+  - paper: "2310.03789"
+    result: r4
+    statement: "Outside the equivalent-kernel limit ($P=600$, $D=150$, $\\epsilon=-1.2$, $\\sigma^2=0.05$), lowering $N$ from 2800 to 700 creates two teacher-aligned minima in the sampled $-\\log p(w\\cdot w^*)$, and Langevin training at $N=700$ shows a delayed drop of the test loss."
+    mapping: "$n,d\\to P,D$; $\\sigma^2\\to\\eta/\\gamma^2$; width drives the transition (smaller $N$ raises $u$); Langevin dynamics read as time, not only equilibrium."
+    equations: "App. D, Eq. (44), Figs. 4-6"
+    role: check
+  - paper: "2510.15174"
+    result: r2
+    statement: "ReLU, parity target $\\chi_S$, $|S|=k$, infinite data, single-site law at a point mass on $w^*=\\alpha\\mathbb 1_S$: the quadratic coefficient of $\\hat S(\\alpha)$ changes sign at $\\kappa_p^2=\\kappa_c^2=\\frac{\\sqrt{C_k^2+4CN^{2\\gamma_p}D_k^2\\sigma_a^{-2}}-C_k}{2C\\sigma_a^{-2}N^{2\\gamma_p}}$, $C=Dk/\\sigma_w^2$; below it a unique $m_S\\in(0,1)$ grows continuously: second-order pitchfork."
+    mapping: "$d\\to D$; $\\kappa_p^2=T/2$ = noise variance of the $P$-averaged loss, i.e. $\\eta/P$ at $\\gamma_p=\\frac12$ (not umbrella $\\kappa=N^{2\\gamma_p-2}$); $m=\\alpha$; $C_k,D_k$ = ReLU-on-cube constants (Eqs. 83-84); $m_S$ = target coefficient of $\\bar f$."
+    equations: "Eq. (11), Sec. 3.1; Lemmas D.3-D.5 Eqs. (74)-(84); Thm D.6 Eq. (85)"
+    role: master
+  - paper: "2510.15174"
+    result: r3
+    statement: "With a shared ARD hyperprior $w_j\\sim\\mathcal N(0,\\rho_j^{-1})$, $\\rho_j=(\\alpha_0+\\frac N2)/(\\beta_0+\\frac N2\\langle w_j^2\\rangle)$, and assuming an $O(1)$ variance gap between on- and off-support coordinates at an $O(1)$ iterate, the onset noise scales as $\\kappa_c^2\\asymp k^{-1/2}$ instead of $(Dk)^{-1/2}$ for plain mean field."
+    mapping: "$d\\to D$; $\\kappa_c^2$ as in result 2 (noise $\\eta/P$); prior curvature along $\\mathbb 1_S$: $C_{\\rm MF}=Dk/\\sigma_w^2$, $C_{\\rm ARD}=\\sum_{j\\in S}\\rho_j=\\Theta(k)$; large-$C$ limit $\\kappa_c^2\\approx|D_k|\\sigma_a/(N^{\\gamma_p}\\sqrt C)$ (Eq. 137); ARD $\\rho_j$ is not the umbrella readout $\\rho$."
+    equations: "Eqs. (13)-(16), Thm 4.1; App. A.6 Eqs. (35)-(40)"
+    role: extension
+  - paper: "2510.15174"
+    result: r4
+    statement: "On 4-sparse parity ($D=35$, $N=512$) and a degree-4 Hermite single-index task ($D=18$, $N=1024$), MF-ARD reproduces the location and sharpness of the SGLD test-error boundary over $(P,\\kappa_p)$; plain mean field finds the onset but misses the post-transition specialisation (9 of 512 SGLD neurons carry…"
+    mapping: "$d\\to D$; $\\gamma_p=\\frac12$ (standard scaling, $\\kappa=1/N$); SGLD at $T=2\\kappa_p^2$; $\\kappa_p^2=\\eta/P$."
+    equations: "Figs. 1, 3-5, 7; Secs. 3.2-3.3, 4.3; App. F Tables 1-4"
+    role: check
+  - paper: "2606.12058"
+    result: r1
+    statement: "Single attention head on the copy task, $d_{\\rm model}\\to\\infty$ first, equivalent-kernel likelihood, $\\chi\\gg1$: marginalising the weights gives an action $\\mathcal S(G)$ over the attention scores (Eq. 10); the ansatz $G=\\hat c_1\\mathbf 1_L/L+\\hat c_GG^*/\\sqrt L$ reduces it to $\\chi L[\\mathcal S_{\\rm NNGP}+\\mathcal S_{\\rm data}](\\hat c_1,\\hat c_G)$ (Eqs. 12, 15), the log-determinant being $O(1/\\chi)$."
+    mapping: "Saddle functional $\\tilde F=\\mathcal S$ with sharpness $\\chi L$; order parameters $\\hat c_1$ (uniform pooling) and $\\hat c_G$ (copy); control parameter $P$; paper $L$ = context length (input $D=LV$), not depth; $\\bar\\sigma^2=\\sigma^2/(L\\chi)$, $\\bar g_{W,O}=\\chi g_{W,O}$."
+    equations: "Eqs. (4)-(15), Secs. 3.1-3.3; App. B Eqs. (56)-(74); App. F"
+    role: master
+  - paper: "2606.12058"
+    result: r2
+    statement: "Linear attention: $\\mathcal S$ is invariant under $(\\hat c_1,\\hat c_G)\\to-(\\hat c_1,\\hat c_G)$; the curvature along $\\hat c_1$ at the origin changes sign at $P^*_{\\hat c_1}=\\frac{L^2V^2\\bar\\sigma^2}{L+V}[\\bar g_O\\bar g_W(L+1)(L+V-1)]^{-1/2}\\sim V^2$, a second-order $\\mathbb Z_2$ transition to uniform pooling; the sign change along $\\hat c_G$ at $P^*_{\\hat c_G}\\sim L^{3/2}V^{1/2}$ (Eq. 17) is only a crossover."
+    mapping: "$m=\\hat c_1$ (with $\\hat c_G$ induced by the bilinear coupling, App. L); $a\\propto P^*_{\\hat c_1}-P$; second order; the approximate $\\mathbb Z_2\\times\\mathbb Z_2$ symmetry gives the plateau and the avoided second transition."
+    equations: "Eqs. (12), (15)-(17), Sec. 3.3; App. A; App. L Eqs. (342)-(352); Figs. 2-3"
+    role: master
+  - paper: "2606.12058"
+    result: r3
+    statement: "Softmax attention: $\\hat a_1=1-\\hat a_G/\\sqrt L$ and $\\hat c_1=0$; the pushed-forward action in $\\hat a_G$ (Eq. 20) has two competing minima whose depths cross at $P^*_{\\hat a_G}\\approx\\frac{L}{4\\bar g_W}\\frac{V}{V-1}\\bar\\sigma^2\\ln^2L\\,(\\sqrt{1+4\\frac{V-1}{\\ln^2L}\\frac{\\bar g_W}{\\bar g_O}}+1)\\sim L\\ln^2L$ (Eq. 21): a first-order jump from uniform pooling to copying."
+    mapping: "$m=\\hat a_G$, with no symmetry: the prior minimum $\\hat a_G=0$ (uniform pooling) stays locally stable, so the transition is a crossing of coexisting minima; Eq. (21) solves $\\mathcal S(0)=\\mathcal S(\\hat a)$ at $\\hat a=O(1)$, large $L$ (approximate)."
+    equations: "Eqs. (18)-(21), Sec. 3.3; App. G (Jacobian dropped); Fig. 2 right, Fig. 4"
+    role: master
+  - paper: "2606.12058"
+    result: r4
+    statement: "Adam (linear case: runs stuck in local minima filtered out) and SGLD warm-started from Adam, at $L=25$, $V=5$, $d_{\\rm model}=10^4$, $\\chi=\\sigma^2=30$, $P\\le800$, match the predicted $\\hat c_1,\\hat c_G,\\hat a_G$ and the $(P,L)$, $(P,V)$ phase boundaries; softmax jumps near $P\\approx300$; SGLD leaves the two-parameter subspace near the linear…"
+    mapping: "As row n=1; Adam with weight decay approximates the MAP at large $\\chi$ (App. K), SGLD samples the posterior with $\\sigma^2=T/2$."
+    equations: "Figs. 1, 3, 4, Sec. 4; App. K Eqs. (338)-(341); App. M Fig. 5"
+    role: check
+  - paper: "2602.15593"
+    result: r2
+    statement: "Linear RNN, endpoint supervision, $T=4$, $P=1$, zero noise: $\\ln P(H|y,x)/N=\\ell_0+\\frac12C^{(2)}d^2-\\frac14d^4/(c^2e^2)$ in the interior temporal off-diagonal $d$, with $C^{(2)}=K_\\lambda(\\lambda-8)$, $\\lambda=y^2/(uw^2v)$: a second-order transition at $\\lambda_c=8$, $d^{*2}=\\frac45u^2w^3(\\lambda-8)$; for the DNN $C^{(2)}=-1/(ce)<0$, no transition."
+    mapping: "$m=d=H^{T-1,T-2}$, $\\tilde F=-\\ell$: $a=-C^{(2)}\\propto\\lambda_c-\\lambda$, $b=1/(c^2e^2)>0$; $\\lambda=\\kappa y^2/(uw^2)$ with $\\kappa=1/v$; $K_\\lambda=1/(1280u^2w^3)$; larger $T$ and erf numerically."
+    equations: "Eq. (7), Sec. 3.2, Fig. 4; App. A.5 Eqs. (36)-(45); A.8 Fig. A.6 (erf)"
+    role: master
+  - paper: "2406.16689"
+    result: r2
+    statement: "Sigmoid, $\\sigma_a^2=1/P$ ($\\kappa=P\\to\\infty$), $T\\to0$: the readout law breaks neuron-permutation symmetry, $P(a)=\\sum_\\gamma P_\\gamma\\delta(a-a_\\gamma)$ with $P_\\gamma\\propto e^{-PE(a_\\gamma)}$ (B10), a redundant code. Sampling shows the unimodal (symmetric) law returning above a rescaled $T_c\\in(0.07,0.08)$ (Fig. 14). No $\\kappa_c$ or Landau expansion is computed."
+    mapping: "$m$ = multimodality of the single-neuron readout law (the codes $a_\\gamma$); $\\kappa=1/\\sigma_a^2=P$; the observed transition is in the rescaled temperature ($\\beta=N/T$); theory $L=1$ (orthogonal toy inputs exact, general $K_0$ ad hoc), $L=2$ numerics; high-dimensional saddle."
+    equations: "Eq. (7); App. B Eqs. (B9)-(B20); Figs. 4-6, 13, 14"
+    role: special-case
+reduces_to:
+  - {target: S04, limit: "symmetric branch: the prior kernel is the saddle of $F$ below the transition"}
+open_problems: [op-03, op-04]

@@ -1,0 +1,143 @@
+id: S02
+slug: finite-width-prior
+title: "Finite-width prior: a scale mixture whose non-Gaussianity is $L/N$"
+kind: collapse
+claim: "At finite width the prior over one output is a scale mixture of Gaussians, exactly for linear networks at any $P$ (a product of $\\chi^2$ scales, Meijer-G); several outputs need a matrix scale; for general $\\varphi$ the hidden-kernel cumulants are controlled by $L/N$."
+formula: '$$p(f)=\mathbb E_s\,\mathcal N\big(0,\,s\,K^0\big),\quad s=\prod_{\ell}\tfrac{\sigma_\ell^2}{N_\ell}\chi^2_{N_\ell},\quad \mathrm{Var}\ln s\simeq 2\sum_\ell\tfrac1{N_\ell}\ (\text{ReLU: }5\textstyle\sum_\ell\tfrac1{N_\ell})$$ One output, deep linear. Hidden kernel, general $\varphi$, $N\to\infty$ first: relative variance $c_\varphi L/N$ ($c_\varphi=\tfrac23$ tanh-like, 5 ReLU, 2 linear).'
+regime:
+  width_limit: finite-exact
+  learning_rule: [bayes]
+  conditions: "Prior only. Exact for a single-output linear network at any widths, $P$, $L$ (Bassetti Prop. 1; Zavatone-Veth–Pehlevan and Noci et al. prove the $P=1$ law). ReLU: binomial mixture of narrower linear priors. General $\\varphi$: $1/N$ cumulant expansion of the hidden kernel at fixed $L$, for $L/N$ small."
+status: thm
+status_note: "Exact laws proved (Bassetti Prop. 1; Zavatone-Veth–Pehlevan, Noci et al. at $P=1$); cumulant orders proved (Hanin 2024); leading-vertex recursions are physics (Yaida, Roberts–Yaida). Zavatone-Veth’s printed Edgeworth coefficient 5/4 is 5/8 from its own Eq. D.9."
+members:
+  - paper: "2104.11734"
+    result: r1
+    statement: "For one input $x$ of a bias-free deep linear net with Gaussian weights, $h^{L+1}\\mid s\\sim\\mathcal N(0,s\\,I_{D_{\\rm out}})$ with $s=K^0\\prod_{\\ell=1}^{L}\\sigma_{\\ell+1}^2\\chi^2_{N_\\ell}/N_\\ell$ (independent factors); the density is the Meijer $G^{L+1,0}_{0,L+1}$ of Eq. (14), depending on widths only through $N_\\ell-D_{\\rm out}$."
+    mapping: "paper depth $d=L+1$; $n_\\ell\\to N_\\ell$, $n_d\\to D_{\\rm out}$, $n_0\\to D$; per-weight variance $\\sigma^2_\\ell=\\varsigma_\\ell^2/N_{\\ell-1}$, so $\\kappa_d^2\\prod_\\ell n_\\ell=K^0\\prod\\varsigma_\\ell^2\\prod N_\\ell$; scale $s=\\sigma_d^2\\Vert h_{d-1}\\Vert^2$. $P=1$."
+    equations: "Eqs. (5), (9), (13)-(15), (17); proofs App. A.2-A.3"
+    role: master
+  - paper: "2104.11734"
+    result: r2
+    statement: "For one input of a bias-free ReLU net, the prior is $\\big(1-\\prod_\\ell(1-2^{-N_\\ell})\\big)\\delta(h)$ plus a binomial mixture of linear priors with widths $k_\\ell\\sim\\mathrm{Bin}(N_\\ell,\\tfrac12)$, $k_\\ell\\ge1$: a Gaussian scale mixture with $s=\\kappa_d^2\\prod_\\ell\\chi^2_{k_\\ell}$."
+    mapping: "as row r1; $k_\\ell$ = number of active ReLUs in layer $\\ell$; atom at $h=0$ when some layer has no active unit."
+    equations: "Eq. (16), Sec. 3.3; proof App. B, Eqs. (B.2)-(B.15)"
+    role: extension
+  - paper: "2104.11734"
+    result: r3
+    statement: "Exact norm moments of the single-input prior, linear $\\mathbb E\\Vert h\\Vert^m=2^{(L+1)m/2}\\kappa_d^m\\prod_{\\ell=1}^{L+1}(N_\\ell/2)_{m/2}$ (Eq. 17) and ReLU (Eq. 18, variance $2^{-L}$ times linear); for both, $\\Vert h\\Vert$ is sub-Weibull with optimal tail parameter $(L+1)/2$."
+    mapping: "paper depth $d=L+1$; $(a)_b$ rising factorial; $N_{L+1}=D_{\\rm out}$; tail parameter $\\theta=d/2$ of Vladimirova et al."
+    equations: "Eqs. (17)-(19), Secs. 4.1-4.2; App. C, Eqs. (C.1)-(C.7)"
+    role: extension
+  - paper: "2104.11734"
+    result: r4
+    statement: "At large width (fixed $L$, $D_{\\rm out}$) the linear prior is $\\mathcal N(0,\\varkappa^2)[1+\\tfrac14\\sum_\\ell N_\\ell^{-1}(\\Vert h\\Vert^4/\\varkappa^4-2(D_{\\rm out}+2)\\Vert h\\Vert^2/\\varkappa^2+D_{\\rm out}(D_{\\rm out}+2))+O(N^{-2})]$; ReLU has coefficient $\\tfrac58$ (printed $\\tfrac54$); every finite order is sub-Gaussian."
+    mapping: "$\\varkappa^2=K^L_{\\rm GP}(x,x)$ (Eq. 20: $\\kappa_d=(n_1\\cdots n_{d-1})^{-1/2}\\varkappa_d$); ReLU variance $2^{1-d}\\varkappa^2$; coefficient = normalised 4th cumulant of the scale over 24."
+    equations: "Eq. (21), Sec. 4.3; App. D, Eqs. (D.6)-(D.10)"
+    role: extension
+  - paper: "2106.06615"
+    result: r1
+    statement: "For one input with $\\Vert x\\Vert=1$, the joint law of a layer's preactivations is the Meijer $G^{l,0}_{0,l}(\\Vert f\\Vert^2/2^l\\sigma^2\\mid0,\\tfrac{N_1-N_l}2,\\dots)$ (linear), i.e. $\\mathcal N(0,sI)$ with $s$ a product of independent $\\chi^2_{N_\\ell}$; ReLU: a binomial mixture over active counts $r_\\ell$ plus an atom at $0$."
+    mapping: "paper $L$ (weight matrices) $=L+1$; $d_\\ell\\to N_\\ell$, $d_l\\to D_{\\rm out}$; $\\sigma_\\ell^2$ per-weight variance ($\\sigma_\\ell^2N_{\\ell-1}$ is the umbrella $\\sigma_\\ell^2$); $\\sigma^2=\\prod\\sigma_i^2$; $q_{\\bm r}$ mixture weights; $P=1$."
+    equations: "Thm 4.1 Eq. (9); Eq. (13); Lemma 4.2 Eqs. (14)-(15); Thm 4.3 Eqs. (16)-(18)"
+    role: variant
+  - paper: "2106.06615"
+    result: r3
+    statement: "Exact single-output kurtosis at equal width $N$: ReLU $3\\big(\\tfrac{N+5}{N}\\big)^{L}$, linear $3\\big(\\tfrac{N+2}{N}\\big)^{L}$ ($L$ hidden layers); it tends to $3$ at fixed depth and to $3e^{5L/N}$ for ReLU at $L/N$ fixed."
+    mapping: "paper exponent $L-1$ = number of hidden layers $L$; $m\\to N$; kurtosis $=3\\,\\mathbb E s^2/(\\mathbb Es)^2$ of the scale mixture."
+    equations: "Eqs. (21)-(23), Sec. 5.2; App. C.4 Eqs. (175)-(186); linear: App. B.4 Eqs. (74)-(77)"
+    role: variant
+  - paper: "2106.06615"
+    result: r2
+    statement: "ReLU, equal width $N\\to\\infty$, depth $c+\\gamma N^{\\beta}$, He variances: even output moments tend to Gaussian ones for $\\beta<1$ (convergence in law), to $e^{\\frac52\\gamma k(k-1)}(2k-1)!!$ of $\\xi\\sqrt s$ with $\\ln s\\sim\\mathcal N(-\\tfrac52\\gamma,5\\gamma)$ for $\\beta=1$ (moments only), diverge for $\\beta>1$."
+    mapping: "paper $\\gamma=L/N$ at $\\beta=1$ (not umbrella $\\gamma$); $Y\\sim\\mathrm{LN}(-\\tfrac54\\gamma,\\tfrac54\\gamma)$ is $\\sqrt s$; $\\mathrm{Var}\\ln s=5L/N$ (ReLU), $2L/N$ (linear, Lemma B.3); $\\sigma_1^2=1$, $\\sigma_i^2=2/m$."
+    equations: "Thm 5.1, Eqs. (19)-(20), Sec. 5.1; linear analogue Lemma B.3, Eqs. (79)-(80)"
+    role: extension
+  - paper: "2106.10165"
+    statement: "Deep linear, single input: $2m$-point correlators are exactly $G_{2m}=\\prod_\\ell c_{2m}(N_\\ell)\\,G_2^m$, $c_{2m}(N)=\\prod_{s<m}(1+2s/N)=\\mathbb E(\\chi^2_N/N)^m$; at $L/N=r$ fixed $G_{2m}\\to e^{m(m-1)r}G_2^m$, i.e. $\\ln s\\sim\\mathcal N(-r,2r)$; connected 4-point $(e^{2r}-1)G_2^2$, 6-point $12r^2G_2^3$."
+    mapping: "$z^{(L)}$ one input $=\\sqrt s\\,\\mathcal N(0,G_2)$, $s=\\prod_\\ell\\chi^2_{N_\\ell}/N_\\ell$ (critical $C_W=1$); $r=L/n\\to L/N$ ($L_{\\rm book}-1$ hidden layers); $\\mathrm{Var}\\ln s=2r$ is the master $2\\sum_\\ell1/N_\\ell$."
+    equations: "Eqs. (3.44)-(3.47), (3.52)-(3.57)"
+    role: variant
+  - paper: "2106.10165"
+    result: r1
+    statement: "General $\\varphi$: kernel recursion $K^{\\ell+1}=\\sigma^2\\langle\\varphi\\varphi\\rangle_{K^\\ell}+O(1/N)$ and vertex recursion $N\\,\\mathrm{Cov}(K^{\\ell+1})=\\sigma^4\\mathrm{Cov}_0(\\varphi\\varphi,\\varphi\\varphi)+\\chi\\,N\\mathrm{Cov}(K^\\ell)\\,\\chi$; at criticality $\\mathrm{Var}K^L/K^2=\\nu L/N$, $\\nu=3A_4/A_2^2-1$ (ReLU 5, linear 2) or $2/3$ ($K^\\star=0$ class); NLO mean shift zero for scale-invariant $\\varphi$."
+    mapping: "$V^{(\\ell)}/n=\\mathrm{Var}$ of the stochastic metric $=C_W^2\\mathrm{Cov}(K^{\\ell-1},K^{\\ell-1})$; $G^{\\{1\\}}/n$ = prior mean shift; $\\chi$ = parallel susceptibility; $\\ell/n\\to L/N$; single input, equal widths (5.107)."
+    equations: "Eqs. (4.86), (4.90)-(4.91), (4.104)-(4.109); (5.107)-(5.110), (5.115)-(5.120), (5.127)-(5.131)"
+    role: extension
+  - paper: "2204.01058"
+    result: r1
+    statement: "For fixed $L$ and any finite input set, conditionally on layer $\\ell$ the next pre-activations are Gaussian with covariance $\\Sigma^{(\\ell)}=C_b+\\sigma^2K^\\ell$ (Eqs. 3.5-3.6), and joint cumulants of order $k$ of outputs and derivatives are $0$ ($k$ odd) or $O(N^{-k/2+1})$ ($k$ even), sharp at two layers (Thm 3.1)."
+    mapping: "$n\\to N$, $n_0\\to D$, $C_W\\to\\sigma^2$; $\\Sigma^{(\\ell)}$ is the umbrella layer kernel (plus $C_b$); the order is that of the $(k/2)$-th cumulant of $K^\\ell$, $O(N^{1-k/2})$."
+    equations: "Thm 3.1, Eq. (3.4); Eqs. (3.5)-(3.6); proof Sec. 7"
+    role: extension
+  - paper: "2204.01058"
+    result: r2
+    statement: "Single input: $\\mathrm{Var}(K^{\\ell+1})=\\frac{\\sigma^4}{N}\\mathrm{Var}_{K^\\ell}(\\varphi^2)+\\big(\\partial K^{\\ell+1}_{\\rm GP}/\\partial K^\\ell\\big)^2\\mathrm{Var}(K^\\ell)+O(N^{-2})$ (Eq. 3.15); the 6th and 8th cumulants obey (3.16)-(3.17), each depending at leading order only on lower or equal orders; initial condition zero at $\\ell=1$."
+    mapping: "$\\kappa_4^{(\\ell)}=\\kappa(z,z,z,z)/3=\\mathrm{Var}\\,\\Sigma^{(\\ell)}$ by (3.12); $T_{0,2}=C_W^2\\mathrm{Var}(\\sigma^2)$; $\\chi_\\parallel=\\frac{C_W}2\\langle\\partial^2\\sigma^2\\rangle_K=\\partial K^{\\ell+1}_{\\rm GP}/\\partial K^\\ell$; $n_\\ell\\to N_\\ell$."
+    equations: "Cor. 3.4, Eqs. (3.12), (3.14)-(3.17); Remark 3.5; proof Sec. 9"
+    role: extension
+  - paper: "2204.01058"
+    result: r3
+    statement: "At criticality ($C_b=0$, $\\sigma^2=\\sigma_1^{-2}$, $K_*=0$ class, equal widths) $\\mathrm{Var}K^L/(K^L)^2=\\frac23\\frac LN(1+O(L^{-1}))+O(N^{-2})$, and the normalised $2k$-th cumulants are $C_{2k}(L/N)^{k-1}$, $C_6=\\frac{28}{15}$, $C_8=\\frac{8756}{315}$ (Eq. 4.12, $k\\le4$); 1-homogeneous: $\\big(6\\frac{a_+^4+a_-^4}{(a_+^2+a_-^2)^2}-1\\big)\\sum_\\ell N_\\ell^{-1}$."
+    mapping: "$\\xi=L/n\\to L/N$; $\\widehat\\kappa_{2k}=\\kappa_{2k}/(K_2)^k$; the master's $T$ is class-dependent: $T=\\frac23(K^L)^2$ ($K_*=0$), $5(K^L)^2$ (ReLU), $2(K^L)^2$ (linear); Hanin's $\\kappa$ is a cumulant, not the umbrella $\\kappa$."
+    equations: "Cor. 4.1, Eq. (4.12) with (4.10)-(4.11); Remark 4.2"
+    role: rate
+  - paper: "1910.00019"
+    result: r1
+    statement: "Finite-width prior to $O(1/N)$ for any $\\varphi$: two-point function $K^\\ell_{\\rm GP}+S^\\ell/N$, connected four-point $V^\\ell/N$, higher cumulants $O(N^{-2})$; layer recursions (R1)-(R3) for kernel, vertex and self-energy. Deep linear: $V^\\ell/N=\\sum_{\\ell'<\\ell}N_{\\ell'}^{-1}(KK+KK)$; ReLU single input: $5\\sum1/N_{\\ell'}\\,K^2$."
+    mapping: "$\\tilde K^{(\\ell)}=C_b+C_WK^{\\ell-1}_{\\rm GP}$; $\\tilde S/n=$ prior mean shift of the output kernel; $\\tilde V/n=C_W^2\\mathrm{Cov}(K^{\\ell-1},K^{\\ell-1})$; $n_\\ell=r_\\ell n$, $n\\to N$; deep linear single input $\\mathrm{Var}K/K^2=2\\sum1/N_\\ell$ = S02 master."
+    equations: "Eqs. (KS), (V), (3.2)-(3.3), (HACK), (R0)-(R3), (D0)-(D2), (3.6); examples (4.2)-(4.4)"
+    role: extension
+  - paper: "1910.08013"
+    result: r2
+    statement: "Deep linear FC prior, $N_\\ell=N$, $L+1$ weight layers, $L\\ll N$: $\\mathrm{Cov}(K^{L+1}_{ij},K^{L+1}_{kl})\\approx\\frac{L+1}{N}(K^0_{ik}K^0_{jl}+K^0_{il}K^0_{jk})$, so for one input $\\mathrm{Var}\\ln K^{L+1}_{ii}\\approx2(L+1)/N$. CNN with spatially structured input: also grows with depth; LCN or unstructured input: nearly depth-independent."
+    mapping: "Paper $L^\\ell=K^\\ell$ (linear), $L^0=XX^\\top/D=K^0$; $K^{L+1}$ is the kernel after $L+1$ random weight layers, so $2\\sum_\\ell1/N_\\ell$ runs over $L+1$ layers; first order in $1/N$ of the exact $\\chi^2$ product ($O(1/N^2)$ dropped, Eq. 48)."
+    equations: "Eqs. (19a)-(19d), (20), Sec. 3; App. A Eqs. (28)-(51) (FC), (52)-(62) (CNN/LCN); Fig. 3"
+    role: extension
+  - paper: "1910.08013"
+    statement: "A finite network is a deep GP: given layer $\\ell-1$, the $N_\\ell$ pre-activation columns are iid $\\mathcal N(0,J^\\ell)$, $J^\\ell=\\varphi\\varphi^\\top/N_{\\ell-1}$, so $N_\\ell K^\\ell\\mid J^\\ell\\sim\\mathcal W_P(J^\\ell,N_\\ell)$. Linear layers ($J^\\ell=K^{\\ell-1}$) or finite linear bottlenecks in infinite networks ($J^\\ell=\\mathbb E\\varphi\\varphi^\\top$ given $K^{\\ell-1}$) make it an exact Wishart kernel chain."
+    mapping: "Paper $K_\\ell$ (activation kernel) $=K^\\ell$, $L_\\ell$ (activity kernel) = post-activation kernel, $J_\\ell$ = conditional covariance, $M_\\ell\\to\\infty$ expansion width, weight variance $1/M_{\\ell-1}$ ($\\sigma_\\ell^2=1$). One output projects the linear chain onto the scalar $s=\\prod_\\ell\\chi^2_{N_\\ell}/N_\\ell$."
+    equations: "Eqs. (9)-(18), Secs. 2-2.1, Fig. 2"
+    role: variant
+  - paper: "2010.01590"
+    result: r1
+    statement: "Deep GP whose kernel depends on the features only through the Gram matrix $G^\\ell=F^\\ell F^{\\ell\\top}/N_\\ell$ (isotropic and dot-product kernels): $G^\\ell\\mid G^{\\ell-1}\\sim\\mathcal W_P(\\mathbf K(G^{\\ell-1})/N_\\ell,N_\\ell)$, mean $\\mathbf K(G^{\\ell-1})$, $\\mathrm{Var}\\,G^\\ell_{ij}=\\frac1{N_\\ell}(\\mathbf K_{ij}^2+\\mathbf K_{ii}\\mathbf K_{jj})$. Linear kernel map: the exact deep linear kernel chain."
+    mapping: "Paper $G_\\ell\\to K^\\ell$ (pre-activation Gram), $\\mathbf K(\\cdot)\\to$ NNGP layer map $K\\mapsto\\mathbb E_{\\mathcal N(0,K)}\\varphi\\varphi^\\top$ (Cho–Saul ReLU, or SE via Eq. 17); $\\mathcal W(V,N)$ has mean $NV$; $K^1=XX^\\top/N_0$, $N_0=D$, $\\sigma_\\ell^2=1$; density (3) needs $N_\\ell>P-1$."
+    equations: "Eqs. (1)-(3), (5a)-(5c), (8a)-(8c), (10)-(12), (13)-(17), Sec. 4.1"
+    role: variant
+  - paper: "2010.01590"
+    result: r2
+    statement: "Finite BNN: the post-activation kernels $K^\\ell=\\varphi\\varphi^\\top/N_{\\ell-1}$ form a Markov chain, $P(K^\\ell\\mid K^{\\ell-1})=\\int dF\\,\\delta(K^\\ell-\\varphi(F)\\varphi(F)^\\top/N)\\,\\mathcal N(F;0,K^{\\ell-1})$, not Wishart and not closed-form; only $\\mathbb E[K^\\ell\\mid K^{\\ell-1}]=\\mathbb E_{\\mathcal N(0,K^{\\ell-1})}\\varphi\\varphi^\\top$ is known. $N\\to\\infty$: deterministic NNGP map. Finite linear bottlenecks: exact Wishart chain."
+    mapping: "Paper $K_\\ell$ = post-activation kernel, $F_\\ell$ = pre-activations ($N_\\ell$ columns), $\\mathbf K(\\cdot)$ = NNGP map, $M_\\ell\\to\\infty$ expansion width; weight variance $1/N_{\\ell-1}$ ($\\sigma_\\ell^2=1$). Eq. (57) is Eq. (8) with $G^\\ell$ the bottleneck Gram."
+    equations: "App. C.1 Eqs. (47)-(52); C.2 Eq. (53); C.3 Eqs. (54)-(57)"
+    role: variant
+  - paper: "1711.00165"
+    statement: "With Gaussian weights, at any width, $p(f\\mid X)=\\int\\mathcal N\\big(f;0,G(K^L)\\otimes I\\big)\\prod_{\\ell=1}^{L}p(K^\\ell\\mid K^{\\ell-1})\\,dK$ exactly, $K^\\ell=\\frac1{N_\\ell}\\varphi\\varphi^\\top$, $G(K)=\\sigma_w^2K+\\sigma_b^2\\mathbf 1\\mathbf 1^\\top$; $p(K^\\ell\\mid K^{\\ell-1})$ has variance $\\propto1/N_\\ell$ and tends to $\\delta(K^\\ell-F\\circ G(K^{\\ell-1}))$."
+    mapping: "App. C $K^l$ is the empirical second-moment matrix (clash with the Sec. 2 NNGP $K^l$); $G(K^\\ell)\\to$ the conditional kernel; $B\\to P$; outputs independent given $K^L$. Matrix-scale mixture for general $\\varphi$; the deep-linear scalar $\\chi^2$ mixture is not derived."
+    equations: "Eqs. (12)-(19), App. C"
+    role: variant
+  - paper: "2209.04882"
+    result: r3
+    statement: "One hidden layer under Gaussian equivalence: the output prior has characteristic function $(1+\\bar s^\\top K^1_{\\rm GP}\\bar s/N)^{-N/2}=\\mathbb E_{s\\sim\\chi^2_N/N}e^{-\\frac s2\\bar s^\\top K^1_{\\rm GP}\\bar s}$, so $p(f)=\\mathbb E_s\\mathcal N(0,sK^1_{\\rm GP})$ at any $P$; Gaussian (NNGP) when $N\\gg P$. The paper calls it Student-t; it is a $\\chi^2$ (variance-gamma) mixture."
+    mapping: "$N_1\\to N$; $K(C)/\\lambda_1\\to K^1_{\\rm GP}$ (readout variance $1/\\lambda_1$ inside); $\\bar s^\\mu\\to$ Fourier variable of $f(x_\\mu)$; S02 scale $s=\\prod_\\ell\\frac{\\sigma_\\ell^2}{N_\\ell}\\chi^2_{N_\\ell}$ keeps only the readout factor, the hidden layer is replaced by its NNGP kernel through GE."
+    equations: "Eqs. (9)-(12), Sec. II B"
+    role: special-case
+  - paper: "2405.10761"
+    result: r1
+    statement: "Exact at any $N,P,L$ (formal): $Z=\\int\\mathcal DK^L\\,\\mathcal N(y;0,K^L+\\eta I)\\,p(K^L)$, with $p(K)$ a Markov chain of layer conditionals in Fourier (cumulant-generating) form, $p(K^\\ell\\mid K^{\\ell-1})=\\int\\mathcal D\\hat K\\,e^{-{\\rm tr}\\hat K^\\top K^\\ell+\\mathcal W(\\hat K\\mid K^{\\ell-1})}$: the prior is a mixture of GPs over a full random kernel."
+    mapping: "$C^{(l)}\\to\\sigma^2_{l+1}K^l+g_b$; $\\tilde C\\to-\\frac N{2g}\\hat K$; $\\kappa_{\\rm paper}\\to\\eta$ (output units); $\\mathcal W\\to N\\log\\mathbb E_{\\mathcal N(0,K^{l-1})}e^{-\\frac12\\varphi^\\top\\hat K\\varphi}$; $p(Y|X)\\to Z$."
+    equations: "Eqs. (2)-(4), Sec. 3.1"
+    role: variant
+  - paper: "2406.03260"
+    result: r1
+    statement: "Single output ($D_{\\rm out}=1$): the exact prior is a Gaussian mixture with $Q_\\ell=\\chi^2_{N_\\ell}/N_\\ell$ at any $P$; several outputs: matrix scale (Prop. 1)."
+    mapping: "as in the statement text"
+    equations: "Prop. 1, Remark 3 Eq. (10); Props. 6, 7"
+    role: master
+  - paper: "2312.11737"
+    statement: "Gaussian fluctuations of the hidden empirical kernel, covariance accumulated over layers, trace at most $c\\sum_{i\\le\\ell}1/N_i$ (Thm 4.2)."
+    mapping: "as in the statement text"
+    equations: "Thm 4.2 Eqs. (4.26)-(4.28), Remark 4.3 Eqs. (4.29)-(4.30)"
+    role: rate
+reduces_to:
+  - {target: S01, limit: "$N\\to\\infty$: $s\\to$ its mean, the prior becomes the NNGP prior"}

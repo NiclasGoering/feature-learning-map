@@ -1,0 +1,98 @@
+id: S03
+slug: posterior-gp-mixture
+title: "Posterior: an evidence-tilted mixture of GP posteriors"
+kind: collapse
+claim: "The exact posterior of a deep linear network (one nonlinear layer under Gaussian equivalence) is a mixture of GP posteriors over a random scale with an evidence-tilted mixing law; so is a posterior with a hyperprior on the output variance or heavy-tailed weights."
+formula: '$$p(f_*\mid y)=\int \pi(ds\mid y)\ \mathrm{GP}_s(f_*\mid y),\qquad \pi(ds\mid y)\propto\pi(ds)\,\mathcal N\big(y;0,\,s\,K^0+\eta I\big)$$'
+regime:
+  width_limit: finite-exact
+  learning_rule: [bayes]
+  conditions: "$s$: product of independent $\\chi^2_{N_\\ell}/N_\\ell$ for linear networks, exact for $N_\\ell>D_{\\rm out}$, $P<D$ (invertible Gram), any $L,\\beta$; several outputs: a matrix scale. A hyperprior on the output variance mixes only the covariance (the mean stays the NNGP mean); heavy-tailed weights at infinite width give a random $P\\times P$ kernel."
+status: thm
+status_note: "Proved for deep linear networks (Hanin–Zlokapa at $\\eta=0$; Bassetti–Gherardi for multi-output and $\\beta$ finite), for the Student-$t$ and heavy-tailed limits (Caporali–Favaro, Apollonio–Franzina); physics under Gaussian equivalence (Pacelli)."
+members:
+  - paper: "2212.14457"
+    result: r1
+    statement: "Deep linear network, any $P\\le D$, $N_\\ell$, $L$, $\\eta=0$: predictive law (3.1), evidence (3.2), mean $\\theta_*^\\top x$ (3.3) and variance (3.4) are Meijer-G functions of $\\|\\theta_*\\|^2/4M$; via Lemma 4.8 (products of Gamma variables) this is the S03 mixture $Z\\propto\\mathbb E_s[s^{-P/2}e^{-\\|\\theta_*\\|^2/2s}]$, $s\\propto\\prod_\\ell\\chi^2_{N_\\ell}/N_\\ell$."
+    mapping: "$N_0\\to D$; $\\|\\theta_*\\|^2=y^\\top(X^\\top X)^{-1}y$ $=y^\\top(K^0)^{-1}y$ with $K^0=X^\\top X$; $\\nu=\\|\\theta_*\\|^2/\\alpha_0=\\sigma^{2(L+1)}\\bar r$; $4M=\\prod_{\\ell=0}^L2\\sigma^2/N_\\ell$; $\\eta=0$, no condition between $N_\\ell$ and $P$."
+    equations: "Thm 3.1, Eqs. (3.1)-(3.4); Lemmas 4.6-4.8, Eqs. (4.31)-(4.33)"
+    role: master
+  - paper: "2111.11954"
+    result: r1
+    statement: "For a deep linear net with $N_\\ell\\ge D_{\\rm out}$ and invertible $K^0$, the posterior predictive is $\\mathbb E_{s\\sim\\pi(\\cdot\\mid y)}\\mathrm{GP}_s$ with prior $\\mathcal{MN}(0,K^0,s)$, $s$ a $D_{\\rm out}\\times D_{\\rm out}$ matrix, and $\\pi(ds\\mid y)\\propto\\pi(ds)\\,\\mathcal N(y;0,K^0\\otimes s+\\eta I)$; for $D_{\\rm out}=1$, $s\\overset d=\\prod_{\\ell=1}^{L}\\chi^2_{N_\\ell}/N_\\ell$."
+    mapping: "paper $L=W_d\\cdots W_2W_2^\\top\\cdots W_d^\\top\\to s$ ($\\lambda$ for one output); $\\varpi,\\rho\\to\\pi(ds),\\pi(ds\\mid y)$; $G_{xx}\\to K^0$; $\\Gamma_\\lambda=(\\lambda K^0+\\eta)/\\eta$; $\\beta\\to1/\\eta$, $\\gamma=1$, $\\kappa=1/N$; depth $d=L+1$."
+    equations: "Eqs. (5)-(7), (10)-(16) (matrix); (17)-(23) (scalar output); App. Eqs. (44)-(49)"
+    role: master
+  - paper: "2111.11954"
+    result: r2
+    statement: "At $\\eta\\to0$ (interchange with the average assumed) the mean is the min-norm interpolant $k^\\top(K^0)^{-1}y$, independent of $s$, and the covariance is the GP covariance times $\\mathbb E_\\pi s$; for $L=1$, $s\\mid y$ is matrix GIG, scalar: $\\pi(s\\mid y)\\propto s^{\\frac{N-P}2-1}e^{-\\frac12(Ns+P\\bar r/s)}$."
+    mapping: "as r1; $Y^\\top G_{xx}^{-1}Y\\to P\\bar r$ for one output ($\\bar r=\\tfrac1Py^\\top(K^0)^{-1}y$); $\\mathrm{MGIG}_{n_2}(Y^\\top G_{xx}^{-1}Y,\\,n_1I,\\,\\tfrac{n_1-p}2)$, Eq. (30)."
+    equations: "Eqs. (24)-(30), Sec. III-C"
+    role: master
+  - paper: "2406.03260"
+    statement: "For a fully connected deep linear net with $D_{\\rm out}$ outputs and $\\min N_\\ell>D_{\\rm out}$, $\\mathrm{vec}f\\mid Q\\sim\\mathcal N(0,K^0\\otimes Q^{(L)})$ with $Q^{(L)}=(U_1\\cdots U_L)^\\top U_1\\cdots U_L$, $U_\\ell^\\top U_\\ell=Q_\\ell\\sim W_{D_{\\rm out}}(N_\\ell,I/N_\\ell)$ independent; the posterior predictive is the GP posterior at $K^0\\otimes Q^{(L)}$ mixed over $Q$ with law $\\propto\\mathcal N(y;0,K^0\\otimes Q^{(L)}+\\eta I)\\,\\mathcal Q_{L,N}(dQ)$."
+    mapping: "paper $D\\to D_{\\rm out}$, $N_0\\to D$; $Q_\\ell\\to$ matrix $\\rho_\\ell$, $Q^{(L)}\\to s$; $K^0=X^\\top X/(N_0\\lambda^*)$ ($\\sigma_\\ell^2=1/\\lambda_\\ell$); $\\beta^{-1}\\to\\eta$, $\\gamma=1$; $\\Phi_\\beta=y^\\top(\\Sigma_{11}+\\eta)^{-1}y+\\log\\det(1+\\beta\\Sigma_{11})$."
+    equations: "Prop. 1, Remark 3 Eq. (10); Prop. 6; Prop. 8 notation Eq. (9)"
+    role: master
+  - paper: "2406.03260"
+    result: r2
+    statement: "For a 1D convolutional deep linear net (periodic boundary, unit stride, one output, $\\min C_\\ell>D$), the prior is a Gaussian mixture whose covariance contracts the local covariance tensor with $T(Q_1,\\dots,Q_L)$, built from independent $D\\times D$ Wisharts $Q_\\ell\\sim W_D(C_\\ell,I/C_\\ell)$; the posterior predictive is the GP posterior at that kernel, mixed with…"
+    mapping: "paper $N_0$ (input positions) $\\to D$, channels $C_\\ell\\to N_\\ell$; $T$ = backward recursion (15) with mask averages $\\tfrac1M\\sum_mT_m^\\top(\\cdot)T_m$; matrix over spatial position pairs; $\\eta=\\beta^{-1}$."
+    equations: "Prop. 5, Eqs. (13)-(17) (prior); Prop. 7 (posterior)"
+    role: extension
+  - paper: "2507.22095"
+    result: r2
+    statement: "Dependent heavy-tailed weights $W_{hj}=\\sqrt{V_j}N_{hj}$, $\\sum_jV_j\\to\\mathrm{ID}(a,\\rho)$, sequential $N_\\ell\\to\\infty$, a.s. invertible random limit kernel $\\mathbb K$: on the training inputs $f(X)\\mid\\mathcal D\\Rightarrow\\mathbb E_S\\,\\mathcal N(\\mathbb K(\\mathbb K+\\eta I)^{-1}y,\\ \\eta\\mathbb K(\\mathbb K+\\eta I)^{-1})$ per output, $dS\\propto\\prod_r\\mathcal N(y_r;0,\\mathbb K+\\eta I)\\,dP_{\\rm prior}$, $\\eta=\\frac12$."
+    mapping: "Paper $d\\to P$, $n_\\ell\\to N_\\ell$, $n_{L+1}\\to D_{\\rm out}$; likelihood $e^{-\\sum_i\\Vert Z(x_i)-y_i\\Vert^2}$ gives $\\eta=\\frac12$; $L=2I+\\mathbb K^{-1}$, $\\lambda=2yL^{-1}$, $\\Lambda=I\\otimes L^{-1}$; the random matrix $\\mathbb K$ replaces $sK^0$; $\\kappa=0$ (likelihood not scaled with width)."
+    role: extension
+  - paper: "2507.22095"
+    result: r1
+    statement: "Prior: $f(X)\\Rightarrow\\mathrm{GM}(0,I_{D_{\\rm out}}\\otimes\\mathbb K^{(L+1)})$, $\\mathbb K^{(\\ell)}=C_B\\mathbf1\\mathbf1^\\top+C_W[a^{(\\ell-1)}\\mathbb E(\\varphi\\varphi^\\top\\mid\\mathbb K^{(\\ell-1)})+\\sum_jT_j\\varphi(\\zeta_j)\\varphi(\\zeta_j)^\\top]$, $T_j$ Poisson points of $\\rho^{(\\ell-1)}$; for $L\\ge2$ every order of the sequential limits gives this law if $\\varphi$ is bounded continuous, or polynomially bounded with finite Lévy measures."
+    mapping: "$a^{(\\ell)}$ = drift (LLN part, the NNGP map), $\\rho^{(\\ell)}$ = Lévy measure (finitely many neurons keep $O(1)$ variance, so $\\mathbb K$ stays random); $C_W=\\sigma_w^2$, $C_B$ = bias variance; $\\rho\\equiv0$ gives $K^\\ell_{\\rm GP}$. This is the mixing prior $\\pi$ of S03."
+    equations: "Thm 1 Eqs. (4.1)-(4.3) (quoted from [26], Lee et al. JMLR 2023, Thm 16)"
+    role: extension
+  - paper: "2507.22095"
+    result: r3
+    statement: "$P_{\\rm prior}(\\det\\mathbb K^{(L+1)}(X)>0)=1$ if $\\varphi$ is Lipschitz non-constant, $a^{(\\ell-1)}=0$ forces infinitely many Poisson points, and the inputs are linearly independent with $D\\ge P$ (Thm 4); or if $\\varphi$ is Lipschitz nonlinear, $a^{(1)}>0$, and the inputs are distinct ($C_B>0$) or pairwise non-proportional ($C_B=0$) (Thm 5)."
+    mapping: "Invertibility is hypothesis (5.2) of Thm 3, needed for the density form of the mixture; $d\\to P$, $n_0\\to D$; extends positivity results for Gaussian-weight kernels (ref. [8] of v5, Carvalho et al. 2025) to random kernels."
+    equations: "Thms 4-5, Eqs. (6.1)-(6.5), Props. 1-4 (Sec. 6)"
+    role: extension
+  - paper: "2502.04247"
+    result: r2
+    statement: "With one variance $s$ shared by readout weights, readout bias and noise, $s\\sim\\mathcal{IG}(a,b)$, the infinite-width posterior is $\\mathbb E_{s\\mid y}\\mathrm{GP}$ with prior $\\mathcal N(0,sK)$, noise $sI$, $s\\mid y\\sim\\mathcal{IG}(a+\\tfrac P2,b+\\tfrac12y^\\top(K+I)^{-1}y)$: a Student-$t_{2a+P}$ with mean $K(K+I)^{-1}y$ and scale $\\tfrac{2b+y^\\top(K+I)^{-1}y}{2a+P}K(K+I)^{-1}$."
+    mapping: "$K=K^L_{\\rm GP}$ with readout variance one, incl. bias $\\mathbf 1\\mathbf 1^\\top$ (paper $K'$, Eq. 10); $k\\to P$, $n_{\\min}\\to N$; paper $L$ layers $=L+1$; the mixing is over the hyperprior, at infinite width; $\\eta=s$ moves with the kernel scale."
+    equations: "Eqs. (8)-(11) (train), Remark 3.1 Eq. (12) (test); Cor. 3.8"
+    role: extension
+  - paper: "2502.04247"
+    result: r1
+    statement: "For Lipschitz activations, shared variance $s\\sim\\mathcal{IG}(a,b)$ with $a>\\tfrac12$ and $b>(1+\\tfrac{\\varepsilon+2}{2\\varepsilon+2})\\Vert y\\Vert^2$, $\\varepsilon<1/\\Vert K\\Vert_{\\rm op}$: on any finite input set $\\mathcal W_1(\\text{BNN posterior},\\text{NNGP-IG posterior})\\le c/\\sqrt{N_{\\min}}$, $c$ independent of the widths."
+    mapping: "as r1; $n_{\\min}$ = smallest hidden width $\\to N_{\\min}$; any number of outputs $n_L$ (the Student-$t$ form needs $n_L=1$); $c$ depends on the input set."
+    equations: "Thm 3.4, Eq. (14); proof sketch Eqs. (15)-(19), Prop. 3.5, Lemma 3.6; App. C"
+    role: rate
+  - paper: "2502.04247"
+    result: r3
+    statement: "NUTS-within-Gibbs samples (100 per width) of two-hidden-layer erf networks, widths $2^0$-$2^7$, $(a,b)=(3,2)$, approach the limiting Student-$t$ process; convergence looks slower than for a fixed-variance Gaussian prior, which the authors attribute to larger constants."
+    mapping: "paper $n$ (equal hidden width) $\\to N$; variance draw from a positive generalised inverse Gaussian (App. D); Gaussian-prior comparison with variances 2 and noise variance 0.1."
+    equations: "Sec. 4, Algorithm 1, Figs. 2-4, Remark 4.1"
+    role: check
+  - paper: "2507.22095"
+    result: r4
+    statement: "Importance-weighted prior Monte Carlo of the finite-width posterior marginal CDFs ($P=3$, $D=4$, $D_{\\rm out}=1$, ReLU, widths up to 32) approaches the Thm 3 limit. Model 1 ($V=Y/n$, $\\rho=0$, $L=2$) has a deterministic kernel and a Gaussian NNGP-type limit; only Model 2…"
+    mapping: "Model 1: $Y=(\\text{Weibull})^2$, heavy-tailed but LLN, $a=24$; Model 2: $Y=(\\text{half-Cauchy})^2$, $a=0$; target $v_1^2+2v_1v_2+v_3^2$ on three basis inputs; $\\eta=\\frac12$; agreement judged visually (Figs. 1-2), no error measure."
+    equations: "Secs. 7.1-7.4, Eqs. (7.1)-(7.2), Figs. 1-2"
+    role: check
+  - paper: "2111.11954"
+    result: r3
+    statement: "The posterior-mean first-layer kernel is $\\langle K^1\\rangle=K^0+\\tfrac1{N_1}\\mathbb E_\\pi\\Delta_s$; for one output $\\Delta_s=sK^0(sK^0+\\eta)^{-1}yy^\\top(sK^0+\\eta)^{-1}K^0-sK^0(sK^0+\\eta)^{-1}K^0$, and at $\\eta\\to0$ $\\langle K^1\\rangle=(1-\\tfrac1{N_1})K^0+\\tfrac1{N_1}\\mathbb E_\\pi[s^{-1}]\\,yy^\\top$."
+    mapping: "as r1; $\\beta\\Gamma_\\lambda^{-1}=(\\lambda K^0+\\eta)^{-1}$; $\\lim\\Delta_L=YL^{-1}Y^\\top-n_dG_{xx}$ (Eq. 36)."
+    equations: "Eqs. (31)-(36), Sec. IV; App. Eqs. (50)-(51)"
+    role: special-case
+  - paper: "1910.08013"
+    result: r1
+    statement: "Two-layer linear net, $D_{\\rm out}$ outputs sharing $W$: $Z=\\mathbb E_W\\prod_\\nu\\mathcal N(y_\\nu;0,K^1+\\eta I)$, $K^1=XWW^\\top X^\\top/N$, so the first layer is a random matrix kernel hyperparameter whose law the evidence tilts; $N\\to\\infty$: $K^1\\to K^0$ (Bayesian linear regression). Optimal finite $N$ under mismatch is numerical (Fig. 1)."
+    mapping: "Paper $H\\to N$, input dim $X\\to D$, $\\sigma^2\\to\\eta$, $XX^\\top/X\\to K^0$. The mixing variable is the $D\\times D$ Wishart matrix $WW^\\top/N$ (mean $I/D$), not a scalar $s$, because the $D_{\\rm out}=10$ outputs share $W$; one output would reduce it to scalar $s$."
+    equations: "Eqs. (3)-(8), Sec. 1; Fig. 1"
+    role: special-case
+reduces_to:
+  - {target: S01, limit: "$\\alpha\\to0$ or $N\\to\\infty$: the mixing law concentrates, the posterior is the NNGP posterior"}
+  - {target: S06, limit: "$P,N\\to\\infty$ with $\\alpha$ fixed: Laplace in $s$ gives the scalar saddle equation"}

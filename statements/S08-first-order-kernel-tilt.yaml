@@ -1,0 +1,171 @@
+id: S08
+slug: first-order-kernel-tilt
+title: "First order in $1/N$: energy tilt and log-determinant tilt"
+kind: collapse
+claim: "At large width and fixed $P$ the posterior kernel and predictor shift at first order by an energy tilt along the target (shared with small-$\\kappa$ μP) and a log-determinant tilt; the predictor also has a prior mean shift and a fluctuation term."
+formula: '$$\delta K^L=\tfrac{\kappa}{2}\,\mathrm{Cov}_0\!\big(\varphi\varphi^\top,(v^\top\varphi)^2\big)\;-\;\tfrac{D_{\rm out}}{2N}\,\mathrm{Cov}_0\!\big(\varphi\varphi^\top,\ \varphi^\top(K^L+\eta I)^{-1}\varphi\big),\qquad v=(K^L+\eta I)^{-1}y$$'
+formula_note: "One hidden layer. Deep: replace $\\mathrm{Cov}_0$ by the prior covariance of $K^\\ell$ with $K^L$ (every layer moves at $O(1/N)$), plus the forward term $\\frac{dK^\\ell_{\\rm GP}}{dK^{\\ell-1}}[\\delta K^{\\ell-1}]$ for $\\ell\\ge2$ (missing from Lauditi Eq. 60). $D_{\\rm out}=1$ on the Overview."
+regime:
+  width_limit: large-width-1/N
+  learning_rule: [bayes]
+  conditions: "$P$ fixed, $L/N$ small, standard scaling $\\kappa=1/N$ (both terms $O(1/N)$); $LP/N$ small for deep members (Hanin–Zlokapa). In μP at small $\\gamma_0$ only the energy tilt appears ($\\kappa=\\gamma_0^2$). At $P\\propto N$ keep the log-det part and the predictor’s fluctuation term, or use readout variables. Naveh–Ringel resums the tilt at large $P$."
+status: phys
+status_note: "Physics. Energy tilt common to Lauditi’s small-$\\gamma_0$, Naveh–Ringel, Seroussi, Fischer, Roberts–Yaida; log-det tilt in Seroussi, Fischer, Yaida, Roberts–Yaida, Zavatone-Veth–Canatar (a conjecture, derived for deep linear); all four predictor terms only in Yaida."
+members:
+  - paper: "1910.00019"
+    result: r2
+    statement: "Bayesian mean at $O(1/N)$, exact conditioning: $\\bar y_E=y^{\\rm GP}_E+\\epsilon\\,[\\delta K_{E R}-K_{ER}K_{RR}^{-1}\\delta K_{RR}]v$, i.e. GP regression with the output kernel shifted by $\\delta K=$ prior mean shift $+$ energy tilt $+$ log-det tilt $+$ fluctuation term $-V_{(\\alpha\\beta_2)(\\beta_1\\beta_3)}K^{-1}_{\\beta_2\\beta_3}$."
+    mapping: "$\\epsilon=1/n_{L-1}=1/N$; $\\epsilon\\tilde V=\\mathrm{Cov}(K_{\\rm out},K_{\\rm out})$, $K_{\\rm out}=C_WK^L$; $\\bar\\phi=\\tilde K_{RR}^{-1}y=v$ ($\\eta=0$); $A=\\epsilon^{-1}\\delta K$ of (NGPM'); $n_L=D_{\\rm out}$; $\\tfrac12\\tilde V\\bar\\phi\\bar\\phi$ = energy, $\\tfrac{n_L}2\\tilde V\\tilde K^{-1}$ = log-det."
+    equations: "Eqs. (Bayes), (GPM), (5.5)-(5.7), (NGPM), Sec. V; App. D (NGPM'), (NGPM'')"
+    role: master
+  - paper: "1910.00019"
+    result: r3
+    statement: "Deep linear, $\\eta=0$: the $O(1/N)$ correction to the Bayesian mean predictor vanishes; the paper expects the first correction at higher order. Each tilt term is of the form $K_{\\alpha R}M$ and cancels separately in $\\delta K_{ER}-K_{ER}K_{RR}^{-1}\\delta K_{RR}$."
+    mapping: "Deep linear, $C_b=0$, $C_W=1$: $S=0$, $\\epsilon\\tilde V_{(\\alpha_1\\alpha_2)(\\alpha_3\\alpha_4)}=c(K_{13}K_{24}+K_{14}K_{23})$, $c=\\sum_\\ell1/N_\\ell$; inserted in (NGPM') and (NGPM'')."
+    equations: "Sec. V, text after (NGPM); deep-linear vertex (4.2)-(4.3)"
+    role: special-case
+  - paper: "1910.00019"
+    result: r4
+    statement: "Two-layer MLP, $\\varphi(z)=z^2$, $C_W=1/3$, $C_b=0$, MNIST with $10^4$ test points: the first-order predictor (NGPM'') gives the best test accuracy at finite width when $P$ is small (10 subsamplings per $P$); read as regularisation by the non-Gaussian prior."
+    mapping: "$\\epsilon=1/N$ varied; $P=N_R$; formula evaluated, no network sampled; $\\eta=0$."
+    equations: "Fig. 2, Sec. V; App. C.1 (S1)-(S3)"
+    role: check
+  - paper: "2106.10165"
+    result: r3
+    statement: "Finite-width posterior mean at exact conditioning: $\\langle f_{\\dot\\beta}\\rangle=m_{\\dot\\beta}+\\langle\\langle w_{\\dot\\beta}Q(w)\\rangle\\rangle$, $m=g_{\\dot\\beta\\tilde\\alpha}\\tilde g^{-1}y$ with $g=K^L_{\\rm GP}+O(1/N)$ (mean shift and part of the log-det); quartic-coupling terms: cubic-in-$y$ energy tilt summed over outputs, an $n_L$-weighted log-det term and a fluctuation term (6.88)."
+    mapping: "$g,v$ = quadratic, quartic couplings, $v=V/n$ with indices raised by $K^{-1}$ on the full set $D=A\\cup B$; $\\Phi=(y_A,m_B)$; $n_L=D_{\\rm out}$; $\\eta=0$; terms grouped by couplings, not by the master split."
+    equations: "Eqs. (6.79)-(6.88), (6.89); couplings (4.80)-(4.82), (4.107)-(4.109); Eqs. (6.96)-(6.104)"
+    role: variant
+  - paper: "2106.00651"
+    result: r1
+    statement: "Conjecture 1: for any hidden-layer observable $O$, $\\langle O\\rangle=\\mathbb E O+\\tfrac12\\sum_{\\rho\\lambda}\\mathrm{Cov}(O,K^L_{\\rho\\lambda})[\\sum_jv_jv_j^\\top-D_{\\rm out}(K^L+\\eta I)^{-1}]_{\\rho\\lambda}+\\dots$, $v_j=(K^L+\\eta I)^{-1}y_j$; for $O=K^\\ell$: prior mean shift plus energy and log-det tilts, no fluctuation term. Derived perturbatively, not proved."
+    mapping: "$K^L\\equiv\\sigma_d^2K^{(d-1)}_\\infty$, $\\Gamma=\\sigma_d^{-2}(K^L+\\eta I)$, $\\eta=1/\\beta$; $n_dG_{yy}=\\sum_jy_jy_j^\\top$; $\\mathrm{cov}_W(O,K^{(d-1)})=\\sigma_d^{-2}\\mathrm{Cov}(O,K^L)$, $=\\tfrac1N\\mathrm{Cov}_0$ for one hidden layer; $n_d=D_{\\rm out}$; $\\kappa=1/N$."
+    equations: "Conjecture 1, Eq. (5); App. B Eqs. (B.23), (B.31), (B.37), (B.42); limits (6)-(7)"
+    role: master
+  - paper: "2106.00651"
+    result: r2
+    statement: "Deep linear FC, no bias: $\\langle K^\\ell\\rangle/m_\\ell^2=G_{xx}+(\\sum_{\\ell'\\le\\ell}D_{\\rm out}/N_{\\ell'})\\,G_{xx}\\Gamma^{-1}(m_d^{-2}G_{yy}-\\Gamma)\\Gamma^{-1}G_{xx}+O(N^{-2})$: same matrix in every layer, weight growing with depth; at $\\eta\\to0$ the kernels interpolate linearly from $G_{xx}$ toward $m_d^{-2}G_{yy}$ (Eq. 9)."
+    mapping: "$m_\\ell^2=\\prod_{\\ell'\\le\\ell}\\sigma_{\\ell'}^2$, $K^\\ell_{\\rm GP}=m_\\ell^2G_{xx}$; $\\Gamma=G_{xx}+I/(\\beta m_d^2)=m_d^{-2}(K^{d-1}_{\\rm out}+\\eta I)$; $\\mathrm{Cov}(K^\\ell,K^{d-1})$ from (C.12) $\\propto\\sum_{\\ell'\\le\\ell}1/N_{\\ell'}$; $n_d=D_{\\rm out}$, $\\beta=1/\\eta$."
+    equations: "Eqs. (8)-(10), Sec. 4.1; App. C.1 (C.5), (C.12); App. D; Fig. 1"
+    role: variant
+  - paper: "2106.00651"
+    result: r3
+    statement: "Deep linear CNN (periodic, vectorised readout): $\\langle K^\\ell_{\\mu\\nu,ab}\\rangle=K^\\ell_{\\infty,\\mu\\nu,ab}+(\\prod_{\\ell'\\ge\\ell}\\sigma^2_{\\ell'})(\\sum_{\\ell'\\le\\ell}D_{\\rm out}/N_{\\ell'})\\tfrac1s\\sum_c\\sum_{\\rho\\lambda}K^\\ell_{\\infty,\\mu\\rho,ac}\\Phi_{\\rho\\lambda}K^\\ell_{\\infty,\\lambda\\nu,cb}$, $\\Phi=\\sigma_d^{-2}\\Gamma^{-1}G_{yy}\\Gamma^{-1}-\\Gamma^{-1}$: the FC correction with the four-index kernel."
+    mapping: "Width $N_\\ell$ = channels; $s$ = spatial size; $K^{d-1}=\\tfrac1s\\sum_aK^{d-1}_{\\cdot\\cdot,aa}$; $\\Phi=\\sigma_d^2[\\tfrac1{D_{\\rm out}}\\sum_jv_jv_j^\\top-(K^L+\\eta)^{-1}]$; patch-pair kernel blocks."
+    equations: "Eqs. (11)-(14), Sec. 4.2; App. C.2; Figs. 2-3"
+    role: variant
+  - paper: "2106.00651"
+    statement: "Deep linear predictor: $\\langle\\hat F\\rangle=\\hat R^\\top[\\Gamma^{-1}-\\tfrac{1}{\\beta\\sigma_d^2}(\\sum_\\ell\\tfrac1{N_\\ell})\\Gamma^{-1}M\\Gamma^{-1}]Y$, $M=\\Gamma^{-1}K+\\mathrm{tr}(\\Gamma^{-1}K)I-D_{\\rm out}\\Phi K$; the correction is $\\propto\\eta$, so at $\\eta=0$ the mean is the least-norm interpolant and width enters only the variance; test error falls with $N$ iff $\\tfrac1P\\mathrm{tr}(G_{xx}^{-1}G_{yy})>\\prod_\\ell\\sigma_\\ell^2$."
+    mapping: "$K=K^{d-1}_\\infty$ (variances absorbed, App. G convention), $\\hat R$ = test-train kernel; $\\mathrm{tr}(\\Gamma^{-1}K)\\sim P$ is the fluctuation (Wishart) term; $\\Phi$ as in result 3; $1/\\beta=\\eta$."
+    equations: "App. G, Eqs. (G.9)-(G.12), (G.14)-(G.20)"
+    role: extension
+  - paper: "2106.00651"
+    result: r5
+    statement: "ReLU, three hidden layers, Langevin at $T=1$ on 1000 MNIST images: without a bottleneck every layer's kernel deviation decays as $1/N$; with a fixed narrow bottleneck the bottleneck and later layers stay at a width-independent deviation, the first layer decays as $1/N$."
+    mapping: "Qualitative check of the $\\sum_{\\ell'\\le\\ell}1/N_{\\ell'}$ layer dependence of Eq. (8) for a nonlinear network; $\\beta=1$; one Langevin run per setting."
+    equations: "Fig. 4, Sec. 5; App. I"
+    role: check
+  - paper: "2106.04110"
+    result: r1
+    statement: "Saddle point of the dual of the training discrepancies: the mean is GP regression on the shifted target $g-\\Delta g$, $\\Delta g=\\sum_{r\\ge3}\\kappa_r(\\cdot,v,\\dots,v)/(r-1)!$, i.e. kernel $K+\\delta K$ with the energy tilt resummed to all cumulant orders and no log-det tilt; covariance from kernel $K+\\Delta K$ (Eq. 9)."
+    mapping: "$n=P$, $C=N$ (channels), $\\sigma^2=\\eta$; $\\langle it\\rangle=\\hat\\delta g/\\sigma^2=v=(K+\\delta K+\\eta)^{-1}g$; $\\kappa_r\\propto C^{1-r/2}$ prior output cumulants; $r=4$: $\\tfrac1{3!}\\kappa_4vvv=\\tfrac\\kappa2\\mathrm{Cov}_0(\\varphi\\varphi^\\top,(v^\\top\\varphi)^2)v$, $\\kappa=1/C$."
+    equations: "Eqs. (4)-(11), Sec. III; App. A (A.8), (A.14)-(A.19), (A.28); validity (A.30)-(A.31), (A.34)-(A.37)"
+    role: variant
+  - paper: "2106.04110"
+    result: r2
+    statement: "Two-layer linear CNN, one-channel teacher, EK limit: the discrepancy factor obeys $\\alpha=\\frac{s}{\\lambda+s}+\\frac{(1-q)\\lambda}{\\lambda+s}+(\\frac{q\\lambda}{\\lambda+s}-1)\\frac{\\lambda^2}{C}(\\frac\\alpha s)^3[1-\\frac\\lambda C(\\frac\\alpha s)^2]^{-1}$, $s=\\sigma^2/P$; the pole bounds $\\alpha$, so data needed scale as $\\sqrt{CNS}$ instead of $NS$."
+    mapping: "$\\lambda=\\sigma_a^2\\sigma_w^2/(NS)$ (GP eigenvalue; paper $N$ = patches, $S$ = stride), $C=N_{\\rm umb}$ channels; $q$ = fitted $O(1/n)$ EK correction; the bracket resums all even cumulants (14) of the per-channel tilt."
+    equations: "Eq. (16), Sec. IV.B, with (13)-(14); Figs. 1, 3; App. E"
+    role: variant
+  - paper: "2106.04110"
+    result: r3
+    statement: "Weight statistics at $O(1/C)$: $\\langle\\Sigma_W\\rangle=(1+(\\lambda^{-1}+P/\\sigma^2)^{-1})I+\\tfrac2C\\tfrac{\\lambda}{(\\lambda+\\sigma^2/P)^2}w^*w^{*\\top}$, a rank-one tilt along the teacher feature; modelled as spiked Marchenko-Pastur, an outlier separates below $C_{\\rm crit}$ (Eq. 18)."
+    mapping: "$\\Sigma_W=\\tfrac SCWW^\\top$ (first-layer channel covariance); the rank-one term is the energy tilt in weight variables; $C_{\\rm crit}$ is a BBP detectability threshold, not a posterior transition."
+    equations: "Eqs. (17), (18), Sec. IV.D; App. G; Fig. 2"
+    role: extension
+  - paper: "2106.04110"
+    result: r4
+    statement: "Quadratic two-layer FCN, rank-one quadratic teacher: numerically solving the saddle target-shift equations (20) with the exact CGF (19) at $\\sigma^2=10^{-5}$ recovers the sample threshold $P=2D$, while the associated GP needs $P=O(D^2)$."
+    mapping: "$M=N$ hidden units, $d=D$, $\\sigma^2=\\eta\\to0$; CGF (19) gives all cumulants; outside S08's fixed-$P$ condition ($P\\sim D$)."
+    equations: "Eqs. (19)-(20), Sec. IV.E; App. I"
+    role: check
+  - paper: "2112.15383"
+    result: r1
+    statement: "Mean-field decoupling plus a centred variational Gaussian closure give layer-wise equations of state: the inverse penultimate pre-kernel shifts by $-\\tfrac1N{\\rm Tr}[A\\,\\partial K^L/\\partial\\tilde K]$, $A=\\gamma^4vv^\\top-\\gamma^2(K^L+\\eta I)^{-1}$ (energy tilt plus log-det tilt), with $\\bar f$ the GP mean on the adapted $K^L$; the output fluctuation term is dropped."
+    mapping: "$Q_f=K^L/\\gamma^2$, $\\sigma_L^2=1/\\gamma^2$, $\\delta=(Q_f+\\sigma^2)^{-1}y=\\gamma^2v$, $\\eta=\\gamma^2\\sigma^2$, $\\kappa=\\gamma^2/N$; $K^{(l)}$ (pre-kernel) $=$ Gaussian-closed tilted covariance $\\tilde K^\\ell$; $Q^{(l)}=\\sigma_l^2G(K^{(l-1)})$ $=K^{\\ell-1}$."
+    equations: "Eq. (4), Sec. 2.1; Eqs. (10)-(16), Sec. 4.1; SI Eqs. (52)-(56)"
+    role: variant
+  - paper: "2112.15383"
+    result: r4
+    statement: "Linear penultimate layer: $(K^L)^{-1}$ shifts by $-\\kappa vv^\\top+\\tfrac1N(K^L+\\eta I)^{-1}$ (Eq. 5); the emergent scale controlling the change of $K^L$ is $\\sigma_L^2\\chi=\\kappa\\,v^\\top K^Lv$ (the paper's $\\chi=N^{-1}\\delta^\\top Q\\delta$ drops $\\sigma_L^2$); for $\\sigma_L^2\\chi\\gtrsim1$ low-order $1/N$ perturbation theory fails."
+    mapping: "$\\delta=\\gamma^2v$, $\\sigma_L^2=\\gamma^{-2}$: $\\sigma_L^2\\chi=\\gamma^{-2}N^{-1}\\gamma^4v^\\top Qv=\\kappa v^\\top K^Lv$ with $Q^{(L-1)}$ the kernel feeding the readout ($=K^L$ in umbrella indexing); main-text estimate needs $\\sigma^4$: $\\chi\\approx\\lambda\\,{\\rm MSE}\\,n/(\\sigma^4N)$."
+    equations: "Eq. (5), Sec. 2.1; SI Eqs. (61)-(63), Sec. 5.5"
+    role: variant
+  - paper: "2112.15383"
+    result: r2
+    statement: "Two-layer erf CNN, linear teacher: the input-weight covariance keeps eigenvalue $1/S$ except along $w^*$, $l_*=S^{-1}(1-\\chi_2)^{-1}$, $\\chi_2=\\alpha^2P^2\\lambda_\\infty/C$; one scalar equation $\\sigma^2\\alpha=1-q\\,S\\lambda_\\infty l_*/(S\\lambda_\\infty l_*+\\sigma^2/P)$ fixes the discrepancy overlap $\\alpha$."
+    mapping: "Width $=C$ (channels), $N$ = patches, $S$ = patch size, $D=NS$; $\\kappa=1/(\\sigma_a^2C)$, $\\eta=\\sigma^2/\\sigma_a^2$; paper $\\alpha$ is $\\delta=\\alpha y$, not $P/N$; $q=q_{\\rm train}$ (1 in the EK limit)."
+    equations: "Eqs. (7)-(8), Sec. 2.3; SI Eq. (104) [HTML (106)], Eq. (109) [HTML (111)]"
+    role: special-case
+  - paper: "2112.15383"
+    statement: "Myrtle-5 (ReLU, $C=256$) trained on $P=2048$ CIFAR-10 images: pre-activations are near-Gaussian (mean or variance shifted from initialisation) except along the leading eigenvector in layers 1-2; cross-layer and cross-channel correlations are about $10^{-3}$, supporting the Gaussian closure and mean-field decoupling."
+    mapping: "Width $C=256$, $P=n=2048$; no $\\kappa$ or $\\eta$ dependence tested; 234 seeds (Fig. 6), 25 seeds (Tables 1-2)."
+    equations: "Sec. 2.4, Fig. 6; SI Sec. 10.3, Tables 1-2"
+    role: check
+  - paper: "2405.10761"
+    result: r3
+    statement: "$K^{l+1}=K^{l+1}_{\\rm GP}+\\frac{g^2}N\\,V\\tilde C^{(l+1)}+O(N^{-2})$ with $V={\\rm Cov}_0(\\varphi\\varphi^\\top,\\varphi\\varphi^\\top)$; at the last layer $\\delta K^L=\\frac\\kappa2{\\rm Cov}_0(\\varphi\\varphi^\\top,(v^\\top\\varphi)^2)-\\frac1{2N}{\\rm Cov}_0(\\varphi\\varphi^\\top,\\varphi^\\top(K^L+\\eta I)^{-1}\\varphi)$, $\\kappa=\\frac1{Ng_L}$; linear $\\varphi$, $\\eta=0$: $\\delta C^{(L)}=\\frac1N(YY^\\top-C^{(L)})$."
+    mapping: "$C^{(L)}=g_LK^L$; $A=C^{(L)}+\\kappa_{\\rm p}I=g_L(K^L+\\eta I)$, $\\eta=\\kappa_{\\rm p}/g_L$; $v_{\\rm paper}=A^{-1}Y=v/g_L$; $\\tilde C^{(L)}=\\frac12(A^{-1}YY^\\top A^{-1}-A^{-1})$ (Eq. 10); $\\kappa=1/(Ng_L)$."
+    equations: "Eqs. (10), (15)-(16), (19), Sec. 3.4; App. B; App. D Eq. (95); Figs. 2-3"
+    role: variant
+  - paper: "2405.10761"
+    result: r4
+    statement: "To linear order and for off-diagonal entries, the last-layer tilt is carried back to layer $l$ as $\\tilde C^{(l)}_{\\alpha\\beta}=\\tilde C^{(L)}_{\\alpha\\beta}\\chi^{(l),\\leftarrow}_{\\alpha\\beta}$, $\\chi^{(l),\\leftarrow}_{\\alpha\\beta}=\\prod_{s=l}^{L-1}g_{s+1}\\langle\\varphi'_\\alpha\\varphi'_\\beta\\rangle$ (derivatives); first-layer adaptation peaks at $g_f$, well below $g_{\\rm crit}\\approx1.38$, evaluated at the NNGP."
+    mapping: "$\\tilde C^{(l)}\\to-\\frac N{2g_l}\\hat K_l$ (dual of $J_l$); $\\chi^{\\leftarrow}$ = product of backward Jacobians $g\\,\\mathbb E[\\varphi'\\varphi']$; $g_{\\rm crit}$: $\\chi_1=1$ (edge of chaos); $\\tilde C^{(L)}$ from Eq. (10)."
+    equations: "Eqs. (20)-(21), Sec. 4.2, Fig. 4"
+    role: extension
+  - paper: "2405.10761"
+    result: r5
+    statement: "With readout variance $g_L\\to g_L/\\gamma_0$ and $\\eta=0$: $\\tilde C^{(L)}\\propto\\gamma_0^2+O(\\gamma_0)$ and $\\tilde C^{(1)}\\propto\\gamma_0+O(1)$. The $\\gamma_0$ term is the energy tilt with $\\kappa=\\gamma_0/(Ng_L)$, the $O(1)$ term the log-determinant tilt; $\\gamma_0\\in\\{1,2,3\\}$ is not extensive in $N$."
+    mapping: "$g_L/\\gamma_0\\to\\sigma_a^2/\\gamma^2$ at $s=0$, so $\\kappa=\\gamma_0/(Ng_L)$; $\\tilde C^{(0)}$ in Eq. (22) is the first-layer conjugate kernel; $\\kappa_{\\rm p}=0\\to\\eta=0$."
+    equations: "Eq. (22), Sec. 4.3, Fig. 5"
+    role: special-case
+  - paper: "2405.10761"
+    result: r2
+    statement: "Stationarity of $N F$ with the full $P\\times P$ kernels, $\\Gamma=NJ_l$ (Gärtner–Ellis): $K^{l+1}=\\mathbb E_{\\nu^\\star_l}\\varphi\\varphi^\\top$, with $\\nu^\\star_L\\propto\\mathcal N(0,K^{L-1})e^{\\frac\\kappa2(v^\\top\\varphi)^2-\\frac1{2N}\\varphi^\\top(K^L+\\eta)^{-1}\\varphi}$ and a backward recursion for $\\tilde C^{(l)}$; first order in $\\tilde C$ gives S08. Claimed exact at $P=\\alpha N$."
+    mapping: "As row 2; $\\Gamma(C^{(l)}\\mid C^{(l-1)})=NJ_l(K^l\\mid K^{l-1})$; $-\\mathcal S=\\sum\\Gamma+\\frac12Y^\\top A^{-1}Y+\\frac12\\ln\\det A=NF+$const; linear $\\Gamma$ (Eq. 88) $=N\\,{\\rm KL}$, the deep-kernel-machine objective (Eq. 90)."
+    equations: "Eqs. (6), (7), (9), (10)-(14), Sec. 3.2-3.3; linear App. C Eqs. (88)-(93), Fig. 6"
+    role: extension
+  - paper: "2502.07998"
+    statement: "To order $\\gamma_0^2$: $\\hat K^L=-\\gamma_0^2vv^\\top$, $v=(K^L_{\\rm GP}+\\eta I)^{-1}y$, so $\\delta K^L=\\frac{\\gamma_0^2}2\\mathrm{Cov}_0(\\varphi\\varphi^\\top,(v^\\top\\varphi)^2)$, the energy tilt alone; lower duals follow the adjoint NNGP map (57). Eq. (60) for $\\ell\\ge2$ omits the forward-propagated term $\\partial K^\\ell_{\\rm GP}/\\partial K^{\\ell-1}[\\delta K^{\\ell-1}]$."
+    mapping: "$\\kappa=\\gamma_0^2$, $\\lambda_\\ell=1$, $\\eta=1/\\beta$; $\\mathrm{Cov}_0$ under the NNGP single-site law; no log-det tilt (fixed $P$, μP); deep linear: Eq. (60) gives $c_\\ell-1\\approx\\gamma_0^2/(1+\\eta)^2$, exact Eq. (48) gives $\\ell\\gamma_0^2/(1+\\eta)^2$."
+    equations: "App. A.5 Eqs. (52)-(60)"
+    role: special-case
+  - paper: "2405.16630"
+    statement: "Shaped MLP, equal widths, any $\\beta$: $Z(x,\\tau)\\propto\\sqrt{\\det2\\pi M_\\beta}\\,e^{Q(t_*)}[1+\\frac LN(\\cdots)]+O(L^2/N^2)+O(1/L)$, $M_\\beta=(K_\\psi+\\eta I)^{-1}$; the $O(L/N)$ bracket is a sum of Gaussian moments $I_2,\\dots,I_6$ of the output dual $t$ around $t_*$: a quadratic (prior mean shift) and quartic (four-point vertex) piece of the prior kernel law."
+    mapping: "$t$ = Fourier dual of the training outputs; $\\hat X^\\top\\hat X=K_\\psi$ on the training set, $\\hat\\theta_*^\\top\\hat X=y^\\top$; $\\eta=1/\\beta$; vertex coefficients $\\hat\\psi$, $g_1,g_2$ (Cor. 4.2) summed over $L$ layers into $L/N$; $\\kappa=1/N$; one output, one test point."
+    equations: "Prop. 5.1 and proof, Prop. 5.2 Eqs. (5.1)-(5.2) ff.; Cor. 4.2; Cor. 3.2"
+    role: special-case
+  - paper: "2405.16630"
+    result: r2
+    statement: "$\\eta=0$ ($\\beta\\to\\infty$), $LP/N$ small: mean $\\sum_\\mu a_\\mu y_\\mu[1+c_{\\psi,\\eta_w}\\frac{LP}N(\\hat x_\\mu^\\top\\Sigma\\hat x_\\mu-\\hat x^\\top\\Sigma\\hat x)]$, variance $\\Vert\\hat x_\\perp\\Vert^2\\{1+\\frac LN[y^\\top K_\\psi^{-1}y-P+O(c_{\\psi,\\eta_w})]\\}$. At $\\psi=0$ the mean is the GP mean and the variance is $\\Vert\\hat x_\\perp\\Vert^2[1+\\frac{LP}N(\\bar r-1)]$, the linearised $\\prod_\\ell\\rho_\\ell$ of S06."
+    mapping: "$a=\\hat X^\\dagger\\hat x$ (projection coefficients on the training span), $\\Sigma=\\hat X\\hat X^\\top/P$, $\\Vert\\hat x_\\perp\\Vert^2=k_{**}-k_*^\\top K_\\psi^{-1}k_*$, $\\Vert\\hat\\theta_*\\Vert^2=y^\\top K_\\psi^{-1}y=P\\bar r$; $\\kappa=1/N$, $\\alpha=P/N$: $-LP/N$ is the log-det tilt, $+\\frac{LP}N\\bar r$ the energy tilt."
+    equations: "Prop. 6.1 (6.3), Prop. 6.2 (6.4)-(6.7), Sec. 6.3.2 (variance display); Eqs. (2.19), (1.8)"
+    role: special-case
+  - paper: "2405.16630"
+    result: r3
+    statement: "Power-law data ($\\lambda_j\\propto j^{-\\alpha_s}$, $y=\\sqrt Pv_k$): the $O(L/N)$ evidence correction is positive iff $\\alpha_s<2$ and $k=o(P^{1/\\alpha_s})$; the evidence is maximal and flat for all $\\beta P>P^{\\alpha_s}$ and grows with $LP/N$ at every $\\beta$. Deep linear with noise $\\sigma_\\epsilon^2=o(P^{1-\\alpha_s})$: generalisation error minimal for $\\beta P>P^{\\alpha_s}$, decreasing in…"
+    mapping: "Paper $\\alpha\\to\\alpha_s$ (spectral exponent, not $P/N$), $B=\\beta P$, $\\eta=1/\\beta=P/B$; leading-order scalings with positive constants omitted; nonlinear case needs $1<\\alpha_s<2$, $\\sigma_\\epsilon=0$; linear evidence holds for $\\sigma_\\epsilon^2=O(P^{1-\\alpha_s})$."
+    role: special-case
+  - paper: "2405.16630"
+    result: r5
+    statement: "For iid centred inputs with $\\mathbb E\\,x_\\psi x_\\psi^\\top=\\Sigma$, the first-order ($L/N$) posterior of the shaped network equals the deep linear posterior on $\\{(x_{\\psi,\\mu},y_\\mu)\\}$ iff $\\mathrm{tr}\\Sigma^2/(\\mathrm{tr}\\Sigma)^2=o(1)$ (near-orthogonal features); conjectured at all orders."
+    mapping: "$x_\\psi$ = feature map of $K_\\psi$; the nonlinear vertex enters with $c_{\\psi,\\eta_w}\\mathrm{tr}\\Sigma^2$ (Eqs. 6.2, 6.4, Cor. 6.6), so when it vanishes only the deep-linear (scalar-scale) tilt remains; $\\kappa=1/N$."
+    equations: "Eqs. (1.6)-(1.7), (2.14)-(2.15), Sec. 2.2.2; Cor. 6.6"
+    role: special-case
+reduces_to:
+  - {target: S01, limit: "$1/N\\to0$: the tilts vanish, the posterior is the NNGP posterior"}
+disagreements:
+  - {papers: ["2502.07998", "2112.15383"], note: "Lauditi Eq. 60 for $\\ell\\ge2$ omits the forward-propagated term: deep linear gives $c_\\ell-1\\approx\\ell\\gamma_0^2$, Eq. 60 gives $\\gamma_0^2$. [verified]"}
+  - {papers: ["2405.10761", "2112.15383"], note: "Seroussi Eq. 8 and Naveh–Ringel Eq. 16 are the same equation (same $\\chi$ pole), so Naveh–Ringel is not perturbative as Seroussi says; Fischer puts the adaptation peak at $g_f$, well below $g_{\\rm crit}$ (the entry said near criticality). [verified]"}
+open_problems: [op-08]

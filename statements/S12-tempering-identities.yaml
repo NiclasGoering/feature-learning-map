@@ -1,0 +1,143 @@
+id: S12
+slug: tempering-identities
+title: "Tempering: the cold posterior and the Gibbs temperature"
+kind: grouping
+claim: "A cold posterior tempers likelihood and prior together: for a Gaussian prior it is the Gibbs posterior at $\\beta=1/T$ with prior variance $T\\sigma^2$. SGLD on augmented data targets each point’s geometric-mean likelihood over its orbit; $\\log Z$ integrates the mean energy over $\\beta$."
+formula: '$$p_T(\theta\mid D)\propto\big[p_0(\theta)\,e^{-\beta L_D(\theta)}\big]^{1/T}=e^{-\frac\beta T L_D(\theta)}\,\mathcal N(0,\,T\sigma^2),\qquad \log Z(\beta)=-\!\int_0^\beta\!\langle L_D\rangle_{\beta^\prime}\,d\beta^\prime$$'
+regime:
+  width_limit: finite-exact
+  learning_rule: [bayes]
+  conditions: "Gaussian iid prior; any width and depth (exact identities). The effect is empirical: without augmentation or curation the best $T$ is $\\approx1$ or warmer on full data sets (Baldock, Noci, Nabarro, Izmailov), but cold on random subsets of SVHN, MNIST, IMDB and a 2D toy (Noci), and for a low-capacity network (Baldock M(3*))."
+status: thm
+status_note: "Proved: the tempering equivalence (Kapoor Thm 1; any bounded prior for $T\\le1$), the thermodynamic integral (Maurer Lemma 3.1), the augmentation identity (Kapoor Eq. 16 = Nabarro Eq. 6); numerics: the cold-posterior effect and its causes. The map’s $T=1/\\beta$ tempers the likelihood only."
+members:
+  - paper: "2203.16481"
+    statement: "A bounded proper prior raised to $1/T$, $T\\le1$, stays proper (Thm 1), so $p_T\\propto[p_0\\,e^{-L_D}]^{1/T}=e^{-L_D/T}\\,\\tilde p_0$: a tempered likelihood with a narrowed prior, $\\sigma^2\\to T\\sigma^2$ for Gaussian (and Laplace) priors. In Bayesian linear regression the cold posterior keeps the Bayes mean and multiplies the covariance by $T$ (Eq. 21)."
+    mapping: "Kapoor $T$ of Eq. (2) is the posterior temperature $T$ with $\\beta=1$ (unscaled NLL $L_D=-\\log p(D|\\theta)$); prior $\\mathcal N(0,\\alpha I)$ means $\\sigma^2=\\alpha$; $N\\to P$; regression noise $\\sigma^2_{\\rm Kapoor}=\\eta$."
+    equations: "App. C.2 Thm 1; App. C.2.1"
+    role: master
+  - paper: "2106.06596"
+    statement: "Tempering the posterior, $[p(D|\\theta)\\,\\mathcal N(0,\\sigma^2)]^{1/T}$, equals tempering only the likelihood with prior variance $T\\sigma^2$; with a grid over prior variances the two are practically equivalent. Aitchison's consensus likelihood $p(y|x)^S$ (Eq. 5) is likelihood-only tempering with $S\\approx1/T$."
+    mapping: "Noci $T$ (Eq. 3) is the posterior temperature, $\\beta=1$, prior $\\mathcal N(0,1)\\to\\mathcal N(0,T)$; $n\\to P$; $S$ = number of labellers, likelihood exponent $S\\leftrightarrow\\beta/T$ at fixed prior."
+    equations: "Sec. 2, paragraph after Eq. (3); Eq. (5)"
+    role: variant
+  - paper: "2203.16481"
+    result: r2
+    statement: "With $K$ augmentations $t_j$ drawn uniformly per minibatch, the expected SGLD gradient gives the stationary law $p_{\\rm aug}(\\theta)\\propto p_0(\\theta)\\prod_{i=1}^{P}\\prod_{j=1}^{K}p(y_i|t_j(x_i))^{1/K}$: likelihood-only tempering at $T=K$ on the $PK$-point augmented set, prior untempered; $T=1/K$ restores the Bayes posterior on that set. VI targets the same (Eq. 23)."
+    mapping: "Paper $N\\to P$; per augmented copy $\\beta=1/K$ (likelihood only, prior fixed); equals exp of Nabarro's averaged loss $L_{\\rm loss}$ for a finite uniform orbit. Exactly a warm $T=K$ posterior on the original points only when outputs on augmentations are independent (GP check, Sec. 6.2)."
+    equations: "Sec. 5 Eqs. (14)-(16); App. E Eqs. (22)-(23); Sec. 6.2 Fig. 4"
+    role: special-case
+  - paper: "2203.16481"
+    result: r1
+    statement: "Tempering only the likelihood, $p_0(w)\\prod_{(x,y)}f_y(x,w)^{1/T}$ (Eq. 9), equals $p_0(w)\\prod\\mathrm{Dir}(1,\\dots,1+\\tfrac1T,\\dots,1)(f(x))$ (Eq. 10): observing $1/T$ counts of the label. With a uniform induced prior on $f(x)$ the train confidence is $\\mathbb E f_y=(T+1)/(D_{\\rm out}T+1)$, $2/(D_{\\rm out}+1)$ at $T=1$."
+    mapping: "Paper $T$ in Eq. (9) is the likelihood-only temperature, $\\beta=1/T$ with the prior untempered (not the cold posterior of Eq. 2); $C\\to D_{\\rm out}$; $f(x)$ = softmax probabilities, not logits."
+    equations: "Sec. 4.1-4.2 Eqs. (5)-(10)"
+    role: variant
+  - paper: "2106.05586"
+    statement: "Standard augmentation in Langevin dynamics or VI replaces $\\log p(y_i|x_i,w)$ by the averaged loss $L^i_{\\rm loss}=\\mathbb E_{x'\\sim P(x'|x_i)}\\log{\\rm softmax}_{y_i}f(x';w)$ (Eqs. 6, 21-22), whose normaliser $\\sum_ye^{L_{\\rm loss}}=Z(x_i)$ depends on $x_i$: not a valid likelihood. On a finite uniform orbit $e^{L_{\\rm loss}}=\\prod_kp(y_i|a_k(x_i))^{1/K}$."
+    mapping: "Stationary law $p_0\\prod_ie^{L^i_{\\rm loss}}$ = Kapoor Eq. (16): each augmented copy at likelihood power $1/K$ (temperature $K$ on the $PK$-point set), prior untempered; $N\\to P$; Nabarro $\\eta$ in Eq. (19) is Langevin noise."
+    equations: "Sec. 3.1 Eqs. (5)-(7); App. A Eqs. (19)-(22); Eq. (18) for the finite orbit"
+    role: special-case
+  - paper: "2510.06028"
+    statement: "For the Gibbs posterior $G_\\beta\\propto e^{-\\beta\\hat L}\\pi$ with mean training loss $\\hat L$ and untempered prior $\\pi$: $-\\ln Z_\\beta=\\int_0^\\beta\\langle\\hat L\\rangle_{\\gamma}d\\gamma$, $\\ln\\frac{dG_\\beta}{d\\pi}(h)=\\int_0^\\beta(\\langle\\hat L\\rangle_\\gamma-\\hat L(h))d\\gamma$, $\\mathrm{KL}(G_\\beta\\Vert\\pi)=\\int_0^\\beta(\\langle\\hat L\\rangle_\\gamma-\\langle\\hat L\\rangle_\\beta)d\\gamma$; $\\langle\\hat L\\rangle_\\beta$ is non-increasing."
+    mapping: "Maurer $\\hat L=L_D/P$ (mean loss), so $\\beta_{\\rm Maurer}=P\\beta$ and $\\int_0^{\\beta_M}\\langle\\hat L\\rangle d\\gamma=\\int_0^{\\beta}\\langle L_D\\rangle d\\beta'$; $n\\to P$; $\\pi=p_0$ (Gaussian of width $\\sigma$ in Sec. 4); likelihood-only tempering."
+    equations: "Lemma 3.1, Eqs. (3)-(5); proof in Sec. 3"
+    role: variant
+  - paper: "2510.06028"
+    result: r1
+    statement: "Substituting Lemma 3.1 in PAC-Bayes (Thm 2.1): for $\\ell\\in[0,1]$ and $h\\sim G_\\beta$ with $\\hat L(h)=0$, $\\mathbb E\\ell(h,x)\\le2(A+\\ln(2\\sqrt P/\\delta))/P$ with $A=\\int_0^\\beta\\langle\\hat L\\rangle_\\gamma d\\gamma$, at every $\\beta$ including $\\beta>P$. Thm 4.5 extends it to any law $\\nu$ via a discretised ladder $\\Gamma$, $R_\\infty$ or KL to $G_\\beta$ and an error $\\Delta$."
+    mapping: "As result 1; $\\beta>P$ (Maurer $\\beta>n$) is colder than Bayes for an NLL-type mean loss; $\\delta$ confidence; $\\nu$ any data-dependent law, not the neuron measure."
+    equations: "Thm 2.1, Eqs. (1)-(2); Def. 4.3, Lemma 4.4, Thm 4.5"
+    role: rate
+  - paper: "2510.06028"
+    result: r2
+    statement: "For a time-homogeneous Markov process started at $\\nu_0=\\pi$ with $G_\\beta$ invariant: $\\mathrm{KL}(\\nu_t\\Vert\\pi)\\le\\lambda_t\\beta\\,\\mathbb E_\\pi\\hat L+(1-\\lambda_t)\\int_0^\\beta\\langle\\hat L\\rangle_\\gamma d\\gamma$, $\\lambda_t=\\mathrm{KL}(\\nu_t\\Vert G_\\beta)/\\mathrm{KL}(\\pi\\Vert G_\\beta)$ decreasing (and with $R_\\infty$, $\\beta\\Vert\\hat L\\Vert_\\infty$); for Langevin dynamics with LSI constant $\\alpha$, $\\lambda_t=e^{-2\\alpha t/\\beta}$."
+    mapping: "Maurer CLD $dh=-(\\nabla\\hat L+h/\\beta\\sigma^2)dt+\\sqrt{2/\\beta}\\,dB$ has stationary law $G_\\beta$ with untempered Gaussian prior of width $\\sigma$; $\\alpha$ is the LSI constant, not $P/N$."
+    equations: "Lemma 4.1, Eq. (6), Prop. 4.2; Sec. 4.1 CLD SDE; App. C.2 Lemma C.3"
+    role: rate
+  - paper: "2510.06028"
+    result: r3
+    statement: "SGLD on binary MNIST and CIFAR-10, $P=8000$, ReLU MLP 1000-1500, $\\sigma=5$, $\\beta\\in[0,64000]$: random labels reach train error $\\lesssim0.1$ while the bound stays above $1/2$; for true labels the calibrated bound ($Q=rA$, Eq. 8) tightly bounds test error; 10-class MNIST certificates beat Perez-Ortiz et al."
+    mapping: "Maurer $\\beta$ multiplies the mean loss, so per-sample inverse temperature $\\beta/P\\le8$; $n\\to P$; $r$ calibration factor fixed on the random-label run."
+    equations: "Eqs. (7)-(8); Sec. 5.4-5.5 Fig. 4, Table 1; App. C.6-C.7; App. D.2"
+    role: check
+  - paper: "1904.04154"
+    result: r1
+    statement: "Sampling $p_T(w)\\propto e^{-L_D(w)/T}p_0(w)$ ($L_D$ = summed cross-entropy, $p_0$ a uniform box) with replica-exchange HMC on a 256-40-40-40-10 logistic MLP, MNIST $16\\times16$, no augmentation: test loss beats standard optimisation; its minimum lies near $T\\sim1$ for $P=50,500$ and at $T>1$ (warm) for $P=5000$; train loss $\\to0$ at low $T$."
+    mapping: "Baldock $E(D|w)=L_D$ with $\\beta=1$; his $T$ tempers the likelihood only, but the box prior is invariant under a power $1/T$, so $T=T_{\\rm post}$; $n\\to P$; $N=40$, $L=3$, $D=256$, $D_{\\rm out}=10$; prior widths $\\sigma_i=100/\\sqrt{k_i}$ (Eq. 11)."
+    equations: "Eqs. (8)-(11); Sec. 3.4 Fig. 3; Table 1"
+    role: check
+  - paper: "1904.04154"
+    result: r3
+    statement: "In M(3*), with logistic outputs before the softmax (minimum achievable training cross-entropy $1.46$ per point), the test loss is lowest at $T\\ll1$ and has no interior minimum over $T\\in[10^{-3/2},10^{3/2}]$; the M(3) net already beats $1.46$ at $P=500$."
+    mapping: "As result 1; M(3*) prior box 1000 times wider than the initialisation range; $T$ = likelihood temperature = posterior temperature (box prior)."
+    equations: "Sec. 3.1 (bound 1.46); Sec. 3.4 Fig. 4; Table 1"
+    role: check
+  - paper: "1904.04154"
+    result: r4
+    statement: "Thermodynamic integration of the evidence along a bridge $J_\\lambda=(1-\\lambda)(J-J(w_0))+\\lambda\\tfrac12(w-w_0)^\\top k(w-w_0)+J(w_0)$ from a fitted diagonal quadratic: $F=F_0+\\int_1^0\\langle\\partial_\\lambda J_\\lambda\\rangle_\\lambda d\\lambda$, $\\log Z=-F$ (Eqs. 21-26); single-mode assumption. At $P=500$, $\\log Z_{M(3)}-\\log Z_{M(1)}=6682-9014\\simeq-2332$ nats: the one-hidden-layer net is preferred."
+    mapping: "Same identity family as the master, $\\partial_s\\log Z_s=-\\langle\\partial_sJ_s\\rangle_s$, but along the bridge $\\lambda$ at $\\beta=1$, not along $\\beta$; $J=L_D$ inside the box prior; $F=-\\log Z$; the prior-volume term $-\\sum\\log\\sigma_i$ enters separately (Eq. 27)."
+    equations: "Eqs. (15)-(29), Sec. 4.3-4.4"
+    role: variant
+  - paper: "2106.05586"
+    result: r2
+    statement: "With augmentation in the likelihood (average probabilities or logits, full or finite orbit, $K=8$) and the posterior tempered as $[p_0e^{-L_D}]^{1/T}$, ResNet-20 on CIFAR-10 (cyclical GGMC) still does best at $T<1$ (best: average probabilities, full orbit, $T=10^{-3}$), except finite-orbit average logits (worst model). Without augmentation the effect is…"
+    mapping: "Nabarro $T$ (Eq. 2) is the posterior temperature: $\\beta=1$ and the prior variance narrowed to $T\\sigma^2$ (prior from the Fortuin et al. code, family not restated); $N\\to P$ (CIFAR-10 train set)."
+    equations: "Eq. (2); Eqs. (9)-(16), (18); Sec. 4.2 Fig. 3; App. C Fig. 5"
+    role: check
+  - paper: "2106.06596"
+    result: r1
+    statement: "With $p_T\\propto[e^{-L_D}\\mathcal N(0,1)]^{1/T}$, ResNet-20 and cyclical SG-MCMC at six $T\\in[10^{-3},1]$: on full SVHN and CIFAR-10 without augmentation $T=1$ is near optimal; with augmentation a cold posterior effect appears. Augmentation is therefore sufficient but not necessary."
+    mapping: "Noci $T$ = posterior temperature (likelihood and prior); $n\\to P$; CPER $=\\ell_{T^*}/\\ell_{T=1}$ is the test cross-entropy ratio, not an umbrella symbol."
+    equations: "Sec. 4 Eq. (6) (CPER); Fig. 1 (no DA), Fig. 3 (DA)"
+    role: check
+  - paper: "2106.06596"
+    result: r2
+    statement: "Synthetic curation (consensus of $S$ trained labellers, Aitchison model $p(y|x)^S$): curating only the training set gives no cold posterior effect for any $S$; curating train and test sets gives one that grows with $S$. On CIFAR-10H, over-weighting the likelihood removes the effect, with fewer labellers than the…"
+    mapping: "Curation exponent $S$ multiplies the log-likelihood only (prior untempered), i.e. likelihood temperature $1/S$; the experiments still sweep the posterior temperature $T$."
+    equations: "Eqs. (4)-(5); Sec. 4.1 Fig. 2; App. D.3, E.3 Figs. 16-17"
+    role: check
+  - paper: "2106.06596"
+    result: r3
+    statement: "Without augmentation, random subsets of SVHN ($P=2^{12}$ to $2^{15}$) show a cold posterior effect that strengthens as $P$ shrinks, also on MNIST and IMDB, but almost none on CIFAR-10 (Fig. 12). The authors attribute it to the prior, whose weight relative to the likelihood grows like $1/P$."
+    mapping: "Noci $n\\to P$; whole posterior tempered so $T$ leaves the prior-to-likelihood ratio unchanged; $T$ = posterior temperature."
+    equations: "Sec. 3; Sec. 4.1 Fig. 4; App. E.1 Figs. 8-9; App. E.2 Fig. 12"
+    role: check
+  - paper: "2106.06596"
+    result: r4
+    statement: "Two 2D Gaussian clusters (Bayes-optimal separator linear), a one-hidden-layer ReLU MLP with 20 units and full-batch MCMC: the cold posterior effect strengthens as $P$ decreases (Fig. 7), and at $P=32$ samples at $T=10^{-2}$ give a simpler, closer-to-linear decision boundary than at $T=1$ (Fig. 6)."
+    mapping: "Noci $n\\to P$, $D=2$, $N=20$; $\\sigma^2=1$ is the cluster variance, not the prior variance (prior $\\mathcal N(0,1)$); $T$ = posterior temperature."
+    equations: "Sec. 4.3 Figs. 6-7; App. D.1; Table 1"
+    role: check
+  - paper: "2203.16481"
+    result: r3
+    statement: "Noisy-Dirichlet Gaussian observation model (Eq. 13, $\\alpha_\\epsilon=10^{-6}$), which equals the softmax likelihood with a label-independent input-dependent prior (Eq. 12): on CIFAR-10 with ResNet-18 and cyclical SGLD, BMA accuracy is roughly flat in $T$ and near-optimal at $T=1$, while the softmax likelihood needs $T=10^{-3}$."
+    mapping: "Paper $T$ is the posterior temperature (Eq. 2, $\\beta=1$, prior $\\mathcal N(0,1)$ narrowed to $\\mathcal N(0,T)$); $\\alpha_\\epsilon$ is the Dirichlet noise, not $P/N$; $N\\to P$ (CIFAR-10 train set)."
+    equations: "Sec. 4.3 Eqs. (11)-(13); Sec. 6.3 Fig. 5"
+    role: check
+  - paper: "2203.16481"
+    result: r4
+    statement: "Augmentation raises the train NLL at every $T$ or $\\alpha_\\epsilon$ (Fig. 7a); the test-NLL-optimal $T$ falls with policy complexity: flips ($K=2$) $T=1$, crops ($K\\approx100$) $10^{-2}$-$10^{-1}$, AugMix $\\le10^{-4}$ (Fig. 7b); $T^*$ shifts with label noise (Fig. 6); at $T=1$ no prior scale in…"
+    mapping: "Paper $T$ = posterior temperature (cold, Eq. 2) or likelihood temperature (tempered softmax, Fig. 6); effective $K$ per policy is the authors' estimate; prior scale = $\\sigma^2$."
+    equations: "Sec. 6.1-6.3 Figs. 3, 4, 6, 7; App. C.3 Fig. 11"
+    role: check
+  - paper: "2104.14421"
+    result: r3
+    statement: "With $p_T(w|D)\\propto(p(D|w)p(w))^{1/T}$ (Eq. 4), full-batch HMC on IMDB (CNN-LSTM, no augmentation) is best at $T=1$ over $T\\in[0.03,10]$; with Wenzel's SGHMC code on CIFAR-10, $T=0.1$ helps only with augmentation (Table 7). For an MLP on noisy MNIST, $T=10^{-3}$ closes the robustness gap to SGD."
+    mapping: "Paper $T\\to T$ of S12 (likelihood and prior tempered, $\\beta=1$); $\\alpha^2\\to\\sigma^2$ (prior $\\mathcal N(0,\\alpha^2I)$, so tempered prior $\\mathcal N(0,T\\alpha^2)$); $D\\to\\mathcal D$; paper $\\alpha$ is not $P/N$."
+    equations: "Eq. (4) (S7.E4), Sec. 7, Fig. 8; App. G.1, Table 7 (A6.T7)"
+    role: check
+  - paper: "2609.15894"
+    result: r1
+    statement: "For prior $\\pi$ and energy $U=-\\log L$, $p(x,E)\\propto\\pi(x)(E-U)_+^\\nu e^{-E}$, $\\nu>-1$, has $x$-marginal $\\propto\\pi e^{-U}$, so $Z=\\Gamma(\\nu+1)^{-1}\\int G_\\nu(E)e^{-E}dE$, $G_\\nu=\\mathbb E_\\pi(E-U)_+^\\nu$; $\\nu=0$ is nested sampling, $Z=\\int_0^1e^{-E(G)}dG$: the vertical form of the $Z$ in $\\log Z=-\\int\\langle U\\rangle$."
+    mapping: "Paper $\\beta$ = map $\\beta$ on the likelihood only, prior untempered (Eq. 1); $\\pi=p_0$; $U=\\beta L_D$ at the paper's $\\beta=1$; $g(E)$ = prior mass per energy, $Z(\\beta)=\\int g(E)e^{-\\beta E}dE$ (Eq. 3), and $d\\log Z/d\\beta=-\\langle U\\rangle_\\beta$ gives the master integral."
+    equations: "Eqs. (1)-(4) (density of states, vertical form); Eqs. (7)-(9) (augmentation)"
+    role: variant
+  - paper: "2609.15894"
+    result: r3
+    statement: "Five UCI tasks, $2\\times16$ tanh nets (528-1280 parameters), $\\mathcal N(0,1)$ weights scaled by $1/\\sqrt{d_{\\rm in}}$, $\\beta=1$: QES, tempered SMC, NUTS and MCLMC give near-equal test NLL; QES and SMC $\\log Z$ differences (tanh vs ReLU) agree within 0.6 nats; Laplace-GGN factors are 2-4 times larger, flipping two choices."
+    mapping: "$\\hat Z$ = the $\\beta=1$ evidence $Z$ of the master formula; $\\log{\\rm BF}=\\log\\hat Z_{\\tanh}-\\log\\hat Z_{\\rm ReLU}$; QES $N=1000$ is particles, not width; $D$ = parameter count; ESS per gradient: NUTS highest, QES 1.4-2.0 times SMC."
+    equations: "Sec. 4.2; Tables 3-4"
+    role: check
+disagreements:
+  - {papers: ["2106.06596", "2203.16481"], note: "Noci et al. attribute the cold optimum on random subsets to the prior (an untested inference; his CIFAR-10 subsets show almost no effect). Kapoor et al. and Nabarro et al. agree on the augmentation formula; they blame a misspecified augmented likelihood and curation or the prior respectively. Kapoor’s Fig. 11 varies the prior scale on full CIFAR-10, so it does not refute Noci."}

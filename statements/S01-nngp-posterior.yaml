@@ -1,0 +1,172 @@
+id: S01
+slug: nngp-posterior
+title: "Wide networks: the posterior is the NNGP posterior"
+kind: collapse
+claim: "At fixed $P$ and $\\kappa\\to0$ (standard scaling) the posterior of a wide network converges to the Gaussian-process posterior with the NNGP kernel."
+formula: '$$f(x)\mid\mathcal D\ \to\ \mathcal{GP}\Big(k_*^\top(K^L_{\rm GP}+\eta I)^{-1}y,\ \ k_{**}-k_*^\top(K^L_{\rm GP}+\eta I)^{-1}k_*\Big),\qquad K^\ell_{\rm GP}=\sigma_\ell^2\,\mathbb E_{h\sim\mathcal N(0,K^{\ell-1}_{\rm GP})}\varphi(h)\varphi(h)^\top$$'
+regime:
+  width_limit: inf-kernel
+  learning_rule: [bayes]
+  conditions: "$P,D,L$ fixed; all widths $N_\\ell\\to\\infty$; Gaussian weights, continuous $\\varphi$ with a linear envelope; likelihood bounded, continuous, Lipschitz with $\\eta>0$ fixed (Hron 2020; Trevisan Cor. 5.3, every Gaussian $\\eta>0$, in $W_1$). The $\\eta=0$ corner is not covered: Trevisan’s constant blows up as $\\eta\\to0$."
+status: thm
+status_note: "Prior limit proved (Matthews, any width rates); posterior proved for $\\eta>0$ (Hron 2020, weak convergence; Trevisan, $W_1$ rate $1/N$ for non-degenerate kernels). Lee 2017 uses the GP regression form at $\\eta=10^{-10}$ and assumes the posterior step."
+members:
+  - paper: "2510.15174"
+    result: r5
+    statement: "At $\\gamma_p=\\frac12$ and $N\\to\\infty$ the self-energy and the tilt of the single-site law vanish, $\\nu=\\nu_0$, and the mean predictor is kernel ridge regression with the NNGP kernel: $\\bar f=K(K+\\tau I)^{-1}y$ in an orthonormal feature basis, ridge $\\tau=\\kappa_p^2/\\sigma_a^2$."
+    mapping: "$K_{AB}=\\mathbb E_{\\nu_0}J_AJ_B$ = NNGP operator $K^1_{\\rm GP}/\\sigma_a^2$ in the basis $\\chi_A$; data-space form $\\bar f=k_*^\\top(K^1_{\\rm GP}+\\eta I)^{-1}y$ with $\\eta=\\kappa_p^2P$ (loss $\\frac1{2\\kappa_p^2P}\\sum(f-y)^2$); mean only."
+    equations: "Eqs. (8)-(10), Sec. 2.3; Thm D.1 Eq. (46), proof Eqs. (47)-(60)"
+    role: special-case
+  - paper: "1711.00165"
+    result: r1
+    statement: "Prior of a deep fully connected network with widths taken to infinity one after another ($N_1\\to\\infty$, then $N_2$, ...): $f\\sim\\mathcal{GP}(0,K^L_{\\rm GP})$, $K^\\ell_{\\rm GP}=\\sigma_b^2+\\sigma_w^2\\,\\mathbb E_{h\\sim\\mathcal N(0,K^{\\ell-1}_{\\rm GP})}\\varphi(h)\\varphi(h)^\\top$, $K^0=\\sigma_b^2+\\sigma_w^2XX^\\top/D$. Argued by the CLT layer by layer, not proved."
+    mapping: "$N_l\\to N_\\ell$, $d_{\\rm in}\\to D$, $K^l\\to K^\\ell_{\\rm GP}$, $\\sigma_w^2\\to\\sigma_\\ell^2$ (same for all layers), $\\sigma_b^2$ absorbed by a constant feature; $F_\\varphi$ is $K\\mapsto\\mathbb E\\varphi\\varphi^\\top$; prior only."
+    equations: "Eqs. (2)-(6), Sec. 2.2-2.3"
+    role: variant
+  - paper: "1711.00165"
+    statement: "Assuming the GP prior, Bayesian prediction is GP regression with $K^L_{\\rm GP}$: mean $k_*^\\top(K^L_{\\rm GP}+\\eta I)^{-1}y$, variance $k_{**}-k_*^\\top(K^L_{\\rm GP}+\\eta I)^{-1}k_*$. Experiments use $\\eta=10^{-10}$, raised tenfold only when Cholesky fails: the $\\eta\\to0$ corner no theorem covers."
+    mapping: "$\\sigma_\\epsilon^2\\to\\eta$ ($\\gamma=1$), $t\\to y$, $n\\to P$, $K_{D,D}\\to K^L_{\\rm GP}$, $K_{x^*,D}\\to k_*^\\top$; one-hot zero-mean targets ($-0.1/0.9$), ten independent outputs."
+    equations: "Eqs. (7)-(9), Sec. 2.4; App. D (noise default $10^{-10}$)"
+    role: special-case
+  - paper: "1711.00165"
+    result: r2
+    statement: "GD comparison, not a posterior test: on MNIST ($P\\le50$k) and CIFAR-10 ($P\\le45$k) the best NNGP matches or beats the best Adam-trained network (best NN wins only MNIST-10k ReLU, by 0.06%); trained-network accuracy approaches the NNGP as width grows to 5000; widest nets generalise best (Fig. 2)."
+    mapping: "NNGP at $\\eta=10^{-10}$ with $(L,\\sigma_w^2,\\sigma_b^2)$ chosen on validation; networks trained by Adam on MSE (Fig. 2: cross-entropy, 5 hidden layers); $N\\le5000$ in Fig. 1, so $P/N\\ge10$."
+    equations: "Table 1, Figs. 1-2, Sec. 3.1; App. D"
+    role: check
+  - paper: "1804.11271"
+    result: r1
+    statement: "Prior half, proved: for Gaussian weights of variance $\\hat C_w/N_{\\ell-1}$, Gaussian biases and continuous $\\varphi$ with $|\\varphi(u)|\\le c+m|u|$, if all widths $N_\\ell=h_\\ell(n)$ grow strictly with $n$ at any relative rates, $f$ on any countable input set converges in distribution to $\\mathcal{GP}(0,K^L_{\\rm GP})$."
+    mapping: "$H_\\mu\\to N_\\ell$, $D\\to L$, $M\\to D$, $L\\to D_{\\rm out}$; $\\hat C_w^{(\\mu)}\\to\\sigma_\\ell^2$, $C_b$ absorbed; first layer $C_w^{(1)}\\to\\sigma_1^2/D$; convergence in the product topology, i.e. of all finite marginals ($P$ fixed)."
+    equations: "Thm 4, Cor 5; Lemma 2 Eqs. (12)-(15); Def. 1 Eq. (11); Def. 3"
+    role: variant
+  - paper: "1804.11271"
+    result: r2
+    statement: "Prior check: the unbiased squared MMD (RBF lengthscale 1/2) between 2000 random ReLU networks and the NNGP on 10 Gaussian inputs in $D=4$ falls with width, is larger and slower for more hidden layers (1-3), and is smaller for widest-first and widest-last profiles."
+    mapping: "$\\hat C_w=0.8$, $C_b=0.2$; $n$ = narrowest width, up to 300; width functions $h_\\mu=n$, $n\\mu$ (Eq. 18), $n(D-\\mu+1)$ (Eq. 19); calibration MMD between RBF GPs with lengthscales $l$, $\\sqrt2l$, $l=\\sqrt8$."
+    equations: "Eq. (17), Eqs. (18)-(19), Fig. 2, Sec. 4"
+    role: check
+  - paper: "1804.11271"
+    result: r3
+    statement: "Posterior check at $N=50$, $L=3$, ReLU: HMC posteriors match NNGP regression on five of six datasets ($P=3,4,10,100$, $D\\le6$; small-XOR log evidence within one nat; marginals slightly more concentrated); on yacht ($P=100$, $D=6$) the network has better held-out log-likelihood."
+    mapping: "Noise variance $\\to\\eta$ ($\\gamma=1$); $\\hat C_w,C_b\\to\\sigma_\\ell^2$; fixed hyperparameters for $P\\le10$, GP type-II ML for $P=100$ shared by both models; $P/N\\le2$."
+    equations: "Secs. 5.1-5.3, Figs. 3-8, Table 1, Eq. (20)"
+    role: check
+  - paper: "2006.10541"
+    result: r1
+    statement: "If the function-space prior converges weakly as all $N_\\ell\\to\\infty$ and the likelihood is width-independent, continuous and bounded with $Z>0$, the exact posterior converges weakly to the posterior under the limiting prior; for the NNGP prior and Gaussian likelihood this is the GP posterior with $K^L_{\\rm GP}+\\eta I$."
+    mapping: "Width $d^l_n\\to N_\\ell$; $m=|D|\\to P$; noise $\\sigma^2$ (Eq. 2) $\\to\\eta$ at $\\gamma=1$ ($\\kappa=1/N$); $P_f$ Gram on $X\\to K^L_{\\rm GP}$ (biases add $\\sigma_b^2\\mathbf 1\\mathbf 1^\\top$). Bounded $\\ell$ requires $\\eta>0$; $\\beta$ fixed."
+    equations: "Prop. 1, Eq. (3), Assumption 1, Eq. (2); proof App. B"
+    role: master
+  - paper: "2006.10541"
+    result: r3
+    statement: "Under Prop. 1, if $h$ is continuous and $\\int|h|\\,dP_{f_n}\\to\\int|h|\\,dP_f<\\infty$, posterior expectations of $h$ converge; with $h=f(x_*)$, $f(x_*)^2$ the predictive mean and variance converge to $k_*^\\top(K^L_{\\rm GP}+\\eta I)^{-1}y$ and $k_{**}-k_*^\\top(K^L_{\\rm GP}+\\eta I)^{-1}k_*$."
+    mapping: "As row n=1: $\\sigma^2\\to\\eta$, $\\gamma=1$, $m\\to P$, NNGP Gram $\\to K^L_{\\rm GP}$. Prior-moment convergence is taken from Yang 2019a,b (Sec. 3), not proved here."
+    equations: "Cor. 1, Eq. (4), Sec. 3; proof App. B"
+    role: master
+  - paper: "2006.10541"
+    result: r4
+    statement: "For FC, conv and attention networks with diagonal Gaussian priors, in the infinite-width finite fan-out embedding, every finite set of weights keeps its prior limit under the posterior ($\\delta_0$ in standard parametrisation, $\\mathcal N(0,\\sigma^2_\\ell)$ in NTK parametrisation); only the top-layer bias has a data-dependent limit."
+    mapping: "Standard parametrisation $W^l_{ij}\\sim\\mathcal N(0,\\sigma_w^2/d^{l-1})$ $\\to$ $W^\\ell/\\sqrt N$ of the umbrella; NTK parametrisation is the umbrella convention. Fixed $P$, $\\eta=\\sigma^2>0$."
+    equations: "Prop. 2, Assumption 2, Sec. 4; proof App. B, B.1 (FCN in full"
+    role: special-case
+  - paper: "2006.10541"
+    result: r2
+    statement: "Exact rejection sampling (prior proposals, Eq. 6) for an $L=3$ erf FCN on $D=2$ inputs $(\\sin t,\\cos t)$: posterior mean and covariance approach the NNGP posterior as $N$ goes $1\\to1000$ (relative Frobenius distance, Fig. 2); the NTK predictor differs."
+    mapping: "$d\\in\\{1,10,100,1000\\}\\to N$; $\\sigma^2=0.01\\to\\eta=0.01$ ($\\beta=100$); $2\\cdot10^6$ proposals, 3187-8596 accepts. $P$, targets, $\\sigma_w$, $\\sigma_b$ not stated."
+    equations: "Eq. (6), Sec. 5, Figs. 1-2"
+    role: check
+  - paper: "2006.10541"
+    statement: "Frozen-feature Bayesian linear regression with bounded $K^L=XX^\\top/N$: the parameter posterior-to-prior $W_2$ distance is $O(N^{-1/2})$ ($\\propto\\sqrt{P/N}$ if $P$ grows, fn. 7, asserted), $2\\,\\mathrm{KL}\\ge N\\|\\mu_N\\|^2=O(1)$; under NTK parametrisation $W_2$ does not vanish."
+    mapping: "$X\\to\\varphi(h^L)$ ($P\\times N$), $n\\to N$, $m\\to P$, $w=a/\\sqrt N$, $K_n\\to K^L$ (deterministic by assumption); $\\alpha=\\beta=1$ gives prior variance 1 and $\\eta=1$; $\\sqrt n\\mu_n=N^{-1/2}\\varphi^\\top v$."
+    equations: "App. A, Example 1 parts (I), (II); fn. 7"
+    role: rate
+  - paper: "2206.07673"
+    result: r1
+    statement: "Weight-space version: whitening the readout by its conditional posterior, $\\phi^{L+1}=\\Sigma^{-1/2}(a-\\mu)$, gives $\\mathrm{KL}(\\mathcal N(0,I)\\Vert P_{\\phi\\mid\\mathcal D})\\to0$ as $N_{\\min}\\to\\infty$; the hidden weights see the data only through $Z=\\mathbb E_{K^L}\\mathcal N(y;0,K^L+\\eta I)$ (Eq. 5). $\\eta>0$, $P$ fixed."
+    mapping: "$d^\\ell\\to N_\\ell$, $n\\to P$, $\\sigma^2\\to\\eta$, $\\theta^{L+1}\\to a$, $\\hat K=\\Psi\\Psi^\\top\\to K^L$, $K\\to K^L_{\\rm GP}$; NTK parametrisation, $\\gamma=1$ ($\\kappa=1/N$)."
+    equations: "Eqs. (3)-(5), Thm 2.1, proof App. A.1"
+    role: variant
+  - paper: "2206.07673"
+    result: r2
+    statement: "The pushforward $f_{T(\\phi)}$, $\\phi\\sim\\mathcal N(0,I)$, satisfies $\\mathrm{KL}(P_{f_{T(\\phi)}}\\Vert P_{f\\mid\\mathcal D})\\to0$ as $N_{\\min}\\to\\infty$; with Hron 2020 and Pinsker it converges in total variation to the NNGP posterior $\\mathcal{GP}(k_*^\\top(K^L_{\\rm GP}+\\eta I)^{-1}y,\\ldots)$. $\\eta>0$, $P$ fixed."
+    mapping: "$d_{\\min}\\to N_{\\min}$, $\\sigma^2\\to\\eta$, $K\\to K^L_{\\rm GP}$; continuous nonlinearities, layers jointly continuous in parameters and inputs; product $\\sigma$-algebra on $\\mathbb R^{\\mathcal X}$."
+    equations: "Prop. 2.2, App. A.2; Sec. 2.4 (Pinsker + Hron 2020a)"
+    role: variant
+  - paper: "2206.07673"
+    result: r3
+    statement: "Score concentration: $P_{\\phi\\mid\\mathcal D}(\\Vert-\\phi-\\nabla_\\phi\\log p(\\phi\\mid\\mathcal D)\\Vert_2>\\epsilon)\\to0$ as $N_{\\min}\\to\\infty$, with $\\mathbb E\\Vert\\Delta_\\phi\\Vert_2\\lesssim N_L^{-1/2}+o(1)$; the readout block agrees exactly at every width."
+    mapping: "$d_{\\min}\\to N_{\\min}$, $d^L\\to N_L$; extra hypotheses: last-layer preactivations exchangeable over width with a limit law, $\\mathbb E\\Vert\\tilde\\Theta_{11}\\Vert_2^2$ converges."
+    equations: "Prop. 3.1, App. A.4 (assumptions 1-2, Eq. (8))"
+    role: extension
+  - paper: "2206.07673"
+    statement: "Without reparametrisation $\\mathrm{KL}(\\mathcal N(0,I)\\Vert P_{\\theta\\mid\\mathcal D})\\to\\frac12[\\eta^{-1}\\mathrm{Tr}K^L_{\\rm GP}+y^\\top(\\eta^{-1}I-(K^L_{\\rm GP}+\\eta I)^{-1})y-\\log\\det(I+\\eta^{-1}K^L_{\\rm GP})]$, the KL between the NNGP prior and posterior."
+    mapping: "$\\sigma^2\\to\\eta$, $K\\to K^L_{\\rm GP}$, $K_{\\sigma^2}\\to K^L_{\\rm GP}+\\eta I$; same hypotheses as Thm 2.1; $P$ fixed."
+    equations: "Prop. 2.3, App. A.3"
+    role: extension
+  - paper: "2206.07673"
+    result: r4
+    statement: "Numerics (CIFAR-10, $\\eta=0.01$): reparametrised underdamped Langevin has up to 50x higher per-step ESS (FCN, $N=1024$, $P=256$), about 10x for $P/N$ up to 40; ResNet-20 gains over 10x at $P=1$K and none at $P=10$K. Gain largest when $N>P$."
+    mapping: "$d^\\ell\\to N$ (FCN widths 32-1024; ResNet 128-512 channels), $n\\to P$, $\\sigma^2=0.01\\to\\eta$; 3 hidden layers, GELU; no Metropolis correction."
+    equations: "Figs. 5, 7, 8, 9, Secs. 4.2.1-4.2.2"
+    role: check
+  - paper: "2312.11737"
+    result: r1
+    statement: "Prior on a finite input set $X$ ($P$ train + test points): for every $p\\ge1$, $\\mathcal W_p(f^{L}[X],\\mathcal{GP}(0,K^L_{\\rm GP}))\\le c\\sum_{\\ell<L}1/N_\\ell$ if every $K^\\ell_{\\rm GP}[X]$ is invertible, else $\\le c\\sum_{\\ell<L}1/\\sqrt{N_\\ell}$; $c=c(p,X,\\varphi,N_L)$, widths jointly at any rates."
+    mapping: "$n_\\ell\\to N_\\ell$; paper $L$ = number of weight layers; $\\sigma_w^2=\\sigma_b^2=1$ (weights $1/n_{\\ell-1}$, Eq. 1.2); $K^{(\\ell)}[X]\\to K^\\ell_{\\rm GP}$; the output width $n_L$ is fixed and its prefactor $n_L\\gamma_p^{kn_L}$ goes into $c$."
+    equations: "Thm 1.1 Eqs. (1.3)-(1.4); Thm 4.1 Eq. (4.3); Thm 4.2 Eqs. (4.24)-(4.25)"
+    role: rate
+  - paper: "2312.11737"
+    result: r2
+    statement: "For a bounded Lipschitz likelihood $g$ of the training outputs with $\\mathbb E\\,g(\\mathcal{GP})>0$, $\\mathcal W_1$(network posterior, GP posterior) on train+test $\\le c/\\sqrt{N_{\\min}}$, and $\\le c/N_{\\min}$ if every $K^\\ell_{\\rm GP}$ is invertible on train+test; Gaussian likelihood $e^{-\\sum\\Vert f-y\\Vert^2}$ is $\\eta=1/2$."
+    mapping: "$N_{\\min}=\\min_{\\ell<L}n_\\ell$ (hidden widths only); $c=c(X,\\varphi,K,g,N_L)$ grows with Lip$(g)$ (hence $|D|$, $1/\\eta$) and $1/\\mathbb E g$; any $\\eta>0$ is a bounded Lipschitz $g$, so covered."
+    equations: "Cor 1.2 Eqs. (1.5)-(1.7); Cor 5.3 Eqs. (5.22)-(5.24); Lemma 5.1 Eq. (5.12)"
+    role: rate
+  - paper: "2401.01611"
+    result: r2
+    statement: "Prior moderate deviations: for $a_N\\to0$, $a_NN\\to\\infty$, $\\sqrt{a_N}\\,Z$ has an LDP at speed $1/a_N$ with rate $\\tfrac12\\mathrm{tr}\\,z^\\top(K^L_{\\rm GP})^{-1}z$: the kernel is frozen at $K^L_{\\rm GP}$. With $a_N=1/\\gamma^2$ this is the $\\kappa=\\gamma^2/N\\to0$ corner of $F$ (prior only)."
+    mapping: "$\\hat g^{(L)}_x\\to K^L_{\\rm GP}$ (with bias $C_b$, $C_W\\to\\sigma_\\ell^2$; Remark 2.2: equals Hanin's $K^{(L+1)}$); $v_n^*\\to N$ (smallest width); $a_N\\to1/\\gamma^2$; $P=|A|$ fixed; no likelihood, no $\\eta$."
+    equations: "Thm 2.2, Eqs. (3), (9), (13); proof Sec. 3.4 (Lemma 3.2)"
+    role: variant
+  - paper: "2106.10165"
+    result: r2
+    statement: "At infinite width the output prior is $\\mathcal N(0,K^L_{\\rm GP})$ per output; exact conditioning ($\\eta=0$) gives the GP posterior mean and covariance, output components stay independent, and the penultimate-layer posterior equals its prior (no representation learning). Ensembles trained only in the last layer with $\\lambda_W=C_W$, $\\lambda_b=C_b$ reproduce it."
+    mapping: "$n\\to N$; $K^{(L)}=C_b^{(L)}+C_W^{(L)}\\langle\\sigma\\sigma\\rangle_{K^{(L-1)}}\\to K^L_{\\rm GP}$ (output kernel, bias included); deterministic hypothesis (6.9): $\\eta=0$, the corner of S01 not covered by the theorems; $\\sigma_\\varepsilon^2$ of (6.10) $=\\eta$; $L_{\\rm book}=L+1$."
+    equations: "Eqs. (6.32), (6.57), (6.64), (6.70)-(6.71); evidence (6.46)-(6.48); GD = Bayes (10.44)-(10.49)"
+    role: variant
+  - paper: "2405.16630"
+    result: r1
+    statement: "Shaped MLP, $\\varphi(t)=t+\\psi t^3/(3L)$, weight variance $1+2\\eta_w/L$: for $N\\gg L,P$, limits $N\\to\\infty$ then $L\\to\\infty$ then $P\\to\\infty$, the posterior is the GP posterior with $K_\\psi=\\lim_LK^L_{\\rm GP}$, $K_\\psi(x,x^\\prime)=\\langle x_\\psi,x^\\prime_\\psi\\rangle$, $x_\\psi=e^{\\eta_w}(1-2\\hat\\psi\\Vert x\\Vert^2/D)^{-1/2}x/\\sqrt D$, $\\hat\\psi=\\psi(e^{2\\eta_w}-1)/(2\\eta_w)$."
+    mapping: "Paper $N_0\\to D$, its $\\eta\\to\\eta_w$ (weight-variance shift, not noise); likelihood noise $\\eta=1/\\beta$ (proof of Prop. 5.1, $M_\\beta=(K_\\psi+\\beta^{-1}I)^{-1}$); $K^L_{\\rm GP}$ from recursion (4.7)-(4.8); standard scaling $\\kappa=1/N$; one output; needs $P<D$, $X$ full rank."
+    equations: "Eqs. (1.5), (2.12)-(2.13), Sec. 2.2.1; Sec. 4.2 Eqs. (4.6)-(4.11)"
+    role: special-case
+  - paper: "2407.10315"
+    result: r1
+    statement: "Single-head continual learning, $N\\to\\infty$, $\\alpha\\to0$: the mean predictor after $T$ tasks is a kernel predictor chained over tasks, $\\langle f_T\\rangle=\\sum_t\\tilde k^\\top_{T,t}\\langle -iv_t\\rangle$ (SI 27-28), with generalised kernels that tend to $K_{\\rm GP}$ and $\\lambda^{-1}K_{\\rm NTK}$ at $\\lambda\\to\\infty$; with fixed random features $F_{2,1}=2(\\gamma_{\\rm RF}-\\gamma_{\\rm rule})$ (Eq. 4)."
+    mapping: "Paper $\\beta,\\sigma^2$ = umbrella $\\beta$, prior variance; $\\lambda$ = proximal coupling between successive posteriors (Eq. 2), not a ridge; $\\gamma_{\\rm RF},\\gamma_{\\rm rule}$ are overlaps of fixed features, not order parameters of $F$."
+    equations: "Eqs. (2), (4)-(9); SI Eqs. (13)-(21), (27)-(28)"
+    role: extension
+  - paper: "2407.10315"
+    result: r2
+    statement: "In the random-feature approximation of the single-head $N\\to\\infty$ theory, short-term forgetting $F_{2,1}$ on benchmark sequences decreases monotonically with depth ($L=1$ to $9$) while the long-term forgetting time grows, so the maximal forgetting changes little, possibly with an optimal depth."
+    mapping: "Depth enters only through the last-hidden-layer NNGP features $X^L_i$, i.e. through $K^L_{\\rm GP}$; $L$ = hidden layers."
+    equations: "Fig. 4, Sec. 3.4; SI Eqs. (27)-(28); SI Fig. 8"
+    role: extension
+  - paper: "2006.15191"
+    result: r1
+    statement: "Two-hidden-layer ReLU FCN ($N=1024$), binarised MNIST, $P=10^4$, 100 test points, MSE: SGD function probabilities $P_{\\rm SGD}(f|S)$ agree within an order of magnitude with $P_B(f|S)$ from sign-thresholded samples of the NNGP posterior with $\\eta=0.002$; 913 shared functions carry 97.7% of SGD and 99.96% of GP mass."
+    mapping: "$|S|=m\\to P$; GP noise $\\sigma^2\\to\\eta=0.002$, $\\gamma=1$, targets $\\pm1$; posterior = S01 master formula at the test points, then $f=\\mathbb 1[f>0]$; SGD side finite $N=1024$, $L=2$."
+    equations: "Fig. 1(a),(d), Sec. 4.1; Eqs. (2)-(3); App. A.2.1 Eq. (5)"
+    role: check
+  - paper: "2006.15191"
+    result: r2
+    statement: "$P_{\\rm OPT}(f|S)\\approx P_B(f|S)$ to first order for CNNs, an LSTM and FCNs on Fashion-MNIST, IMDb, ionosphere and four adaptive optimisers; $P_B$ mostly from the NNGP with 0-1 likelihood via EP (scatter below $y=x$), MSE GP for some panels; the NTK finds 77.5% of GP and 65.8% of SGD mass."
+    mapping: "Bayes side NNGP ($N\\to\\infty$, $\\kappa\\to0$); CE panels: Heaviside link, $\\beta\\to\\infty$ sign likelihood, EP closure, not the Gaussian-likelihood master formula; MSE panels: $\\eta=0.002$; $|S|\\to P\\le45000$."
+    equations: "Figs. 2-4, Secs. 4.2-4.5, 5.2; NTK Fig. 3, Sec. 4.3; App. A.2.2"
+    role: check
+  - paper: "2006.15191"
+    result: r4
+    statement: "Batch size, learning rate and optimiser shift $P_{\\rm OPT}(f|S)$ as second-order effects relative to the NNGP $P_B$ (CE/EP, Fig. 5); with 20% corrupted labels (MSE, $\\eta=0.002$, 50 test points) shared functions carry 99.3% of $P_B$ but only 24.3% of $P_{\\rm SGD}$, and $\\langle\\epsilon\\rangle_{\\rm SGD}=13.4\\%$ against 5.80% for the GP."
+    mapping: "Bayes side NNGP; Fig. 5: 0-1 likelihood via EP ($\\beta\\to\\infty$); Fig. 6(c): Gaussian likelihood $\\eta=0.002$; SGD side $N=1024$, $L=2$; $|S|=10^4\\to P$."
+    equations: "Secs. 5.1-5.2, Fig. 5; Sec. 6, Fig. 6(b)-(c); Fig. 19"
+    role: check

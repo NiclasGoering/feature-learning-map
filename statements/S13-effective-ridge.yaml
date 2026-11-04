@@ -1,0 +1,58 @@
+id: S13
+slug: effective-ridge
+title: "Averaging over training sets: the effective ridge"
+kind: collapse
+claim: "In the NNGP, averaging over training sets renormalises the ridge: modes the data cannot resolve add their weight to an effective ridge. A finite-dimension kernel-fluctuation correction pulls the predictive mean towards zero on the symmetric tasks evaluated (Lindner). A data-size effect at $N=\\infty$."
+formula: '$$\eta_{\rm eff}=\eta+\sum_{k>k_T}\lambda_k,\qquad P\,\lambda_{k_T}=\eta_{\rm eff}$$'
+regime:
+  width_limit: inf-kernel
+  learning_rule: [bayes]
+  conditions: "$N=\\infty$ (R0), $\\kappa\\to0$; $P\\to\\infty$ as a Poisson mean averaged over training sets; Gaussian data features at leading order; sharp cutoff at $k_T$; the small-variance condition holds per shell ($\\delta c\\ll\\eta_c$), and the flow is used at $\\eta=0$. Non-Gaussian features give an input-dependent ridge. Lindner: Gaussian disorder, first order in the kernel covariance $C$."
+status: phys
+status_note: "Physics. Howard’s flow is the Canatar–Bordelon effective ridge with a sharp cutoff, in Wilsonian language; the data-variability correction is Lindner’s, a different closure, listed as an extension."
+members:
+  - paper: "2405.06008"
+    result: r1
+    statement: "For Gaussian data features, integrating out the kernel modes above a cutoff shell by shell (each shell $\\delta c\\ll\\eta_c$) gives $d\\eta_c/dc=1$, i.e. $\\eta_{\\rm eff}=\\eta+\\sum_{k>k_T}\\lambda_k$, stopped at the first learnable mode $P\\lambda_{k_T}=\\eta_{\\rm eff}$; predictor $\\bar f_k=\\lambda_ky_k/(\\lambda_k+\\eta_{\\rm eff}/P)$; the kernel does not change."
+    mapping: "$\\sigma^2\\to\\eta$, $\\sigma_c^2\\to\\eta_{\\rm eff}$; paper $\\eta$ (Poisson mean dataset size) $\\to P$; $\\kappa$ (cutoff index) $\\to k_T$; $\\lambda_k$ = population eigenvalues of $K^L_{\\rm GP}$ over $p_{\\rm data}$; $c=\\sum_{k>\\kappa}\\lambda_k$."
+    equations: "Eqs. (30)-(34), Sec. III; predictor Eqs. (11), (35)"
+    role: master
+  - paper: "2405.06008"
+    result: r2
+    statement: "For $\\lambda_k\\propto k^{-(1+a)}$ at $\\eta=0$ the flow gives $\\eta_{\\rm eff}(k_\\Lambda)\\approx a^{-1}k_\\Lambda^{-a}$ and $k_T\\propto P$; for $y_k^2\\propto k^{-(1+a)}$ the loss is $\\propto P^{-a}$ (data exponent of Bahri et al.) instead of the naive equivalent-kernel $P^{-a/(1+a)}$."
+    mapping: "paper spectral exponent $\\alpha\\to a$ (not $P/N$); $\\eta_{\\rm paper}\\to P$; $\\sigma^2=0$ ($10^{-8}$ in Fig. 1) $\\to\\eta$; learnability $L_k=\\eta_{\\rm eff}/(P\\lambda_k+\\eta_{\\rm eff})$, threshold $T=0.01$ (not a temperature)."
+    equations: "Sec. IV (p. 15), Eqs. (36)-(37), Fig. 1"
+    role: special-case
+  - paper: "2405.06008"
+    result: r3
+    statement: "With weakly non-Gaussian features (fourth cumulant $U\\sim1/D$, first order), the flow reweights the loss locally, $dW_c/dc=-2B_c(x)/\\eta_c$ with $\\int d\\mu\\,W_c=1$, i.e. an input-dependent ridge $\\eta_c/W_c(x)$; the conditional-mean term drops out (Eq. 53), so no target shift is derived."
+    mapping: "$\\sigma_c^2\\to\\eta_c$; $W_c(x)$ = spatial loss weight; $B$ = conditional-variance shift of $\\varphi_q$ given $\\varphi_<$ (Eq. 46); $U_{k_1..k_4}$ = data-feature cumulant, not a width coupling."
+    equations: "Eqs. (45)-(46), (53), (55)-(57), (63)-(64), Sec. V A"
+    role: special-case
+  - paper: "2307.16695"
+    result: r1
+    statement: "Averaging the NNGP predictive mean over Gaussian kernel-entry disorder $K\\sim\\mathcal N(m,C)$ gives, to first order in $C$, $\\langle f_*\\rangle=m_{*\\alpha}m^{-1}_{\\alpha\\beta}y_\\beta+m_{*\\epsilon}m^{-1}_{\\epsilon\\alpha}C_{(\\alpha\\beta)(\\gamma\\delta)}m^{-1}_{\\beta\\gamma}m^{-1}_{\\delta\\rho}y_\\rho-C_{(*\\alpha)(\\beta\\gamma)}m^{-1}_{\\alpha\\beta}m^{-1}_{\\gamma\\delta}y_\\delta$; deep kernels propagate $C$ by linear response."
+    mapping: "$m=\\mathbb E_X[K^L_{\\rm GP}]+\\eta I$, $\\eta=\\sigma_{\\rm reg}^2$; $C=\\mathrm{Cov}_X$ of the output kernel $K^y$, obtained from the input-overlap covariance $\\Sigma\\propto1/N_{\\rm dim}$ (Eqs. 65, 75); $D\\to P$, $N_{\\rm dim}\\to D$, $N_h\\to N=\\infty$."
+    equations: "Eq. (39) (HTML Eq. 42), Sec. III A; action Eqs. (36)-(37)"
+    role: extension
+  - paper: "2307.16695"
+    result: r2
+    statement: "Symmetric two-class task, $P\\to\\infty$: the zeroth order tends to the label $y$, while the first-order data-variability correction (Eq. 52) tends to a finite $O(1/D)$ term of sign opposite to $y$; for a linear kernel (Eq. 56) it is $\\frac{y\\,\\sigma_v^2(1-u)}{D\\,u(\\sigma_v^2(1-u)+\\eta)}(-2u-\\eta/\\sigma_v^2)$, a pull towards zero."
+    mapping: "Training-set size $D\\to P$, $N_{\\rm dim}\\to D$, $\\sigma_{\\rm reg}^2\\to\\eta$, $u$ = intra-class input overlap, $\\sigma_v^2$ readout prior variance; $N=\\infty$."
+    role: extension
+  - paper: "2307.16695"
+    result: r3
+    statement: "For deep erf NNGPs ($L=5$-$50$, $D=50$, $P=100$, $\\eta=1$) $C$ is propagated layer by layer by linear response (Eqs. 72-75); the weight variance minimising the variability-corrected test error is slightly supercritical, $\\sigma_w^2>1$, and approaches $\\sigma_w^2=1$ as $L$ grows (Fig. 4)."
+    mapping: "Training-set size $D\\to P$, $N_{\\rm dim}\\to D$, $\\sigma_{\\rm reg}^2\\to\\eta$, layers $L\\to L$; $N=\\infty$; erf only."
+    equations: "Fig. 4, Sec. III B 3; kernel recursions Eqs. (72)-(75); one-layer erf Eqs. (57)-(71)"
+    role: extension
+  - paper: "2307.16695"
+    result: r4
+    statement: "On MNIST (0 against 4, linear kernel) and Gaussianised MNIST (erf kernel) the first-order theory tracks the mean GP prediction over resampled training sets, including the class-ratio dependence; at large $P$ it deviates on finite MNIST because resampled sets are correlated (Figs. 5-6)."
+    mapping: "Training-set size $D\\to P$, $N_{\\rm dim}=784\\to D$, $\\sigma_{\\rm reg}^2\\to\\eta$; exact GP regression on resampled sets as the empirical side; $N=\\infty$."
+    equations: "Fig. 6 (Gaussianised MNIST, erf), Fig. 5 (finite MNIST, linear), Sec. III B 4"
+    role: check
+reduces_to:
+  - {target: S01, limit: "no averaging ($C\\to0$, $k_T\\to\\infty$): the NNGP posterior mean"}
+disagreements:
+  - {papers: ["2405.06008", "2510.25553"], note: "Howard’s flow comes from data averaging (the pure GP flows); in Peraza Coppola the pure GP has no flow and the quartic vertex drives it. They share the coarse-graining, not the source."}

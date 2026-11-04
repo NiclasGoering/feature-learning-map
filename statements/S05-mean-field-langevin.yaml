@@ -1,0 +1,200 @@
+id: S05
+slug: mean-field-langevin
+title: "Mean-field Langevin: the proximal Gibbs measure"
+kind: collapse
+claim: "For a loss convex in the neuron measure the entropy-regularised mean-field problem has a unique minimiser, its own proximal Gibbs measure. Langevin dynamics converges to it under a log-Sobolev inequality, and the $N$-neuron Gibbs posterior is $O(1)$ in KL from $\\hat\\nu^{\\otimes N}$."
+formula: '$$\hat\nu\ \propto\ \nu_0\,\exp\!\Big(-\tfrac1T\,\tfrac{\delta\mathcal L}{\delta\nu}[\hat\nu]\Big),\qquad \hat\nu=\arg\min_\nu\ \mathcal F_T[\nu]=\mathcal L[\nu]+T\,\mathrm{KL}(\nu\Vert\nu_0)$$'
+formula_note: "$-\\frac1N\\log Z_N=\\frac1T\\min\\mathcal F_T+O(1/N)$ for $Z_N$ normalising $\\nu_0^{\\otimes N}e^{-\\frac NT\\mathcal L}$ (Chen–Ren–Wang Thm 2.6 at stationarity). The constant is $LR^2/2N$ for a loss averaged over data, $P$ times larger for a summed loss."
+regime:
+  width_limit: inf-meanfield-fixedP
+  learning_rule: [bayes]
+  conditions: "Two-layer network, bounded neurons and loss derivative (Nitanda–Wu, Chizat, Hu), or a truncated readout (Chen–Ren–Wang); $P$ fixed; $T>0$; likelihood scaled with $N$. Prior variance $\\propto T$ in Nitanda–Wu, Chizat, Chen–Ren–Wang, Kook, Nitanda (cold convention); Hu and Takakura temper the likelihood only. A trainable Gaussian readout is outside the hypotheses, except Takakura’s two-timescale dynamics."
+status: thm
+status_note: "All proved. Chen–Ren–Wang, Kook et al., Nitanda 2024 and Chewi–Nitanda reach the finite-$N$ Gibbs posterior; Hu–Ren, Nitanda–Wu, Chizat treat the $N=\\infty$ dynamics. Takakura’s profiled stationary law differs from the posterior by $\\det(K_W+\\eta I)^{-1/2}$."
+members:
+  - paper: "1905.07769"
+    result: r2
+    statement: "For $\\mathcal L$ convex, $C^1$ and bounded below on $\\mathcal P(\\mathbb R^d)$ and $\\nu_0=e^{-U}$ with $U$ smooth, coercive and $\\nabla U$ Lipschitz, $\\mathcal F_T=\\mathcal L+T\\,\\mathrm{KL}(\\nu\\Vert\\nu_0)$ has a unique minimiser $\\nu^*\\in\\mathcal P_2$, and $\\nu$ minimises iff $\\nu\\propto\\nu_0\\exp(-\\frac1T\\frac{\\delta\\mathcal L}{\\delta\\nu}[\\nu])$."
+    mapping: "$m\\to\\nu$, $F\\to\\mathcal L$, $\\sigma^2/2\\to T$, Gibbs measure $g=e^{-U}\\to\\nu_0$ (fixed, independent of $T$, so $T$ is the map's $T=1/\\beta$), $H\\to\\mathrm{KL}(\\cdot\\Vert\\nu_0)$, $V^\\sigma\\to\\mathcal F_T$, $\\frac{\\delta F}{\\delta m}\\to\\frac{\\delta\\mathcal L}{\\delta\\nu}$."
+    equations: "Prop. 2.5, Eq. (2.4); objective Eq. (2.1); Ass. 2.1-2.2"
+    role: master
+  - paper: "1905.07769"
+    result: r1
+    statement: "If $D_m\\mathcal L$ is bounded and Lipschitz in $(x,W_2)$ (Ass. 2.7) and $\\nu_{t=0}\\in\\mathcal P_p$, $p>2$, the marginals of $dX_t=-(D_m\\mathcal L(\\nu_t,X_t)+T\\nabla U(X_t))dt+\\sqrt{2T}dW_t$ converge in $W_2$ to $\\nu^*$, without a rate; for networks only with a truncated readout (Cor. 3.3)."
+    mapping: "$\\sigma\\,dW\\to\\sqrt{2T}\\,dW$, $m_t\\to\\nu_t$, $m^*\\to\\nu^*$; network $\\hat\\varphi=\\ell(\\beta)\\varphi(\\alpha\\cdot z)$, $\\ell\\in C_b^\\infty$ truncation, $\\varphi\\in C_b^\\infty$, so $(\\beta,\\alpha)\\to(a,w)$ with $a$ entering only through bounded $\\ell(a)$."
+    equations: "Thm 2.11; SDE Eq. (2.5); Ass. 2.1, 2.2, 2.7; Cor. 3.3 with Ass. 3.2"
+    role: rate
+  - paper: "1905.07769"
+    result: r4
+    statement: "Along mean-field Langevin dynamics, $\\mathcal F_T(\\nu_t)-\\mathcal F_T(\\nu_s)=-\\int_s^t\\!\\int|D_m\\mathcal L(\\nu_r,x)+T\\nabla\\log\\nu_r+T\\nabla U|^2\\,d\\nu_r\\,dr$ for all $t>s>0$, so $\\mathcal F_T$ decreases (Thm 2.9, Eq. 2.7)."
+    mapping: "$V^\\sigma\\to\\mathcal F_T$, $\\frac{\\sigma^2}{2}\\to T$, $\\frac{\\nabla m_r}{m_r}\\to\\nabla\\log\\nu_r$; hypotheses Ass. 2.2 and 2.7 (not convexity)."
+    equations: "Thm 2.9, Eq. (2.7); proof Sec. 6 (Lemmas 6.1-6.5)"
+    role: rate
+  - paper: "1905.07769"
+    result: r5
+    statement: "If $\\mathcal L$ is weakly continuous, $\\mathcal F_T$ $\\Gamma$-converges to $\\mathcal L$ as $T\\downarrow0$, so $\\mathcal L[\\nu^*_T]\\to\\inf_{\\mathcal P_2}\\mathcal L$ and cluster points of $\\nu^*_T$ minimise $\\mathcal L$ (Prop. 2.3)."
+    mapping: "$\\sigma\\downarrow0\\to T\\downarrow0$ at fixed $\\nu_0$ (map's convention); $m^{*,\\sigma}\\to\\nu^*_T$."
+    equations: "Prop. 2.3 (proof Sec. 4)"
+    role: rate
+  - paper: "1905.07769"
+    result: r3
+    statement: "At $T=0$: if the first and second linear derivatives of $\\mathcal L$ are bounded by $L_2$ in the sense of Eq. (2.3) and $\\mathcal L$ has a minimiser, then $0\\le\\inf_{x_1..x_N}\\mathcal L[\\frac1N\\sum_i\\delta_{x_i}]-\\min\\mathcal L\\le 2L_2/N$ (Thm 2.4)."
+    mapping: "$F\\to\\mathcal L$, $L\\to L_2$ (a derivative bound, not depth), $N$ neurons; no entropy and no Gibbs measure."
+    equations: "Thm 2.4, Eq. (2.3); proof Eqs. (4.3)-(4.5)"
+    role: rate
+  - paper: "2201.10469"
+    result: r1
+    statement: "If $\\mathcal L$ is convex with $\\frac{\\delta\\mathcal L}{\\delta\\nu}=O(1+\\Vert\\theta\\Vert^2)$ uniformly (Ass. 1) and every $\\hat\\nu[\\nu]$ satisfies an LSI with constant $\\alpha$ (Ass. 2), then for any $T>0$ $\\mathcal F_T(\\nu_t)-\\mathcal F_T^*\\le e^{-2\\alpha Tt}(\\mathcal F_T(\\nu_0)-\\mathcal F_T^*)$ (Thm 1), and $\\inf_{s\\le t}\\mathrm{KL}(\\nu_s\\Vert\\hat\\nu_s)$ decays alike (Cor. 1)."
+    mapping: "$q\\to\\nu$, $p_q\\to\\hat\\nu[\\nu]$, $\\lambda\\to T$, $\\alpha\\to C_{\\rm LSI}$ ($\\mathrm{Ent}(g^2)\\le\\frac2\\alpha\\mathbb E|\\nabla g|^2$); $F$ includes $\\lambda'\\Vert\\theta\\Vert^2$, so $\\nu_0=\\mathcal N(0,\\frac{T}{2\\lambda'}I)$, variance $\\propto T$; $\\mathcal L(q)=\\mathcal F_T+$ const; $M\\to N$."
+    equations: "Thm 1; Ass. 1-2; Eqs. (6)-(9); Cor. 1; App. A.1 (LSI constant)"
+    role: rate
+  - paper: "2201.10469"
+    result: r3
+    statement: "The minimiser is its own proximal Gibbs measure, $\\nu^*=\\hat\\nu[\\nu^*]\\propto\\exp(-\\frac1T\\frac{\\delta F}{\\delta\\nu}[\\nu^*])$ (Eq. 15, credited to Hu et al.); for every $\\nu$, $T\\,\\mathrm{KL}(\\nu\\Vert\\hat\\nu[\\nu])\\ge\\mathcal F_T(\\nu)-\\mathcal F_T^*\\ge T\\,\\mathrm{KL}(\\nu\\Vert\\nu^*)$ (Prop. 1.3), a PL and quadratic-growth pair."
+    mapping: "$\\exp(-\\frac1\\lambda\\frac{\\delta F}{\\delta q})$ with $F$ = loss + $\\lambda'\\Vert\\theta\\Vert^2$ equals $\\nu_0\\exp(-\\frac1T\\frac{\\delta\\mathcal L}{\\delta\\nu})$ with $\\nu_0=\\mathcal N(0,\\frac T{2\\lambda'}I)$; $\\lambda\\to T$, $\\mathcal L(q)\\to\\mathcal F_T$."
+    equations: "Def. 1 Eq. (5); Eq. (15); Prop. 1 (items 1-3, Eq. 16)"
+    role: rate
+  - paper: "2201.10469"
+    result: r2
+    statement: "For the time-discretised mean-field dynamics ($N=\\infty$) with step $h$ and one-step error $\\delta_h$, $\\mathcal F_T(\\nu^{(k)})-\\mathcal F_T^*\\le\\frac{\\delta_h}{2\\alpha T}+e^{-\\alpha Thk}(\\mathcal F_T(\\nu^{(0)})-\\mathcal F_T^*)$ (Thm 2); for smooth bounded-gradient networks $\\delta_h=O(h)$ (Lemma 1), so $O(\\frac1{\\epsilon\\alpha^2T^2}\\log\\frac1\\epsilon)$ iterations reach accuracy $\\epsilon$ (Cor. 2)."
+    mapping: "Paper step size $\\eta\\to h$ (not the umbrella $\\eta$); $\\lambda\\to T$; $\\alpha\\to C_{\\rm LSI}$; Lemma 1 needs $|\\partial_z\\ell|\\le C_1$, $\\Vert\\partial_\\theta h_\\theta\\Vert\\le C_3$ and $2\\lambda'h<1$."
+    equations: "Thm 2; Lemma 1 Eqs. (21)-(22); Cor. 2 Eq. (23)"
+    role: rate
+  - paper: "2201.10469"
+    result: r4
+    statement: "For regularised empirical risk with convex differentiable loss, the duality gap between $\\nu$ and its residual vector $g_\\nu=(\\partial_z\\ell(f_\\nu(x_\\mu),y_\\mu))_\\mu$ equals $T\\,\\mathrm{KL}(\\nu\\Vert\\hat\\nu[\\nu])$ (Thm 3); with $C_2$-smooth loss and $|h_\\theta|\\le B$, $\\mathcal F_T(\\hat\\nu[\\nu])-\\mathcal D(g_\\nu)\\le(T+2B^2C_2)\\mathrm{KL}(\\nu\\Vert\\hat\\nu[\\nu])$ (Thm 4)."
+    mapping: "$\\hat\\nu[\\nu]\\propto\\exp(-\\frac1T(\\frac1P\\sum_\\mu g_\\mu h_\\theta(x_\\mu)+\\lambda'\\Vert\\theta\\Vert^2))$; $n\\to P$; for the square loss $g_\\nu=f_\\nu-y=-\\eta v$ with $\\eta=TP$; $\\mathcal D$ is the dual of Eq. (25)."
+    equations: "Eqs. (24)-(25); Thm 3; Thm 4; Cor. 3"
+    role: rate
+  - paper: "2202.01009"
+    result: r1
+    statement: "If $\\nabla\\frac{\\delta\\mathcal L}{\\delta\\nu}$ is jointly Lipschitz in $x$ and $W_2$ (Ass. 1), $\\mathcal L$ is convex with a minimiser (Ass. 2) and every $\\hat\\nu[\\nu]$ satisfies LSI($\\rho_T$) (Ass. 3), then $\\mathcal F_T(\\nu_t)-\\mathcal F_T^*\\le e^{-2T\\rho_Tt}(\\mathcal F_T(\\nu_0)-\\mathcal F_T^*)$; $\\mathrm{KL}(\\nu_t\\Vert\\nu^*)$ and $W_2^2$ decay alike."
+    mapping: "$\\mu\\to\\nu$, $\\tau\\to T$, $G\\to\\mathcal L$ + weight decay $\\frac\\lambda2\\Vert x\\Vert^2$, so $\\nu_0=\\mathcal N(0,\\frac T\\lambda I)$ (variance $\\propto T$); $e^{-V[\\mu]/\\tau}\\to\\hat\\nu[\\nu]$; $\\rho_\\tau\\to C_{\\rm LSI}$ ($H\\le I/2\\rho$); $m\\to N$; $H$ = entropy against Lebesgue."
+    equations: "Thm 3.2, Eq. (14); Eq. (15); Cor. 3.3; Lemma 3.4; Ass. 1-3; Def. 3.1"
+    role: rate
+  - paper: "2202.01009"
+    result: r3
+    statement: "If $\\mathcal L$ is convex, smooth in the sense of Ass. 1, and $\\mathcal F_T=\\mathcal L+TH$ has a minimiser, the minimiser is unique and satisfies $\\nu^*\\propto e^{-V[\\nu^*]/T}$, $V$ the first variation (Prop. 2.3, Eq. 9; recalled, not proved)."
+    mapping: "$e^{-V[\\mu]/\\tau}$ with $V$ = first variation of loss + $\\frac\\lambda2\\Vert x\\Vert^2$ equals $\\nu_0e^{-\\frac1T\\frac{\\delta\\mathcal L}{\\delta\\nu}}$ with $\\nu_0=\\mathcal N(0,\\frac T\\lambda I)$; $\\tau\\to T$."
+    equations: "Prop. 2.3, Eq. (9)"
+    role: rate
+  - paper: "2202.01009"
+    result: r4
+    statement: "For square or logistic loss, $|\\Phi|\\le K$ smooth in $x$ and weight decay $\\lambda$, Ass. 1-3 hold with $\\rho_T\\ge\\frac\\lambda Te^{-2K/T}$ (logistic) or $\\frac\\lambda Te^{-2K(K+K')/T}$ (square, $|\\mathbb E[y|z]|\\le K'$) (Prop. 5.1); $a\\varphi(b^\\top z)$ is excluded (Eq. 22); 2-homogeneous $\\Phi$ with bounded $\\ell'$ and large $\\lambda$ satisfies Ass. 3 via (23)."
+    mapping: "$\\Phi(z,x)\\to$ one neuron $a\\varphi(w\\cdot z)$ only if bounded; $\\lambda$ = weight decay = prior precision $\\times T$; $\\mathcal D$ = data law (empirical: mean over $P$)."
+    equations: "Prop. 5.1, Eqs. (21)-(22); Lyapunov relaxation Eq. (23)"
+    role: rate
+  - paper: "2202.01009"
+    result: r2
+    statement: "If Ass. 1-3 hold for all $T>0$ with $\\rho_T\\ge C_0e^{-\\alpha^*/T}$, $\\mathcal L$ bounded below and $T_t=\\alpha/\\log t$, $\\alpha>\\alpha^*$, then $\\mathcal F_{T_t}(\\nu_t)-\\mathcal F^*_{T_t}\\le Ct^{-(1-\\alpha^*/\\alpha-\\epsilon)}$ and $\\mathcal L(\\nu_t)-\\inf\\mathcal L\\le C'\\frac{\\log\\log t}{\\log t}$ (Thm 4.1)."
+    mapping: "$\\tau_t\\to T_t$; $G\\to\\mathcal L$ including the weight decay $\\frac\\lambda2\\Vert x\\Vert^2$ (so the limit is the weight-decay-regularised minimum); annealing shrinks $\\nu_0=\\mathcal N(0,\\frac{T_t}\\lambda I)$ too."
+    equations: "Thm 4.1, Eqs. (17)-(19); Lemmas 4.2-4.3; Step 2 of the proof"
+    role: rate
+  - paper: "2202.01009"
+    result: r5
+    statement: "Noisy particle GD on a kernel-MMD objective on the 2-torus ($m=50$ particles, step 0.08, 10 runs): at $T=0.1$, $\\mathcal F_T$ decays exponentially to a plateau; with $T_t=20/(t+1)$, faster than Thm 4.1 allows, annealed NPGD ends at lower $\\mathcal L$ than noiseless PGD."
+    mapping: "Not a network: $G$ = squared kernel MMD to a 10-atom empirical $\\nu$ (Eq. 24), uniform reference on the torus, $\\rho_T\\ge((1+2\\pi)d)^{-1}e^{(\\inf k-\\sup k)/T}$ (Prop. 5.2)."
+    equations: "Sec. 5.2, Eq. (24), Prop. 5.2, Fig. 1a-c"
+    role: check
+  - paper: "2212.03050"
+    result: r3
+    statement: "With $\\Pi_N\\propto\\nu_0^{\\otimes N}e^{-\\frac NT\\mathcal L[\\mu_x]}$ and normaliser $Z_N$ (Eq. 2.16), for $N>C_1/4\\rho'$: $0\\le\\mathrm{KL}(\\Pi_N\\Vert\\nu^{*\\otimes N})\\le-\\log Z_N-\\frac NT\\min\\mathcal F_T\\le\\frac{C_2}{4\\rho'-C_1/N}$, $C_2\\propto d$ (Thm 2.6 at stationarity, Rem. 2.7); the $O(1)$ is sharp, so $-\\frac1N\\log Z_N=\\frac1T\\min\\mathcal F_T+O(1/N)$."
+    mapping: "$m^N_\\infty\\to\\Pi_N$, $m_\\infty\\to\\nu^*$, $F\\to\\frac1T(\\mathcal L+\\frac\\lambda2\\Vert\\theta\\Vert^2)$, $T=\\sigma^2/2$ (Rem. 2.3); $\\mathcal F=F+H\\to\\frac1T\\mathcal F_T+$ const, $\\nu_0=\\mathcal N(0,\\frac T\\lambda)$; $\\mathcal F^N(m^N_\\infty)-N\\mathcal F(m_\\infty)=-\\log Z_N-\\frac NT\\min\\mathcal F_T$; $\\rho\\to C_{\\rm LSI}/2$; $\\beta_{\\rm umb}\\propto N$."
+    equations: "Eq. (2.16), Prop. 4.3; Thm 2.6 Eq. (2.23) at stationarity; Remark 2.7; Eq. (2.15)"
+    role: master
+  - paper: "2212.03050"
+    result: r2
+    statement: "For $N>C_1/4\\rho'$ the $N$-particle Langevin law obeys $\\mathrm{KL}(\\nu^N_t\\Vert\\nu^{*\\otimes N})\\le\\mathcal F^N(\\nu^N_t)-N\\mathcal F(\\nu^*)\\le(\\mathcal F^N(\\nu^N_{t_0})-N\\mathcal F(\\nu^*))e^{-(4\\rho'-C_1/N)(t-t_0)}+\\frac{C_2}{4\\rho'-C_1/N}$, with $C_1=M^F_{mm}(16+\\frac{6M^F_{mm}\\rho'}{\\rho(\\rho-\\rho')})$, $C_2=dM^F_{mm}(10+\\frac{3M^F_{mm}\\rho'}{\\rho(\\rho-\\rho')})$."
+    mapping: "$m^N_t\\to\\nu^N_t$, $m_\\infty\\to\\nu^*$, $\\rho'\\in(0,\\rho)$; $\\mathcal F^N(m^N)=N\\int F(\\mu_x)dm^N+H(m^N)$ (Eq. 2.15) $=\\mathrm{KL}(m^N\\Vert\\Pi_N)-\\log\\int e^{-NF}$; time in units where the diffusion is $\\sqrt2$."
+    equations: "Thm 2.6, Eq. (2.23); $C_1,C_2$ below (2.23); proof Sec. 5.1 (Lemmas 5.1-5.2)"
+    role: rate
+  - paper: "2212.03050"
+    result: r1
+    statement: "With chaotic start $\\nu^N_0=\\nu_0^{\\otimes N}$, $\\nu_0\\in\\mathcal P_6$ of finite entropy: $\\sup_{t\\ge0}\\frac1NW_2^2(\\nu^N_t,\\nu_t^{\\otimes N})\\le CN^{-\\kappa_{\\rm POC}}$ and, under (2.5) and an $L^{1+}$ initial density, $\\sup_t\\frac1N\\mathrm{KL}(\\nu^N_t\\Vert\\nu_t^{\\otimes N})\\le CN^{-\\kappa_{\\rm POC}}$, $\\kappa_{\\rm POC}=\\min(2\\rho/C_4,1)/(d\\vee4)$ (Cor. 2.8)."
+    mapping: "Paper $\\kappa\\to\\kappa_{\\rm POC}$ (not the umbrella $\\kappa$); here $\\nu_0$ is the initial law, not the prior; $d$ = parameter dimension of one neuron."
+    equations: "Thm 2.7, Eqs. (2.24)-(2.27); Cor. 2.8, Eqs. (2.28)-(2.29)"
+    role: rate
+  - paper: "2212.03050"
+    result: r4
+    statement: "Under (2.1)-(2.4), $\\mathrm{KL}(\\nu_t\\Vert\\nu^*)\\le\\mathcal F(\\nu_t)-\\mathcal F(\\nu^*)\\le(\\mathcal F(\\nu_{t_0})-\\mathcal F(\\nu^*))e^{-4\\rho(t-t_0)}$ (Thm 2.1); with (2.5) and $d\\nu_0/d\\nu^*\\in L^{p_0}$, $p_0>1$, $\\Vert d\\nu_t/d\\nu^*\\Vert_{L^p(\\nu^*)}\\to1$ exponentially for every $p\\in\\mathbb R$ (Thm 2.4), with uniform-in-time concentration (Thm 2.5)."
+    mapping: "$m_t\\to\\nu_t$, $m_\\infty\\to\\nu^*$, $\\rho\\to C_{\\rm LSI}/2$ ($\\rho\\,\\mathrm{Ent}(f^2)\\le\\mathbb E|\\nabla f|^2$), so $e^{-4\\rho t}$ at $T=1$ is the Nitanda/Chizat rate $e^{-2C_{\\rm LSI}Tt}$."
+    equations: "Thm 2.1 Eq. (2.17); Prop. 2.2 Eq. (2.18); Prop. 2.3 Eqs. (2.19)-(2.20)"
+    role: rate
+  - paper: "2212.03050"
+    result: r5
+    statement: "For $\\Phi(\\theta;z)=\\ell(c)\\varphi(a\\cdot z+b)$ with finite truncation $|\\ell|\\le L$, $\\varphi,\\ell$ with four bounded derivatives, square loss and weight decay $\\lambda$, (2.1)-(2.5) hold with $\\rho=\\frac\\lambda2e^{-2(\\Vert f\\Vert_{L^1}+\\Vert\\ell\\Vert_\\infty)\\Vert\\ell\\Vert_\\infty}$; numerics ($K=1000$, $N=64$-$1024$) show an $N$-independent loss decay and residual fitted by $0.001+0.448/N$."
+    mapping: "$\\theta=(c,a,b)\\to$ (readout, input weights, bias), readout bounded by $L$; $K\\to P$; $\\mu$ = data law; $\\gamma=\\sqrt N$, $\\kappa=1$; numerics $\\sigma=1$ ($T=\\frac12$), $\\lambda=10^{-5}$."
+    equations: "Examples 2 and 4, Eqs. (3.4)-(3.10); Remarks 3.5-3.8; Sec. 3.3, Table 1, Figs. 2-3"
+    role: rate
+  - paper: "2402.07355"
+    statement: "For linearly convex $\\mathcal L$ with Lipschitz Wasserstein gradient and a uniform LSI ($\\bar C_{\\rm LSI}$) for all proximal Gibbs measures, the finite-$N$ Gibbs posterior obeys $\\mathrm{KL}(\\mu^{1:k}\\Vert\\hat\\nu^{\\otimes k})\\le\\frac{33\\beta\\bar C_{\\rm LSI}dk}{2TN}$ for $N\\ge80\\beta\\bar C_{\\rm LSI}/T$; at $k=N$ the KL is $O(1)$."
+    mapping: "$\\sigma^2/2\\to T$; $\\pi\\to\\hat\\nu$; $F_0$ (loss summed over data) $\\to\\mathcal L$; $\\frac\\lambda2\\Vert x\\Vert^2\\to\\nu_0=\\mathcal N(0,\\frac T\\lambda I)$; $\\mu^{1:N}$ (Eq. 2.3) $\\to$ finite-$N$ Gibbs posterior, likelihood $N/T$ per datum; $\\beta$ smoothness; $d$ neuron-parameter dimension."
+    equations: "Thm 5, Sec. 3.1.2; proof App. A.3 (Lemma 19, A.6-A.7); laws Eqs. (2.2), (2.3)"
+    role: rate
+  - paper: "2402.07355"
+    result: r3
+    statement: "For linearly convex, smooth $\\mathcal L$ with Wasserstein gradient bounded by $B$, the finite-$N$ Gibbs posterior satisfies an LSI with $C_{\\rm LSI}\\lesssim\\frac{2T}{\\lambda}\\exp O\\big(\\frac{B^2}{2\\lambda T}+\\frac{\\beta d}{\\lambda}e^{8B^2/\\lambda T}\\big)$ for all $N\\gtrsim\\frac{\\beta d}{\\lambda}e^{4B^2/\\lambda T}$: uniform in $N$, doubly exponential in $B^2/\\lambda T$."
+    mapping: "$\\sigma^2=2T$; $\\lambda$ weight decay ($\\nu_0=\\mathcal N(0,\\frac T\\lambda I)$); $B$ bound on $\\Vert\\nabla\\delta\\mathcal L/\\delta\\nu\\Vert$ (Ass. 8); $\\mu^{1:N}\\to$ finite-$N$ Gibbs posterior; LSI via a Lipschitz (Kim-Milman) transport map, $C_{\\rm LSI}\\le L^2$."
+    equations: "Cor. 25, Eq. (B.4); Lemmas 21-24, Thm 26 (App. B.3)"
+    role: rate
+  - paper: "2402.07355"
+    result: r1
+    statement: "For pairwise energies $\\int V\\,d\\nu+\\iint W(x-y)\\,d\\nu\\,d\\nu+T\\int\\nu\\log\\nu$ with weak interaction, $\\mathrm{KL}(\\mu^{1:k}\\Vert\\hat\\nu^{\\otimes k})=\\tilde O(dk^2/N^2)$, sharp for Gaussians (Thm 3); under convexity alone $W_2^2$ and KL are $O(dk/N)$ (Thm 4). Generic interacting particles, not a network."
+    mapping: "$\\sigma^2/2\\to T$; $\\pi$ (Eq. 1.1) $\\to\\hat\\nu$; $\\mu^{1:N}$ (Eq. 2.1) $\\to$ finite-$N$ Gibbs law with $\\lambda=0$; a translation-invariant $W$ excludes the two-layer interaction $\\sum_\\mu h(\\theta,x_\\mu)h(\\theta^\\prime,x_\\mu)$."
+    equations: "Thm 3, Eq. (3.1); Thm 4, Eqs. (3.2)-(3.3); Example 10 (App. C)"
+    role: rate
+  - paper: "2402.07355"
+    result: r2
+    statement: "Sampling $\\hat\\nu$: run a log-concave sampler on the finite-$N$ Gibbs law and keep one particle; the error is the sampler error over $\\sqrt N$ plus the chaos bias. In the general (network) setting ULMC with the proximal sampler reaches $\\sqrt{\\mathrm{KL}}\\le\\varepsilon$ with $\\tilde O(\\kappa^{5/2}d^{3/2}/\\varepsilon^3)$ gradient calls."
+    mapping: "$\\kappa_{\\rm paper}=\\beta\\bar C_{\\rm LSI}/\\sigma^2$ is a condition number, not the map's $\\kappa$; $\\mu^{1:N}\\to$ finite-$N$ Gibbs law; $\\pi\\to\\hat\\nu$; $M\\cdot N$ oracle calls (Table 1)."
+    equations: "Algorithm 1, Sec. 4; Table 1; Examples 11, 13; App. E"
+    role: rate
+  - paper: "2405.15767"
+    result: r1
+    statement: "With $Z_N=\\mathbb E_{\\nu_0^{\\otimes N}}e^{-N\\mathcal L/T}$: $\\frac TN\\mathrm{KL}(\\mu^{(N)}\\Vert\\hat\\nu^{\\otimes N})\\le-\\frac TN\\log Z_N-\\min\\mathcal F_T\\le\\frac{LR^2}{2N}$, free of LSI constants, for a convex $L$-smooth loss averaged over the $P$ data and $R^2\\ge\\sup_x\\mathbb E_{\\hat\\nu}h(\\theta,x)^2$."
+    mapping: "$\\lambda\\to T$; weight decay $\\lambda^\\prime\\to\\nu_0=\\mathcal N(0,\\frac{T}{2\\lambda^\\prime}I)$; $F_0=\\frac1n\\sum\\ell\\to\\mathcal L$ (averaged, $n=P$); $\\mu_*\\to\\hat\\nu$; $\\mu_*^{(N)}$ (Eq. 9) $\\to$ finite-$N$ Gibbs posterior, likelihood $N/(TP)$ per datum; $\\frac1N\\mathcal L^{(N)}(\\mu_*^{(N)})\\to-\\frac TN\\log Z_N$ (+ const); $L$ loss smoothness."
+    equations: "Thm 1, Eq. (15); proof Thm 3 and App. 5.1; laws Eqs. (9)-(10)"
+    role: rate
+  - paper: "2405.15767"
+    result: r2
+    statement: "Under an LSI ($\\bar\\alpha$) for the finite-$N$ Gibbs law, $N$-neuron noisy gradient descent obeys $\\frac1N\\mathcal L^{(N)}(\\mu_k)-\\min\\mathcal F_T\\le\\frac{LR^2}{2N}+\\frac{\\delta_\\eta}{2\\bar\\alpha T}+e^{-\\bar\\alpha T\\eta k}\\Delta_0$ (continuous time: no $\\delta_\\eta$, rate $e^{-2\\bar\\alpha Tt}$); the particle term is LSI-free."
+    mapping: "$\\lambda\\to T$; $\\bar\\alpha\\to1/C_{\\rm LSI}$ of the $N$-neuron law; $\\eta$ step size (not the noise); $\\delta_\\eta$ discretisation error; $\\Delta_0$ initial gap; requires $\\eta\\lambda^\\prime<\\frac12$."
+    equations: "Thm 2 (parts 1-2); dynamics Eqs. (8), (12); Ass. 4; proof App. 5.2"
+    role: rate
+  - paper: "2405.15767"
+    result: r3
+    statement: "Single-neuron marginal of noisy GD from i.i.d. initialisation: $T\\,\\mathrm{KL}(\\mu_{k,1}\\Vert\\hat\\nu)\\le\\frac{LR^2}{2N}+\\frac{\\delta_\\eta}{2\\bar\\alpha T}+e^{-\\bar\\alpha T\\eta k}\\Delta_0$ (Cor. 1); with a uniform LSI also uniform-in-time chaos, $\\frac1NW_2^2(\\mu_t^{(N)},\\mu_t^{\\otimes N})\\le\\frac4{\\alpha T}(\\frac{LR^2}{2N}+\\dots)$ (Cor. 2)."
+    mapping: "$\\lambda\\to T$; $\\alpha$, $\\bar\\alpha\\to1/C_{\\rm LSI}$ of proximal Gibbs and $N$-neuron laws; $\\mu_*\\to\\hat\\nu$; entropy sandwich $T\\,\\mathrm{KL}(\\nu\\Vert\\hat\\nu)\\le\\mathcal F_T[\\nu]-\\mathcal F_T[\\hat\\nu]$ (Eq. 16)."
+    equations: "Cor. 1 (via Eq. (16)); Cor. 2; TV version after Cor. 2"
+    role: rate
+  - paper: "2405.15767"
+    statement: "Exact identity: for any $\\nu$, the finite-$N$ Gibbs posterior is $\\mu^{(N)}\\propto e^{-\\frac NTB_{\\mathcal L}(\\rho_\\theta,\\nu)}\\,\\hat\\nu_\\nu^{\\otimes N}$, i.i.d. proximal Gibbs neurons tilted by the Bregman divergence of the loss at the empirical measure; the tilt vanishes for a loss linear in the output."
+    mapping: "$\\lambda\\to T$; $\\hat\\mu\\to\\hat\\nu_\\nu\\propto\\nu_0e^{-\\frac1T\\delta\\mathcal L/\\delta\\nu[\\nu]}$; $B_F$ (Eq. 18) $=B_{F_0}$ since the prior part is linear; $\\mu_{\\mathbf x}\\to\\rho_\\theta$; Thm 3: gap $=N\\mathbb E_{\\hat\\nu^{\\otimes N}}B-$ a non-negative term."
+    equations: "Eqs. (18)-(19), Sec. 4; Props. 1-2, Eqs. (20)-(22); Thm 3, Eqs. (23)-(24)"
+    role: variant
+  - paper: "2409.10440"
+    result: r1
+    statement: "For every $N\\ge1$, linearly convex $\\mathcal L$ with $\\Vert\\nabla_1\\nabla_2\\delta^2\\mathcal L\\Vert_{\\rm op}\\le\\beta$ and Wasserstein gradient $\\le B$, and a $\\lambda$-strongly convex prior potential, the finite-$N$ Gibbs posterior is an $L$-Lipschitz image of a Gaussian, $L\\lesssim\\sqrt{2T/\\lambda}\\,e^{O({\\rm poly})}$, so $C_{\\rm LSI}\\le L^2$ uniformly in $N$."
+    mapping: "$\\sigma^2/2\\to T$; $\\mu^{1:N}\\propto e^{-\\frac{2N}{\\sigma^2}F}$ (Eq. 1.4) $\\to$ finite-$N$ Gibbs posterior; $V=\\frac\\lambda2\\Vert x\\Vert^2\\to\\nu_0=\\mathcal N(0,\\frac T\\lambda I)$; $\\pi$ (Eq. 1.3) $\\to\\hat\\nu$; $\\beta$, $B$ regularity constants, not inverse temperature; ${\\rm poly}=\\frac{\\beta d}\\lambda+\\frac{B^2}{\\lambda\\sigma^2}+\\dots$"
+    equations: "Thm 2, Sec. 2; consequences Eq. (2.1) and LSI $C_{\\rm LSI}\\le L^2$"
+    role: rate
+  - paper: "2409.10440"
+    result: r2
+    statement: "Dimension-free version for $\\mathcal L=\\frac1P\\sum_\\mu\\ell(\\mathbb E_\\nu h(\\theta,x_\\mu),y_\\mu)$ with $\\ell$ convex, $L_\\ell$-Lipschitz, $\\beta_\\ell$-smooth and $h$ $L_h$-Lipschitz in all parameters, e.g. $h=\\mathrm{ReLU}(\\theta\\cdot x)$ with no trainable readout: $L\\lesssim\\sqrt{2T/\\lambda}\\,e^{O(L_h^2\\beta_\\ell/\\lambda+\\dots)}$. The squared loss and a trainable linear readout are excluded."
+    mapping: "Example 1: $\\beta=L_h^2\\beta_\\ell$, $B=L_hL_\\ell$; $L_h=\\max_\\mu\\Vert x_\\mu\\Vert$ for ReLU; loss averaged over data; $\\sigma^2/2\\to T$; $\\mu^{1:N}\\to$ finite-$N$ Gibbs posterior."
+    equations: "Thm 3, Example 1, Sec. 2"
+    role: rate
+  - paper: "2409.10440"
+    statement: "For every $N\\ge1$ and heterogeneous prior potentials, the finite-$N$ posterior is $O(1)$ in KL from a product of proximal Gibbs laws: $\\mathrm{KL}(\\mu^{1:N}\\Vert\\otimes_i\\hat\\nu^i)\\le\\frac{\\beta}{2T}\\min\\{\\bar C_{\\rm PI},\\frac2\\alpha+\\frac{2B^2}{\\alpha^2T^2}\\}$ for networks (Thm 8); for general $\\mathcal L$ a bound carrying $d$ (Thm 7)."
+    mapping: "$\\pi^i\\propto e^{-V_i-\\frac1T\\delta\\mathcal L[\\bar\\pi]}\\to\\hat\\nu^i$; $\\alpha$ strong convexity of $V_i$ (not $P/N$); $\\bar C_{\\rm PI}$ Poincare constant of the $\\pi^i$; $\\sigma^2=2T$; proof via the Bregman tilt of Nitanda Eq. (19), output variance $\\frac{\\beta_\\ell}{2N^2}\\sum_i\\mathrm{var}_{\\pi^i}h$."
+    equations: "Thm 7 (Sec. 4.1), Thm 8 (Sec. 4.2), with proofs"
+    role: rate
+  - paper: "2403.14917"
+    result: r1
+    statement: "Two-timescale limit (readout at its ridge optimum $a_\\nu$): the reduced loss $G(\\nu)$ is convex in $\\nu$ with $\\frac{\\delta G}{\\delta\\nu}=T(-\\frac{\\kappa}{2D_{\\rm out}}\\Vert a_\\nu(w)\\Vert^2+\\frac{\\lambda_w}2\\Vert w\\Vert^2)$; for $|h|\\le1$ and convex losses the proximal Gibbs law satisfies an LSI, MFLD converges as $e^{-2\\alpha Tt}$, and the $N$-particle discretisation errs by $O(1/N)$ plus a step-size term."
+    mapping: "$\\lambda\\to T$; $\\mu\\to\\nu$, $\\nu=\\mathcal N(0,I/\\lambda_w)\\to\\nu_0$; $\\lambda_a\\to\\kappa$; tasks $T\\to D_{\\rm out}$; $\\alpha\\to1/C_{\\rm LSI}$; the prior is fixed as $T$ varies ($\\bar\\lambda=\\lambda\\cdot\\lambda_{a,w}$), so $T$ is the map’s $1/\\beta$; Gibbs law of the profiled (readout-maximised) objective."
+    equations: "Thm 3.1, Eq. (3) (App. B.1); Lemma 3.5 (App. B.2); Thm 3.7 (App. B.3)"
+    role: extension
+reduces_to:
+  - {target: S04, limit: "$L=1$, Gaussian readout integrated out: $\\kappa=1$, $\\eta=TP$ for a loss averaged over $P$ (algebra confirmed; no cited theorem covers a trainable Gaussian readout)", conjectural: true}
+open_problems: [op-02, op-03]
