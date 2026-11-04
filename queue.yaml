@@ -1145,3 +1145,64 @@
   status: added
   doi: "10.1038/s41467-018-03101-6"
   note: "No arXiv version; ingest from the published version (INGEST.md 3.3b)."
+# RG literature scan 2026-11-04 (user-requested exception to "only papers from the reference note"):
+- id: "1610.09733"
+  cited_as: "Bradde & Bialek 2016"
+  title: "PCA meets RG"
+  year: 2016
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "1906.05301"
+  cited_as: "Cohen et al. 2019"
+  title: "Learning Curves for Deep Neural Networks: A Gaussian Field Theory Perspective"
+  year: 2019
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2004.01190"
+  cited_as: "Naveh et al. 2020"
+  title: "Predicting the outputs of finite deep neural networks trained with noisy gradients"
+  year: 2020
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2204.12939"
+  cited_as: "Berman et al. 2022"
+  title: "On the Dynamics of Inference and Learning"
+  year: 2022
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2212.11379"
+  cited_as: "Berman & Klinger 2022"
+  title: "The Inverse of Exact Renormalization Group Flows as Statistical Inference"
+  year: 2022
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2405.17538"
+  cited_as: "Howard et al. 2024"
+  title: "Bayesian RG Flow in Neural Network Field Theories"
+  year: 2024
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2502.18553"
+  cited_as: "Ringel et al. 2025"
+  title: "Applications of Statistical Field Theory in Deep Learning"
+  year: 2025
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2607.10770"
+  cited_as: "Le Pera & Nordio 2026"
+  title: "Learning as a Geometric Phase Transition: Renormalization Group Flow and Anisotropic Symmetry Breaking in Deep Networks"
+  year: 2026
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2608.20403"
+  cited_as: "Howard et al. 2026"
+  title: "Criticality in Neural Network Function Space through Wilsonian Fixed Points and Finite-Width Corrections"
+  year: 2026
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2610.36113"
+  cited_as: "Chen et al. 2026"
+  title: "Scaling and Renormalization in Neural Networks: An Effective Renormalization-Group Description of Grokking"
+  year: 2026
+  status: added
+  source: "RG literature scan 2026-11-04"
