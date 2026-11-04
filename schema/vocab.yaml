@@ -736,6 +736,32 @@ fields:
       rate: {label: "rate or bound", desc: "A quantitative version: a convergence rate, an error bound."}
       check: {label: check, desc: "A numerical or empirical test."}
 
+  rg_sense:
+    label: RG sense
+    band: statement
+    multi: false
+    empty: false
+    # Only for statements with family: rg. The five senses in which the literature says "renormalisation".
+    values:
+      a: {label: "(a) Wilsonian RG over data or kernel eigenmodes", desc: "Modes of the data covariance or of the kernel are integrated out shell by shell and a parameter (ridge, coupling) flows."}
+      b: {label: "(b) RG over depth, criticality, effective theory", desc: "The layer index is the scale: kernel and vertices flow with depth, with corrections in L/N, or a trained network is coarse-grained."}
+      c: {label: "(c) neural-network field theory and its RG", desc: "A network ensemble is a field theory: infinite width is the free theory, 1/N the interaction; couplings run with a cutoff."}
+      d: {label: "(d) learning as RG on data", desc: "Learning or inference is read as coarse-graining of the data or of a generative model, with information-theoretic scales."}
+      e: {label: "(e) kernel renormalisation at P ∝ N", desc: "Integrating layers or neurons out at P ∝ N renormalises the kernel by a readout-side order parameter."}
+
+  maturity:
+    label: Maturity
+    band: statement
+    multi: false
+    empty: false
+    # Only for statements with family: rg. How far the RG reading is developed, not how true the underlying formula is.
+    values:
+      mature: {label: mature, desc: "Exact or rigorous, cross-validated by independent papers, and closed."}
+      solid: {label: solid, desc: "Physics-level derivation, well tested numerically or against other derivations; closure or order stated."}
+      partial: {label: partial, desc: "Exact in a restricted setting or one step, with the rest asserted or unchecked."}
+      early: {label: early, desc: "A flow or coupling is written down, but only at first order or tree level, with little testing."}
+      heuristic: {label: heuristic, desc: "A definition, an analogy or a correspondence; no flow is computed for a network."}
+
 # Free-text fields: not vocabulary-controlled, but every one has a limit and
 # none may be blank. `unknown` / `not-stated` are allowed where marked.
 # Words are whitespace-separated tokens; each $…$ math span counts as one word.

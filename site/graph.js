@@ -39,6 +39,7 @@
   ];
   var REGION = {};
   REGIONS.forEach(function (r) { REGION[r.id] = r; });
+  REGION.rg = { id: "rg", label: "Renormalisation-group layer", sub: "" };   // not drawn as a region; labels RG statements
 
   // A result goes to the first of its width/limit values in this order.
   var WIDTH_ORDER = ["inf-meanfield-propP", "finite-proportional", "inf-meanfield-fixedP", "large-width-1/N",
@@ -53,6 +54,7 @@
   var D, h, svg, root, zoom, sim, nodes, links, ops, hubs, papers, byBase;
   var panel, scrim, tip, query = "";
   var VIEW = "statements", STMT = [], sById = {}, arrows = [], sops = [], gS, gR;
+  var RGS = [], ALLS = [], rglinks = [], gRG;   // the RG layer: statements with family rg, and their links to the main statements
 
   function regionOf(view) {
     var w = view.width_limit || [];
@@ -542,7 +544,7 @@
         el("a", { href: "table.html?p=" + encodeURIComponent(p.key) }, "Full entry in the table"),
         h.extLink(p.links.abs, p.id.indexOf("doi:") === 0 ? "Publisher ↗" : p.id.indexOf("ref:") === 0 ? "Source ↗" : "arXiv ↗")),
       el("p", { class: "oneline" }, p.one_line),
-      STMT.length ? el("p", { class: "muted" }, placed ? placed + " of its " + plural(p.results.length, "result") + (placed === 1 ? " belongs" : " belong") + " to a statement." :
+      ALLS.length ? el("p", { class: "muted" }, placed ? placed + " of its " + plural(p.results.length, "result") + (placed === 1 ? " belongs" : " belong") + " to a statement." :
         "None of its results is placed under a statement yet.") : null,
       el("h3", null, "Its results and the statement each belongs to"),
       p.results.map(function (r) {
@@ -555,7 +557,7 @@
           el("div", { class: "result-head" }, h.statusPill(r.status), h.sourceLink(r),
             sn ? el("span", { class: "muted" }, "written in " + h.lab("canonical_variables", r.canonical.variables) +
               " · " + h.lab("canonical_approximation", r.canonical.approximation)) : null,
-            !sn && STMT.length ? el("span", { class: "muted" }, "not placed under a statement") : null,
+            !sn && ALLS.length ? el("span", { class: "muted" }, "not placed under a statement") : null,
             VIEW === "results" && n && n.np > 1 ? el("span", { class: "muted" }, "also in " + plural(n.np - 1, "other paper")) : null));
       }),
       out.length || inc.length ? el("h3", null, "Relations in the map") : null,
@@ -595,6 +597,23 @@
     grouping: { short: "grouping", long: "Grouping: the members share an object or a setting; they are placed together, not shown equal." }
   };
 
+  // The RG layer sits in a column to the right of the limit plane (statements view only).
+  var RGCOL = { x: W + 44, w: 330, y: 0, h: H };
+  var VB_PLAIN = [-70, -46, W + 84, H + 56], VB_RG = [-70, -46, W + 84 + 380, H + 56];
+  var REL = {   // how an RG statement relates to a main statement (statement.links[].relation)
+    reproduces: { label: "reproduces", rev: "reproduced by", long: "in the stated limit it is the same formula, under the symbol mapping given" },
+    extends: { label: "extends", rev: "extended by", long: "it contains the main statement as a special case or adds an ingredient" },
+    contradicts: { label: "contradicts", rev: "contradicted by", long: "the two make incompatible claims about the same object" },
+    unrelated: { label: "unrelated", rev: "unrelated", long: "a reader might expect a link, but the objects differ" },
+    "reduces-to": { label: "reduces to", rev: "reduced to by", long: "in the limit written, it becomes the main statement" }
+  };
+  var REL_FWD = { "reproduced-by": "reproduces", "extended-by": "extends", "contradicted-by": "contradicts", unrelated: "unrelated" };
+  var REL_ORDER = ["reproduces", "extends", "contradicts", "unrelated"];
+  function relLabel(r) { return (REL[r] || { label: r.replace(/-/g, " ") }).label; }
+  function relRev(r) { return (REL[r] || { rev: r.replace(/-/g, " ") }).rev; }
+  function senseLetter(s) { return s.sense ? "(" + s.sense + ")" : ""; }
+  function senseText(s) { return s.sense ? h.lab("rg_sense", s.sense) : ""; }
+
   // LaTeX in a short label (SVG text cannot hold KaTeX) to plain Unicode.
   var TEX = [
     [/\\alpha/g, "α"], [/\\beta/g, "β"], [/\\gamma/g, "γ"], [/\\kappa/g, "κ"], [/\\eta/g, "η"], [/\\rho/g, "ρ"],
@@ -613,7 +632,7 @@
 
   function smodel() {
     sById = {};
-    STMT = (D.statements || []).map(function (s) {
+    var mkNode = function (s) {
       var n = {
         s: s, id: s.id, region: WIDTH_REGION[s.width_limit] || "exact", np: s.n_papers,
         r: SR + SK * Math.sqrt(s.n_papers), red: (s.disagreements || []).length
@@ -621,7 +640,12 @@
       n.name = plainTex(s.title);
       sById[s.id] = n;
       return n;
-    });
+    };
+    STMT = (D.statements || []).filter(function (s) { return s.family !== "rg"; }).map(mkNode);
+    RGS = (D.statements || []).filter(function (s) { return s.family === "rg"; }).map(mkNode);
+    RGS.sort(function (a, b) { return (a.s.sense || "z").localeCompare(b.s.sense || "z") || a.id.localeCompare(b.id); });
+    RGS.forEach(function (n) { n.rg = true; n.region = "rg"; });
+    ALLS = STMT.concat(RGS);
     // Each region lays its statements on a grid (label room below every dot).
     REGIONS.forEach(function (reg) {
       var mem = STMT.filter(function (n) { return n.region === reg.id; });
@@ -655,6 +679,23 @@
     arrows.forEach(function (a) {
       var twin = arrows.filter(function (b) { return b !== a && b.source === a.target && b.target === a.source; }).length;
       a.bend = twin ? 0.28 : 0.14;
+    });
+    // The RG column: one row per RG statement, ordered by sense.
+    var top = 86, bottom = H - 24, k = RGS.length;
+    RGS.forEach(function (n, i) {
+      n.x = RGCOL.x + 52;
+      n.y = top + (bottom - top) * (k <= 1 ? 0.5 : (i + 0.5) / k);
+    });
+    rglinks = [];
+    RGS.forEach(function (n) {
+      (n.s.links || []).forEach(function (l) {
+        var t = sById[l.target];
+        if (t) rglinks.push({ source: n, target: t, rel: l.relation, note: l.note });
+      });
+      (n.s.reduces_to || []).forEach(function (r) {
+        var t = sById[r.target];
+        if (t) rglinks.push({ source: n, target: t, rel: "reduces-to", note: r.limit });
+      });
     });
     smodelOps();
   }
@@ -734,6 +775,51 @@
       t.attr("dy", -3);
     });
 
+    // The RG layer: a column on the right; lines from each RG statement to the main statements it links to.
+    gRG = gS.append("g").attr("class", "gr-rg");
+    var cg = gRG.append("g").attr("class", "gr-rgcol");
+    cg.append("rect").attr("class", "gr-region gr-rgframe").attr("x", RGCOL.x).attr("y", RGCOL.y + 3).attr("width", RGCOL.w).attr("height", RGCOL.h - 6);
+    cg.append("text").attr("class", "gr-rlabel").attr("x", RGCOL.x + 14).attr("y", 23).text("Renormalisation group");
+    cg.append("text").attr("class", "gr-rsub").attr("x", RGCOL.x + 14).attr("y", 40)
+      .text(RGS.length + " RG statements · (a)–(e) by sense · lines: links to S01–S15");
+    cg.append("text").attr("class", "gr-rsub").attr("x", RGCOL.x + 14).attr("y", 58)
+      .text("fill = maturity: mature → heuristic");
+    var lgr = gRG.append("g").attr("class", "gr-rglinks");
+    rglinks.forEach(function (l) {
+      var rel = REL[l.rel] ? l.rel : "other";
+      var g = lgr.append("g").attr("class", "gr-rglink rel-" + rel);
+      var tgt = l.target, src = l.source;
+      var x1 = src.x - src.r - 2, y1 = src.y, x2 = tgt.rg ? tgt.x : tgt.x + tgt.r + 3, y2 = tgt.y;
+      var dx = x1 - x2, c = Math.min(260, Math.abs(dx) * 0.45 + 40);
+      g.append("path").attr("d", "M" + x1.toFixed(1) + "," + y1.toFixed(1) + " C" + (x1 - c).toFixed(1) + "," + y1.toFixed(1) +
+        " " + (x2 + (tgt.rg ? c : c)).toFixed(1) + "," + y2.toFixed(1) + " " + x2.toFixed(1) + "," + y2.toFixed(1));
+      g.append("title").text(src.id + " " + relLabel(l.rel) + " " + tgt.id + ": " + l.note);
+      l.el = g.node();
+    });
+    var rgn = gRG.append("g").attr("class", "gr-rgnodes");
+    RGS.forEach(function (n) {
+      var s = n.s;
+      var g = rgn.append("g").attr("class", "gr-snode gr-rgnode mat-" + s.maturity + (s.kind === "collapse" ? "" : " group") + (n.red ? " red" : ""))
+        .attr("transform", "translate(" + n.x.toFixed(1) + "," + n.y.toFixed(1) + ")")
+        .attr("tabindex", 0).attr("role", "button")
+        .attr("aria-label", s.id + ", " + s.title + ", sense " + s.sense + ", maturity " + s.maturity + ", " + plural(n.np, "paper"));
+      if (n.red) g.append("circle").attr("class", "gr-sred").attr("r", n.r + 6);
+      g.append("circle").attr("class", "gr-sdot gr-rgdot").attr("r", n.r);
+      g.append("text").attr("class", "gr-scount").attr("y", 5).attr("text-anchor", "middle").text(n.np);
+      var t = g.append("text").attr("class", "gr-slabel gr-rglabel").attr("text-anchor", "start");
+      var lines = wrap(n.name, 27);
+      t.append("tspan").attr("class", "id").attr("x", n.r + 10).attr("y", -6).text(s.id + " · " + senseLetter(s) + " · " + s.maturity);
+      lines.slice(0, 3).forEach(function (line, i) {
+        t.append("tspan").attr("x", n.r + 10).attr("y", 9 + 14 * i).text(i === 2 && lines.length > 3 ? line + "…" : line);
+      });
+      n.el = g.node();
+      g.on("mouseenter", function (ev) { if (panel.hidden) smark([n], n); tipFor(sTip(n), ev); })
+        .on("mousemove", function (ev) { moveTip(ev); })
+        .on("mouseleave", function () { hideTip(); if (panel.hidden) smark(null); })
+        .on("click", function (ev) { ev.stopPropagation(); openStatement(n); })
+        .on("keydown", function (ev) { if (ev.key === "Enter") openStatement(n); });
+    });
+
     var og = gS.append("g").attr("class", "gr-sops");
     sops.forEach(function (op) {
       var g = og.append("g").attr("class", "gr-op").attr("tabindex", 0).attr("role", "button")
@@ -782,7 +868,8 @@
     var s = n.s;
     return [
       h.el("div", { class: "t" }, s.id + " · " + n.name),
-      h.el("div", { class: "a" }, REGION[n.region].label + " · " + KIND[s.kind].short + " · " + h.lab("status", s.status)),
+      n.rg ? h.el("div", { class: "a" }, "RG statement " + senseLetter(s) + " · maturity: " + s.maturity + " · " + KIND[s.kind].short + " · " + h.lab("status", s.status))
+        : h.el("div", { class: "a" }, REGION[n.region].label + " · " + KIND[s.kind].short + " · " + h.lab("status", s.status)),
       h.el("div", null, plain(s.claim)),
       h.el("div", { class: "a" }, plural(n.np, "paper") + (n.red ? " · papers disagree" : "") + ". Click for the formula and the papers.")
     ];
@@ -794,17 +881,26 @@
     if (!svg) return;
     if (!set) {
       svg.classed("sfocus", false);
-      STMT.forEach(function (x) { x.el.classList.remove("hi", "sel"); });
+      ALLS.forEach(function (x) { x.el.classList.remove("hi", "sel"); });
       arrows.forEach(function (a) { a.el.classList.remove("hi"); });
+      rglinks.forEach(function (l) { l.el.classList.remove("hi"); });
       return;
     }
     var on = set.slice();
-    if (centre) arrows.forEach(function (a) {
-      if (a.source === centre && on.indexOf(a.target) < 0) on.push(a.target);
-      if (a.target === centre && on.indexOf(a.source) < 0) on.push(a.source);
-    });
+    if (centre) {
+      arrows.forEach(function (a) {
+        if (a.source === centre && on.indexOf(a.target) < 0) on.push(a.target);
+        if (a.target === centre && on.indexOf(a.source) < 0) on.push(a.source);
+      });
+      // RG layer: an RG statement lights the main statements it links to, and a main statement the RG statements that link to it.
+      rglinks.forEach(function (l) {
+        if (l.rel === "unrelated") return;
+        if (l.source === centre && on.indexOf(l.target) < 0) on.push(l.target);
+        if (l.target === centre && on.indexOf(l.source) < 0) on.push(l.source);
+      });
+    }
     svg.classed("sfocus", true);
-    STMT.forEach(function (x) {
+    ALLS.forEach(function (x) {
       x.el.classList.toggle("hi", on.indexOf(x) >= 0);
       x.el.classList.toggle("sel", set.indexOf(x) >= 0);
     });
@@ -812,7 +908,27 @@
       a.el.classList.toggle("hi", centre ? (a.source === centre || a.target === centre)
         : (set.indexOf(a.source) >= 0 && set.indexOf(a.target) >= 0));
     });
+    rglinks.forEach(function (l) {
+      l.el.classList.toggle("hi", !!centre && (l.source === centre || l.target === centre));
+    });
   }
+
+  // The RG statements that link to a main statement: from the RG side, plus links written on the main statement itself.
+  function rgViewOf(n) {
+    var out = [];
+    rglinks.forEach(function (l) {
+      if (l.target === n && l.rel !== "reduces-to") out.push({ n: l.source, rel: l.rel, note: l.note });
+    });
+    (n.s.links || []).forEach(function (l) {
+      var t = sById[l.target];
+      if (t && t.rg && !out.some(function (o) { return o.n === t; })) out.push({ n: t, rel: REL_FWD[l.relation] || l.relation, note: l.note });
+    });
+    return out.sort(function (a, b) {
+      return REL_ORDER.indexOf(a.rel) - REL_ORDER.indexOf(b.rel) || a.n.id.localeCompare(b.n.id);
+    });
+  }
+
+  function matPill(s) { return h.el("span", { class: "pill mat mat-" + s.maturity, title: h.desc("maturity", s.maturity) }, s.maturity); }
 
   function stmtButton(id, extra) {
     var n = sById[id];
@@ -830,17 +946,18 @@
     var keys = s.papers.slice().sort(function (a, b) { return papers[a].p.year - papers[b].p.year; });
     var down = (s.reduces_to || []).filter(function (r) { return sById[r.target]; });
     var up = [];
-    STMT.forEach(function (x) {
+    ALLS.forEach(function (x) {
       (x.s.reduces_to || []).forEach(function (r) { if (r.target === s.id) up.push({ n: x, limit: r.limit, conj: !!r.conjectural }); });
     });
     var ops = (s.open_problems || []).map(function (id) {
       return (D.open_problems || []).filter(function (o) { return o.id === id; })[0];
     }).filter(Boolean);
     showPanel([
-      el("p", { class: "gr-kind" }, "Statement " + s.id + (s.family ? " · " + s.family : "")),
+      el("p", { class: "gr-kind" }, n.rg ? "RG statement " + s.id + " · renormalisation-group layer" : "Statement " + s.id),
       el("h2", null, s.title),
-      el("div", { class: "authors" }, REGION[n.region].label + " · " + h.labs("learning_rule", s.learning_rule) + " · " +
-        plural(n.np, "paper")),
+      n.rg ? el("div", { class: "authors" }, senseText(s), " · maturity ", matPill(s)) : null,
+      el("div", { class: "authors" }, (n.rg ? "Where it holds: " + h.lab("width_limit", s.width_limit) : REGION[n.region].label) + " · " +
+        h.labs("learning_rule", s.learning_rule) + " · " + plural(n.np, "paper")),
       el("p", { class: "oneline gr-claim" }, s.claim),
       el("div", { class: "gr-formula" }, s.formula),
       s.formula_note ? el("p", { class: "muted gr-fnote" }, s.formula_note) : null,
@@ -858,10 +975,9 @@
         return el("li", null, stmtButton(x.n.id), el("div", { class: "muted gr-lim" }, "in the limit: ", limitSpan(x.limit)),
           x.conj ? el("div", { class: "gr-conj" }, "conjectural: outside the hypotheses of the cited theorems") : null);
       })) : null,
-      (s.links || []).length ? el("h3", null, "Related statements") : null,
-      (s.links || []).length ? el("ul", { class: "plain" }, s.links.map(function (l) {
-        return el("li", null, stmtButton(l.target), el("span", { class: "muted" }, " · " + l.relation.replace(/-/g, " ")), el("div", { class: "muted gr-lim" }, l.note));
-      })) : null,
+      n.rg ? rgLinksBlock(n) : null,
+      n.rg ? null : relatedBlock(n),
+      n.rg ? null : rgViewBlock(n),
       (s.disagreements || []).length ? el("h3", { class: "gr-red-h" }, "Where papers disagree") : null,
       (s.disagreements || []).map(function (d) {
         return el("div", { class: "gr-disagree" }, el("div", null, d.note),
@@ -895,6 +1011,53 @@
 
   function roleLabel(role) { return h.lab("member_role", role); }
 
+  // Main statement: links to other main statements (links to RG statements go to the RG view).
+  function relatedBlock(n) {
+    var ls = (n.s.links || []).filter(function (l) { return !(sById[l.target] && sById[l.target].rg); });
+    if (!ls.length) return null;
+    return h.el("div", null, h.el("h3", null, "Related statements"),
+      h.el("ul", { class: "plain" }, ls.map(function (l) {
+        return h.el("li", null, stmtButton(l.target), h.el("span", { class: "muted" }, " · " + l.relation.replace(/-/g, " ")), h.el("div", { class: "muted gr-lim" }, l.note));
+      })));
+  }
+
+  // Main statement: the RG view, i.e. which renormalisation statements say something about it.
+  function rgViewBlock(n) {
+    if (!RGS.length) return null;
+    var v = rgViewOf(n), el = h.el;
+    return el("div", { class: "gr-rgview" },
+      el("h3", null, "RG view"),
+      v.length ? el("p", { class: "muted gr-fnote" }, "Renormalisation-group statements that link to this one, with the exact correspondence. Each is a reading of the RG literature, rated for maturity.")
+        : el("p", { class: "muted" }, "No RG statement links to it."),
+      v.length ? el("ul", { class: "plain" }, v.map(function (o) {
+        return el("li", { class: "gr-rgitem rel-" + o.rel },
+          stmtButton(o.n.id), " ", el("span", { class: "pill role" }, senseLetter(o.n.s)), matPill(o.n.s),
+          el("div", { class: "gr-rgrel" }, el("strong", null, relLabel(o.rel)), " this statement", o.rel === "unrelated" ? " (objects differ)" : ""),
+          el("div", { class: "muted gr-lim" }, o.note));
+      })) : null);
+  }
+
+  // RG statement: its links to the main statements, grouped by relation.
+  function rgLinksBlock(n) {
+    var ls = (n.s.links || []), el = h.el;
+    if (!ls.length) return null;
+    var kids = [el("h3", null, "Links to the main statements"),
+      el("p", { class: "muted gr-fnote" }, "Reproduces: the same formula in the stated limit. Extends: contains it or adds an ingredient. Contradicts: incompatible claims. Unrelated: the objects differ. Click to jump; the main statement's panel lists this one under “RG view”.")];
+    REL_ORDER.forEach(function (rel) {
+      var g = ls.filter(function (l) { return l.relation === rel; });
+      if (!g.length) return;
+      kids.push(el("div", { class: "gr-relhead rel-" + rel }, el("strong", null, relLabel(rel)), el("span", { class: "muted" }, " · " + REL[rel].long)));
+      kids.push(el("ul", { class: "plain" }, g.map(function (l) {
+        return el("li", { class: "gr-rgitem rel-" + rel }, stmtButton(l.target), el("div", { class: "muted gr-lim" }, l.note));
+      })));
+    });
+    var other = ls.filter(function (l) { return !REL[l.relation]; });
+    if (other.length) kids.push(el("ul", { class: "plain" }, other.map(function (l) {
+      return el("li", null, stmtButton(l.target), el("span", { class: "muted" }, " · " + l.relation.replace(/-/g, " ")), el("div", { class: "muted gr-lim" }, l.note));
+    })));
+    return el("div", { class: "gr-rglinksblock" }, kids);
+  }
+
   // A limit written in LaTeX shows as text with its math rendered in the panel.
   function limitSpan(txt) { return h.el("span", null, txt); }
 
@@ -914,18 +1077,27 @@
     ], op.o.id);
   }
 
+  // The RG column widens the canvas; with the layer off (or in the results view) the plane is as before.
+  function setViewBox(withRG) {
+    var vb = withRG ? VB_RG : VB_PLAIN;
+    svg.attr("viewBox", vb.join(" "));
+    document.getElementById("graph").style.aspectRatio = vb[2] + " / " + (vb[3] - 10);
+  }
+
   function applySFilters() {
     var q = query.trim().toLowerCase();
     var arrowsOn = document.getElementById("gr-sarrows").checked;
     var opsOn = document.getElementById("gr-sops").checked;
-    STMT.forEach(function (n) {
+    var rgOn = RGS.length > 0 && document.getElementById("gr-srg").checked;
+    ALLS.forEach(function (n) {
       var s = n.s;
       n.match = !!q && ((s.id + " " + s.title + " " + s.claim).toLowerCase().indexOf(q) >= 0 ||
         s.papers.some(function (k) { return papers[k].hay.indexOf(q) >= 0; }));
       n.el.classList.toggle("match", n.match);
     });
     svg.classed("ssearching", !!q);
-    svg.classed("noarrows", !arrowsOn).classed("noops", !opsOn);
+    svg.classed("noarrows", !arrowsOn).classed("noops", !opsOn).classed("norg", !rgOn);
+    if (VIEW === "statements") setViewBox(rgOn);
   }
 
   function buildIndex() {
@@ -937,6 +1109,19 @@
           n.id + " · " + n.name),
         h.el("span", { class: "muted" }, " — " + REGION[n.region].label + " · " + plural(n.np, "paper") + " · " + h.lab("status", n.s.status))));
     });
+    var rl = document.getElementById("gr-rlist");
+    if (rl) {
+      rl.innerHTML = "";
+      RGS.forEach(function (n) {
+        rl.appendChild(h.el("li", null,
+          h.el("button", { type: "button", class: "linklike gr-nbtn", onclick: function () { openStatement(n, true); } },
+            n.id + " · " + n.name),
+          h.el("span", { class: "muted" }, " — " + senseLetter(n.s) + " · " + n.s.maturity + " · " + plural(n.np, "paper") + " · " +
+            plural((n.s.links || []).filter(function (l) { return l.relation !== "unrelated"; }).length, "link") + " to other statements")));
+      });
+      var sec = document.getElementById("gr-rgindex");
+      if (sec) sec.hidden = !RGS.length;
+    }
   }
 
   // ------------------------------------------------------------------ init
@@ -950,7 +1135,8 @@
       document.getElementById("gr-v-" + x).setAttribute("aria-selected", x === v ? "true" : "false");
     });
     d3.selectAll(".gr-rsub").text(function (r) { return regionSub(r); });
-    svg.attr("aria-label", v === "statements" ? "Statements placed by limit, " + STMT.length + " dots"
+    if (v === "results") setViewBox(false);
+    svg.attr("aria-label", v === "statements" ? "Statements placed by limit, " + ALLS.length + " dots"
       : "Results placed by limit, " + nodes.length + " dots");
     document.getElementById("graph").setAttribute("aria-label", v === "statements" ? "Graph of statements by limit" : "Graph of results by limit");
     document.getElementById("gr-q").placeholder = v === "statements" ? "statement, author, title, arXiv id" : "result, author, title, arXiv id";
@@ -973,7 +1159,11 @@
     smodel();
     render(box);
     buildIndex();
-    var haveStmts = STMT.length > 0;
+    var haveStmts = ALLS.length > 0;
+    if (!RGS.length) {
+      var rgt = document.getElementById("gr-srg-label"); if (rgt) rgt.hidden = true;
+      d3.selectAll(".gr-rgleg").remove();
+    }
     if (!haveStmts) {
       document.getElementById("gr-v-statements").hidden = true;
       document.getElementById("gr-v-results").hidden = true;
@@ -982,7 +1172,7 @@
     ["gr-bayes", "gr-gd", "gr-na", "gr-ops"].forEach(function (id) {
       document.getElementById(id).addEventListener("change", applyFilters);
     });
-    ["gr-sarrows", "gr-sops"].forEach(function (id) {
+    ["gr-sarrows", "gr-sops", "gr-srg"].forEach(function (id) {
       document.getElementById(id).addEventListener("change", applySFilters);
     });
     document.getElementById("gr-v-statements").addEventListener("click", function () { if (VIEW !== "statements") setView("statements"); });
@@ -995,7 +1185,7 @@
       var hits = Object.keys(papers).filter(function (k) { return q && papers[k].hay.indexOf(q) >= 0; });
       if (hits.length === 1) { openPaper(hits[0], true); return; }
       if (VIEW === "statements") {
-        var sh = STMT.filter(function (n) { return n.match; })[0];
+        var sh = ALLS.filter(function (n) { return n.match; })[0];
         if (sh) openStatement(sh, true);
         return;
       }

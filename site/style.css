@@ -621,6 +621,54 @@ ul.dict li { padding: 0.6rem 0; border-bottom: 1px solid var(--line); }
 .gr-red-h { color: var(--mx-crit); }
 .gr-disagree { border-left: 2px solid var(--mx-crit); padding: 0.2rem 0 0.2rem 0.9rem; margin: 0.7rem 0; font-size: 0.95rem; }
 .pill.role { color: var(--fg-muted); }
+/* Renormalisation-group layer (statements view): a column of RG statements with lines to the main statements */
+:root { --rg: #e6a15a; --rg-rep: #7fd1b9; --rg-ext: #e6a15a; --rg-con: #f08f8f; }
+:root[data-theme="light"] { --rg: #b0620a; --rg-rep: #1d7a63; --rg-ext: #b0620a; --rg-con: #9a2222; }
+.gr-rgframe { stroke: var(--rg); stroke-dasharray: 2 5; }
+.gr-rgdot { fill: var(--rg); }
+.gr-rgnode.mat-mature .gr-rgdot { fill-opacity: 1; }
+.gr-rgnode.mat-solid .gr-rgdot { fill-opacity: 0.82; }
+.gr-rgnode.mat-partial .gr-rgdot { fill-opacity: 0.62; }
+.gr-rgnode.mat-early .gr-rgdot { fill-opacity: 0.42; }
+.gr-rgnode.mat-heuristic .gr-rgdot { fill-opacity: 0.22; }
+.gr-rgnode .gr-rgdot { stroke: var(--rg); stroke-width: 2; }
+.gr-rgnode.group .gr-sdot { fill: var(--bg); stroke: var(--rg); stroke-width: 3.5; }
+.gr-rgnode .gr-scount { fill: var(--fg); }
+.gr-rgnode.sel .gr-sdot { stroke: var(--fg); }
+.gr-rgnode.group.mat-mature .gr-sdot, .gr-rgnode.group.mat-solid .gr-sdot,
+.gr-rgnode.group.mat-partial .gr-sdot, .gr-rgnode.group.mat-early .gr-sdot, .gr-rgnode.group.mat-heuristic .gr-sdot { fill: var(--bg); }
+.gr-rglabel { text-anchor: start; }
+.gr-rglink path { fill: none; stroke-width: 1.6; opacity: 0.4; pointer-events: stroke; }
+.gr-rglink.rel-reproduces path { stroke: var(--rg-rep); }
+.gr-rglink.rel-extends path { stroke: var(--rg-ext); }
+.gr-rglink.rel-contradicts path { stroke: var(--rg-con); stroke-dasharray: 6 4; }
+.gr-rglink.rel-unrelated path { display: none; }
+.gr-rglink.rel-reduces-to path { stroke: var(--fg-muted); stroke-dasharray: 2 4; }
+.gr-rglink.hi path { opacity: 1; stroke-width: 2.6; }
+.gr-svg.sfocus .gr-rglink:not(.hi) path { opacity: 0.06; }
+.gr-svg.norg .gr-rg { display: none; }
+.sw-rg { background: var(--rg); }
+.ln { display: inline-block; width: 1.4rem; height: 0; border-top: 2px solid var(--fg-muted); margin: 0 0.2rem 0 0.5rem; vertical-align: 0.2rem; }
+.ln-rep { border-top-color: var(--rg-rep); }
+.ln-ext2 { border-top-color: var(--rg-ext); }
+.ln-con { border-top: 2px dashed var(--rg-con); }
+.pill.mat { font-variant: small-caps; letter-spacing: 0.04em; margin-left: 0.2rem; }
+.pill.mat-mature { color: var(--thm); }
+.pill.mat-solid { color: var(--phys); }
+.pill.mat-partial { color: var(--num); }
+.pill.mat-early { color: var(--mx-high); }
+.pill.mat-heuristic { color: var(--mx-crit); }
+.gr-relhead { margin: 0.7rem 0 0.2rem; font-size: 0.95rem; }
+.gr-relhead.rel-reproduces strong { color: var(--rg-rep); }
+.gr-relhead.rel-extends strong { color: var(--rg-ext); }
+.gr-relhead.rel-contradicts strong { color: var(--rg-con); }
+.gr-rgitem { margin: 0.5rem 0; }
+.gr-rgrel { font-size: 0.9rem; margin: 0.1rem 0 0 0.9rem; }
+.gr-rgitem.rel-reproduces .gr-rgrel strong { color: var(--rg-rep); }
+.gr-rgitem.rel-extends .gr-rgrel strong { color: var(--rg-ext); }
+.gr-rgitem.rel-contradicts .gr-rgrel strong { color: var(--rg-con); }
+.gr-rgview { margin-top: 0.4rem; padding-top: 0.2rem; border-top: 1px dotted var(--rg); }
+
 @media (max-width: 700px) {
   .gr-box { min-height: 0; max-height: none; }
   .gr-search input { width: 11rem; }

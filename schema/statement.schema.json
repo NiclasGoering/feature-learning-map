@@ -41,6 +41,15 @@
       "type": "string",
       "pattern": "^[a-z][a-z0-9-]*$"
     },
+    "sense": {
+      "description": "Only for family rg: in which of the five senses the statement is a renormalisation statement (a to e).",
+      "x-vocab": "rg_sense",
+      "x-single": true
+    },
+    "maturity": {
+      "description": "Only for family rg: how far the RG reading is developed.",
+      "x-vocab": "maturity"
+    },
     "claim": {
       "description": "One line: what the statement says. LaTeX allowed.",
       "$ref": "#/$defs/text"

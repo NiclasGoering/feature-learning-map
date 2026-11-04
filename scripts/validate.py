@@ -436,6 +436,12 @@ def check_statements(vocab, papers, op_ids, report):
                     check_text(where, dotted, v, kind, limit)
             elif head in meta:
                 check_text(where, dotted, meta[head], kind, limit)
+        if meta.get("family") == "rg":
+            for need in ("sense", "maturity"):
+                if need not in meta:
+                    report.error(where, need, "required for family rg")
+        elif "sense" in meta or "maturity" in meta:
+            report.error(where, "sense", "sense and maturity are only for family rg")
         if "$" not in meta["formula"]:
             report.error(where, "formula", "write the formula as LaTeX in $...$ or $$...$$")
         else:
