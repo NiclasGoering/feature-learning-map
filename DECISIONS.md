@@ -99,3 +99,10 @@ One line per choice made where SPEC.md left room.
 - Ingest sessions may change only new files in `papers/`, new files in `schema/mechanisms/` and `queue.yaml`; other vocabulary proposals go in the pull-request description.
 - The pull-request body includes `Closes #n` for every added issue, so issues close when the pull request is merged.
 - Issue form: arXiv URL (required) and note (optional), label `add-paper`, which is created in the repository.
+
+## Statements
+
+- Statements are theorems or established physics results that several papers state in different notations; there are 5 to 20. One YAML file each in `statements/`, with an id `S01`, `S02`, …, members (paper, result, equations, symbol mapping, role), `reduces_to` with the connecting limit, and the disagreements between papers.
+- A result points to its statement with an optional per-result `canonical:` block (statement id, mapping, variables, order parameter, closure, approximation). The validator checks both directions: a block must name a statement that lists the result, and a listed member without a block is a warning.
+- `public: false` marks a placeholder for a statement whose formula is the team's own unpublished derivation. The repository is public, so such a file holds no formula; the build never emits it and drops the `canonical` blocks that point to it.
+- A result belongs to at most one statement, so that "the statement each result belongs to" has one answer.
