@@ -39,21 +39,38 @@
 <main id="content" class="graph-page">
   <div class="gr-head">
     <h1>Graph</h1>
-    <p class="lede">Each dot is a result: one feature-learning mechanism in one limit, gathering every paper in the map that shows it (where no mechanism was analysed, results are grouped by what they compute). The number is how many papers show it. Click a dot for the statements and the papers; click a paper for all its results. Left to right: data per width, from fixed $P$ to $P\propto N$ to high-dimensional $P\sim D^k$. Bottom to top: how far the kernel moves, from lazy ($\kappa\to0$) through $1/N$ corrections to mean field and μP ($\kappa=O(1)$). Lines join results that the same paper shows. The axes are schematic.</p>
+    <p class="lede" data-view="statements">Most papers in this literature state the same few results in different notations. Each dot is one <em>statement</em>: a theorem or an established physics result, written once in the map's notation, with the papers that state it. Size is the number of papers; a filled dot is a collapse (the papers' results are one formula under a mapping of symbols), a ring a grouping (a shared object, not shown equal). Arrows join a statement to the one it becomes in a limit, labelled with that limit; red marks papers that disagree; diamonds are open problems in the gaps. Left to right: data per width, from fixed $P$ to $P\propto N$ to high-dimensional $P\sim D^k$. Bottom to top: how far the kernel moves, from lazy ($\kappa\to0$) through $1/N$ corrections to mean field and μP ($\kappa=O(1)$). Click a statement for its formula, conditions and member papers; click a paper for its results. The axes are schematic.</p>
+    <p class="lede" data-view="results" hidden>Each dot is a result: one feature-learning mechanism in one limit, gathering every paper in the map that shows it (where no mechanism was analysed, results are grouped by what they compute). The number is how many papers show it. Click a dot for the statements and the papers; click a paper for all its results. Left to right: data per width, from fixed $P$ to $P\propto N$ to high-dimensional $P\sim D^k$. Bottom to top: how far the kernel moves, from lazy ($\kappa\to0$) through $1/N$ corrections to mean field and μP ($\kappa=O(1)$). Lines join results that the same paper shows. The axes are schematic.</p>
   </div>
   <div class="gr-tools" role="group" aria-label="Graph controls">
-    <label class="gr-search">Find <input id="gr-q" type="search" placeholder="result, author, title, arXiv id" autocomplete="off"></label>
-    <span class="gr-toggles">
+    <span class="gr-views" role="tablist" aria-label="View">
+      <button type="button" role="tab" id="gr-v-statements" aria-selected="true">Statements</button>
+      <button type="button" role="tab" id="gr-v-results" aria-selected="false">All results</button>
+    </span>
+    <label class="gr-search">Find <input id="gr-q" type="search" placeholder="statement, result, author, arXiv id" autocomplete="off"></label>
+    <span class="gr-toggles" data-view="results" hidden>
       <label><input type="checkbox" id="gr-bayes" checked> <span class="sw sw-bayes"></span>Bayes</label>
       <label><input type="checkbox" id="gr-gd" checked> <span class="sw sw-gd"></span>GD</label>
       <label><input type="checkbox" id="gr-na" checked> results without a mechanism</label>
       <label><input type="checkbox" id="gr-ops" checked> open problems</label>
     </span>
+    <span class="gr-toggles" data-view="statements">
+      <label><input type="checkbox" id="gr-sarrows" checked> arrows</label>
+      <label><input type="checkbox" id="gr-sops" checked> open problems</label>
+    </span>
     <span class="gr-hint">drag to pan · pinch or ⌘-scroll to zoom</span>
     <button type="button" id="gr-fit">Fit</button>
   </div>
-  <div id="graph" class="gr-box" aria-label="Graph of results by limit"></div>
-  <p class="gr-legend">
+  <div id="graph" class="gr-box" aria-label="Graph of statements by limit"></div>
+  <p class="gr-legend" data-view="statements">
+    <span><span class="sw sw-stmt"></span>collapse: the papers' results are one formula (size: papers)</span>
+    <span><span class="sw sw-stmt-ring"></span>grouping: a shared object, not shown equal</span>
+    <span><span class="ar"></span>reduces to, in the limit written on the arrow</span>
+    <span><span class="ar ar-dash"></span>dashed: conjectural, outside the cited theorems</span>
+    <span><span class="sw sw-red"></span>papers disagree</span>
+    <span><span class="dm"></span>open problem</span>
+  </p>
+  <p class="gr-legend" data-view="results" hidden>
     <span><span class="sw sw-bayes"></span>Bayesian posterior</span>
     <span><span class="sw sw-gd"></span>gradient descent</span>
     <span><span class="sw sw-both"></span>both</span>
@@ -61,6 +78,10 @@
     <span><span class="ln ln-ext"></span>shown in the same paper (thicker: more papers)</span>
     <span><span class="dm"></span>open problem</span>
   </p>
+  <section class="gr-index" data-view="statements" aria-label="Statements">
+    <h2>The statements</h2>
+    <ol id="gr-slist" class="gr-slist"></ol>
+  </section>
 </main>
 <div id="scrim" class="scrim" hidden></div>
 <aside id="panel" class="panel" hidden aria-label="Paper details"></aside>

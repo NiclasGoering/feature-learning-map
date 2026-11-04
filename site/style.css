@@ -575,8 +575,57 @@ ul.dict li { padding: 0.6rem 0; border-bottom: 1px solid var(--line); }
 .ln { display: inline-block; width: 1.4rem; height: 0; border-top: 1.5px solid; margin-right: 0.35rem; vertical-align: 0.2rem; }
 .ln-ext { border-color: var(--fg-faint); border-top-width: 1px; }
 .gr-inc { margin: 0.8rem 0 0.2rem; font-style: italic; }
+/* Statements view (default) */
+.gr-views { display: inline-flex; border: 1px solid var(--line-strong); }
+.gr-views button { border: 0; border-right: 1px solid var(--line-strong); padding: 0.12rem 0.8rem; background: var(--bg); color: var(--fg-muted); font-size: inherit; }
+.gr-views button:last-child { border-right: 0; }
+.gr-views button[aria-selected="true"] { background: var(--fg); color: var(--bg); }
+.gr-views button[hidden] { display: none; }
+.gr-svg.v-statements .gr-rview, .gr-svg.v-results .gr-sview { display: none; }
+.gr-snode { cursor: pointer; }
+.gr-sdot { fill: var(--c-ent); stroke: var(--bg); stroke-width: 1.5; }
+.gr-snode.group .gr-sdot { fill: var(--bg); stroke: var(--c-ent); stroke-width: 3.5; }
+.gr-snode.group .gr-scount { fill: var(--fg); }
+.gr-sred { fill: none; stroke: var(--mx-crit); stroke-width: 2.4; }
+.gr-scount { fill: var(--bg); font-size: 14px; font-weight: 600; pointer-events: none; }
+.gr-slabel { fill: var(--fg); font-size: 13px; pointer-events: none; paint-order: stroke; stroke: var(--bg); stroke-width: 3px; }
+.gr-slabel .id { font-weight: 600; fill: var(--fg-muted); font-variant: small-caps; letter-spacing: 0.04em; }
+.gr-snode.sel .gr-sdot { stroke: var(--fg); stroke-width: 2.8; stroke-dasharray: none; }
+.gr-snode:focus-visible .gr-sdot { stroke: var(--focus); stroke-width: 3; }
+.gr-svg.sfocus .gr-snode:not(.hi) { opacity: 0.2; }
+.gr-svg.sfocus .gr-arrow:not(.hi) { opacity: 0.08; }
+.gr-svg.ssearching .gr-snode:not(.match) { opacity: 0.16; }
+.gr-arrow path { fill: none; stroke: var(--fg-muted); stroke-width: 1.5; }
+.gr-arrow text { fill: var(--fg-muted); font-size: 12px; font-style: italic; paint-order: stroke; stroke: var(--bg); stroke-width: 3.5px; pointer-events: none; }
+.gr-arrow.conj path { stroke-dasharray: 6 5; }
+.gr-arrow.hi path { stroke: var(--fg); stroke-width: 2.2; }
+.gr-arrow.hi text { fill: var(--fg); }
+.gr-ahead { fill: var(--fg-muted); }
+.gr-oplink { stroke: var(--num); stroke-width: 1; stroke-dasharray: 2 4; opacity: 0.55; pointer-events: none; }
+.gr-svg.noarrows .gr-arrows, .gr-svg.noops .gr-sops { display: none; }
+.sw-stmt { background: var(--c-ent); }
+.sw-stmt-ring { background: var(--bg); box-shadow: inset 0 0 0 2.5px var(--c-ent); }
+.ar.ar-dash { border-top-style: dashed; }
+.sw-red { background: transparent; box-shadow: inset 0 0 0 2px var(--mx-crit); }
+.ar { display: inline-block; width: 1.4rem; height: 0; border-top: 1.5px solid var(--fg-muted); margin-right: 0.35rem; vertical-align: 0.2rem; }
+.gr-index { max-width: 62rem; margin: 1.2rem auto 0; }
+.gr-index h2 { font-size: 1rem; font-weight: 600; font-variant: small-caps; letter-spacing: 0.05em; color: var(--fg-muted); margin: 0 0 0.4rem; }
+.gr-slist { list-style: none; padding: 0; margin: 0; font-size: 0.95rem; }
+.gr-slist li { margin: 0.3rem 0; }
+.gr-formula { margin: 0.8rem 0; padding: 0.6rem 0.8rem; background: var(--bg); border: 1px solid var(--line); overflow-x: auto; text-align: center; font-size: 1.05rem; }
+.gr-claim { font-style: normal; font-size: 1.02rem; }
+.gr-fnote { font-size: 0.9rem; margin: 0.3rem 0; }
+.gr-lim { margin: 0.05rem 0 0.2rem 0.9rem; font-size: 0.9rem; }
+.gr-conj { margin: 0 0 0.2rem 0.9rem; font-size: 0.85rem; font-style: italic; color: var(--num); }
+.gr-map { font-size: 0.9rem; color: var(--fg-muted); margin-top: 0.3rem; }
+.gr-red-h { color: var(--mx-crit); }
+.gr-disagree { border-left: 2px solid var(--mx-crit); padding: 0.2rem 0 0.2rem 0.9rem; margin: 0.7rem 0; font-size: 0.95rem; }
+.pill.role { color: var(--fg-muted); }
 @media (max-width: 700px) {
   .gr-box { min-height: 0; max-height: none; }
   .gr-search input { width: 11rem; }
   .gr-hint { margin-left: 0; }
 }
+
+/* graph.js switches views with the hidden attribute */
+.graph-page [data-view][hidden] { display: none !important; }

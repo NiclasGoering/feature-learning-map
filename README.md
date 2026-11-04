@@ -1,6 +1,6 @@
 # Feature-learning literature map
 
-A public map of the theory literature on feature learning in neural networks, for two learning rules: Bayesian posteriors and gradient-based training. Every paper is one Markdown file with structured YAML front matter. A static site compiles them into one table grouped by learning rule, depth and width/limit, a graph of results placed by limit, a mechanisms page (the first version of a feature-learning dictionary) and a list of open problems.
+A public map of the theory literature on feature learning in neural networks, for two learning rules: Bayesian posteriors and gradient-based training. Every paper is one Markdown file with structured YAML front matter. A static site compiles them into one table grouped by learning rule, depth and width/limit, a graph of the main statements placed by limit (with the all-results view behind a toggle), a mechanisms page (the first version of a feature-learning dictionary) and a list of open problems.
 
 **Site:** https://niclasgoering.github.io/feature-learning-map/
 
