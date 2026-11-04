@@ -436,16 +436,15 @@ One file per statement, checked against `schema/statement.schema.json`. Ids are 
 id: S04
 slug: deep-linear-scalar-renormalisation
 title: "Deep linear networks at P ∝ N: one scalar renormalises the kernel"   # at most 14 words
-public: true                       # false: a placeholder that stays off the site (see 8.4)
 claim: "..."                       # one line, at most 45 words, LaTeX allowed
-formula: '$$\rho=1-\alpha+\alpha\bar r\,\rho^{-L}$$'   # the master formula, LaTeX; required when public
+formula: '$$\rho=1-\alpha+\alpha\bar r\,\rho^{-L}$$'   # the master formula, LaTeX; required
 formula_note: "..."                # what the symbols are, at most 70 words (optional)
 regime:
   width_limit: finite-proportional # where it sits on the limit plane: one value of the width / limit field
   learning_rule: [bayes]
   conditions: "..."                # P against N, scaling of the likelihood, temperature, activation, depth; at most 70 words
 status: phys                       # thm | phys | num | conjecture, as for a result
-status_note: "..."                 # which part is proved, which is physics (optional)
+status_note: "..."                 # which part is proved, which is physics, which goes beyond the member papers (optional)
 members:                           # at least one
   - paper: "2012.04030"            # arXiv ID without version, quoted; doi:<DOI>; ref:<slug>
     result: r1                     # result id in that paper's entry; omit if no single result carries it
@@ -480,9 +479,9 @@ The values come from `schema/vocab.yaml` (`canonical_*` fields). `variables` is 
 
 ### 8.3 What the validator and the build do
 
-- `scripts/validate.py` checks every statement against the schema and the text limits; that each member paper and result exists; that each `canonical.statement` names a statement listing the result and the other way round; that `reduces_to` targets exist and form no cycle; that `disagreements` and `open_problems` name existing papers and problems; and the public-data rule (no `[[...]]`, no `[derived]`, no "manuscript", no "unpublished").
-- `scripts/build.py` writes `data.statements` with the statements that have `public: true`, members resolved to the site records of their papers. It leaves out `reduces_to` edges that end at a non-public statement and removes the `canonical` block of a result whose statement is not public.
+- `scripts/validate.py` checks every statement against the schema and the text limits; that each member paper and result exists; that each `canonical.statement` names a statement listing the result and the other way round; that `reduces_to` targets exist and form no cycle; that `disagreements` and `open_problems` name existing papers and problems; and the public-data rule (no `[[...]]`, no `[derived]`, no "manuscript").
+- `scripts/build.py` writes `data.statements`: every statement, members resolved to the site records of their papers.
 
-### 8.4 `public: false`
+### 8.4 Every statement is public
 
-The repository is public, so a statement file cannot hold anything that is not published. A statement whose formula is the team's own unpublished derivation is therefore kept as a **placeholder**: `public: false`, a neutral `title` and `claim` that say only what the published papers say, no `formula` and no `formula_note` (the validator rejects both), and members that are published results. The derivation itself stays in the team's private notes. The site and `data.json` never show a placeholder.
+There is no private statement: a statement file goes on the site as written, so write it as you would publish it. A statement whose formula goes beyond what its member papers print (a unification across dial settings, say) says so in `status_note`, with how it was checked, and its members are the papers that print the special cases.

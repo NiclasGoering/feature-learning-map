@@ -66,12 +66,6 @@ STATEMENT_TEXT_LIMITS = [
     ("reduces_to.limit", "words", 30),
     ("disagreements.note", "words", 70),
 ]
-# Extra patterns for statements: the repository is public, so even a statement with
-# public: false must not carry the team's unpublished derivations.
-STATEMENT_FORBIDDEN = [
-    (re.compile(r"\bunpublished\b", re.I), "the word `unpublished` (content that is not published must not be in the repository)"),
-    (re.compile(r"\b(?:our|the team'?s) (?:own )?(?:derivation|calculation)\b", re.I), "reference to the team's own derivation"),
-]
 PAPER_REF = re.compile(r"[0-9]{4}\.[0-9]{4,5}|[a-z-]+(?:\.[A-Z]{2})?/[0-9]{7}|doi:10\.[0-9]{4,9}/\S+|ref:[a-z0-9]+(?:-[a-z0-9]+)*")
 
 QUEUE_STATUSES = {"queued", "needs-id", "added", "skipped"}
@@ -383,7 +377,7 @@ def check_mechanism_files(vocab, used_by, report):
 
 def check_statements(vocab, papers, op_ids, report):
     """statements/S<NN>-<slug>.yaml: schema, members exist, ids consistent with the
-    papers' canonical blocks, reduces_to acyclic, and the public-data rules.
+    papers' canonical blocks, reduces_to acyclic, and the public-data rules ([[...]], [derived], "manuscript").
 
     `papers` maps a base id to (path, meta) for every paper file that parsed."""
     validator = Draft202012Validator(flmap.load_statement_schema(vocab))
@@ -398,9 +392,6 @@ def check_statements(vocab, papers, op_ids, report):
         where = rel(path)
         text = path.read_text(encoding="utf-8")
         scan_forbidden(where, text, report)
-        for rx, what in STATEMENT_FORBIDDEN:
-            for m in rx.finditer(text):
-                report.error(where, f"line {text.count(chr(10), 0, m.start()) + 1}", f"{what} is not allowed in statements")
         try:
             meta = flmap.load_yaml(text)
         except Exception as e:  # noqa: BLE001
@@ -444,18 +435,10 @@ def check_statements(vocab, papers, op_ids, report):
                     check_text(where, dotted, v, kind, limit)
             elif head in meta:
                 check_text(where, dotted, meta[head], kind, limit)
-        if meta["public"]:
-            if not meta.get("formula"):
-                report.error(where, "formula", "a public statement needs its master formula")
-            elif "$" not in meta["formula"]:
-                report.error(where, "formula", "write the formula as LaTeX in $...$ or $$...$$")
-            else:
-                check_text(where, "formula", meta["formula"], "words", 80)
+        if "$" not in meta["formula"]:
+            report.error(where, "formula", "write the formula as LaTeX in $...$ or $$...$$")
         else:
-            for key in ("formula", "formula_note"):
-                if key in meta:
-                    report.error(where, key, "a statement with public: false is a placeholder and must not carry a formula "
-                                             "(the repository is public); keep the content in the private notes")
+            check_text(where, "formula", meta["formula"], "words", 80)
         seen = set()
         for i, m in enumerate(meta["members"]):
             loc = f"members[{i}]"
@@ -486,7 +469,7 @@ def check_statements(vocab, papers, op_ids, report):
                 report.warn(where, loc, f"{rel(ppath)} {rid} has no canonical block; add one with statement: {sid}")
             elif canon.get("statement") != sid:
                 report.error(where, loc, f"{rel(ppath)} {rid} has canonical.statement {canon.get('statement')}, not {sid}")
-            if meta["public"] and flmap.merged_view(pmeta, res).get("learning_rule") == ["gd"]:
+            if flmap.merged_view(pmeta, res).get("learning_rule") == ["gd"]:
                 report.warn(where, loc, f"{m['paper']} {rid} is about GD alone and is hidden on the site")
         for i, r in enumerate(meta.get("reduces_to") or []):
             if r["target"] == sid:

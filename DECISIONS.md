@@ -104,5 +104,5 @@ One line per choice made where SPEC.md left room.
 
 - Statements are theorems or established physics results that several papers state in different notations; there are 5 to 20. One YAML file each in `statements/`, with an id `S01`, `S02`, …, members (paper, result, equations, symbol mapping, role), `reduces_to` with the connecting limit, and the disagreements between papers.
 - A result points to its statement with an optional per-result `canonical:` block (statement id, mapping, variables, order parameter, closure, approximation). The validator checks both directions: a block must name a statement that lists the result, and a listed member without a block is a warning.
-- `public: false` marks a placeholder for a statement whose formula is the team's own unpublished derivation. The repository is public, so such a file holds no formula; the build never emits it and drops the `canonical` blocks that point to it.
+- Every statement is public (the team's instruction of 2026-11-04): the build emits all of them. A statement that goes beyond what its member papers print says so in `status_note`.
 - A result belongs to at most one statement, so that "the statement each result belongs to" has one answer.
