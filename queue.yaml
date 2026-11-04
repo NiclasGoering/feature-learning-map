@@ -257,6 +257,55 @@
   title: "Order parameters and phase transitions of continual learning in deep neural networks"
   year: 2024
   status: added
+# RG literature scan 2026-11-04 (user-requested exception to "only papers from the reference note"):
+- id: "1301.3124"
+  cited_as: "Bény 2013"
+  title: "Deep learning and the renormalization group"
+  year: 2013
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "1410.3831"
+  cited_as: "Mehta & Schwab 2014"
+  title: "An exact mapping between the Variational Renormalization Group and Deep Learning"
+  year: 2014
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "1704.06279"
+  cited_as: "Koch-Janusz & Ringel 2017"
+  title: "Mutual Information, Neural Networks and the Renormalization Group"
+  year: 2017
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2012.01447"
+  cited_as: "Gordon et al. 2020"
+  title: "Relevance in the Renormalization Group and in Information Theory"
+  year: 2020
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2107.06898"
+  cited_as: "Erdmenger et al. 2021"
+  title: "Towards quantifying information flows: relative entropy in deep neural networks and the renormalization group"
+  year: 2021
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2210.04909"
+  cited_as: "Yaida 2022"
+  title: "Meta-Principled Family of Hyperparameter Scaling Strategies"
+  year: 2022
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2410.00396"
+  cited_as: "Lee et al. 2024"
+  title: "Dynamic neuron approach to deep neural networks: Decoupling neurons for renormalization group analysis"
+  year: 2024
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2606.00157"
+  cited_as: "Gong & Xia 2026"
+  title: "Interpreting FCDNNs via RG on Exponential Family"
+  year: 2026
+  status: added
+  source: "RG literature scan 2026-11-04"
 - id: "2405.06008"
   cited_as: "Howard et al. 2025"
   title: "Wilsonian Renormalization of Neural Network Gaussian Processes"
