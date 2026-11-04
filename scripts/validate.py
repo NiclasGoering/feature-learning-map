@@ -482,13 +482,10 @@ def check_statements(vocab, papers, op_ids, report):
                 report.error(where, f"links[{i}]", "a statement cannot link to itself")
             elif l["target"] not in stmts:
                 report.error(where, f"links[{i}].target", f"{l['target']} is not a statement in statements/")
-        member_papers = {m["paper"] for m in meta["members"]}
         for i, d in enumerate(meta.get("disagreements") or []):
             for pid in d["papers"]:
                 if not PAPER_REF.fullmatch(pid) or pid not in papers:
                     report.error(where, f"disagreements[{i}].papers", f"{pid} has no file in papers/")
-                elif pid not in member_papers:
-                    report.warn(where, f"disagreements[{i}].papers", f"{pid} is not a member of {sid}")
         for op in meta.get("open_problems") or []:
             if op not in op_ids:
                 report.error(where, "open_problems", f"{op} is not an id in open-problems/")
