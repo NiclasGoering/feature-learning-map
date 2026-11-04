@@ -126,6 +126,7 @@ fields:
       cold-posterior: "Cold posteriors"
       volume-simplicity: "Prior volume and simplicity bias"
       deep-linear: "Deep linear networks"
+      renormalisation-group: "Renormalisation group"
 
   tags:
     label: Tag
