@@ -7,6 +7,67 @@
 # id: arXiv ID without version; doi:<DOI> when there is no arXiv version; ref:<slug> when there is neither.
 # Quote every id. Ingest sessions take `queued` entries from the top (INGEST.md).
 
+# RG literature scan 2026-11-04 (user-requested exception to "only papers from the reference note"):
+- id: "1909.11304"
+  cited_as: "Dyer & Gur-Ari 2019"
+  title: "Asymptotics of Wide Networks from Feynman Diagrams"
+  year: 2019
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2008.08601"
+  cited_as: "Halverson et al. 2020"
+  title: "Neural Networks and Quantum Field Theory"
+  year: 2020
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2108.01403"
+  cited_as: "Erbin et al. 2021"
+  title: "Nonperturbative renormalization for the neural network-QFT correspondence"
+  year: 2021
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2109.13247"
+  cited_as: "Grosvenor & Jefferson 2021"
+  title: "The edge of chaos: quantum field theory and deep neural networks"
+  year: 2021
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2212.11811"
+  cited_as: "Erbin et al. 2022"
+  title: "Renormalization in the neural network-quantum field theory correspondence"
+  year: 2022
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2305.02334"
+  cited_as: "Banta et al. 2023"
+  title: "Structures of Neural Network Effective Theories"
+  year: 2023
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2305.07715"
+  cited_as: "Fischer et al. 2023"
+  title: "Field theory for optimal signal propagation in ResNets"
+  year: 2023
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2305.10491"
+  cited_as: "Berman et al. 2023"
+  title: "Bayesian Renormalization"
+  year: 2023
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2307.03223"
+  cited_as: "Demirtas et al. 2023"
+  title: "Neural Network Field Theories: Non-Gaussianity, Actions, and Locality"
+  year: 2023
+  status: added
+  source: "RG literature scan 2026-11-04"
+- id: "2608.19331"
+  cited_as: "Jefferson & Ramakrishnan 2026"
+  title: "Deep neural networks as lattice gauge theories"
+  year: 2026
+  status: added
+  source: "RG literature scan 2026-11-04"
 - id: "2210.17449"
   cited_as: "Li & Sompolinsky 2022"
   title: "Globally Gated Deep Linear Networks"
