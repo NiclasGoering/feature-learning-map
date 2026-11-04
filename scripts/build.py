@@ -6,6 +6,8 @@
 Runs the validator first and stops if it fails. Then copies site/ (publishing
 overview.html also as the landing page index.html) and writes
 _site/data.json, compiled from papers/*.md, open-problems/*.md and queue.yaml.
+Results about gradient descent alone are left out of the site for now; results
+that compare Bayes with GD stay.
 Preview locally with:  python -m http.server -d _site 8000
 """
 
@@ -79,8 +81,21 @@ def source_url(meta, res):
     return f"https://arxiv.org/pdf/{pid}"
 
 
+def gd_only(meta, res):
+    """A result about gradient descent alone (no posterior side)."""
+    return flmap.merged_view(meta, res).get("learning_rule") == ["gd"]
+
+
 def compile_paper(path, vocab):
+    """The site record of a paper, or None when the site hides all its results.
+
+    For now the site shows Bayesian results and the results that compare Bayes with
+    GD; results about GD alone stay in papers/ but are left out (DECISIONS.md)."""
     meta, body = flmap.split_front_matter(path.read_text(encoding="utf-8"))
+    hidden = sum(1 for res in meta["results"] if gd_only(meta, res))
+    meta = dict(meta, results=[res for res in meta["results"] if not gd_only(meta, res)])
+    if not meta["results"]:
+        return None, hidden
     rec = dict(meta)
     rec["key"] = path.stem
     rec["base"] = flmap.base_id(meta["id"])
@@ -95,7 +110,7 @@ def compile_paper(path, vocab):
         r["source_url"] = source_url(meta, res)
         rec["results"].append(r)
     rec["notes_html"] = md_to_html(body) if body else ""
-    return rec
+    return rec, hidden
 
 
 def compile_open_problems(papers):
@@ -121,7 +136,14 @@ def main():
         print("Build stopped: fix the validation errors above.", file=sys.stderr)
         return 1
     vocab = flmap.load_vocab()
-    papers = [compile_paper(p, vocab) for p in flmap.paper_files()]
+    papers, hidden_papers, hidden_results = [], 0, 0
+    for path in flmap.paper_files():
+        rec, hidden = compile_paper(path, vocab)
+        hidden_results += hidden
+        if rec is None:
+            hidden_papers += 1
+        else:
+            papers.append(rec)
     papers.sort(key=lambda p: (p["year"], p["first_author"], p["title"]))
     queue = flmap.load_yaml(flmap.QUEUE.read_text(encoding="utf-8")) or []
     counts = {}
@@ -139,13 +161,15 @@ def main():
         "papers": papers,
         "open_problems": compile_open_problems(papers),
         "queue": counts,
+        "hidden_gd_only": {"papers": hidden_papers, "results": hidden_results},
     }
     if OUT.exists():
         shutil.rmtree(OUT)
     shutil.copytree(SITE, OUT)
     shutil.copyfile(OUT / "overview.html", OUT / "index.html")   # the overview is the landing page
     (OUT / "data.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-    print(f"Built {OUT.relative_to(flmap.ROOT)}/ with {len(papers)} paper(s).")
+    print(f"Built {OUT.relative_to(flmap.ROOT)}/ with {len(papers)} paper(s); "
+          f"{hidden_results} GD-only result(s) hidden, {hidden_papers} paper(s) with nothing else.")
     return 0
 
 

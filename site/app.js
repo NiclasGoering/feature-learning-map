@@ -136,7 +136,9 @@
     if (foot) {
       var queued = D.queue.queued || 0;
       foot.textContent = "Compiled " + D.generated + " from papers/*.md · " + D.papers.length +
-        " paper" + (D.papers.length === 1 ? "" : "s") + " · " + queued + " queued for ingest.";
+        " paper" + (D.papers.length === 1 ? "" : "s") + " · " + queued + " queued for ingest." +
+        (D.hidden_gd_only && D.hidden_gd_only.results ? " For now the site shows Bayesian results and Bayes-vs-GD comparisons; " +
+          D.hidden_gd_only.results + " results about gradient descent alone are left out." : "");
     }
   }
 
