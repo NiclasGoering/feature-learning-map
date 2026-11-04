@@ -83,7 +83,11 @@ def source_url(meta, res):
 
 
 def gd_only(meta, res):
-    """A result about gradient descent alone (no posterior side)."""
+    """A result about gradient descent alone (no posterior side). Results placed under
+    a main statement stay: mean-field Langevin results describe the Gibbs posterior
+    the dynamics converges to, which is a statement about the posterior (S05)."""
+    if (res.get("canonical") or {}).get("statement"):
+        return False
     return flmap.merged_view(meta, res).get("learning_rule") == ["gd"]
 
 

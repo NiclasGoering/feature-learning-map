@@ -71,6 +71,7 @@ One line per choice made where SPEC.md left room.
 - The Graph's plane (data per width across, kernel movement up) is schematic and stated as such on the page. When equivalence classes exist (the `canonical:` / `classes/` extension the pilot recommends), the class replaces the mechanism label as the unit of a dot.
 - On the Graph, plain scrolling scrolls the page; pinch or ⌘/Ctrl-scroll zooms, so the page keeps a single scroll.
 - At the team's request (2026-11-04), for now the site shows only Bayesian results and results that compare Bayes with GD. Results whose learning rule is GD alone stay in `papers/` (valid, still ingested) but `scripts/build.py` leaves them out, and papers with no other results drop off the site. The footer says how many are hidden. Reversing it is a one-line change in the build.
+- GD-only results that belong to a main statement (a `canonical.statement`) stay on the site: the mean-field Langevin results of S05 describe the Gibbs posterior the dynamics converges to.
 - The Mechanisms page lists every result under its FL type, then its mechanism label, as "In: setting · statement · paper, location".
 - Rows flag `gold` or `extracted` entries next to the arXiv links; `verified` entries carry no flag.
 
