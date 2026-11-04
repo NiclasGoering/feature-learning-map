@@ -99,3 +99,11 @@ One line per choice made where SPEC.md left room.
 - Ingest sessions may change only new files in `papers/`, new files in `schema/mechanisms/` and `queue.yaml`; other vocabulary proposals go in the pull-request description.
 - The pull-request body includes `Closes #n` for every added issue, so issues close when the pull request is merged.
 - Issue form: arXiv URL (required) and note (optional), label `add-paper`, which is created in the repository.
+
+## Statements
+
+- Statements are theorems or established physics results that several papers state in different notations; there are 5 to 20. One YAML file each in `statements/`, with an id `S01`, `S02`, …, members (paper, result, equations, symbol mapping, role), `reduces_to` with the connecting limit, and the disagreements between papers.
+- A result points to its statement with an optional per-result `canonical:` block (statement id, mapping, variables, order parameter, closure, approximation). The validator checks both directions: a block must name a statement that lists the result, and a listed member without a block is a warning.
+- Every statement is public (the team's instruction of 2026-11-04): the build emits all of them. A statement that goes beyond what its member papers print says so in `status_note`.
+- A result belongs to at most one statement, so that "the statement each result belongs to" has one answer.
+- Graph: the statements view is the default and the previous all-results view stays behind a toggle. One dot per statement on the limit plane, sized by the number of papers; a filled dot is a collapse and a ring a grouping; arrows are `reduces_to`, labelled with the limit and dashed when `conjectural`; a red ring marks papers that disagree; diamonds are open problems placed next to the statements they touch. A statement panel shows the claim, the formula (KaTeX), the conditions and status, then its member papers with their result text, symbol mapping and source link; a paper panel shows each of its results with the statement it belongs to. Below the graph an index lists the statements, which is also the way in on a phone.

@@ -1,0 +1,254 @@
+id: S07
+slug: nonlinear-proportional
+title: "Nonlinear networks at $P\\propto N$: a readout-side Wishart functional"
+kind: collapse
+claim: "Under Gaussian equivalence the posterior of nonlinear networks at $P\\propto N$ reduces to a readout-side functional of a fixed-size Wishart order parameter: a scalar per layer, or a matrix over outputs, patches, gates, replicas or attention paths. One scalar rescales the NNGP kernel."
+formula: '$$F_B(\rho)=j(\rho)+\kappa\,\tfrac12\,y^\top\big(\rho K_{\rm GP}+\eta I\big)^{-1}y+\tfrac1{2N}\log\det\big(\rho K_{\rm GP}+\eta I\big),\quad j(\rho)=\tfrac12(\rho-1-\ln\rho)$$ one hidden layer, $\kappa=\tfrac1N$, $\eta=0$: $\ \rho^2+(\alpha-1)\rho-\alpha\bar r=0$'
+regime:
+  width_limit: finite-proportional
+  learning_rule: [bayes]
+  conditions: "One hidden layer (deep: nested or factorised closure, equal for degree-one homogeneous $\\varphi$); Gaussian equivalence, guaranteed only for $P=O(\\sqrt D)$ at Hermite rank 1 ($P=1000$, $D\\le1024$ runs suggest the bound is pessimistic); finite-mean $\\varphi$ (ReLU) needs two scalars, so scalar ReLU results are approximate. At $T>0$ the order parameter moves the mean through $\\eta/\\rho$ or the ridge $\\eta Q^{-1}$."
+status: phys
+status_note: "Physics: exact once Gaussian equivalence is assumed. Tiberi et al. (softmax attention, fixed $Q,K$) are exact without GE because the network is linear in the values."
+members:
+  - paper: "2209.04882"
+    result: r1
+    statement: "One hidden layer, zero-mean $\\varphi$, Gaussian equivalence, any $T$: $-\\frac1N\\log Z\\to\\min_\\rho F_B(\\rho)$, $F_B=j(\\rho)+\\frac1{2N}y^\\top(\\rho K^1_{\\rm GP}+\\eta I)^{-1}y+\\frac1{2N}\\log\\det(\\rho K^1_{\\rm GP}+\\eta I)$, $j=\\frac12(\\rho-1-\\ln\\rho)$, after eliminating the dual by $\\bar Q=1/(1+Q)$; mean $k^\\top(K^1_{\\rm GP}+\\frac\\eta\\rho I)^{-1}y$."
+    mapping: "$\\bar Q\\to\\rho$; $Q\\to1/\\rho-1$; $K/\\lambda_1\\to K^1_{\\rm GP}$; $T=1/\\beta\\to\\eta$; $\\alpha_1/P=1/N_1\\to\\kappa$; $\\frac12S\\to F_B$ + const ($P\\log\\beta$); $\\kappa_\\mu/\\lambda_1\\to k$. Under GE $\\rho$ is the readout norm $\\lambda_1\\Vert v\\Vert^2/N$ (pilot derivation, not in the paper)."
+    equations: "Eqs. (6)-(7), Sec. II A; Methods C-E Eqs. (47)-(49), (56)"
+    role: master
+  - paper: "2209.04882"
+    result: r2
+    statement: "At $T=0$: $\\rho^2+(\\alpha-1)\\rho-\\alpha\\bar r=0$, $\\rho^*=\\frac12[\\sqrt{(\\alpha-1)^2+4\\alpha\\bar r}-(\\alpha-1)]$; the mean is the NNGP mean and the variance is $\\rho^*$ times the NNGP variance, so finite width helps iff $\\bar r<1$. At $T>0$ the mean is $k^\\top(K^1_{\\rm GP}+\\frac\\eta\\rho I)^{-1}y$ and moves."
+    mapping: "$\\bar Q^*\\to\\rho^*$; $s=\\frac1Py^\\top(K/\\lambda_1)^{-1}y\\to\\bar r$; $\\alpha_1\\to\\alpha$; $\\kappa_\\mu/\\lambda_1\\to k$, $\\kappa_0/\\lambda_1\\to k_{**}$; $\\lambda_1T/\\bar Q$ (in units of $K$) $\\to\\eta/\\rho$ (in units of $K^1_{\\rm GP}$)."
+    equations: "Eqs. (8), (49), (50); finite T Eq. (56)"
+    role: master
+  - paper: "2209.04882"
+    result: r4
+    statement: "Deep, zero-mean $\\varphi$: $F=\\sum_\\ell\\frac{N_\\ell}{N_L}j(\\rho_\\ell)+\\frac1{2N_L}[y^\\top(K^R_L+\\eta I)^{-1}y+\\log\\det(K^R_L+\\eta I)]$ with the nested kernel $K^R_\\ell=\\rho_\\ell\\Phi_\\ell(K^R_{\\ell-1})$, $K^R_0=K^0$; one scalar per layer is imposed (Methods G). For degree-one homogeneous $\\varphi$, $K^R_L=\\prod_\\ell\\rho_\\ell K^L_{\\rm GP}$."
+    mapping: "$\\bar Q_\\ell\\to\\rho_\\ell$; $Q_\\ell\\to1/\\rho_\\ell-1$; $\\frac1{\\lambda_\\ell}K\\circ(\\cdot)\\to\\Phi_\\ell$ (NNGP map incl. $\\sigma^2_{\\ell+1}$); $\\alpha_L/\\alpha_\\ell=N_\\ell/N_L$; $\\alpha_L/P=1/N_L\\to\\kappa$; $C\\to K^0$; $T\\to\\eta$."
+    equations: "Eqs. (13)-(15), (16)-(18); Methods G Eqs. (58)-(61); SM Eqs. (96)-(99)"
+    role: extension
+  - paper: "2209.04882"
+    result: r5
+    statement: "ReLU, $\\alpha_\\ell=\\alpha$, $T=0$, first order in $\\alpha$: SM Eq. 99 gives $\\rho_\\ell-1\\simeq\\alpha(\\bar r_L-1)$, so $\\Delta\\epsilon_g\\propto\\alpha(\\bar r_L-1)$ with the bias unchanged; finite width helps iff $\\bar r_L=\\frac1Py^\\top(K^L_{\\rm GP})^{-1}y<1$, and $\\bar r_L$ diverges with depth. Rests on the zero-mean action, which SM IV calls incomplete for ReLU."
+    mapping: "$\\bar Q_\\ell\\to\\rho_\\ell$; $s_L=\\frac1Py^\\top K_L^{-1}y\\to\\bar r_L$ with $K_L$ the ReLU NNGP kernel incl. priors (Eq. 15 at $\\bar Q_\\ell=1$); $\\alpha_\\ell\\to\\alpha$."
+    equations: "Eqs. (19)-(20), Sec. II C; SM Eqs. (98)-(99)"
+    role: special-case
+  - paper: "2401.11004"
+    result: r1
+    statement: "Unadjusted-Langevin sampling of one-hidden-layer erf networks on MNIST and grey-scaled CIFAR-10 matches the generalisation loss at $\\min_\\rho F_B(\\rho)$ ($\\kappa=1/N$, $\\eta=T=0.01$-$0.1$, $\\lambda_0=\\lambda_1=1$), at fixed $\\alpha=1/4$ (Fig. 1) and fixed $P=1000$ with $N$ varied (Fig. 2); small deviations at small $N$."
+    mapping: "$\\bar Q\\to\\rho$; $K(C)/\\lambda_1\\to K^1_{\\rm GP}$; $C=xx^\\top/(\\lambda_0N_0)\\to\\sigma_1^2K^0$; $T\\to\\eta$; $N_1\\to N$; mean $\\Gamma=k^\\top(K^1_{\\rm GP}+\\frac\\eta\\rho I)^{-1}y$ (Eqs. 2, 4), which moves at these $T$."
+    equations: "Eqs. (1)-(5); Figs. 1-2"
+    role: check
+  - paper: "2401.11004"
+    result: r2
+    statement: "At $T=\\eta=0.1$, $\\lambda_0=1$, three widths: increasing $\\lambda_1=1/\\sigma_a^2$ always lowers the sampled and predicted generalisation loss, and its $N$-dependence fades as $\\lambda_1$ grows; theory from $\\min_\\rho F_B$ and Langevin agree."
+    mapping: "$\\lambda_1\\to1/\\sigma_a^2$ (enters $K^1_{\\rm GP}=K(C)/\\lambda_1$ and the ridge $\\eta/\\rho$ in units of $K^1_{\\rm GP}$); $\\bar Q\\to\\rho$; $T\\to\\eta$."
+    equations: "Fig. 3; main text \"Effect of Gaussian priors\""
+    role: check
+  - paper: "2401.11004"
+    result: r3
+    statement: "For $\\pm1$ labels the expected test accuracy is $H(-{\\rm sign}(y^0)\\Gamma(\\rho^*)/\\sigma(\\rho^*))$, with $\\Gamma,\\sigma^2$ the GP mean and variance at kernel $\\rho^*K^1_{\\rm GP}$ and noise $\\eta$, evaluated at the same saddle as $F_B$; predicted (not simulated) optimal $\\lambda_0\\in(0,1)$ on CIFAR-10, larger $\\lambda_1$ always better."
+    mapping: "$\\bar Q^*\\to\\rho^*$; $\\Gamma(\\bar Q),\\sigma^2(\\bar Q)$ (SM Eq. 32) $\\to$ GP mean/variance with $\\rho K^1_{\\rm GP}$, $\\eta=T$; $\\lambda_0\\to1/\\sigma_1^2$, $\\lambda_1\\to1/\\sigma_a^2$; $H(x)=\\frac12{\\rm erfc}(x/\\sqrt2)$."
+    equations: "Eq. (6); SM Eqs. (21)-(34), esp. (32)-(34); Fig. 4 (theory only)"
+    role: special-case
+  - paper: "2401.11004"
+    result: r4
+    statement: "On CIFAR-10 the generalisation loss is lowest at finite $\\eta=T$ (learning curves at $T=0.03$ and $0.1$ cross), on MNIST lower $T$ helps over the probed range; both behaviours are reproduced by $\\min_\\rho F_B$ at $\\eta=T$."
+    mapping: "$T=1/\\beta\\to\\eta$ (likelihood temperature; priors not tempered); $\\bar Q\\to\\rho$; $P=1000$, $N$ varied."
+    equations: "Fig. 2; main text \"Effect of temperature\""
+    role: check
+  - paper: "2412.15911"
+    result: r1
+    statement: "Output-pair matrix $Q\\in\\mathbb R^{D_{\\rm out}\\times D_{\\rm out}}$: $\\frac12S_{\\rm FC}=\\frac12[{\\rm Tr}Q-D_{\\rm out}-\\log\\det Q]+\\frac1{2N}\\mathbf y^\\top(Q\\otimes K^1_{\\rm GP}+\\eta I)^{-1}\\mathbf y+\\frac1{2N}\\log\\det(Q\\otimes K^1_{\\rm GP}+\\eta I)$ + const, odd $\\varphi$, Gaussian equivalence; quoted from 2209.04882. Its $T=0$ root $Q^*=\\frac12[(1-\\alpha)I+((1-\\alpha)^2I+4\\alpha\\bar M)^{1/2}]$ is derived here, not in the paper."
+    mapping: "$Q\\to$ readout Gram over output pairs ($=$ Pacelli $\\bar{\\mathbf Q}$); $K^{\\rm NNGP}=K/\\lambda_1\\to K^1_{\\rm GP}$; $\\alpha_1/P=1/N_1\\to\\kappa$; $T\\to\\eta$; paper $D\\to D_{\\rm out}$; $\\bar M=Y^\\top(K^1_{\\rm GP})^{-1}Y/P$; $D_{\\rm out}=1$ gives $\\rho$."
+    equations: "Eqs. (1)-(2); SM I Eqs. (10)-(16); SM IV Eq. (42)"
+    role: extension
+  - paper: "2412.15911"
+    result: r2
+    statement: "$\\epsilon_g=\\Vert y^0-\\Gamma\\Vert^2+{\\rm Tr}\\Sigma$ with the GP mean and covariance at kernel $Q^*\\otimes K^1_{\\rm GP}$ and noise $\\eta$: $\\Gamma=(I\\otimes k^\\top)(I\\otimes K^1_{\\rm GP}+\\eta Q^{*-1}\\otimes I)^{-1}\\mathbf y$; at $T=0$ the mean is the NNGP mean and $\\Sigma=Q^*\\sigma^2_{\\rm NNGP}$. Matches Langevin at $T=0.01$, deviations at small $N$ and small $D$."
+    mapping: "$\\Gamma_a,\\Sigma_{ab}$ (SM Eqs. 17-18) $\\to$ posterior predictive; $(K^{(R)}_{Q})_{ab}=Q_{ab}K/\\lambda_1\\to Q_{ab}K^1_{\\rm GP}$; $\\frac1\\beta\\to\\eta$; $N_0\\to D$; $P=1000$, $D_{\\rm out}\\le10$, $N\\le10^4$."
+    equations: "Eq. (3); SM Eqs. (15)-(19); Fig. 1, SM Fig. 4"
+    role: extension
+  - paper: "2412.15911"
+    result: r3
+    statement: "The output-pair order parameter is the posterior readout Gram: $\\langle vv^\\top\\rangle/N=Q^*\\sigma_a^2$; off-diagonal entries (output-output correlations) vanish at infinite width and are $O(1)$ at $\\alpha=1$, e.g. negative between CIFAR-10 vehicle classes, matching Langevin overlaps."
+    mapping: "$\\lambda_1\\to1/\\sigma_a^2$; $v\\in\\mathbb R^{D_{\\rm out}\\times N}$ readout; $Q^*\\to$ saddle of the output-pair Wishart integral; $N_1\\to N$; derived by differentiating with respect to a matrix prior $\\Lambda$ (SM II)."
+    equations: "Eq. (4); SM II Eqs. (21)-(29); Fig. 2, SM Fig. 5"
+    role: extension
+  - paper: "2412.15911"
+    result: r4
+    statement: "One-loop (first order in $\\alpha$) solution of the output-pair saddle: $Q=I+\\alpha Q^{(1)}$ with $Q^{(1)}$ explicit from SM Eq. 46; at $T=0$, $Q^{(1)}=\\bar M-I$, the expansion of $Q^2+(\\alpha-1)Q=\\alpha\\bar M$. Less accurate than the numerically minimised $Q^*$ but cheap."
+    mapping: "$Q^{(0)}=\\mathbb 1$ (SM Eq. 45) $\\to$ NNGP; $\\alpha_1\\to\\alpha$; $K/\\lambda_1\\to K^1_{\\rm GP}$; $\\bar M=Y^\\top(K^1_{\\rm GP})^{-1}Y/P$; $\\frac1\\beta\\to\\eta$."
+    equations: "SM IV Eqs. (41)-(46); Fig. 1 dashed"
+    role: extension
+  - paper: "2307.11807"
+    result: r2
+    statement: "One convolutional hidden layer, odd $\\varphi$, Gaussian equivalence: $F_A(\\bar Q)=\\frac12[{\\rm Tr}\\bar Q-n-\\log\\det\\bar Q]+\\frac1{2N}y^\\top(K_R(\\bar Q)+\\eta I)^{-1}y+\\frac1{2N}\\log\\det(K_R(\\bar Q)+\\eta I)$, $K_R=\\frac1n\\sum_{ij}\\bar Q_{ij}K^{ij}_{\\rm GP}$, over an $n\\times n$ patch-pair matrix, $n=\\lfloor D/S\\rfloor$, $N$ channels."
+    mapping: "$\\bar Q_{ij}\\to$ patch-pair readout Gram; $Q\\to\\bar Q^{-1}-I$; $K^{ij}/\\lambda_1\\to K^{ij}_{\\rm GP}$ (local patch kernels, Eqs. 12-13); $N_c\\to N$; $\\alpha_c/P=1/N_c\\to\\kappa$; $T\\to\\eta$; $N_0\\to D$; FC is $n=1$."
+    equations: "Eqs. (10)-(13), Sec. III; App. B Eq. (B13) [HTML (62)]"
+    role: extension
+  - paper: "2307.11807"
+    result: r1
+    statement: "Fully connected one hidden layer: the action is the scalar $F_B(\\rho)$ of 2209.04882 with $K^{(R)}=\\rho K^1_{\\rm GP}$. Since $\\rho$ enters only through $\\rho/\\lambda_1$, the finite-width predictor at any $T$ equals the NNGP predictor with readout variance $\\rho^*\\sigma_a^2$, so finite width cannot beat the best tuned infinite-width kernel."
+    mapping: "$\\bar Q\\to\\rho$; $K(C)/\\lambda_1\\to K^1_{\\rm GP}$; $\\lambda_1\\to1/\\sigma_a^2$; $T\\to\\eta$; $N_1\\to N$; tuned NNGP has $\\sigma_a^2\\to\\rho^*\\sigma_a^2$, i.e. $\\lambda_1\\to\\lambda_1/\\rho^*$."
+    equations: "Eqs. (4)-(5), Sec. II"
+    role: variant
+  - paper: "2307.11807"
+    result: r5
+    statement: "At $T=0$ the FC mean $\\Gamma^{\\rm FC}=k^\\top(K^1_{\\rm GP})^{-1}y$ is independent of $\\rho$ and of width, while the CNN mean $\\Gamma^{\\rm CNN}=k_R(\\bar Q)^\\top K_R(\\bar Q)^{-1}y$ depends on the patch-pair matrix and on width; erf CNNs on CIFAR-10 beat their infinite-width limit, the FC network does not."
+    mapping: "$\\kappa^{(R)}=\\frac{\\bar Q}{\\lambda_1}\\kappa\\to\\rho k$ (FC, Eq. 27); $[\\kappa^{(R)}_{\\rm CNN}]=\\frac1{\\lambda_1n}\\sum\\bar Q_{ij}\\kappa^{ij}\\to k_R(\\bar Q)$ (Eq. 28); $\\beta\\to\\infty$ is $\\eta\\to0$."
+    equations: "Eqs. (22)-(30), Sec. V; Fig. 3 (qualitative, no theory curve)"
+    role: extension
+  - paper: "2307.11807"
+    result: r3
+    statement: "At $T=0$, to first order in $\\alpha$: $\\bar Q_{ij}=\\delta_{ij}+\\alpha\\,\\delta\\bar Q_{ij}$, $\\delta\\bar Q_{ij}=\\frac1Pv^\\top K^{ij}v-\\frac1P{\\rm Tr}(K^{ij}\\bar K^{-1})$, $v=\\bar K^{-1}y$ (energy derivative minus log-det derivative); the full patch-pair saddle is not solved."
+    mapping: "$\\alpha_c\\to\\alpha$; $\\tilde y=\\bar K^{-1}y\\to v$ at $\\eta=0$; $\\bar K=\\frac1{\\lambda_1n}\\sum_iK^{ii}\\to$ CNN $K_{\\rm GP}$ (Eq. 14); the factor $1/(\\lambda_1n)$ of Eq. (11) is dropped in Eqs. (16)-(17)."
+    equations: "Eqs. (15)-(17), Sec. IV"
+    role: extension
+  - paper: "2307.11807"
+    result: r4
+    statement: "Posterior similarity matrix at $T=0$: FC $\\langle K^1\\rangle=(1-\\frac1N)K_{\\rm GP}+\\frac{1}{N\\rho}yy^\\top$, entrywise $O(1/N)$ but a rank-one target term of operator norm $O(\\alpha)$; CNN: no such cancellation, entries claimed $O(1)$ by an unshown scaling argument. Tested with Adam GD (tanh), not posterior sampling."
+    mapping: "$O_{\\mu\\nu}/\\lambda_1=\\frac{\\sigma_a^2}N\\sum_i\\varphi(h_i^\\mu)\\varphi(h_i^\\nu)\\to K^1$; $K/\\lambda_1\\to K_{\\rm GP}$ (the paper writes $K$ for $\\lambda_1K_{\\rm GP}$ in Eq. 19); $\\bar Q\\to\\rho$; $N_1\\to N$."
+    equations: "Eqs. (18)-(20), Sec. V; App. C Eqs. (C3), (C27) [HTML (71), (95)]"
+    role: extension
+  - paper: "2605.29684"
+    result: r1
+    statement: "$-\\frac1N\\ln Z\\to\\min_\\rho F$, $F=\\sum_{\\ell=1}^Lj(\\rho_\\ell)+\\frac\\kappa2y^\\top(\\mathcal QK^L_{\\rm GP}+\\eta I)^{-1}y+\\frac1{2N}\\log\\det(\\mathcal QK^L_{\\rm GP}+\\eta I)$, $\\mathcal Q=\\prod_\\ell\\rho_\\ell$ (factorised deep closure); all $\\rho_\\ell$ equal; at $\\eta=0$: $\\rho^L(\\rho-1+\\alpha)=\\alpha\\bar r$; $L=1$ gives the master quadratic."
+    mapping: "$q_\\ell\\to\\rho_\\ell$, $\\mathcal I_q\\to j$, $S(q)=2F+$const, $\\frac\\alpha P=\\frac1N=\\kappa$, $\\beta^{-1}=T\\to\\eta$, $\\Theta^L(C)\\to K^L_{\\rm GP}$, $M_{yy}\\to\\bar r$; ansatz on the pushed-forward kernel $\\Theta^{L-\\ell}(K_E^{(\\ell)})$ (Eq. 27)."
+    equations: "Eqs. (27), (29)-(30), (45)-(50); App. F (F1)-(F6)"
+    role: extension
+  - paper: "2605.29684"
+    result: r2
+    statement: "Langevin-sampled erf and ReLU MLPs ($N=200$, $P\\le500$, $\\eta=T=0.1$, $L\\le10$) follow the $L$-scalar saddle where the NNGP fails, with EWA/NNGP crossings in $L$; on Gaussian data at $\\alpha=2.5$ the closure breaks down for $L>3$, while MNIST and CIFAR-10 still fit."
+    mapping: "$T\\to\\eta$; $\\alpha_\\ell=P/N_\\ell\\to\\alpha$; predictor Eqs. (92)-(93) with $K_R=\\mathcal Q^*K^L_{\\rm GP}$, i.e. GP regression with ridge $\\eta/\\mathcal Q^*$."
+    equations: "Figs. 1, 4, 5, S10-S12; Sec. VI C"
+    role: check
+  - paper: "2605.29684"
+    result: r3
+    statement: "Stacked EWA for CNNs: $K_R=\\frac1{n}\\sum_{ij}\\mathcal Q_{ij}[(\\Theta\\circ\\omega)^L(C)]_{ji}$, $\\mathcal Q=(\\prod_\\ell U_\\ell^\\top)^\\top(\\prod_\\ell U_\\ell^\\top)$, $U_\\ell U_\\ell^\\top\\sim\\mathcal W_n(1/A_\\ell,A_\\ell)$: an $n\\times n$ patch-pair order parameter, channels $A_\\ell$ in place of width; off-diagonal patch blocks move the mean."
+    mapping: "$N_p\\to n$ (patches); channels $A_\\ell\\to N$; $\\alpha=P/A_1$; $\\Theta(G)$, $(\\Theta\\circ\\omega)^L(C)$ = stacked patch NNGP kernel $\\to K^L_{\\rm GP}$ blocks; $q_{ij}\\to$ matrix order parameter."
+    equations: "Eqs. (71)-(72), (81), (89)-(90) [HTML (75)-(76), (88), (96)-(97)], Sec. V B; Fig. 7"
+    role: extension
+  - paper: "2605.29684"
+    result: r5
+    statement: "In $\\mu$P ($\\sigma_a^2\\to\\sigma_a^2/\\gamma^2$, $T_{\\mu P}=T_{SP}/\\gamma^2$, $\\kappa=\\gamma_0^2$) the $L$-scalar saddle still fits the CIFAR-10 error of a ReLU MLP ($L=4$, $P=1000$, $N\\le4000$); the gain over SP is variance. At these $N$, $\\rho^*\\approx3.9$ per layer, outside the checked LDP window."
+    mapping: "$\\lambda_L\\to\\gamma^2\\lambda_L$ gives $\\kappa=\\gamma_0^2$, $\\eta=T_{SP}$; $\\mathcal Q^*=\\prod\\rho_\\ell$; at $\\eta=0$ the saddle is $\\rho^L(\\rho-1+\\alpha)=\\gamma_0^2N\\alpha\\bar r$."
+    equations: "Sec. VI F; Fig. 8 (Q*=238.5, Q*/(gamma^2 lambda)=0.119 at N=4000); Eq. (50)"
+    role: check
+  - paper: "2508.20989"
+    result: r1
+    statement: "One hidden layer, $P/N=\\alpha$, $\\eta=T\\ge0$: at the S07 saddle $\\rho$ the posterior feature Gram is $K+\\delta K$, $\\delta K=\\frac{\\rho}{\\lambda_1N}K[vv^\\top-(\\rho K_{\\rm GP}+\\eta I)^{-1}]K$, $v=(\\rho K_{\\rm GP}+\\eta I)^{-1}y$; entrywise $O(1/N)$, but the rank-one $vv^\\top$ part has operator norm $O(\\alpha)$."
+    mapping: "$\\bar Q=\\rho$; $K$ = feature NNGP kernel, $K_{\\rm GP}=K/\\lambda_1$, $\\lambda_1=1/\\sigma_a^2$; $K_{(R)}=\\rho K_{\\rm GP}$; $1/\\beta=T=\\eta$; $\\tilde K_{(R)}=\\rho K_{\\rm GP}+\\eta I$; $N_1=N$; $\\Delta_2$ = energy tilt, $\\Delta_1$ = log-det tilt."
+    equations: "Eq. (1); SM Eq. (13) (same matrix), SM Eqs. (45)-(48) (Pacelli action)"
+    role: extension
+  - paper: "2508.20989"
+    result: r2
+    statement: "Binary balanced labels: $\\langle D^2\\rangle=\\frac{4N}{P^2}y^\\top\\langle\\varphi\\varphi^\\top\\rangle y\\simeq\\frac4\\alpha\\frac{y^\\top Ky}{P}+\\frac{\\lambda_1}{\\rho}(\\bar f_+-\\bar f_-)^2$, $\\bar f_\\pm$ class means of the posterior mean $\\rho K_{\\rm GP}(\\rho K_{\\rm GP}+\\eta I)^{-1}y$; $N$ times the rank-one tilt is finite; nonmonotonic in $T$, peak vanishing as $\\alpha\\to0$."
+    mapping: "$4N_1/P^2=4/(\\alpha P)$; third term of Eq. (3): $\\frac{4\\rho}{\\lambda_1P^2}(y^\\top Kv)^2$ with $Kv=\\frac{\\lambda_1}\\rho\\langle f\\rangle$ and $y^\\top\\langle f\\rangle=\\frac P2(\\bar f_+-\\bar f_-)$ gives $\\frac{\\lambda_1}\\rho(\\bar f_+-\\bar f_-)^2$; the $y^\\top\\Delta_1y$ term dropped."
+    equations: "Eqs. (2)-(5); SM Eqs. (9)-(24) (general weights, Eq. 24 balanced case)"
+    role: extension
+  - paper: "2508.20989"
+    result: r3
+    statement: "Same saddle: $\\langle w_hw_k\\rangle=\\sigma_1^2\\big[\\delta_{hk}+\\frac{\\rho}{2\\lambda_1N}\\big({\\rm Tr}[(\\rho K_{\\rm GP}+\\eta I)^{-1}\\Delta_{hk}]-v^\\top\\Delta_{hk}v\\big)\\big]$, $\\Delta_{hk}=\\partial_h\\partial_kK$ (SM 43); for linear activation $\\Delta_{hk}=-\\sigma_1^2(x_hx_k^\\top+x_kx_h^\\top)/D$, so the $v$ term is positive along the data; it grows about linearly in $\\alpha$."
+    mapping: "$\\lambda_0=1/\\sigma_1^2$, $N_0=D$; $\\Lambda_1=\\frac{\\alpha\\bar Q}{2\\lambda_1P}\\sum\\tilde K^{-1}_{\\mu\\nu}\\Delta^{\\mu\\nu}_{hk}$ (Eq. 7, $\\alpha/P=1/N$); $\\Lambda_2=-\\frac{\\alpha\\bar Q}{2\\lambda_1P}v^\\top\\Delta_{hk}v$ by SM (49); main Eq. (8) drops this minus."
+    equations: "Eqs. (6)-(8); SM Eqs. (26)-(49), linear check SM (50)-(55)"
+    role: extension
+  - paper: "2407.07168"
+    result: r1
+    statement: "Transfer learning, one hidden layer, $P_s,P_t\\propto N$: a target net whose first layer is coupled by $\\frac\\gamma2\\Vert w_s-w_t\\Vert^2$ to a quenched source-posterior sample has the Franz-Parisi action $S_n={\\rm Tr}\\lambda Q\\bar Q-\\log\\det(1+\\bar Q)-\\frac1N\\log\\det(1+\\beta\\mathcal K)-\\frac\\beta Ny^\\top(1+\\beta\\mathcal K)^{-1}y$, $\\mathcal K^{ab}=Q^{ab}K^{ab}$, over replicas $\\times$ tasks."
+    mapping: "$N_1\\to N$, $N_0\\to D$, $\\beta^{-1}\\to\\eta$; $Q$ $(n+1)\\times(n+1)$ readout overlaps (0 = source) $\\to$ matrix $\\rho$; RS gives $Q_s,Q_t,Q_{st},Q_{tt}$; $\\gamma$ is the coupling, not umbrella $\\gamma$."
+    equations: "Eqs. (1)-(6); App. B Eqs. (48)-(51), source action (52)-(54), transfer action (55)-(61)"
+    role: extension
+  - paper: "2407.07168"
+    result: r2
+    statement: "The best coupling depends on source-target similarity: on correlated hidden-manifold pairs with most features shared ($\\rho=0.1$) the target test loss falls monotonically in $\\gamma$ (freeze), with half shared ($\\rho=0.5$) freezing does not beat training from scratch and only $\\gamma\\simeq1$ helps; theory matches Langevin runs on C-EMNIST…"
+    mapping: "Paper $\\rho$ = fraction of replaced features (not umbrella $\\rho$); $\\gamma$ as in result 1; $P_s=800$, $P_t=200$ (Fig. 2 caption)."
+    equations: "Fig. 1b, Sec. 3; Fig. 2, Sec. 3.1"
+    role: extension
+  - paper: "2407.07168"
+    result: r3
+    statement: "As $N\\gg P_s,P_t$ the action returns to the lazy infinite-width solution $Q=\\mathbb 1$ ($Q_s=Q_t=1$, $Q_{st}=Q_{tt}=0$): readout norms stay at the prior and coupling gives no gain (under 2% at $N\\sim10P_s$); at $P\\propto N$ coupled nets beat the best uncoupled (infinite-width) predictor."
+    mapping: "$\\alpha=P/N\\to0$ is the NNGP corner (S01, $\\rho=1$); C-EMNIST, $P_s=800$, $P_t=100$."
+    equations: "Fig. 3, Sec. 3.2"
+    role: extension
+  - paper: "2407.10315"
+    result: r3
+    statement: "Multi-head, $L=1$, $P\\propto N$, $\\lambda\\to\\infty$: four renormalisation factors over tasks and replicas solve SI (140)-(143), the first being $\\sigma^{-2}\\rho^2-(1-\\alpha)\\rho-\\alpha\\bar r=0$; regimes are fixed representations ($\\alpha<1$), overfitting ($1<\\alpha<\\alpha_c$) and generalisation, with $\\alpha_c=\\gamma_{\\rm sim}^{-2}$."
+    mapping: "$u^1_{1,1}\\to\\rho$, $\\bar r=\\frac1PY_1^\\top(K^1_{1,1})^{-1}Y_1$; $u^1_{1,2},u^1_{2,2},u^0_{2,2}$ the cross-task and replica entries; $\\gamma_{\\rm sim}$ (Eq. 11) a data functional, not an order parameter."
+    equations: "Eq. (11), Fig. 5, Sec. 4.2; SI Eqs. (101), (106)-(108), (124)-(125), (138)-(143)"
+    role: extension
+  - paper: "2407.10315"
+    result: r4
+    statement: "On permuted and split MNIST, $\\gamma_{\\rm sim}$ computed from the data falls from 1 to 0 with the permutation or split ratio and predicts $\\alpha_c=\\gamma_{\\rm sim}^{-2}$ (e.g. 1.51 and 3.19) where forgetting and new-task error change abruptly; GD with an L2 penalty on weight change shows the same transitions."
+    mapping: "As result 3; GD side: SI 13.2, Eqs. (185)-(186), penalty on $W_t-W_{t-1}$ only."
+    equations: "Eq. (11), Fig. 6, Sec. 4.3; SI Eq. (108); SI Fig. 13 (GD)"
+    role: extension
+  - paper: "2407.10315"
+    result: r5
+    statement: "For dissimilar tasks in the overfitting regime ($\\alpha=3<\\alpha_c$, 100% permuted or split MNIST), forgetting falls and new-task error rises with $\\lambda$; an intermediate $\\lambda$ minimises $\\max(G_{2,1},G_{2,2})$ and gives hidden-layer similarity matrices with task-aligned blocks for both tasks."
+    mapping: "As result 3 at finite $\\lambda$; $G_{t,\\tau}$ normalised test losses."
+    equations: "Fig. 7, Sec. 4.4; SI Eqs. (140)-(143) at finite lambda"
+    role: extension
+  - paper: "2405.15926"
+    result: r1
+    statement: "Mean predictor $k^\\top(K+\\eta I)^{-1}y$, $\\eta=T$, with $K=H^{-L}\\sum_{\\pi\\pi^\\prime}U^{\\pi\\pi^\\prime}C_{\\pi\\pi^\\prime}$ over attention-path pairs; $U$ and nested $U^{(\\ell)}$ (one per trained linear layer) minimise $\\frac N2S$ = matrix entropy $+\\frac12y^\\top(K+\\eta I)^{-1}y+\\frac12\\log\\det(K+\\eta I)$; GP limit $U=\\sigma^{2(L+1)}\\delta$. Exact (no GE) at fixed $W_Q,W_K$."
+    mapping: "$U/\\sigma^{2(L+1)}\\to\\rho$ (matrix over path pairs); $\\sigma^{2(L+1)}H^{-L}\\sum_\\pi C_{\\pi\\pi}\\to K_{\\rm GP}$; Gibbs $T\\to\\eta$; $f=a\\cdot x/\\sqrt N$, so $\\kappa=1/N$; $\\frac N2S\\to NF_B$; $-\\frac12\\mathcal L(M)\\to j_{\\rm mat}(M)$ ($\\sigma=1$); $H=1$: deep linear chain (S06), not $j(\\rho)$."
+    equations: "Result 1, Eqs. (9)-(12); App. B.1, Eqs. (29)-(34); derivation App. C, Eqs. (45)-(78)"
+    role: extension
+  - paper: "2405.15926"
+    result: r2
+    statement: "The order parameter is the posterior overlap of effective path weights, $U^{\\pi\\pi^\\prime}=\\frac1N\\langle V^{({\\rm eff})\\pi}\\cdot V^{({\\rm eff})\\pi^\\prime\\top}\\rangle$, $V^{({\\rm eff})\\pi}=N^{-L/2}a\\,V^{(L)h_L}\\cdots V^{(1)h_1}$: a readout-side Gram matrix over attention paths."
+    mapping: "$U\\to$ readout-side Wishart matrix $\\rho$ over path pairs (at $H=1$ the readout Gram $\\frac1N\\Vert v\\Vert^2$ of a deep linear net); $V^{({\\rm eff})\\pi}\\to$ readout vector propagated back along path $\\pi$."
+    equations: "Result 2, Eq. (13); App. B.2, Eq. (35); derivation App. D"
+    role: extension
+  - paper: "2405.15926"
+    result: r3
+    statement: "Hidden-Markov-chain task ($P=100$, $L=H=2$, $T=0.01$, NUTS): the saddle $U$ matches sampled accuracy and $U$ down to $N=10$; finite width beats the GP by suppressing adversarial paths and anticorrelating good and denoising paths; at $N=1000$, $U$ is close to the GP value."
+    mapping: "$T\\to\\eta=0.01$; $\\alpha=P/N$ from $10$ to $0.1$; designed $W_Q,W_K$; four paths, so $U$ is $4\\times4$; no samples for $N\\ge1000$."
+    equations: "Sec. 4.1, Fig. 2; App. F (NUTS), G.1"
+    role: check
+  - paper: "2405.15926"
+    result: r4
+    statement: "One-shot Omniglot in context ($P=600$, $L=2$, $H=4$, $T$ tuned per $N$; $W_Q,W_K$ from a GD-trained net): finite width beats the GP, also out of distribution on FashionMNIST; theory matches samples at $N=10$, below the 136 entries of $U$; scoring heads by $U$ prunes…"
+    mapping: "$T\\to\\eta$ (tuned, App. H.2.1); $U$ is $16\\times16$; the GD comparison of $U$ (Eq. 13 on one GD-trained net, $P=528$k, $N=512$) is qualitative (block structure and signs)."
+    equations: "Sec. 4.2, Fig. 3; App. H.1, H.2.1"
+    role: check
+  - paper: "2012.04030"
+    result: r4
+    statement: "Heuristic ansatz for ReLU: keep the ReLU NNGP kernel $K^L_{\\rm GP}$, take $\\rho$ from $1-\\rho=\\alpha(1-\\rho^{-L}\\bar r)$ with $\\bar r$ from the ReLU GP kernel (Eqs. 58-59); mean $=$ GP mean, variance $\\rho^L\\times$ NNGP variance (Eq. 60). Matches Langevin for $L\\lesssim5$, fails deeper and near $N\\sim\\alpha_0$."
+    mapping: "$u_0=\\sigma^2\\rho$; Eq. (60) factor $u_0^L\\sigma^{-2L}=\\rho^L$; $r_0=\\sigma^{2L}Y^\\top\\langle K^{GP}_L\\rangle^{-1}Y/P$; at $L=1$ this is the S07 one-layer equation $\\rho^2+(\\alpha-1)\\rho-\\alpha\\bar r=0$ with no derivation of Gaussian equivalence."
+    equations: "Sec. VI A-B, Eqs. (54)-(60); Figs. 11-15"
+    role: check
+  - paper: "2502.03210"
+    result: r2
+    statement: "One-loop Legendre transform $\\Gamma=-S-\\frac12\\log\\det(-S^{(2)})$. For a linear network at $N\\propto P\\to\\infty$ the mean is GP regression with $\\rho K^0$, $\\rho_{\\rm 1loop}=\\rho_0-\\frac{\\rho_0^2}N{\\rm Tr}[(\\rho K^0+\\eta)^{-1}K^0]$, $\\rho_0=1/(1-\\kappa v^\\top K^0v)$: the first-order expansion, in $t/N=O(\\alpha)$, of the stationarity of $F_B$."
+    mapping: "$\\gamma=1$: $\\kappa=1/(g_wN)$ (S07 $\\kappa=1/N$ after $y\\to y/\\sqrt{g_w}$), $\\eta=\\kappa_0/g_w$; $Q/g_w\\to\\rho$; $C^{(xx)}\\to K^0$; $A=g_w(\\rho K^0+\\eta)$; $\\frac12\\log\\det(-S^{(2)})\\approx\\frac12\\log\\det(\\rho K^0+\\eta)$ plus $O(1/N)$ rank-one terms."
+    equations: "Eqs. (17)-(20), (24); App. A.3 Eqs. (79)-(88); App. A.5 Eqs. (137)-(142); Fig. 3"
+    role: variant
+  - paper: "2510.25553"
+    result: r2
+    statement: "One hidden layer, linear $\\varphi$ (App. B): the Wilsonian ridge flow, at linear order in the coupling $U=-g_w^2P/(4N\\eta^2)$, accumulates the linearised S07 scalar mode by mode, $\\rho(k)-1=\\frac1N\\sum_{k'>k}\\big[\\frac{P^2\\lambda y^2}{(P\\lambda+\\eta)^2}-\\frac{P\\lambda}{P\\lambda+\\eta}\\big]_{k'}$ (energy minus log-det); over all modes at $\\eta=0$ this is $\\alpha(\\bar r-1)$."
+    mapping: "$\\kappa_{\\rm paper}\\to\\eta$; $r=P/\\eta$, $\\delta r/r_0\\to\\rho-1$ (equal for the mean); $\\Lambda_\\mu=P\\lambda_\\mu$, $Y_\\mu^2=Py_\\mu^2$ (equivalent-kernel modes); $d^2$-contraction $\\to$ energy $v^\\top Kv$, $c$-contraction $\\to$ ${\\rm Tr}K(K+\\eta)^{-1}$; spectral $\\alpha,\\beta$ are not $P/N$."
+    equations: "Eqs. (25)-(27), Sec. V A; nullclines (32)-(33); App. B (B2)-(B7); App. D"
+    role: special-case
+  - paper: "2510.25553"
+    result: r3
+    statement: "The mean of mode $k$ is the GP mean with a mode-dependent ridge, $\\langle\\Delta(k)\\rangle\\simeq y(k)/(\\tilde r(k)\\lambda(k)+1)$, $\\tilde r=r(\\ell)\\ell^{-(1+a)}$ at $\\ell=\\Lambda/k$: in the App. B reading $\\eta_{\\rm eff}(k)=\\eta/\\rho(k)$, the S07 statement that the scalar moves the mean through $\\eta/\\rho$, resolved by mode."
+    mapping: "$P/\\tilde r\\to\\eta/\\rho(k)$; $\\Delta$ = residual $y-f$; spectral exponent $\\alpha_{\\rm paper}\\to a$; eigenfunctions unchanged; the variance is Eq. (35)."
+    equations: "Eqs. (34)-(35), Sec. V B; App. G (G5); Figs. 3, 7"
+    role: special-case
+  - paper: "2510.25553"
+    result: r4
+    statement: "GP (equivalent-kernel) training loss $\\mathcal L_{\\rm bias}/P\\simeq I_{\\rm bias}(P/\\eta)^{-b/(1+a)}$, $\\mathcal L_{\\rm var}/P\\simeq I_{\\rm var}(P/\\eta)^{-a/(1+a)}$; the first-order corrections are $\\propto U\\eta$ and decay at fixed $U$. With the App. B coupling, the relative corrections are $k_P^{1+a-b}/N$ (energy) and $k_P/N$ (log-det), which grow with $P$ at fixed $N$."
+    mapping: "spectral $\\alpha,\\beta\\to a,b$ ($\\lambda_k=k^{-1-a}$, $y_k^2=k^{-1-b}$); $\\kappa\\to\\eta$; $k_P=(P/\\eta)^{1/(1+a)}\\approx{\\rm Tr}K(K+\\eta)^{-1}$; $U\\eta\\propto P/(N\\eta)$ from App. B."
+    equations: "Eqs. (39)-(42), Sec. V D; Sec. VI Eq. (43); Fig. 5"
+    role: special-case
+reduces_to:
+  - {target: S06, limit: "linear $\\varphi$: $K_{\\rm GP}$ is the linear kernel, the equation is the deep linear one"}
+  - {target: S01, limit: "$\\alpha\\to0$: $\\rho\\to1$"}
+disagreements:
+  - {papers: ["2209.04882", "2605.29684"], note: "Deep closure: Pacelli nests the scalar in each layer, $K^R_\\ell=\\rho_\\ell\\Phi(K^R_{\\ell-1})$; the equivalent Wishart ansatz factorises it, $\\prod q_\\ell\\,\\Theta^L$. Equal for degree-one homogeneous $\\varphi$ (linear, ReLU), different for erf and sign (Pacelli SM Eqs. 96–97). Pacelli SM III B says the factorised replacement is not correct in general; which closure fits erf data is untested. [verified]"}
+  - {papers: ["2307.11807", "2412.15911"], note: "In the locally connected CNN the $T=0$ mean moves ($K_R=\\frac1n\\sum_i\\bar Q_iK^{ii}$); the cross-patch terms are specific to the CNN. The output-pair matrix leaves the mean unchanged only at $T=0$ (it enters as the ridge $\\eta Q^{-1}$ at $T>0$). [verified]"}
+open_problems: [op-08, op-09]

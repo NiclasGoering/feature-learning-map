@@ -1,0 +1,154 @@
+id: S06
+slug: deep-linear-scalar
+title: "Deep linear networks at $P\\propto N$: one scalar equation"
+kind: collapse
+claim: "For deep linear networks at $P\\propto N$ the posterior is a GP with the NNGP kernel rescaled by $\\rho^L$, with $\\rho$ the root of one scalar equation: the published Li–Sompolinsky equation at standard scaling, the fixed-$P$ μP one at $\\alpha=0$."
+formula: '$$\rho=1-\alpha+\kappa\,P\,\bar r\,\rho^{-L},\qquad \alpha=\tfrac PN,\qquad \bar r=\tfrac1P\,y^\top(K^L_{\rm GP})^{-1}y$$'
+regime:
+  width_limit: finite-proportional
+  learning_rule: [bayes]
+  conditions: "Linear activation; $P,N\\to\\infty$ with $\\alpha=P/N$ fixed, $P<D$, $L$ fixed; $\\eta\\to0$. $\\kappa=1/N$: $\\kappa P=\\alpha$. Unequal widths: $\\rho_\\ell=1-\\alpha_\\ell+\\alpha_\\ell\\bar r/\\prod_k\\rho_k$, $\\alpha_\\ell=P/N_\\ell$. $\\alpha\\to0$ with $\\kappa P\\to0$: NNGP. $\\alpha=0$, $\\kappa=\\gamma_0^2$: Lauditi Eq. 48. At $\\eta>0$ the mean moves (Li–Sompolinsky Eq. 46)."
+status: phys
+status_note: "Published at general $\\kappa$ by van Meegen–Sompolinsky (Eq. A53, $\\kappa=1/\\sigma_a^2$, $T=0$, physics); at $\\kappa=1/N$ by Li–Sompolinsky, proved at $\\eta=0$ by Hanin–Zlokapa. Laplace in $s$ on the exact mixture S03 reproduces it numerically ($N=4000$, relative difference below $10^{-3}$)."
+members:
+  - paper: "2012.04030"
+    result: r1
+    statement: "Deep linear network, $P,N,D\\to\\infty$ at fixed $\\alpha$, $\\alpha_0<1$, $\\eta\\to0$: integrating out layers from the readout gives effective kernel $\\rho^LK^L_{\\rm GP}$ with $\\rho=1-\\alpha+\\alpha\\bar r\\rho^{-L}$; the mean predictor is the GP mean and the variance is $\\rho^L$ times the NNGP variance."
+    mapping: "$u_0=\\sigma^2\\rho$; $r_0=Y^\\top K_0^{-1}Y/P=\\sigma^{2L}\\bar r$ ($K^L_{\\rm GP}=\\sigma^{2L}K_0$, $K_0=\\sigma^2X^\\top X/N_0$); $T=\\eta$, $\\gamma=1$, $\\kappa=1/N$, so $\\kappa P=\\alpha$; Eq. (26) variance factor $u_0^L$ on $K_0$ is $\\rho^L$ on $K^L_{\\rm GP}$."
+    equations: "Eqs. (7), (11), (25)-(27), Sec. II B, D; App. A (A1)-(A12) [HTML (61)-(72)]"
+    role: master
+  - paper: "2012.04030"
+    result: r3
+    statement: "At $\\eta=T>0$: mean $\\rho^Lk_*^\\top(\\rho^LK^L_{\\rm GP}+\\eta I)^{-1}y$ and variance $\\rho^Lk_{**}-\\rho^{2L}k_*^\\top(\\rho^LK^L_{\\rm GP}+\\eta I)^{-1}k_*$, with $\\rho-1=\\tfrac1Nv^\\top K_ev-\\tfrac1N{\\rm Tr}\\,K_e(K_e+\\eta I)^{-1}$, $K_e=\\rho^LK^L_{\\rm GP}$, $v=(K_e+\\eta I)^{-1}y$; the mean moves."
+    mapping: "$T=\\eta$, $u_0^LK_0=\\rho^LK^L_{\\rm GP}$, $u_0^Lk_0=\\rho^Lk_*$; Eq. (46) is the general-$\\eta$ stationarity of S06 at $\\kappa=1/N$; $\\lambda=u_0^{-L}$ is the effective noise weight."
+    equations: "Eqs. (45)-(48), Sec. IV B; App. B (B4)-(B6) [HTML (99)-(101)]"
+    role: special-case
+  - paper: "2012.04030"
+    statement: "$m$ outputs: an $m\\times m$ matrix $\\mathcal P$, diagonal in the eigenbasis of $\\mathcal R=Y^\\top(K^L_{\\rm GP})^{-1}Y/P$, with $I-\\mathcal P=\\alpha(I-\\mathcal R\\mathcal P^{-L})$; mean $=$ GP mean, covariance $\\mathcal P^L\\otimes$ NNGP variance at $\\eta=0$; at $\\eta>0$ the modes do not decouple."
+    mapping: "$\\mathcal U_0=\\sigma^2\\mathcal P$, $R_0=\\sigma^{2L}\\mathcal R$; Eq. (44) per eigenvalue $1-\\alpha=\\sigma^{-2}u_{k0}-\\alpha u_{k0}^{-L}r_{k0}$; (C6) is the $L=1$ matrix form $I-\\sigma^{-2}U=\\alpha(I-\\tfrac1PY^\\top K^{-1}YU^{-1})$."
+    equations: "Sec. IV A, Eqs. (33)-(44)"
+    role: extension
+  - paper: "2212.14457"
+    result: r4
+    statement: "Deep linear, $\\eta=0$, fixed $L$, $P/N\\to\\alpha\\in(0,\\infty)$, $P/D\\to\\alpha_0\\in(0,1)$: the posterior predictive converges to a Gaussian with mean $\\theta_*^\\top x$ and variance $\\rho^L$ times the NNGP variance, $\\rho=1-\\alpha+\\alpha\\bar r\\rho^{-L}$, $\\rho>\\max(0,1-\\alpha)$; the evidence is given to $O(\\log)$. Proved."
+    mapping: "$1+z_*=\\rho$; $\\nu=\\sigma^{2(L+1)}\\bar r$; (3.15) $\\bar r=(1+z_*/\\alpha)(1+z_*)^L$; variance $\\nu\\Sigma_\\perp(1+z_*/\\alpha)^{-1}$ with $\\Sigma_\\perp$ read as $\\|x_\\perp\\|^2/N_0$ equals $\\rho^L\\sigma^{2(L+1)}\\|x_\\perp\\|^2/N_0$; $\\kappa=1/N$."
+    equations: "Thm 3.4, Eq. (3.15) [HTML (3.17)]; Thm 3.2(a), Eqs. (3.6)-(3.8); proof Lemmas 4.8-4.10"
+    role: master
+  - paper: "2212.14457"
+    result: r3
+    statement: "At $\\sigma^2=1$ with $L/N\\to\\lambda_{\\rm prior}$, $P/N\\to\\alpha$: the posterior predictive is Gaussian with mean $\\theta_*^\\top x$ and variance $\\nu\\Sigma_\\perp$, independent of $\\alpha$ and $\\lambda_{\\rm prior}$, i.e. the evidence-maximising posterior; this equals fixed $L$ at the tuned $\\sigma_*^2=\\nu^{1/(L+1)}$ (Cor 3.7)."
+    mapping: "In S06 terms $\\rho-1=z_*=O(1/N)$ per layer, but $\\rho^L\\to\\bar r$ as $L=\\lambda_{\\rm prior}N$ layers compound, so the variance factor $(1+z_*/\\alpha)^{-1}\\to1$; $\\lambda_{\\rm prior}=L/N$."
+    equations: "Thm 3.6, Cor 3.7, Sec. 3.3.2; Thm 3.2(b), Eqs. (3.9)-(3.10); Cors 4.12-4.13, Sec. 4.7"
+    role: extension
+  - paper: "2212.14457"
+    result: r2
+    statement: "At $\\sigma^2=1$ with $L,P,N\\to\\infty$, $P/N\\to0$, $L/N\\to0$, $LP/N\\to\\lambda_{\\rm post}$: Gaussian posterior with variance $\\nu\\Sigma_\\perp(1+t_*)^{-1}$, $(1+t_*)e^{\\lambda_{\\rm post}t_*}=\\nu$; $\\partial_{\\lambda_{\\rm post}}\\log Z=Pt_*^2/4\\ge0$, so evidence grows with $\\lambda_{\\rm post}$."
+    mapping: "$\\lambda_{\\rm post}=\\alpha L$ with $\\alpha\\to0$ (not $L\\propto N$); from (3.15) set $z_*=\\alpha t_*$, $(1+\\alpha t_*)^L\\to e^{\\lambda_{\\rm post}t_*}$, $\\sigma^2=1$ so $\\bar r=\\nu$."
+    equations: "Thm 3.8, Cor 3.9, Eq. (3.18), Sec. 3.3.3; Thm 3.2(c), Eqs. (3.11)-(3.13)"
+    role: extension
+  - paper: "2203.00573"
+    result: r2
+    statement: "Deep linear Bayesian regression, data-averaged RS replica, $\\eta\\to0$ after the limit: $\\epsilon_{\\rm NN}-\\epsilon_{\\rm LR}=(1-\\alpha_0)\\sigma^2(\\prod_\\ell\\rho_\\ell-1)$ with $\\rho_\\ell=1-\\alpha_\\ell+\\alpha_\\ell\\bar r/\\prod_k\\rho_k$ for unequal widths; equal widths give $\\rho=1-\\alpha+\\alpha\\bar r\\rho^{-L}$. For $\\alpha_0>1$ the gap is $0$."
+    mapping: "Paper $p,d,n_\\ell,\\ell$ = $P,D,N_\\ell,L$; paper $\\alpha=\\alpha_0=P/D$; $\\alpha/\\gamma_\\ell=\\alpha_\\ell=P/N_\\ell$ ($\\kappa=1/N_\\ell$); $z=(1-\\alpha_0)\\sigma^2\\prod_\\ell\\rho_\\ell$; $\\bar r=1/\\tilde\\sigma^2=(1+\\eta_{\\rm lab}^2/(1-\\alpha_0))/\\sigma^2$ with $\\eta_{\\rm lab}$ the label-noise std; Li-Sompolinsky $u=\\rho$ (Eq. D33)."
+    equations: "Eqs. (28)-(30); App. B3 Eqs. (B142)-(B144); App. D Eqs. (D30)-(D37)"
+    role: variant
+  - paper: "2203.00573"
+    result: r3
+    statement: "First order in $\\alpha_\\ell$: $\\epsilon_{\\rm NN}=\\epsilon_{\\rm LR}+[(1-\\alpha_0)(1-\\sigma^2)+\\eta_{\\rm lab}^2]\\sum_\\ell\\alpha_\\ell+O(\\alpha^2)$, the first-order term of the S06 root; quenched random features give the identical term (Eq. 21), so at $O(\\alpha)$ the change is a scale effect, not a target-driven tilt."
+    mapping: "As row n=1; $\\prod_\\ell\\rho_\\ell-1=\\sum_\\ell\\alpha_\\ell(\\bar r-1)+O(\\alpha^2)$ and $(1-\\alpha_0)\\sigma^2(\\bar r-1)=(1-\\alpha_0)(1-\\sigma^2)+\\eta_{\\rm lab}^2$."
+    equations: "Eqs. (21), (32); App. B Eq. (B150); App. E Eq. (E5)"
+    role: special-case
+  - paper: "2203.00573"
+    result: r4
+    statement: "Equal widths, second order: $(\\epsilon_{\\rm NN}-\\epsilon_{\\rm LR})/(1-\\alpha_0+\\eta_{\\rm lab}^2)=\\tilde\\sigma^2(\\rho^L-1)=L(1-\\tilde\\sigma^2)\\alpha+[\\tfrac{L(L-1)}2\\tilde\\sigma^2-\\tfrac{L(L+1)}{2\\tilde\\sigma^2}+L]\\alpha^2+O(\\alpha^3)$; the gap to quenched random features (Eq. 34) is $\\tfrac{L(L+1)}{2\\tilde\\sigma^2}\\alpha^2>0$ (Eq. 35)."
+    mapping: "As row n=1 with equal widths, $\\alpha=P/N$, $\\tilde\\sigma^2=1/\\bar r$; the S06 root expanded to $\\rho=1+\\alpha(\\bar r-1)-L\\bar r(\\bar r-1)\\alpha^2+O(\\alpha^3)$."
+    equations: "Eqs. (33)-(35); App. B Eqs. (B151)-(B152); App. F4 Eq. (F35)"
+    role: special-case
+  - paper: "2111.11954"
+    result: r4
+    statement: "One hidden layer, $\\eta\\to0$, $P,N\\to\\infty$ at $\\alpha=P/N$, $D_{\\rm out}$ fixed: the mode of the posterior scale solves $I-s^{-1}\\tfrac{Y^\\top(K^0)^{-1}Y}{N}s^{-1}-(1-\\alpha)s^{-1}=0$; one output: $\\rho=1-\\alpha+\\alpha\\bar r\\rho^{-1}$, the S06 equation at $L=1$, $\\kappa=1/N$."
+    mapping: "paper $L$ (scale matrix) $\\to s$, scalar $\\lambda\\to\\rho$; $Y^\\top G_{xx}^{-1}Y/n_1\\to\\alpha\\bar r$ for one output; $K^L_{\\rm GP}=K^0$; $\\kappa P=\\alpha$; $D_{\\rm out}\\times D_{\\rm out}$ matrix $\\rho$ for several outputs."
+    equations: "Eqs. (39)-(41), Sec. V-C"
+    role: special-case
+  - paper: "2406.03260"
+    statement: "One output: $Z\\propto\\int\\prod_\\ell dQ_\\ell\\,e^{-\\sum_\\ell[\\frac{N_\\ell}2Q_\\ell-(\\frac{N_\\ell}2-1)\\log Q_\\ell]-\\frac12\\Phi_\\beta}$ exactly; at $P,N\\to\\infty$, $\\alpha=P/N$ fixed, assuming the data terms converge, the saddle has $Q_\\ell=\\rho$ and at $\\eta\\to0$ $\\rho=1-\\alpha+\\alpha\\bar r\\rho^{-L}$."
+    mapping: "paper $Q_\\ell=u_0$ (L-S, with $\\sigma$ absorbed into $K^0=X^\\top X/N_0\\lambda^*$) $\\to\\rho$; $\\bar r=\\tfrac1Py^\\top(K^0)^{-1}y$; $\\kappa=1/N$ so $\\kappa P=\\alpha$; $L$ hidden layers."
+    equations: "Sec. 4.2, Eqs. (20), (21)"
+    role: variant
+  - paper: "2406.16689"
+    result: r1
+    statement: "Non-lazy deep linear network, $T\\to0$, readout-chain (Li-Sompolinsky) route: $U=\\sigma_a^2(1-\\alpha)I_m+\\sigma_a^{2L}U^{-L}Y^\\top(K^L_{\\rm GP})^{-1}Y$ (A53), i.e. $\\rho=1-\\alpha+\\kappa P\\bar r\\rho^{-L}$ with $\\kappa=1/\\sigma_a^2$, a matrix over $m$ outputs; at $\\sigma_a^2=P^{-1/L}$ ($\\kappa\\to\\infty$) it reduces to $U^{L+1}=\\sigma_a^{2L}Y^\\top K_0^{-1}Y$ (Eq. 4)."
+    mapping: "$U=\\sigma_a^2\\rho$ ($m\\times m$; per-layer $U_\\ell=\\rho$, A52); $\\kappa=1/\\sigma_a^2$; $P\\bar r=Y^\\top(K^L_{\\rm GP})^{-1}Y$, $K^L_{\\rm GP}=\\prod_\\ell\\sigma_\\ell^2K_0$, $K_0=X^\\top X/N_0$; $\\alpha=P/N$, equal widths; $T\\to T/N$ then $T\\to0$ ($\\eta=0$); $N_0>P$ so $K_0$ is invertible."
+    equations: "Eqs. (A47)-(A53) (App. A3a; HTML numbers (56)-(62)); kappa->inf limit Eqs. (4), (A29)"
+    role: variant
+  - paper: "2406.16689"
+    result: r4
+    statement: "Linear: the mean predictor $k_0(x)^\\top K_0^{-1}Y$ equals the GP mean at $T=0$ (A68), the variance is $O(P^{(L-1)/L}/N)$ (A69); on three MNIST digits ($N=P=100$, $D=784$, NUTS, $T=10^{-4}$) the gain over the GP is all variance. Sigmoid and ReLU gains are mainly variance too."
+    mapping: "As row n=1; GP comparison uses the NNGP kernel $K^L_{\\rm GP}$ (App. D3)."
+    equations: "Eqs. (6), (A68)-(A69); Figs. 3, 7, 10, 20, 21, 26"
+    role: check
+  - paper: "2406.16689"
+    statement: "The high-dimensional saddle over $P\\times P$ kernels and conjugates (A3-A22) gives $\\rho=1+\\kappa P\\bar r\\rho^{-L}$, without the $-\\alpha$ of the readout-chain result (A53); the paper calls that saddle \"in general not valid\", and it holds here only because $\\kappa=1/\\sigma_a^2\\to\\infty$ makes $1$ and $\\alpha$ negligible."
+    mapping: "As row n=1; (A22) is $U=\\sigma_a^2I+\\sigma_a^{2L}U^{-L}Y^\\top(K^L_{\\rm GP})^{-1}Y$, i.e. the fixed-$P$ kernel functional with no Wishart Jacobian."
+    equations: "Eq. (A22) (HTML 31) vs Eq. (A53) (HTML 62); text after (A53); derivation A3-A21"
+    role: check
+  - paper: "2210.17449"
+    result: r1
+    statement: "One hidden layer, $T\\to0$, $P,N\\to\\infty$, $\\alpha=P/N$ fixed: the posterior is a GP with kernel $\\tilde K_1=(g^\\top Ug/M)\\circ K^0$, $U$ ($M\\times M$) minimising $\\frac12[\\sigma^{-2}\\mathrm{Tr}U-\\log\\det U]+\\frac1{2N}[y^\\top\\tilde K_1^{-1}y+\\log\\det\\tilde K_1]$; at $M=1$ this is the master at $L=1$; for $M>1$ the mean moves."
+    mapping: "$U/\\sigma^2\\to\\rho$ (matrix over gates); paper $K_0=\\sigma^2x^\\top x/N_0\\to K^0$, $K^1_{\\rm GP}=\\sigma^2K^0$; $T\\to\\eta=0$; $\\kappa=1/N$; $N_0\\to D$; $U=\\langle aa^\\top\\rangle/N$ (Eq. 7)."
+    equations: "Eqs. (5)-(8), Sec. 3; App. A.1, SI Eqs. (3)-(10), (21)"
+    role: extension
+  - paper: "2210.17449"
+    result: r2
+    statement: "With localised gates and a ReLU teacher with preferred inputs (clustered Gaussian inputs), the diagonal block of $U$ for gates covering those inputs grows as $N$ shrinks, so bias and error increase with $N$ towards the GP value; for a teacher without preferred inputs all errors decrease with $N$."
+    mapping: "As result 1, $L=1$; $U\\to\\sigma^2\\rho$ over gates; $P=200$-$1000$, $N_0=100$-$200$, $M=20$-$50$ (App. C.2)."
+    equations: "Sec. 4.1, Fig. 2(b)-(e); App. C.2; Langevin check App. B.2, SI Fig. 2"
+    role: extension
+  - paper: "2210.17449"
+    result: r3
+    statement: "On MNIST (even vs odd), bias can rise or fall with the prior scale $\\sigma$ while variance rises, giving an error minimum at intermediate $\\sigma$, whereas for deep linear networks ($M=1$) the bias is $\\sigma$-independent and $\\sigma\\to0$ is optimal; GD shows the same trends."
+    mapping: "As result 1; $\\sigma^2$ = prior variance of all weights $\\to\\sigma_\\ell^2$; $M=5$, $N=3000$, $P=800$ or $M=100$, $N=200$, $P=300$ (App. C.3)."
+    equations: "Sec. 4.1, Fig. 3; App. B.3, C.3"
+    role: extension
+  - paper: "2210.17449"
+    result: r4
+    statement: "For $L$ gated layers $H_L=\\frac12y^\\top\\tilde K_L^{-1}y+\\frac12\\log\\det\\tilde K_L+\\frac N2\\sum_l[\\sigma^{-2}\\mathrm{Tr}U^l_L-\\log\\det U^l_L]$ with $U^l_L$ of size $M^l\\times M^l$ (SI Eq. 40); the renormalised normalised kernel flattens with $L$ more slowly than the GP kernel $(\\frac{\\pi-\\theta}\\pi)^L\\cos\\theta$."
+    mapping: "$U^l_L/\\sigma^2\\to\\rho_\\ell$, a matrix over gate paths of length $l$; $M=6$, $N=500$, $P=600$ on MNIST (Fig. 5); GP form for random zero-threshold gates at $M\\to\\infty$."
+    equations: "Sec. 4.2, Fig. 5; App. A.2, SI Eqs. (38)-(42)"
+    role: extension
+  - paper: "2210.17449"
+    result: r5
+    statement: "Two tasks with conflicting labels on the same inputs, gates combining top-down task signals and input: $\\tilde K_{p\\mu,q\\nu}=(g_p(x^\\mu)^\\top Ug_q(x^\\nu)/M)K^0_{\\mu\\nu}$; narrower nets suppress the cross-task blocks more, so the generalisation error increases with $N$."
+    mapping: "Task index $p$ enters through the gates; $2P\\times2P$ kernel, $P=600$, $M=20$, $N_0=400$; $U\\to\\sigma^2\\rho$ over gates."
+    equations: "Sec. 5.2, Fig. 7; kernel $\\tilde K_{p\\mu,q\\nu}$ after Fig. 7 caption"
+    role: extension
+  - paper: "2407.18807"
+    result: r1
+    statement: "Linear parallel-branch network ($L_b$ branches, one hidden layer each), $P\\propto N$: $F=\\sum_l j(\\rho_l)+\\frac1{2N}[y^\\top(K_e+\\eta)^{-1}y+\\log\\det(K_e+\\eta)]$, $K_e=\\frac1{L_b}\\sum_l\\rho_lK_{l,\\rm GP}$, stationarity $1-\\rho_l=\\frac1N[\\mathrm{Tr}_l-r_l]$; $L_b=1$, $\\eta=0$ gives $\\rho=1-\\alpha+\\alpha\\bar r/\\rho$."
+    mapping: "Paper $u_l/\\sigma_w^2\\to\\rho_l$, $T\\to\\eta$, $L\\to L_b$ (branches, not depth), $K_l\\sigma_w^2\\to K_{l,\\rm GP}$, $\\mathrm{Tr}_l={\\rm Tr}[(K+T)^{-1}u_lK_l/L]$, $r_l$ the quadratic form of Eq. (12)."
+    equations: "Eqs. (4)-(13), Sec. 3.3; App. A.2, A.4"
+    role: extension
+  - paper: "2407.18807"
+    result: r2
+    statement: "At $\\eta=0$ and $\\alpha\\to\\infty$ the stationarity becomes $r_l=\\mathrm{Tr}_l$, the stationarity of $\\frac12[y^\\top K_e^{-1}y+\\log\\det K_e]$ (evidence maximisation over branch scales); for a teacher with branch readout variances $\\beta_l^2$ and $N_t\\to\\infty$ it is solved by $\\rho_l=\\sigma_t^2\\beta_l^2/\\sigma_w^4$, i.e. $u_l=\\sigma_t^2\\beta_l^2/\\sigma_w^2$."
+    mapping: "As result 1; teacher weight variance $\\sigma_t^2$, width $N_t$; ML-II reading is the team's, the paper calls it equipartition."
+    equations: "Eq. (17), proof Eqs. (18)-(21), Sec. 4.1; App. B.1 Eq. (62)"
+    role: extension
+  - paper: "2407.18807"
+    result: r3
+    statement: "Student-teacher CSBM graph, two branches, HMC at $T=5\\cdot10^{-4}\\sigma_w^2$ against the saddle: branch norms split from the GP value as $N$ falls and converge to the teacher norms at $N=4$; bias grows with width from the narrow-width value to the GP value, variance falls with width for small $\\sigma_w$."
+    mapping: "$N\\le1024$, $N_0=950$, $n=2600$ nodes, train ratio 0.65, teacher $N_t=1024$, $\\beta_0^2=0.4$, $\\beta_1^2=2$."
+    equations: "Figs. 2-4, Sec. 4.2; App. C.1, C.5"
+    role: check
+  - paper: "2407.18807"
+    result: r4
+    statement: "On Cora (2708 nodes, binary node regression, $T=0.01$, HMC up to $N=64$) bias grows with width towards the GP value and branch norms converge at narrow width independently of $\\sigma_w$ and $L_b$; errors are variance-limited and the narrow-width limit is not reached."
+    mapping: "As result 3; 21% training nodes."
+    equations: "Figs. 5-8, Sec. 5; App. C.2"
+    role: check
+reduces_to:
+  - {target: S01, limit: "$\\alpha\\to0$: $\\rho\\to1$; mean and variance are the NNGP ones"}
+  - {target: S15, limit: "$\\kappa=\\gamma_0^2$ (μP) at $P\\propto N$: $\\kappa P\\to\\infty$, no finite limit"}
+disagreements:
+  - {papers: ["2405.10761", "2012.04030"], note: "Fischer et al. claim their $P=\\alpha N$ kernel action exact at linear order; its linear rate (PDF Eq. 88) lacks the Wishart term $+\\frac{P+1}2\\ln\\det$, and its scalar projection gives $u-1=(r-1)/N$, missing the $O(\\alpha)$ renormalisation of Li–Sompolinsky Eq. 27. Kernel variables need the $N-P$ term. [verified]"}
+open_problems: [op-07]

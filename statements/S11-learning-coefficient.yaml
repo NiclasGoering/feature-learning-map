@@ -1,0 +1,85 @@
+id: S11
+slug: learning-coefficient
+title: "Singular learning: the free energy is $P\\,L+\\lambda\\log P$"
+kind: grouping
+claim: "For a fixed model the Bayesian free energy of $P$ samples is $P\\,L_P+\\lambda_{\\rm LC}\\log P$; the learning coefficient sets the posterior volume, is computable exactly for biparametric polynomial models and deep linear networks, and plain SGLD underestimates it at degenerate points."
+formula: '$$-\log Z_P=P\,L_P(w_0)+\lambda_{\rm LC}\,\log P-(m-1)\log\log P+O(1)$$'
+regime:
+  width_limit: finite-exact
+  learning_rule: [bayes]
+  conditions: "Fixed model, $P\\to\\infty$, no width limit (Watanabe); local learning coefficient at $w_0$, multiplicity $m$; tempered likelihood: $P\\beta L_P$. Deep linear networks have degree-$2(L+1)$ polynomial loss for $L$ hidden layers (Hitchcock Lemma 2.1). Preconditioned SGLD overestimates at generic points."
+status: thm
+status_note: "Proved (classical SLT; exact computation by Sergeant-Perthuis–Tsigaridas, Hitchcock–Hoogland for deep linear networks); the sampler benchmarks are numerics."
+members:
+  - paper: "2507.21449"
+    statement: "The sublevel volume near a minimum scales as $\\mathcal V(\\epsilon,w_0)\\approx c\\,\\epsilon^{\\lambda_{\\rm LC}(w_0)}(-\\log\\epsilon)^{m(w_0)-1}$ (Eq. 3.3); for deep linear networks of equal width $N$ and a rank-$r$ target, $\\lambda_{\\rm LC}$ is known exactly: Aoyagi's global value at special (minimal rank-pattern) points (Thms B.1, B.4), $\\frac12[\\min_S c(\\mu^{-1}(S))+r(2N-r)]$ at generic points (Thm B.5)."
+    mapping: "Paper $n\\to P$, $\\lambda(w_0)\\to\\lambda_{\\rm LC}$, layer count $N\\to L+1$ weight matrices, width $d\\to N$; $L(w)$ is the population loss. Eq. (3.3) is the volume form of the master formula: its Laplace transform gives $-\\log Z_P=P\\beta L_P(w_0)+\\lambda_{\\rm LC}\\log P-(m-1)\\log\\log P+O(1)$."
+    equations: "Eqs. (3.1)-(3.3), Sec. 3.1.1"
+    role: variant
+  - paper: "2507.21449"
+    result: r2
+    statement: "At $\\beta=\\beta_0/\\log P$ the estimator $\\hat\\lambda(w_0)=P\\beta(\\mathbb E^\\beta_w[L_P]-L_P(w_0))$ over the tempered local posterior is asymptotically unbiased for $\\lambda_{\\rm LC}(w_0)$ as $P\\to\\infty$, under the SLT conditions (compact prior support). Experiments use a non-compact Gaussian localising prior and mini-batch losses (Eq. 3.10), outside the theorem."
+    mapping: "Paper $n\\to P$, $L_n\\to L_P$ (mean squared error, noise $1/2\\sigma^2$ absorbed into $\\beta$), $\\lambda\\to\\lambda_{\\rm LC}$; localisation $\\gamma$ is not the umbrella $\\gamma$. $\\hat\\lambda$ is $\\beta\\,\\partial_\\beta$ of the master formula."
+    equations: "Def. 3.1, Eq. (3.4); Thm 3.2 (Watanabe 2013 Thm 4); Def. F.1"
+    role: variant
+  - paper: "2507.21449"
+    result: r1
+    statement: "For a deep linear network with $L+1$ weight matrices the empirical loss $L_P(W)$ is almost surely a polynomial of degree $2(L+1)$ in the weights (also the population loss, Remark C.2), so the Lyapunov growth (2.4) and global Lipschitz (2.5) conditions behind global SGLD guarantees fail for $L\\ge1$."
+    mapping: "Paper layer count $N\\to L+1$ (weight matrices), $n\\to P$; requires absolutely continuous input law. Degree is $2(L+1)$, not $2L$, in umbrella symbols."
+    equations: "Lemma 2.1 (= Lemma C.1, proof App. C); conditions Eqs. (2.4)-(2.5)"
+    role: check
+  - paper: "2507.21449"
+    result: r3
+    statement: "At special (most degenerate) DLN minima with $10^5$-$10^8$ parameters, $P=10^6$, $\\beta=1/\\log P$, RMSProp- and Adam-preconditioned SGLD estimate $\\lambda_{\\rm LC}$ accurately over the widest step-size range, with the best mean-variance trade-off and order preservation; plain SGLD is near-unbiased only at step sizes where many runs diverge."
+    mapping: "Paper $n\\to P$, $\\lambda\\to\\lambda_{\\rm LC}$, relative error $(\\lambda-\\hat\\lambda)/\\lambda$; one chain per estimate, 100 learning problems per class."
+    equations: "Sec. 4, Fig. 3 (10M class)"
+    role: check
+  - paper: "2608.20183"
+    result: r1
+    statement: "For a bivariate $f\\in\\mathbb Q[x,y]$ with normalising series $P_f$ and finite part $P_f^{\\rm fin}$, set $\\tilde f=f(x,y-P_f^{\\rm fin}(x))$: if $\\tilde f$ is normalised, $\\lambda_{\\rm LC}=\\mathrm{RLCT}_0(f)=1/\\delta_{\\tilde f}$ (Newton distance); otherwise $1/m$, with $m>\\delta_f$ the largest root multiplicity of the main-face polynomial."
+    mapping: "Paper sample size $N$ (also $n$) $\\to P$, $\\lambda\\to\\lambda_{\\rm LC}$; $f$ is the KL distance $K(\\theta)$ or a contact-equivalent polynomial; the paper's WBIC line $-\\log P(x\\mid M)\\approx-\\log P(x\\mid\\hat\\theta,M)+\\lambda\\log N$ is the master formula."
+    equations: "Thm 2.11 (proof App. F.2); Props. 2.5-2.7; Defs. 2.1-2.4, 2.8, 2.10"
+    role: special-case
+  - paper: "2608.20183"
+    result: r2
+    statement: "The finite part of the normalising series has degree $<(d_y+\\frac12)d_x$ with $d_x,d_y$ the partial degrees of $f$, so Algorithm 1 returns the exact $\\lambda_{\\rm LC}=\\mathrm{RLCT}_0(f)$ of any $f\\in\\mathbb Q[x,y]$ in fewer than $(d_y+\\frac12)d_x$ loop iterations (Thm 3.1, Cor. 3.2)."
+    mapping: "RLCT at the origin $=\\lambda_{\\rm LC}$ at $w_0=0$ for two-parameter models; no width, depth or $P$ enters the bound."
+    role: special-case
+  - paper: "2608.20183"
+    result: r3
+    statement: "For bias-free polynomial networks repeating $W=\\begin{pmatrix}\\theta_1+\\theta_2&\\theta_1^2\\\\\\theta_1^2&\\theta_2^2\\end{pmatrix}$ as all $L+1$ weight matrices with $\\sigma(x)=x^r$ and Gaussian-noise regression, $\\lambda_{\\rm LC}$ at $\\theta^*=0$ for $L+1=1,2,\\dots$ is $3/4,1/4,3/28,1/20,3/124$ ($r=2$), $3/4,3/16,3/52,3/160$ ($r=3$), $3/4,3/20,1/28$ ($r=4$), decreasing in depth and $r$."
+    mapping: "Paper depth $L$ (copies of $W$) $\\to L+1$ weight matrices; activation degree $r$; two parameters total; $K(\\theta)=\\int\\Vert f_\\theta\\Vert^2q$ replaced by the contact-equivalent sum of squared coefficients $H_{L,r}$."
+    equations: "Eq. (1), Sec. 4.2-4.3, Table 1; contact equivalence Props. B.3, B.5"
+    role: special-case
+  - paper: "2608.20183"
+    statement: "The SGLD estimator of $\\lambda_{\\rm LC}$ ($\\gamma=1$, step $10^{-5}$, 5 chains of $10^4$ steps) lies below the exact value in all ten finite cases of Table 1 (e.g. $0.677$ against $3/4$; $0.154$ against $1/4$) and returns NaN at the largest depth and degree; it takes about…"
+    mapping: "Paper $\\hat\\lambda_{\\rm SGLD}\\to$ estimate of $\\lambda_{\\rm LC}$ at $w_0=0$ (the only, and most degenerate, point evaluated); sample size and $\\beta$ not stated (DevInterp estimator of Lau et al.)."
+    equations: "Table 1 (SGLD rows), Sec. 4.3"
+    role: check
+  - paper: "2503.22478"
+    result: r2
+    statement: "Late SGD (learning rate $\\gamma\\ll1$, large batch) on a region where $D_\\xi=\\xi^{2-2\\lambda_{\\rm LC}/d_s}$ is constant: the assumed steady state is $p_s\\propto e^{-\\gamma L_P/D_\\xi}$. For log-loss and $\\gamma=1$, $p_s^{PD_\\xi}\\propto p(X|w)$, a posterior tempered to $\\beta=1/(PD_\\xi)$. Globally SGD over-weights the regions it can reach (verbal claim)."
+    mapping: "$m\\to P$; $\\mathcal L_m\\to L_P$ (averaged log-loss); $\\lambda(w)\\to\\lambda_{\\rm LC}$; $\\gamma$ = SGD learning rate; $\\xi$ = free length scale. The S11 free energy is not derived; tempering would replace $P$ by $1/D_\\xi$ in $PL_P+\\lambda_{\\rm LC}\\log P$ (Watanabe; not in the paper)."
+    equations: "Lemma 3.2, Cor. 3.1 Eq. (13); Lemma 3.3, Cor. 3.2 Eqs. (14)-(15)"
+    role: check
+  - paper: "2503.22478"
+    result: r5
+    statement: "500 SGD runs (two ReLU layers of 64, $P=512$ moons points, lr 0.01, batch 128) favour low-$\\lambda_{\\rm LC}$ solutions, and one cluster more than SGLD seeded at the lowest-loss, lowest-$\\lambda_{\\rm LC}$ SGD solutions. Reweighting cluster masses by $p_s^{PD_\\xi}$ at a fitted $\\xi=0.5$ matches SGLD (KL 0.009, JS 0.003)."
+    mapping: "Clusters of solutions as basins; $\\lambda_{\\rm LC}$ from the SGLD-based LLC estimator (Table 3); SGLD lr $10^{-5}$, 200 burn-in, 1000 draws, temperature not stated; $\\xi$ chosen by minimising the KL between empirical and theoretical SGD distributions (Fig. 3)."
+    equations: "Sec. 4.2; Figs. 3, 4; Table 2; App. G.4"
+    role: check
+  - paper: "2310.06301"
+    result: r4
+    statement: "TMS autoencoder ($r=2$ hidden, $c=6$ features): posterior phases are $k$-gon critical points chosen by $-\\log Z_P\\approx\\min_\\alpha[P\\,L(w^*_\\alpha)+\\lambda_\\alpha\\log P+c_\\alpha]$ (Eq. 9); NUTS shows 5-gon to 6-gon ($\\lambda_{\\rm LC}$ 7 to 8.5) at $600\\le P\\le700$. SGD at $P=1000$ plateaus at the same critical points, with $\\hat\\lambda_{\\rm LC}$ rising at each loss drop, but never…"
+    mapping: "$n\\to P$; $\\lambda,\\hat\\lambda\\to\\lambda_{\\rm LC}$; $F_n\\to-\\log Z_P$, $L_n\\to L_P$; $m$ multiplicity ($\\log\\log P$ term absorbed into $c_\\alpha$); paper $\\alpha,\\beta$ are phase labels, not $P/N$ or $1/T$; $r\\to N$, $c\\to D$."
+    equations: "Eqs. (5)-(9), Sec. 4.1; Table 1; Fig. 2, Sec. 4.2"
+    role: check
+  - paper: "2310.06301"
+    result: r5
+    statement: "Conjecture: each dynamical transition $\\alpha\\to\\beta$ has a Bayesian antecedent. With equal constants, $P_{\\rm cr}/\\log P_{\\rm cr}=-\\Delta\\lambda_{\\rm LC}/\\Delta L$ (Eq. 16), solvable iff $\\Delta L<0$ and $\\Delta\\lambda_{\\rm LC}>0$; for $r=2$, $c=6$ free-energy curves suggest antecedents for all transitions in (10), two being inconclusive at low $P$."
+    mapping: "$n\\to P$; $\\lambda\\to\\lambda_{\\rm LC}$ (theoretical for $5,5^+,6$, SGLD estimates $\\hat\\lambda$ otherwise, Table K.1); $\\Delta c$ = difference of constant terms of Eq. (11)."
+    equations: "Sec. 5.1 (BAH); App. C, Eqs. (11)-(13); App. D, Eq. (16)"
+    role: check
+disagreements:
+  - {papers: ["2503.22478", "2505.24060"], note: "Hennick et al.: SGD over-weights accessible regions of the posterior (low learning coefficient only empirically, Fig. 4a). Mingard et al. (Boolean data): greedy SGD-like search tracks the Metropolis posterior qualitatively, while their one continuous SGD run (App. E.6) beats the discrete Bayesian sampler on 6/7-parity, confounded by the architecture."}
+open_problems: [op-10]

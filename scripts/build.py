@@ -7,7 +7,8 @@ Runs the validator first and stops if it fails. Then copies site/ (publishing
 overview.html also as the landing page index.html) and writes
 _site/data.json, compiled from papers/*.md, open-problems/*.md and queue.yaml.
 Results about gradient descent alone are left out of the site for now; results
-that compare Bayes with GD stay.
+that compare Bayes with GD stay. Statements (statements/S<NN>-*.yaml) are emitted as
+data.statements (every statement is public).
 Preview locally with:  python -m http.server -d _site 8000
 """
 
@@ -86,6 +87,11 @@ def gd_only(meta, res):
     return flmap.merged_view(meta, res).get("learning_rule") == ["gd"]
 
 
+def load_statements():
+    """[(path, meta)] for statements/*.yaml, in id order (the validator has checked them)."""
+    return [(path, flmap.load_yaml(path.read_text(encoding="utf-8"))) for path in flmap.statement_files()]
+
+
 def compile_paper(path, vocab):
     """The site record of a paper, or None when the site hides all its results.
 
@@ -113,6 +119,48 @@ def compile_paper(path, vocab):
     return rec, hidden
 
 
+def compile_statements(stmts, papers):
+    """Site records of the statements: members resolved to the compiled papers."""
+    by_base = {p["base"]: p for p in papers}
+    out = []
+    for _, m in stmts:
+        members = []
+        for mem in m["members"]:
+            p = by_base.get(mem["paper"])
+            if p is None:
+                print(f"note: {m['id']} member {mem['paper']} has no result on the site; left out", file=sys.stderr)
+                continue
+            res = next((r for r in p["results"] if r["id"] == mem.get("result")), None)
+            if mem.get("result") and res is None:
+                print(f"note: {m['id']} member {mem['paper']} {mem['result']} is hidden; left out", file=sys.stderr)
+                continue
+            rec = {"paper": p["key"], "base": p["base"], "statement": mem["statement"], "mapping": mem["mapping"],
+                   "role": mem["role"], "source_url": res["source_url"] if res else p["links"]["abs"]}
+            if res:
+                rec["result"] = res["id"]
+            if mem.get("equations"):
+                rec["equations"] = mem["equations"]
+            members.append(rec)
+        keys = {mem["paper"] for mem in members}
+        rec = {
+            "id": m["id"], "slug": m["slug"], "title": m["title"], "kind": m["kind"], "claim": m["claim"], "formula": m["formula"],
+            "width_limit": m["regime"]["width_limit"], "learning_rule": m["regime"]["learning_rule"],
+            "conditions": m["regime"]["conditions"], "status": m["status"], "members": members,
+            "papers": sorted(keys), "n_papers": len(keys),
+            "reduces_to": list(m.get("reduces_to") or []),
+            "disagreements": [], "open_problems": m.get("open_problems") or [], "links": list(m.get("links") or []),
+        }
+        for key in ("formula_note", "status_note", "family"):
+            if m.get(key):
+                rec[key] = m[key]
+        for d in m.get("disagreements") or []:
+            ds = [by_base[b]["key"] for b in d["papers"] if b in by_base]
+            if len(ds) >= 2:
+                rec["disagreements"].append({"papers": ds, "note": d["note"]})
+        out.append(rec)
+    return out
+
+
 def compile_open_problems(papers):
     out = []
     for path in flmap.open_problem_files():
@@ -136,6 +184,7 @@ def main():
         print("Build stopped: fix the validation errors above.", file=sys.stderr)
         return 1
     vocab = flmap.load_vocab()
+    stmts = load_statements()
     papers, hidden_papers, hidden_results = [], 0, 0
     for path in flmap.paper_files():
         rec, hidden = compile_paper(path, vocab)
@@ -159,6 +208,7 @@ def main():
             "empty_states": vocab["empty_states"],
         },
         "papers": papers,
+        "statements": compile_statements(stmts, papers),
         "open_problems": compile_open_problems(papers),
         "queue": counts,
         "hidden_gd_only": {"papers": hidden_papers, "results": hidden_results},
@@ -168,7 +218,7 @@ def main():
     shutil.copytree(SITE, OUT)
     shutil.copyfile(OUT / "overview.html", OUT / "index.html")   # the overview is the landing page
     (OUT / "data.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-    print(f"Built {OUT.relative_to(flmap.ROOT)}/ with {len(papers)} paper(s); "
+    print(f"Built {OUT.relative_to(flmap.ROOT)}/ with {len(papers)} paper(s), {len(data['statements'])} statement(s); "
           f"{hidden_results} GD-only result(s) hidden, {hidden_papers} paper(s) with nothing else.")
     return 0
 

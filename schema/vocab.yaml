@@ -655,6 +655,87 @@ fields:
       extracted: {label: extracted, desc: "Written by an ingest session; not yet checked by a person."}
       verified: {label: verified, desc: "Checked against the paper by a team member (verified_by)."}
 
+  # ----------------------------------------------- canonical form (statements)
+  # A result may carry an optional `canonical:` block that places it under one of
+  # the main statements in statements/ (see INGEST.md, "Statements"). These fields
+  # describe how the result is written once it is put in the map's one notation.
+
+  canonical_variables:
+    label: Written in
+    band: canonical
+    multi: false
+    empty: false
+    values:
+      readout: {label: readout variables, desc: "A readout-side scalar or fixed-size matrix (a χ²-type object of speed N). Needs only the scalar rate, the energy and the log-determinant at P ∝ N."}
+      kernel: {label: kernel variables, desc: "A P×P kernel (or its dual). At P ∝ N it needs the Wishart Jacobian and the bulk fluctuation, or it is wrong at O(α)."}
+      function: {label: function values, desc: "Function values or the predictor; the function-space prior or posterior."}
+      weights: {label: weights / neurons, desc: "Parameter space: weights, the neuron measure, or particles."}
+
+  canonical_order_parameter:
+    label: Order parameter
+    band: canonical
+    multi: false
+    empty: false
+    values:
+      none: {label: none, desc: "No order parameter: an exact law, a bound, a method or an empirical result."}
+      scalar-per-layer: {label: "one scalar per layer", desc: "A single readout norm ρ_ℓ for every layer."}
+      matrix-outputs: {label: "matrix over outputs", desc: "A D_out×D_out matrix."}
+      matrix-patch-pairs: {label: "matrix over patch pairs", desc: "n×n over patches of a convolutional layer."}
+      matrix-gates: {label: "matrix over gates", desc: "M×M over gating units."}
+      matrix-branches: {label: "one scalar per branch", desc: "Diagonal over parallel branches."}
+      replica-task: {label: "replicas × tasks", desc: "Overlaps between replicas and tasks (transfer, continual learning)."}
+      full-kernel: {label: "full kernel", desc: "The whole P×P layer kernel is the variable."}
+      rate-function: {label: "rate function", desc: "A large-deviation rate function over outputs or kernels."}
+      neuron-measure: {label: "neuron measure", desc: "The single-neuron law ν (mean field)."}
+      other: Other
+
+  canonical_closure:
+    label: Closure
+    band: canonical
+    multi: false
+    empty: false
+    values:
+      exact: {label: exact, desc: "No closure: an exact identity or a theorem."}
+      gaussian-equivalence: {label: "Gaussian equivalence", desc: "Hidden features replaced by a Gaussian with the same kernel."}
+      gaussian-closure: {label: "Gaussian (variational) closure", desc: "Single-site law closed on a Gaussian."}
+      factorised-kernel: {label: "factorised kernel", desc: "Deep kernel written as a product of per-layer scalars times the NNGP kernel."}
+      nested-kernel: {label: "nested kernel", desc: "Each layer's scalar enters the next layer's kernel map."}
+      replica-rs: {label: "replica symmetric", desc: "Replica-symmetric ansatz."}
+      cumulant-truncation: {label: "cumulant truncation", desc: "Expansion truncated at a fixed cumulant order."}
+      mixture-ansatz: {label: "Gaussian-mixture ansatz", desc: "Single-site law closed on a mixture of Gaussians."}
+      other: Other
+
+  canonical_approximation:
+    label: Approximation
+    band: canonical
+    multi: false
+    empty: false
+    values:
+      exact: {label: exact, desc: "Exact at the stated N, P, L, or a theorem."}
+      saddle: {label: saddle point, desc: "Leading order of a saddle point or Laplace/Varadhan argument."}
+      first-order: {label: first order, desc: "First order in a small parameter (κ, 1/N, a coupling)."}
+      one-loop: {label: one loop, desc: "Saddle plus the Gaussian fluctuation determinant."}
+      perturbative-1/N: {label: "perturbative in 1/N", desc: "Systematic 1/N expansion at fixed P, L/N small."}
+      replica-rs: {label: "replica symmetric", desc: "Replica computation with the RS ansatz."}
+      ldp: {label: "large deviations", desc: "Large-deviation principle at a given speed."}
+      bound: {label: bound, desc: "An inequality or non-asymptotic rate."}
+      numerics: {label: numerics, desc: "Only numerically supported."}
+
+  # ------------------------------------------------------------ member roles
+
+  member_role:
+    label: Role in the statement
+    band: statement
+    multi: false
+    empty: false
+    values:
+      master: {label: master, desc: "States the statement in its general form."}
+      special-case: {label: special case, desc: "The statement at particular dial settings, or in a simpler model."}
+      variant: {label: "same result, other notation", desc: "Equivalent after a change of symbols."}
+      extension: {label: extension, desc: "Adds a genuine ingredient (a matrix order parameter, another closure)."}
+      rate: {label: "rate or bound", desc: "A quantitative version: a convergence rate, an error bound."}
+      check: {label: check, desc: "A numerical or empirical test."}
+
 # Free-text fields: not vocabulary-controlled, but every one has a limit and
 # none may be blank. `unknown` / `not-stated` are allowed where marked.
 # Words are whitespace-separated tokens; each $…$ math span counts as one word.

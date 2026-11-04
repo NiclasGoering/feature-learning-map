@@ -1,0 +1,159 @@
+id: S10
+slug: simplicity-volume
+title: "Prior volume and simplicity bias of functions"
+kind: grouping
+claim: "At $\\beta\\to\\infty$ the posterior weights each interpolating function by its prior volume; the prior favours simple functions (input insensitivity of NNGP prior samples is proved; the complexity bound is measured on Boolean functions). SGD tracks this coarsely, not in detail at finite width."
+formula: '$$P_B(f\mid S)=\frac{P(f)\,\mathbb 1[f|_S=y]}{P(S)},\qquad P(f)\ \lesssim\ 2^{-a\,\mathcal K(f)+b}$$'
+regime:
+  width_limit: finite-exact
+  learning_rule: [bayes, gd]
+  conditions: "$\\beta\\to\\infty$: sign interpolation in Mingard’s CE/EP results, a Gaussian likelihood with $\\eta=0.002$ in his MSE panels. Mingard 2023: tanh/ReLU nets of width 40, $n=7$ Boolean inputs, prior sampling. Exact rejection sampling at $P\\le32$ (Peleg–Hein, Mingard App. F). Vaintrob: μP $\\kappa=1$ volume at speed $N$, bounded Lipschitz activation, polynomial size."
+status: num
+status_note: "Proved: De Palma et al. (input insensitivity of NNGP prior samples; the converse fails for parity), Vaintrob et al. (learnability iff polynomial reduced entropy at mean-field scaling). The bound $2^{-a\\mathcal K+b}$ is quoted from Valle-Pérez et al., not proved or fitted here; the SGD comparisons are numerics."
+members:
+  - paper: "1812.10156"
+    result: r1
+    statement: "For the NNGP prior $f\\sim\\mathcal{GP}(0,Q\\,F(x\\cdot x'/D))$ on $\\{\\pm1\\}^D$, the expected number of opposite-sign strings at Hamming distance $a\\sqrt{D/\\ln D}$ vanishes for $a<|f(x)|/(2\\sqrt{QF'(1)})$; so the nearest one is at mean distance $\\sqrt{D/(2\\pi F'(1)\\ln D)}\\ge\\sqrt{D/(2\\pi\\ln D)}$ (ReLU)."
+    mapping: "$n\\to D$; $\\phi=\\varphi^{(L+1)}\\to f$; $Q\\,F(t)\\to K^L_{\\rm GP}(x,x')$ with $t=x\\cdot x'/D=1-2h/D$, $Q$ its diagonal; $\\sigma_w^2/n_{l-1},\\sigma_b^2\\to\\sigma_\\ell^2$; prior only ($P=0$), width-first limit."
+    equations: "Thm 1, Eqs. (4)-(6); reading Eqs. (7)-(8); kernel Eqs. (2)-(3); App. A Eqs. (13)-(25)"
+    role: variant
+  - paper: "1812.10156"
+    result: r2
+    statement: "For the same NNGP prior, along a random geodesic of bit flips the expected number of flips to the first sign change is at least $t_0D$ with $t_0>0$ fixed by $F$ (Thm 2); an independent-increment heuristic gives $D/(4F'(1))\\ge D/4$ for ReLU."
+    mapping: "$n\\to D$; $h_n\\to$ expected first sign-change index; $t_0=\\mathbb E\\,t(\\varphi)$ of the continuous limit process with covariance $F(1-2|s-t|)$; prior only, width-first limit."
+    equations: "Thm 2, Eq. (9); proof App. C Eqs. (32)-(36); heuristic Eq. (10), Sec. 3.3"
+    role: variant
+  - paper: "1812.10156"
+    result: r3
+    statement: "Random two-hidden-layer ReLU networks of width $N=D$ ($\\sigma_w^2=2$, no bias, so $F'(1)=1$): nearest-boundary distance $\\approx0.405\\sqrt{D/\\ln D}$ against $1/\\sqrt{2\\pi}=0.399$, linear in $|f(x)|$; random-flip distance $\\approx0.33D$; agreement from $D\\gtrsim100$."
+    mapping: "$n\\to D$, $n_1=n_2=n\\to N=D$, $L=2$; greedy search checked against exhaustive search (Table 1); 1000 networks per point."
+    equations: "Figs. 1-2, Secs. 4.1-4.2, 4.4; App. D Table 1"
+    role: check
+  - paper: "1812.10156"
+    result: r4
+    statement: "Adam-trained ReLU networks ($N=D=784$, $L=2$, MNIST even/odd on binarised pixels) keep the prior nearest-boundary distance $\\approx\\sqrt{D/(2\\pi\\ln D)}\\approx4.33$ on random inputs; training and test images sit farther (mean 10.6 correct, 1.4-2.3 misclassified)."
+    mapping: "$n\\to D=784$; trained network compared with the random-network (prior) value; no posterior is computed."
+    equations: "Figs. 3-4, Sec. 4.3"
+    role: check
+  - paper: "2304.06670"
+    result: r1
+    statement: "Prior over functions $P(f)=\\int\\mathbb 1[\\mathcal N(\\Theta)=f]P_{\\rm par}(\\Theta)d\\Theta$ (Eq. 1) of tanh FCNs ($N=40$, $L=10$, $D=7$) obeys the cited bound $P(f)\\lesssim2^{-a\\mathcal K(f)+b}$ (Supp. Eq. 21); at $\\sigma_w=1$, $a\\approx1$ cancels the $2^{\\mathcal K}$ growth (flat $P(\\mathcal K)$); at $\\sigma_w=8$ it does not."
+    mapping: "$n\\to D$, $m\\to P$, width 40 $\\to N$, $N_l\\to L$; $K(f)$ is LZ complexity $\\mathcal K(f)$, not a kernel; Discussion $\\alpha$ is the exponent $a$, not $P/N$."
+    equations: "Eq. (1); Supp. Eq. (21); Fig. 1(a),(b),(g),(h); Figs. S1, S4"
+    role: master
+  - paper: "2304.06670"
+    result: r3
+    statement: "With a 0-1 likelihood $P(f\\mid S)=P(f)\\mathbb 1[f|_S=y]/P(S)$ (Supp. Eqs. 84-86). Averaged over training sets, $\\langle P(f\\mid S)\\rangle_m\\approx P(f)(1-\\epsilon(f))^m/\\langle P(S)\\rangle_m$ (Eq. 2); a decoupling ansatz gives $\\langle P(\\mathcal K\\mid S)\\rangle_m\\propto P(\\mathcal K)\\langle(1-\\epsilon_G(\\mathcal K))^m\\rangle_{l}$, $l=5$ (Eq. 3), which tracks SGD histograms (Fig. 2)."
+    mapping: "$\\beta\\to\\infty$; $P(S)=\\sum_{f\\in U(S)}P(f)$ is the sign-consistent (thresholded) prior volume, not value interpolation; $m\\to P$; $\\epsilon(f)$ error on all $2^n$ inputs."
+    equations: "Eqs. (2)-(3); Supp. Eqs. (84)-(89), (815); Fig. 2; Figs. S12-S14, S22"
+    role: master
+  - paper: "2304.06670"
+    result: r2
+    statement: "SGD-trained tanh FCNs ($N=40$, $L=10$, $m=64$, advSGD, cross-entropy) generalise better at $\\sigma_w=1$ than at $\\sigma_w=8$ on simple targets, the gap closing for complex ones; with a cutoff $\\mathcal K\\le K_M$ the $\\sigma_w=1$ error stays flat for $K_M>K_t$, the unbiased learner grows like the PAC bound (Fig. 1i)."
+    mapping: "SGD side only; prior from Result 1; $m\\to P$. No posterior computed here."
+    equations: "Fig. 1(c)-(f),(i); Supp. Notes 6-7, Eqs. (72)-(75); Figs. S17, S20-S21"
+    role: check
+  - paper: "2304.06670"
+    statement: "In the infinite-depth chaotic limit of the NNGP ($L\\to\\infty$, then $\\sigma_w\\to\\infty$ at fixed $\\sigma_b$) the kernel becomes diagonal, so every Boolean function on $m$ inputs has prior probability $P(f)=2^{-m}$: no simplicity bias ($a=0$) (Supp. Eq. 31)."
+    mapping: "$N=\\infty$ (NNGP, R0), $N_l\\to L$, $m\\to P$ inputs; uniform $P(f)$ is the bound with $a=0$; sign-thresholded outputs."
+    equations: "Supp. Note 3, Eq. (31) (HTML Eq. 5, anchor A3.E5)"
+    role: special-case
+  - paper: "2304.06670"
+    result: r4
+    statement: "Tanh FCNs (width 200, 2-10 layers) trained by SGD to 100% train accuracy on MNIST ($m=1000$) and CIFAR-10 ($m=5000$): test error grows with $\\sigma_w$ and depth, and the prior over CSR complexity shifts to complex functions at $\\sigma_w=2$ (Fig. 3); no likelihood or posterior is computed."
+    mapping: "$m\\to P$, width 200 $\\to N$; CSR replaces LZ as $\\mathcal K$."
+    equations: "Fig. 3; Supp. Note 8.8; Figs. S18-S19"
+    role: check
+  - paper: "2006.15191"
+    result: r3
+    statement: "With the 0-1 likelihood, $P_B(f|S)=P(f)\\mathbb 1[f|_S=y]/P(S)$ (Eq. 2), so on zero-error functions the posterior is the prior volume; EP estimates on binarised MNIST ($P=10^4$) give $\\langle\\log P_B\\rangle$ falling roughly linearly in test errors and $P_B$ anticorrelated with CSR complexity."
+    mapping: "$P(S)=\\sum_{f\\in C(S)}P(f)$ is the NNGP orthant (sign-consistency) volume, Heaviside link; $\\beta\\to\\infty$; $|S|\\to P$; CSR stands in for $\\mathcal K$; $a,b$ not fitted."
+    equations: "Eq. (2), Fig. 1(b)-(c), Sec. 4.1; App. A.1.3 Algorithm 4; App. A.2.2"
+    role: check
+  - paper: "2006.15191"
+    statement: "Exact $\\beta\\to\\infty$ posterior of a finite ReLU net ($N=40$, $L=2$, $D=7$ Boolean inputs, $P=32$ of 128), by rejection sampling of $10^{10}$ parameter draws, correlates with and is of the same order as $P_{\\rm SGD}(f|S)$ for seven targets (LZ complexity 28-35 shown); CE-trained SGD about doubles the dominant function."
+    mapping: "ABI = exact rejection sampling of $P_B$ (Eq. 2) at finite $N$; $\\sigma_w=\\sigma_b=1$ with variance divided by fan-in, so $\\sigma^2=1$; $P(S)$ sign-consistent volume; LZ complexity $\\to\\mathcal K$."
+    equations: "App. F, Figs. 21-23 (HTML S6.F21-S6.F23)"
+    role: check
+  - paper: "2407.03848"
+    result: r1
+    statement: "Exact $\\beta\\to\\infty$ posterior of a ReLU LeNet by rejection sampling (G&C), MNIST 0 vs 7, $P=16$: with the $U[-1,1]$ initialisation of earlier work SGD stops early at small margin and matches G&C (83.6% vs 82.8%); with Kaiming or $U[-0.2,0.2]$ SGD reaches 96.3% while G&C, scale-invariant per layer, is unchanged."
+    mapping: "Paper $n\\to P$; G&C = prior conditioned on zero training error, i.e. $P_B(f\\mid S)$ with sign interpolation; prior $P(W)$ = SGD initialisation law; LeNet $\\sim4.4\\times10^4$ parameters."
+    equations: "Fig. 1, Sec. 4.1; App. C, Figs. 7, 11-12"
+    role: check
+  - paper: "2407.03848"
+    result: r2
+    statement: "For LeNet, MLP and a small ResNet on binary MNIST ($P\\le32$) and CIFAR-10 ($P\\le24$), widening (269 to 43746 LeNet parameters) raises test accuracy and geometric margin of SGD interpolators, while the exact $\\beta\\to\\infty$ posterior accuracy stays flat (slight gain only for LeNet on CIFAR-10 up to…"
+    mapping: "Width factor $\\to$ relative $N$; geometric margin $\\rho(x)=g/L(g)$ (Eq. 1, not the umbrella $\\rho$); $\\gamma(x)$ (Eq. 3) is a weight-normalised margin, not the umbrella $\\gamma$."
+    equations: "Figs. 2-3, Sec. 4.2; margin criterion Eqs. (1)-(3); App. B Tables 1-2"
+    role: check
+  - paper: "2407.03848"
+    statement: "The prior volume of the zero-training-error set, $Z=P_W(\\text{train error}=0\\mid S)\\approx N/M_S$ under a compact uniform prior, is constant in width for LeNet, MLP and ResNet and decreases with depth; a random function gives $2^{-P}$."
+    mapping: "$Z$ here is the sign-interpolation (classification) volume, the $\\beta\\to\\infty$ evidence of a 0-1 likelihood, not the value-interpolation $Z$; $M_S$ draws give $N$ accepted nets."
+    equations: "Sec. 3.3 (estimator, unnumbered); Fig. 3 right, Fig. 4 right; Secs. 4.2-4.3"
+    role: check
+  - paper: "2407.03848"
+    result: r3
+    statement: "Adding layers (at width 2/6, removing the largest layer) lowers margin and test accuracy of the exact $\\beta\\to\\infty$ posterior throughout; SGD stagnates on easy pairs (MNIST 0 vs 7) and degrades like the posterior on harder ones (CIFAR-10, MNIST 3 vs 5), which the paper calls an architectural bias."
+    mapping: "As result 2; depth $\\to L$ (number of weight layers $L_{\\rm paper}=L+1$)."
+    equations: "Figs. 4-5, Sec. 4.3; App. B Tables 3-4"
+    role: check
+  - paper: "2607.05735"
+    result: r1
+    statement: "At κ=1 (readout $\\frac1N\\sum\\alpha_i\\varphi$) with bounded Lipschitz non-polynomial $\\varphi$ on $\\{\\pm1\\}^d$, a target family is learnable from poly($d$) samples by the infinite-width Gibbs posterior iff it is by a poly-width one iff a poly-width poly-weight network computes it to $o(1)$ MSE iff $s_\\infty(y_d,\\varepsilon)=\\limsup-\\frac1N\\log\\pi^0_N(L\\le\\varepsilon)$ is…"
+    mapping: "$s_\\infty$ = prior-volume exponent of the population-MSE $\\varepsilon$-ball at speed $N$ in weight space ($-\\frac1N\\log$ of the volume); polynomial width plays the role of $\\mathcal K(f)$; learner is $\\propto e^{-N\\bar\\beta\\hat L_D}\\pi^0_N$, $\\bar\\beta\\le$ poly($d$), not $\\beta\\to\\infty$ interpolation."
+    equations: "Thm 3.1 (assembled in Sec. 7.3); Eq. (3); Lemma 2.1"
+    role: extension
+  - paper: "2607.05735"
+    result: r2
+    statement: "Compression and conservation: $s_\\infty(y,\\varepsilon_-)\\le s$ implies a width-$N_0\\le$ poly($s,d,1/\\Delta$) poly-weight network with MSE $\\le\\varepsilon_+$ and $\\sup_x|f_{\\hat\\theta}-f_\\infty|\\le\\delta$; a width-$W$ poly-weight network with MSE $\\le\\varepsilon_-$ implies $s_\\infty(y,\\varepsilon)\\le$ poly($W,d$); hence $s_\\infty\\le$ poly($2^d$) for every $y$."
+    mapping: "Two-sided bound volume $\\leftrightarrow$ circuit size: $e^{-N\\,{\\rm poly}(W,d)}\\le\\pi^0_N(L\\le\\varepsilon)$, the analogue of $P(f)\\gtrsim2^{-a\\mathcal K(f)}$; active/lazy split of each $K^\\ell$ at $\\lambda_0$, lazy swap error $\\le p\\sqrt{\\lambda_0}c$ (Stein)."
+    equations: "Thm 3.2; Lemma 5.1; Thm 5.4 (App. B, Thm B.14); Thm 6.1 (App. C)"
+    role: rate
+  - paper: "2607.05735"
+    result: r3
+    statement: "If $s_\\infty(y,\\varepsilon_-)\\le s$, the empirical Gibbs learner with $P,N_0,\\bar\\beta\\le$ poly($s,d,1/\\Delta$) has expected population MSE $\\le\\varepsilon_+$, at infinite width and at width $N_0$ (Thm 7.2); conversely Gibbs learnability at $\\bar\\beta\\le$ poly($P,d$) gives $s_\\infty(y,\\varepsilon)\\le$ poly($P,d$) (Thm 7.3); the needed $\\bar\\beta_\\star\\le s_N(y,\\varepsilon_-)/(\\varepsilon-\\varepsilon_-)$ (Lemma 4.3)."
+    mapping: "Generalisation from the prior volume: free energy $\\Phi_N(\\bar\\beta)\\le\\bar\\beta\\varepsilon_-+s_\\infty$ (Lemma A.1) plus uniform convergence on the compressed class; $\\bar\\beta$ is the map's $\\beta_{\\rm umb}/N$ up to the factor $P/2$."
+    equations: "Thm 7.2, Thm 7.3, Lemma 7.1, Lemma 4.3, Lemma A.1"
+    role: rate
+  - paper: "2505.24060"
+    result: r4
+    statement: "On depth-two ternary networks ($n=7$, $N=\\alpha_w2^{n-1}=128$, $m\\le96$), a greedy batch steepest-descent search with norm tie-breaking (Alg. 3, $p=0.3$ as weight decay) gives learning curves qualitatively like the Metropolis sampler of $\\pi\\propto e^{-\\kappa L-\\lambda\\Vert\\theta\\Vert_1}$, $\\kappa=1000$: $k\\le4$ parities learned, $k=6,7$ at chance."
+    mapping: "$\\kappa=1000$ approximates $\\beta\\to\\infty$ (0-1 likelihood), so $\\pi$ at $\\lambda=0$ is $P_B(f|S)$ with a uniform ternary prior; $e^{-\\lambda\\Vert\\theta\\Vert_1}\\to e^{-\\lambda K(f)}$ (Eq. 7); $m\\to P$; no quantitative distance is reported."
+    equations: "Sec. 4.1 (Algs. 1, 3), Eq. (7), Sec. 4.3 \"Greedy SGD-like\", Fig. 4"
+    role: check
+  - paper: "2505.24060"
+    statement: "Continuous two-layer ReLU networks of the same width, trained by SGD (batch $m/2$, lr $10^{-3}$), behave like the DFCN sampler on all targets except large-$k$ parity, which they learn more easily (Fig. 13). Weight space and prior change with the rule, so the gap is not a…"
+    mapping: "Continuous weights with an unstated initialisation in place of the uniform ternary prior of Def. 3.1; no posterior of the continuous network is sampled; $m\\to P\\le96$, $n=7$; Fig. 13 also has a weight-decay row (value not stated)."
+    equations: "App. E.6, Fig. 13 (entry r5, added)"
+    role: check
+  - paper: "2503.13145"
+    result: r1
+    statement: "With a uniform box prior $w\\in[-2/\\sqrt W,2/\\sqrt W]$ and $e^{S(L_{\\rm train},a)}$ its volume, the equilibrium test performance at fixed $L_{\\rm train}$ (Eq. 1 mean or max-entropy point) matches or beats tuned SGD on five small tasks, markedly at low $L_{\\rm train}$. MNIST, 250 training images, 362-parameter CNN: 0.76 against 0.68."
+    mapping: "$e^{S}$ = prior volume $P(f)$ on a train-loss shell: the S10 measure with $\\mathbb 1[f|_S=y]$ replaced by $L_{\\rm train}=$ const (microcanonical, no explicit $\\beta$); box prior instead of Gaussian; $W\\to N$; $P=40$ to $2500$; no width limit."
+    equations: "Eq. (1); Figs. 1-2; SM Fig. 4 (MD check), SM Fig. 6 (CIFAR)"
+    role: check
+  - paper: "2503.13145"
+    result: r2
+    statement: "At fixed data (spiral regression, $P=250$) the gap between the max-entropy test loss and Adam at equal $L_{\\rm train}$ shrinks with width $W=30,100,300$ and vanishes at $W=1000$ ($10^6$ parameters). The trend is similar but weaker on house prices ($W\\le100$), the polymer head ($W\\ge50$ equal) and MNIST…"
+    mapping: "$W\\to N$ at fixed $P$, so $P/N$ falls; box half-width $2/\\sqrt W$ is NNGP-type scaling; Adam replaces SGD because SGD \"performs much worse\" (Table 4); the GP limit is cited, not tested."
+    equations: "Fig. 3; SM Figs. 7-9; SM Table 4"
+    role: check
+  - paper: "2606.31282"
+    result: r1
+    statement: "$\\beta\\to\\infty$, uniform prior on binary weights: the most probable test accuracy $Q^*=\\arg\\max_Qg(A=P,Q)$ of zero-error networks loses to BinaryConnect GD and SGD in all 36 cells of Table 2 (3 nets, MNIST and Fashion-MNIST, $P=30,300,600$); GD gap 21-30 points at $P=30$, 8-17 at 300, 5-14 at 600."
+    mapping: "Paper $D\\to P$; paper $N$ = number of binary parameters (not width); $g(A,Q)$ = prior volume split by train and test accuracy; $g(A=P,\\cdot)$ = interpolating (zero classification error) volume $P(S)$ resolved by test accuracy; $Q^*$ = typical $\\beta\\to\\infty$ posterior sample."
+    equations: "Table 2, Fig. 1, Sec. 5 (\"Diminishing advantage of gradient descent\"); method Eqs. (3.1)-(3.2)"
+    role: check
+  - paper: "2606.31282"
+    result: r3
+    statement: "Hidden width 64 to 128 raises $Q^*$ in five of six (dataset, $P$) cells (not Fashion-MNIST at $P=300$: 62.0 against 62.1) and GD and SGD accuracy in all six; the GD gap does not shrink systematically with width; depth has mixed effects; only two widths are tested."
+    mapping: "Base vs wider net of Table 1 (FC width 64 vs 128; 75,958 vs 151,862 binary parameters); $Q^*$ = the \"Random\" column of Table 2."
+    equations: "Fig. 3, Table 2, Sec. 5 (\"The role of width and depth\"); Table 1"
+    role: check
+reduces_to:
+  - {target: S01, limit: "$N\\to\\infty$: $P(f)$ is the NNGP prior probability of the function"}
+disagreements:
+  - {papers: ["2006.15191", "2407.03848"], note: "Mingard et al. find SGD $\\approx$ Bayes on coarse functions against the NNGP and, in App. F, at the exact posterior with $P=32$; Peleg–Hein sample that posterior and find SGD improves with width while the posterior does not. Both volumes are sign (zero-error) volumes, unlike the umbrella’s value-interpolation $Z$."}
+  - {papers: ["2503.13145", "2606.31282"], note: "The volume (max-entropy) measure beats SGD on 250 MNIST images at fixed train loss with a box prior and a barely overparameterised CNN (Yang et al.); random zero-error sampling loses to GD by 8.3–16.6 points at $P=300$ (Pakman–Kreimer). The pair differs in more than data size."}
+open_problems: [op-10, op-05]

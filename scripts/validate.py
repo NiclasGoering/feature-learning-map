@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate papers/, open-problems/ and queue.yaml.
+"""Validate papers/, statements/, open-problems/ and queue.yaml.
 
     python scripts/validate.py              # check the whole repository
     python scripts/validate.py draft.md     # also check draft.md as if it were in papers/
@@ -52,6 +52,22 @@ TEXT_LIMITS = [
 FREE_TEXT_NA = {"scaling.relations", "data.target_params.k", "data.target_params.degree",
                 "data.target_params.exponent", "data.target_params.teacher_width",
                 "empirics.temperature", "empirics.chains", "empirics.scale"}
+
+# Text limits for statements/*.yaml (paths inside the file; "members." and the like are per item).
+STATEMENT_TEXT_LIMITS = [
+    ("title", "words", 14),
+    ("claim", "words", 45),
+    ("formula_note", "words", 70),
+    ("regime.conditions", "words", 70),
+    ("status_note", "words", 50),
+    ("members.statement", "words", 50),
+    ("members.mapping", "words", 45),
+    ("members.equations", "words", 14),
+    ("reduces_to.limit", "words", 30),
+    ("links.note", "words", 40),
+    ("disagreements.note", "words", 70),
+]
+PAPER_REF = re.compile(r"[0-9]{4}\.[0-9]{4,5}|[a-z-]+(?:\.[A-Z]{2})?/[0-9]{7}|doi:10\.[0-9]{4,9}/\S+|ref:[a-z0-9]+(?:-[a-z0-9]+)*")
 
 QUEUE_STATUSES = {"queued", "needs-id", "added", "skipped"}
 QUEUE_KEYS = {"id", "cited_as", "title", "year", "status", "doi", "note", "source", "pr"}
@@ -360,6 +376,157 @@ def check_mechanism_files(vocab, used_by, report):
             report.error(where, "date_added", 'quoted date, e.g. "2026-10-24"')
 
 
+def check_statements(vocab, papers, op_ids, report):
+    """statements/S<NN>-<slug>.yaml: schema, members exist, ids consistent with the
+    papers' canonical blocks, reduces_to acyclic, and the public-data rules ([[...]], [derived], "manuscript").
+
+    `papers` maps a base id to (path, meta) for every paper file that parsed."""
+    validator = Draft202012Validator(flmap.load_statement_schema(vocab))
+    stmts = {}   # id -> (path, meta)
+    if flmap.STATEMENTS.exists():
+        for p in sorted(flmap.STATEMENTS.iterdir()):
+            if p.name in (".gitkeep", "README.md"):
+                continue
+            if not re.fullmatch(r"S[0-9]{2}-[a-z0-9]+(?:-[a-z0-9]+)*\.yaml", p.name):
+                report.error(rel(p), None, "statements/ holds only S<NN>-<slug>.yaml files")
+    for path in flmap.statement_files():
+        where = rel(path)
+        text = path.read_text(encoding="utf-8")
+        scan_forbidden(where, text, report)
+        try:
+            meta = flmap.load_yaml(text)
+        except Exception as e:  # noqa: BLE001
+            report.error(where, None, f"cannot parse: {e}")
+            continue
+        if not isinstance(meta, dict):
+            report.error(where, None, "must be a YAML mapping")
+            continue
+        errors = sorted(validator.iter_errors(meta), key=lambda e: list(e.absolute_path))
+        for err in errors:
+            loc = ".".join(str(x) for x in err.absolute_path) or "(top level)"
+            report.error(where, loc, schema_message(err))
+        if errors:
+            continue
+        sid = meta["id"]
+        if path.name != f"{sid}-{meta['slug']}.yaml":
+            report.error(where, "id", f"file must be named statements/{sid}-{meta['slug']}.yaml")
+        if sid in stmts:
+            report.error(where, "id", f"duplicate id {sid} (also {rel(stmts[sid][0])})")
+        stmts[sid] = (path, meta)
+
+    def check_text(where, loc, value, kind, limit):
+        n = count_words(value) if kind == "words" else count_sentences(value)
+        if n > limit:
+            report.error(where, loc, f"{n} {kind} (max {limit})")
+        if str(value).count("$") % 2:
+            report.error(where, loc, "unbalanced $ math delimiters")
+
+    owner = {}   # (base, result) -> statement id
+    for sid, (path, meta) in sorted(stmts.items()):
+        where = rel(path)
+        for dotted, kind, limit in STATEMENT_TEXT_LIMITS:
+            head, _, tail = dotted.partition(".")
+            if head in ("members", "reduces_to", "disagreements", "links"):
+                for i, item in enumerate(meta.get(head) or []):
+                    if tail in item:
+                        check_text(where, f"{head}[{i}].{tail}", item[tail], kind, limit)
+            elif "." in dotted:
+                v = get(meta, dotted)
+                if v is not None:
+                    check_text(where, dotted, v, kind, limit)
+            elif head in meta:
+                check_text(where, dotted, meta[head], kind, limit)
+        if "$" not in meta["formula"]:
+            report.error(where, "formula", "write the formula as LaTeX in $...$ or $$...$$")
+        else:
+            check_text(where, "formula", meta["formula"], "words", 80)
+        seen = set()
+        for i, m in enumerate(meta["members"]):
+            loc = f"members[{i}]"
+            if not PAPER_REF.fullmatch(m["paper"]):
+                report.error(where, f"{loc}.paper", "an arXiv ID without version (quoted), doi:<DOI> or ref:<slug>")
+                continue
+            if m["paper"] not in papers:
+                report.error(where, f"{loc}.paper", f"{m['paper']} has no file in papers/")
+                continue
+            ppath, pmeta = papers[m["paper"]]
+            rid = m.get("result")
+            key = (m["paper"], rid)
+            if key in seen:
+                report.error(where, loc, f"duplicate member {m['paper']} {rid or ''}".strip())
+            seen.add(key)
+            if rid is None:
+                continue
+            results = {r.get("id"): r for r in pmeta.get("results") or [] if isinstance(r, dict)}
+            if rid not in results:
+                report.error(where, f"{loc}.result", f"{m['paper']} has no result {rid}")
+                continue
+            if key in owner and owner[key] != sid:
+                report.error(where, loc, f"{m['paper']} {rid} is already a member of {owner[key]}; a result belongs to one statement")
+            owner[key] = sid
+            res = results[rid]
+            canon = res.get("canonical")
+            if canon is None:
+                report.warn(where, loc, f"{rel(ppath)} {rid} has no canonical block; add one with statement: {sid}")
+            elif canon.get("statement") != sid:
+                report.error(where, loc, f"{rel(ppath)} {rid} has canonical.statement {canon.get('statement')}, not {sid}")
+            if flmap.merged_view(pmeta, res).get("learning_rule") == ["gd"]:
+                report.warn(where, loc, f"{m['paper']} {rid} is about GD alone and is hidden on the site")
+        for i, r in enumerate(meta.get("reduces_to") or []):
+            if r["target"] == sid:
+                report.error(where, f"reduces_to[{i}]", "a statement cannot reduce to itself")
+            elif r["target"] not in stmts:
+                report.error(where, f"reduces_to[{i}].target", f"{r['target']} is not a statement in statements/")
+        for i, l in enumerate(meta.get("links") or []):
+            if l["target"] == sid:
+                report.error(where, f"links[{i}]", "a statement cannot link to itself")
+            elif l["target"] not in stmts:
+                report.error(where, f"links[{i}].target", f"{l['target']} is not a statement in statements/")
+        for i, d in enumerate(meta.get("disagreements") or []):
+            for pid in d["papers"]:
+                if not PAPER_REF.fullmatch(pid) or pid not in papers:
+                    report.error(where, f"disagreements[{i}].papers", f"{pid} has no file in papers/")
+        for op in meta.get("open_problems") or []:
+            if op not in op_ids:
+                report.error(where, "open_problems", f"{op} is not an id in open-problems/")
+
+    # reduces_to must be acyclic.
+    graph = {sid: [r["target"] for r in (m.get("reduces_to") or []) if r["target"] in stmts] for sid, (_, m) in stmts.items()}
+    state = {}
+
+    def visit(node, trail):
+        state[node] = 1
+        for nxt in graph[node]:
+            if state.get(nxt) == 1:
+                report.error(rel(stmts[node][0]), "reduces_to", "cycle: " + " -> ".join(trail + [node, nxt]))
+            elif nxt not in state:
+                visit(nxt, trail + [node])
+        state[node] = 2
+
+    for sid in sorted(graph):
+        if sid not in state:
+            visit(sid, [])
+
+    # Every canonical block must point at a statement that lists the result.
+    for base, (ppath, pmeta) in sorted(papers.items()):
+        for res in pmeta.get("results") or []:
+            canon = res.get("canonical") if isinstance(res, dict) else None
+            if not canon:
+                continue
+            sid = canon.get("statement")
+            where = rel(ppath)
+            if sid not in stmts:
+                report.error(where, f"{res.get('id')}.canonical.statement", f"{sid} is not a statement in statements/")
+            elif owner.get((base, res.get("id"))) != sid:
+                report.error(where, f"{res.get('id')}.canonical.statement",
+                             f"{sid} does not list {base} {res.get('id')} among its members")
+
+    nums = sorted(int(s[1:]) for s in stmts)
+    if nums and nums != list(range(1, nums[-1] + 1)):
+        report.warn("statements/", None, "ids are not consecutive: " + ", ".join(sorted(stmts)))
+    return stmts
+
+
 def check_queue(paper_bases, report):
     where = "queue.yaml"
     if not flmap.QUEUE.exists():
@@ -429,6 +596,7 @@ def main(argv):
             report.error(rel(p), None, "papers/ holds only <id>.md files")
 
     bases = {}
+    metas = {}
     used_by = {}
     for name in sorted(files):
         path = files[name]
@@ -448,20 +616,22 @@ def main(argv):
                 used_by.setdefault(label, set()).add(pid)
         if isinstance(pid, str):
             b = flmap.base_id(pid)
+            metas[b] = (path, meta)
             if b in bases:
                 report.error(where, "id", f"{b} is already present as {bases[b]} (one file per paper, any version)")
             bases[b] = where
 
     check_mechanism_files(vocab, used_by, report)
+    stmts = check_statements(vocab, metas, ctx["op_ids"], report)
     check_queue(set(bases), report)
 
     for line in report.lines:
         print(line)
     n = len(files)
     if report.errors:
-        print(f"\n{report.errors} error(s) in {n} paper file(s), open-problems/ and queue.yaml.")
+        print(f"\n{report.errors} error(s) in {n} paper file(s), statements/, open-problems/ and queue.yaml.")
         return 1
-    print(f"OK: {n} paper file(s), {len(ctx['op_ids'])} open problem(s), queue.yaml.")
+    print(f"OK: {n} paper file(s), {len(stmts)} statement(s), {len(ctx['op_ids'])} open problem(s), queue.yaml.")
     return 0
 
 

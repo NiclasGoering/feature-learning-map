@@ -205,7 +205,23 @@
             "explanation": {"$ref": "#/$defs/text"}
           }
         },
-        "overrides": {"$ref": "#/$defs/overrides"}
+        "overrides": {"$ref": "#/$defs/overrides"},
+        "canonical": {"$ref": "#/$defs/canonical"}
+      }
+    },
+
+    "canonical": {
+      "description": "Optional. Places this result under one of the main statements in statements/ (INGEST.md, section Statements): which statement, how its symbols map onto the statement's, and how the result is written (variables, order parameter, closure, approximation). Every result listed as a member of a statement should carry one.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statement", "mapping", "variables", "order_parameter", "closure", "approximation"],
+      "properties": {
+        "statement": {"type": "string", "pattern": "^S[0-9]{2}$"},
+        "mapping": {"$ref": "#/$defs/text"},
+        "variables": {"x-vocab": "canonical_variables"},
+        "order_parameter": {"x-vocab": "canonical_order_parameter"},
+        "closure": {"x-vocab": "canonical_closure"},
+        "approximation": {"x-vocab": "canonical_approximation"}
       }
     },
 

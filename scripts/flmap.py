@@ -14,6 +14,8 @@ QUEUE = ROOT / "queue.yaml"
 VOCAB = ROOT / "schema" / "vocab.yaml"
 SCHEMA = ROOT / "schema" / "paper.schema.json"
 MECHANISMS = ROOT / "schema" / "mechanisms"   # one file per mechanism label added by ingest
+STATEMENTS = ROOT / "statements"               # one file per main statement (S01-<slug>.yaml)
+STATEMENT_SCHEMA = ROOT / "schema" / "statement.schema.json"
 
 GROUPING = ["learning_rule", "depth", "width_limit"]
 BANDS = ["setting", "dials", "scaling", "data", "method", "empirics"]
@@ -38,6 +40,10 @@ FIELD_PATHS = {
     "mechanism_type": "r:mechanism.type",
     "mechanism_label": "r:mechanism.label",
     "moves_mean": "r:mechanism.moves_mean",
+    "canonical_variables": "r:canonical.variables",
+    "canonical_order_parameter": "r:canonical.order_parameter",
+    "canonical_closure": "r:canonical.closure",
+    "canonical_approximation": "r:canonical.approximation",
 }
 for _band, _fields in {
     "setting": ["architecture", "activation", "learned_layers", "parametrisation", "prior_scale", "prior_family"],
@@ -153,9 +159,10 @@ def expand_schema(node, vocab):
     if "x-vocab" in node:
         name = node["x-vocab"]
         field = vocab["fields"][name]
-        rest = {k: v for k, v in node.items() if k != "x-vocab"}
+        single = bool(node.get("x-single"))   # take one value of a multi field
+        rest = {k: v for k, v in node.items() if k not in ("x-vocab", "x-single")}
         enum = {"type": "string", "enum": allowed_values(field), "x-vocab-field": name}
-        if field["multi"]:
+        if field["multi"] and not single:
             out = {"type": "array", "items": enum, "uniqueItems": True,
                    "minItems": 0 if name in ("threads", "tags") else 1, "x-vocab-field": name}
         else:
@@ -167,6 +174,10 @@ def expand_schema(node, vocab):
 
 def load_schema(vocab):
     return expand_schema(json.loads(SCHEMA.read_text(encoding="utf-8")), vocab)
+
+
+def load_statement_schema(vocab):
+    return expand_schema(json.loads(STATEMENT_SCHEMA.read_text(encoding="utf-8")), vocab)
 
 
 def key_to_filename(pid):
@@ -271,3 +282,8 @@ def paper_files():
 
 def open_problem_files():
     return sorted(p for p in OPEN_PROBLEMS.glob("op-*.md"))
+
+
+def statement_files():
+    """statements/S<NN>-<slug>.yaml, sorted; other files in the folder are reported by the validator."""
+    return sorted(STATEMENTS.glob("S[0-9][0-9]-*.yaml")) if STATEMENTS.exists() else []

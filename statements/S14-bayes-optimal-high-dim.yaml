@@ -1,0 +1,85 @@
+id: S14
+slug: bayes-optimal-high-dim
+title: "High-dimensional Bayes-optimal error, and when GD reaches it"
+kind: grouping
+claim: "In the high-dimensional limit the Bayes-optimal error of teacher–student models is a variational formula over a finite overlap matrix (replica-symmetric; proved for generalised linear models). Gradient training reaches it in easy cases; in hard ones only with averaging, batch reuse, tuned regularisation or width."
+formula: '$$q^*=\operatorname*{argmax}_q\ \inf_r\Big[\psi_{P_0}(r)+\alpha\,\Psi_{P_{\rm out}}(q;\rho_0)-\tfrac12rq\Big],\qquad \mathrm{MMSE}=\rho_0-q^*,\quad\alpha=\tfrac PD$$'
+regime:
+  width_limit: high-dim
+  learning_rule: [bayes, gd]
+  conditions: "Teacher–student, $P\\sim D^k$ ($k=1$: GLMs, multi-index, deep random targets via Gaussian equivalence; $k=2$: quadratic nets, attention). $\\mathrm{MMSE}=\\rho_0-q^*$ needs no sign symmetry; continuous channels need $\\Delta>0$. Averaging lowers GD only to the metastable universal branch once specialisation is the equilibrium. Members are outside the core: placed, not collapsed."
+status: phys
+status_note: "Proved for generalised linear models (Barbier et al. 2017); replica/AMP physics for the others; the GD comparisons are numerical."
+members:
+  - paper: "1708.03395"
+    result: r5
+    statement: "Teacher-student GLM $y_\\mu=\\varphi(x_\\mu^\\top w^*/\\sqrt D,a_\\mu)$ at $P/D=\\alpha$: against the proved Bayes-optimal error (Eq. 9) and GAMP (Eq. 10), hand-tuned logistic regression nearly matches it for Gauss-Bernoulli weights but misses perfect generalisation near $\\alpha_{\\rm AMP}\\approx1.493$ for binary weights; a two-hidden-layer RMSprop-trained net learns the symmetric door only approximately."
+    mapping: "Paper $n\\to D$, $m\\to P$, $\\alpha=m/n\\to P/D$ (not the umbrella $P/N$), $\\Phi\\to X$, $X^*\\to w^*$, $\\rho=\\mathbb E X^{*2}\\to\\rho_0$; $q$ is the scalar teacher overlap; no hidden layer on the Bayes side."
+    equations: "Fig. 2, Sec. 3.4, SI F.1 (comparison)"
+    role: check
+  - paper: "2302.00375"
+    result: r2
+    statement: "Deep random target, Gaussian inputs, $P,D,N_\\ell\\to\\infty$ proportionally: the Bayes MSE (Eqs. 12-13, scalar RS overlap $q$) equals that of a noisy linear target (Eq. 16); ridge at $\\lambda^*=\\epsilon_r/\\rho$ (Eq. 21) and kernel ridge (Eq. 25) reach it; logistic and ridge classification lie $10^{-4}$, $10^{-3}$ above Eq. (15)."
+    mapping: "$n\\to P$, $d\\to D$, $k_\\ell\\to N_\\ell$ (target widths), $\\alpha=n/d\\to P/D$; paper $\\rho=\\Delta_a\\prod(\\kappa_1^{(\\ell)})^2\\Delta_\\ell$ is a signal strength, not the umbrella $\\rho$; $\\kappa_1,\\kappa_*$ Hermite coefficients, not $\\kappa$; $\\epsilon_r$ residual noise (Eq. 14)."
+    equations: "Eqs. (12)-(16), Sec. 3.3; Eqs. (19)-(21), (24)-(25), Secs. 4.1-4.4; Figs. 2-4"
+    role: check
+  - paper: "2302.00375"
+    result: r3
+    statement: "At $P\\propto D$ ($D=500$) nets trained by full-batch GD (Fig. 2) or Adam (Fig. 4) do not go below the Bayes errors (12), (15); the gap is not quantified. At $P\\sim D^2$ ($D=30$) an Adam-trained net reaches MSE $\\sim10^{-5}$, about $10^3$ below kernel regression; no Bayes curve…"
+    mapping: "$n\\to P$, $d\\to D$, $k\\to N$; GD: lr $8\\cdot10^{-3}$, weight decay 0.1, 30 trials; Adam: lr $3\\cdot10^{-3}$, 2000 epochs (Fig. 5 batch $P/3$, 10 trials); no averaging over initialisations."
+    equations: "Fig. 2 (S3.F2), Fig. 4 (S4.F4), Sec. 3.3; Fig. 5 (S4.F5), Sec. 5"
+    role: check
+  - paper: "2408.03733"
+    result: r4
+    statement: "Quadratic one-hidden-layer teacher of width $N=\\kappa D$, $P=\\alpha D^2$, noiseless: GD on the square loss from a prior initialisation reaches matrix error about $2\\,\\mathrm{MMSE}$, as one posterior sample would (Gibbs), and the GD estimate averaged over 64 initialisations matches the replica MMSE of Eq. (8), at $D=100,200$…"
+    mapping: "Paper $d\\to D$, $m\\to N$, $n\\to P$; paper $\\kappa=N/D$ and $\\alpha=P/D^2$ clash with umbrella $\\kappa$, $\\alpha$; error is $\\kappa\\,\\mathrm{tr}[(S^\\star-\\hat S)^2]$, $S=WW^\\top/N$; readout fixed to 1."
+    equations: "Eq. (7), Eq. (8) (MMSE), Fig. 3 left, Sec. 5.3; App. F.2"
+    role: check
+  - paper: "2506.01582"
+    result: r5
+    statement: "One softmax tied-attention layer, width $\\rho D$, $P=\\alpha D^2$, noiseless: the Bayes-optimal error $\\rho_0-\\mathrm{tr}\\,q^*$ (Result 4.3) is that of the single-token quadratic network at $2\\alpha/(T^2+T-2)$. Adam averaged over 32 initialisations matches it; single runs fall short; both seem to recover perfectly at the threshold Eq. (32)."
+    mapping: "Paper $d\\to D$, $n\\to P$, $r=\\rho d$ (key/query width), $\\alpha=n/d^2$, $S=WW^\\top/\\sqrt{rd}$ the target matrix, $Q=1+\\rho\\to\\rho_0$, $q\\to q^*$; AGD estimator Eq. (34); $\\beta$ is the softmax inverse temperature, not $1/T$."
+    equations: "Result 4.3, Eq. (32); Eqs. (33)-(34); Fig. 2 right; Sec. 4"
+    role: check
+  - paper: "2405.15480"
+    result: r5
+    statement: "Multi-index target, $P/D=\\alpha_0$, $D\\to\\infty$: Bayes-AMP weakly recovers the trivial subspace $T^\\star$ in one step for every $\\alpha_0>0$ (Thm 3.2). Via cited results, empty $T^\\star$ (generative exponent $>1$) makes one-pass SGD fail at $P=O(D)$; online SGD needs information exponent 1; batch-reuse GD recovers exactly $T^\\star$ at…"
+    mapping: "Paper $d\\to D$, $n\\to P$, $\\alpha=n/d\\to\\alpha_0$ (not $P/N$); $p$ indices = teacher width $O(1)$; Bayes side is AMP (optimal first-order), not the posterior; GD side cited (Ben Arous 2021, Dandi 2024)."
+    equations: "Lemma 3.1 (Eq. 11), Def. 3 (Eq. 12), Thm 3.2, Lemma 3.3 (Eq. 14)"
+    role: check
+  - paper: "2502.00901"
+    result: r4
+    statement: "Two-layer tied softmax attention target ($M=2$, ranks 1, $c=1$): GAMP at $P/D=1.2$ learns layer 2 within a few iterations, layer 1 after about 10, mirroring the thresholds $\\alpha_1\\approx0.14<\\alpha_2\\approx0.79$; batch-reuse SGD on the square loss at $P/D=15$ learns them in the same order. No SGD run near…"
+    mapping: "Paper $N\\to P$ (samples), $\\alpha=N/D\\to P/D$, $P_\\ell\\to$ teacher rank per layer ($O(1)$), $W^\\star\\to$ teacher weights, $Q\\to q$ (overlap matrix of S14), $C_\\ell$ = cosine similarity; SGD $\\eta,\\lambda$ are step size and weight decay, not the noise $\\eta$."
+    equations: "Fig. 2, Sec. 3.3 (SGD update)"
+    role: check
+  - paper: "2507.00629"
+    result: r4
+    statement: "Narrow committee machine ($N=K\\ll D$, $P=\\tilde\\alpha DN$, readouts fixed), noiseless regression, $\\lambda=0.01$: single-run full-batch GD from random init gives the $\\beta\\to\\infty$ memorization-branch error below $\\tilde\\alpha_{\\rm spec}$, but specialises only at $\\tilde\\alpha\\approx2.3$ (ReLU), $2.5$ (erf), above $\\tilde\\alpha_{\\rm spec}$; the Bayes-optimal error vanishes for $\\tilde\\alpha\\ge1$."
+    mapping: "Paper $N\\to D$ (input dimension), $K\\to N$ (width), $P\\to P$, $\\tilde\\alpha=P/(NK)\\to P/(DN)$; overlaps $m,q,v$ ($K\\times K$, diagonal plus $O(1/K)$ off-diagonal) $\\to q$ of S14; $\\beta\\to\\infty$ = ERM; LD/GD step $\\eta$ is not the noise $\\eta$."
+    equations: "Fig. 3, Sec. 3; RS theory Eqs. (9)-(14)"
+    role: check
+  - paper: "2507.00629"
+    result: r3
+    statement: "In the $(\\tilde\\alpha,\\lambda^{-1})$ plane of the $\\beta\\to\\infty$ RS potential (erf, $K=10$, label noise $10^{-4}$), PS, memorization and specialization phases coexist; $\\lambda_{\\rm opt}(\\tilde\\alpha)$ jumps at $\\tilde\\alpha^{\\rm BO}_{\\rm sp}$ and then sits where memorization loses global stability. Tuned ERM approaches the Bayes-optimal error; no single $\\lambda$ saturates it."
+    mapping: "As row 1; $\\lambda$ = weight decay in $\\frac\\lambda2\\Vert W\\Vert_F^2$ (Eq. 2); $\\Delta^*$ = label-noise variance; BOE from the Bayes-optimal RS equations (App. E.3, committee machine [31])."
+    equations: "Fig. 5, Sec. 4 (phase-diagram paragraph)"
+    role: check
+  - paper: "2510.24616"
+    result: r5
+    statement: "One hidden layer, Gaussian inner weights, $P=\\alpha D^2$, $N=\\gamma D$, $\\alpha>\\alpha_{\\rm sp}$: randomly initialised ADAM and HMC stall on the universal (metastable) branch and need time exponential in $D$ to specialise; matched ADAM plateaus at $2\\varepsilon_{\\rm uni}$ (ReLU, $\\mu_2\\ne0$) or near $\\varepsilon_{\\rm uni}$ ($\\tanh2x$, $\\mu_2=0$); $\\varepsilon_{\\rm opt}$ is not…"
+    mapping: "$d\\to D$, $k=\\gamma d\\to N$, $n=\\alpha d^2\\to P$ (paper $\\alpha=P/D^2$); $\\varepsilon_{\\rm opt}$ = MMSE $=\\rho_0-{\\rm tr}\\,q^*$ at the equilibrium (specialised) saddle, $\\varepsilon_{\\rm uni}$ = the same at the $\\mathcal Q\\equiv0$ branch; one-shot error = Gibbs error $=2\\times$ Bayes error (Remark 5)."
+    equations: "Figs. 8-9"
+    role: check
+  - paper: "2510.24616"
+    statement: "ReLU, $\\alpha=4$, $D=200$, teacher width $k=100$, homogeneous readouts: an ADAM student of width $K=sk$ reaches about the $s$-shot universal error $\\frac{s+1}{s}\\varepsilon_{\\rm uni}$, from $2\\varepsilon_{\\rm uni}$ toward $\\varepsilon_{\\rm uni}$, as does an average of $s$ HMC samples of the metastable state; $\\varepsilon_{\\rm opt}$ stays out of reach in polynomial…"
+    mapping: "$K\\to N_{\\rm student}=sN$; $s$-shot estimator = mean output of $s$ posterior samples; $\\frac{s+1}{s}\\varepsilon$ from $\\mathbb E(\\bar f_s-f_0)^2=\\varepsilon+{\\rm Var}/s$ with ${\\rm Var}=\\varepsilon$ (Nishimori identity, assumed to hold at the metastable state)."
+    equations: "Fig. 10 (left ADAM vs student width $K$, right $s$-shot HMC)"
+    role: check
+  - paper: "2605.10395"
+    result: r4
+    statement: "Teacher $y=v^\\top\\varphi(W_0x)$, $N=\\Theta(D)$, $P\\gg D$, $\\mu_2=0$, $v_i\\propto i^{-\\beta_v}$, $\\beta_v>1/2$: $\\varepsilon^{\\rm BO}=\\Theta(k_cD/P)$, $k_c\\sim(P/D)^{1/(2\\beta_v)}$, so $\\varepsilon^{\\rm BO}\\propto P^{1/(2\\beta_v)-1}$, then $P^{-1}$ once $k_c=N$; an ADAM student of width $\\approx k_c$ shows both exponents, a full-width one overfits."
+    mapping: "$d\\to D$, $k\\to N$ (teacher), $k_s\\to N_s$, $n\\to P$, $\\beta\\to\\beta_v$; Eq. (6) $\\varepsilon=\\sum_iv_i^2[g_\\sigma(1)-g_\\sigma(q_i)]$ is the $\\rho_0-{\\rm tr}\\,q^*$ form with per-feature overlaps $q_i$; the Bayesian student knows $v$, ADAM learns $W$ and $v$."
+    equations: "Fig. 1 (right); Sec. 3 \"Scaling with data\"; Result 1, Eqs. (6), (7)"
+    role: check
+open_problems: [op-10]

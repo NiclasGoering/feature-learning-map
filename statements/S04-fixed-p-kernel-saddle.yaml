@@ -1,0 +1,263 @@
+id: S04
+slug: fixed-p-kernel-saddle
+title: "Fixed $P$: kernel large deviations and the saddle $F$"
+kind: collapse
+claim: "At fixed $P$ and large width, $-\\frac1N\\log Z\\to F=\\min\\sum_\\ell J_\\ell+\\kappa E$: the prior kernels have rate $\\sum_\\ell J_\\ell$; standard scaling ($\\kappa\\to0$) leaves them in place (lazy), while $\\kappa=O(1)$ (mean field, μP) selects data-dependent kernels."
+formula: '$$F=\min_{K^1,\dots,K^L}\ \sum_{\ell=1}^{L}\gamma_\ell J_\ell\big(K^\ell\mid K^{\ell-1}\big)+\kappa\,\tfrac12\,y^\top\big(K^L+\eta I\big)^{-1}y,\qquad J_\ell(K|K^\prime)=\min\{\mathrm{KL}(\nu\Vert\mathcal N(0,K^\prime)):\sigma_\ell^2\,\mathbb E_\nu\varphi\varphi^\top=K\}$$'
+formula_note: "$\\gamma_\\ell=\\lim N_\\ell/N$ (1 for equal widths). $D_{\\rm out}=O(1)$ outputs share the kernel; for $D_{\\rm out}\\sim N$ the term $\\frac\\kappa2D_{\\rm out}\\log\\det(K^L+\\eta I)$ stays at the same order."
+regime:
+  width_limit: inf-meanfield-fixedP
+  learning_rule: [bayes]
+  conditions: "$P$ fixed; Gaussian prior; $\\kappa=\\gamma^2/N$ (standard $\\gamma_0^2/N$, μP $\\gamma_0^2$). Prior rate: bounded $\\varphi$ (Macci) or linear growth incl. ReLU, GELU (Vogel). Posterior: $\\eta>0$ (Andreis Prop. 4.3, $\\varphi^2\\le A(1+|x|^r)$, $r<2$; Papagiannouli $\\eta=1$; ReLU by combining Vogel with Papagiannouli Lemma B.1)."
+status: phys
+status_note: "Proved: prior rate; lazy posterior at $\\kappa=1/N$; kernel-selecting posterior at $\\kappa=1$, $\\eta>0$. Physics: deep $\\eta=0$ forms and the tilted single-site law (Lauditi, Rubin, Bauer). Deep kernel machines are $F$ plus an order-one log-determinant (extension)."
+members:
+  - paper: "2401.01611"
+    result: r1
+    statement: "Prior LDP at speed $N$: $Z/\\sqrt N$ has rate $I(z)=\\inf_{K^1..K^L}\\{\\sum_\\ell\\gamma_\\ell J_\\ell(K^\\ell|K^{\\ell-1})+\\tfrac12\\mathrm{tr}\\,z^\\top(K^L)^{-1}z\\}$, bounded continuous $\\varphi$. Hence $I(\\sqrt\\kappa\\,y)=F$ at $\\eta=0$, as a prior ball probability; the kernels alone have rate $\\inf\\sum_\\ell\\gamma_\\ell J_\\ell$."
+    mapping: "$v_n^*=n_{\\hat\\ell}\\to N$ (smallest width); $\\gamma_\\ell=\\lim N_\\ell/N\\in[1,\\infty]$ weights $J_\\ell$; $\\kappa^*((g-C_b1)/C_W;g')\\to J_\\ell$ (Cramér form); $g^{(\\ell)}\\to K^\\ell$ with bias; $Z/\\sqrt N=\\sqrt\\kappa\\,y$, i.e. $\\gamma^2=\\kappa N$."
+    equations: "Thm 2.1, Eqs. (5)-(12); Lemma 3.3 (Eq. 14); Prop. 3.1; Remark 2.3; Remark 3.1"
+    role: special-case
+  - paper: "2401.01611"
+    result: r3
+    statement: "ReLU, one input ($P=1$): Thms 2.1-2.2 still hold; $I(z)=\\inf_{g\\ge C_b}\\{I_G(g)+\\Vert z\\Vert^2/(2g)\\}$ with layer cost $\\gamma_\\ell\\kappa^*$, $\\kappa(\\eta;q)=\\log\\frac{(1-2\\eta q)^{-1/2}+1}2$ for $\\eta<1/(2q)$, $\\kappa^*$ explicit via the inverse of $u^3/(u+1)$; $\\kappa^*(0;q)=\\log2$."
+    mapping: "As result 1 with $P=1$: $I(\\sqrt\\kappa\\,y)=F$ at $\\eta=0$, $P=1$; $q\\to K^{\\ell-1}$, $y\\to$ the layer kernel value $(g-C_b)/C_W$."
+    equations: "Sec. 4 (no numbered theorem), Sec. 4.1 Eq. (16), Sec. 4.2; Remark 2.3"
+    role: special-case
+  - paper: "2401.01611"
+    result: r4
+    statement: "$L=1$: $\\frac1{\\sqrt N}\\partial^{s}Z$ (output, $s=0$, or first input derivative, $s=1$) has an LDP at speed $N$ with rate $\\inf\\{\\sum_hI_h(y_h)+\\Upsilon^*(f):y_h+f_{\\alpha h}=z_{\\alpha h}\\}$ (Cramér), and an MDP, whenever $\\Upsilon$ is finite near 0 (linear growth suffices). For $s=0$ this is Eq. (10) at $L=1$."
+    mapping: "$I_h$ = output-bias cost $y^2/(2C_b)$; $\\Upsilon^*$ = Cramér transform of $\\sqrt{C_W}\\,\\hat W\\varphi(\\cdot)$; $n\\to N$; for $s=0$, $\\Upsilon^*\\square I_h=\\inf_K\\{J_1+\\tfrac12 z^\\top K^{-1}z\\}$, i.e. $F$ at $L=1$, $\\eta=0$."
+    equations: "Props. 5.1-5.3, Eqs. (17)-(20); Examples 5.1-5.3"
+    role: special-case
+  - paper: "2405.16958"
+    result: r1
+    statement: "Prior LDP at speed $N$ (the slowest width) for the output $Z/\\sqrt N$ of a deep Gaussian network with $\\varphi$ of at most linear growth (ReLU, GELU, softplus, sigmoid) on $P$ fixed inputs, rate $\\inf\\{\\sum_\\ell\\gamma_\\ell J_\\ell(K^\\ell\\mid K^{\\ell-1})+\\tfrac12\\Vert r\\Vert_F^2:(K^L)^{1/2}r=z\\}$: the $\\kappa=0$ (prior) part of $F$."
+    mapping: "$v(n)=n_{\\hat l}\\to N$; $g^{(l)}\\to K^\\ell$ (includes bias $C_b$, $C_W\\to\\sigma^2$); $J=\\gamma_l\\kappa^*\\to\\gamma_\\ell J_\\ell$ with $\\gamma_l=\\lim n_l/n_{\\hat l}$ (1 at equal widths); Legendre form $\\kappa^*$ equals the KL form by contraction; $z\\to f(X)$ at $\\gamma=\\sqrt N$."
+    equations: "Thm 1, Eqs. (1.5)-(1.8); Assumptions 1-3; Lemma 2.3"
+    role: special-case
+  - paper: "2405.16958"
+    result: r2
+    statement: "Simplified prior rate: the inner minimum over $r$ is attained at $r=(K^{L})^{1/2,+}z$, so $\\mathcal I(z)=\\min_{K^1..K^L}\\sum_\\ell\\gamma_\\ell J_\\ell+\\tfrac12\\,z^\\top(K^L)^{+}z$ over ${\\rm Im}K^L\\supset{\\rm Im}z$; at $z=\\gamma_0y$ and equal widths this is $F$ with $\\kappa=\\gamma_0^2$, $\\eta=0$."
+    mapping: "$\\Vert(g^{L,\\#})^+z\\Vert_F^2=\\mathrm{tr}\\,z^\\top(K^L)^+z$ (Moore-Penrose); $z=\\gamma_0y$ for a readout $1/(\\gamma_0N)$, giving $\\kappa=\\gamma_0^2$; $\\gamma_l=1$ at equal widths; prior only, $\\eta=0$ (cost of $f(X)=y$ exactly)."
+    equations: "Thm 1, Eq. (1.9); Prop. 2.6, Eq. (2.31)"
+    role: special-case
+  - paper: "2505.08062"
+    result: r1
+    statement: "Functional prior LDP at speed $N$ for the layer covariances $(K^1,\\dots,K^L)$ on a compact input set (trace norm, Thm 3.2; sup norm with Lipschitz $\\varphi$, Thm 3.3), rate $\\sum_\\ell m_\\ell J_\\ell(K^\\ell\\mid K^{\\ell-1})$, for continuous $\\varphi$ with $\\varphi^2\\le A(1+|x|^r)$, $r<2$ (ReLU excluded)."
+    mapping: "$K^{\\ell+1}_{N_\\ell}\\to K^\\ell$ (index shifted by one; $1/\\lambda_\\ell\\to\\sigma^2$); $I_\\lambda(K_2|K_1)$ of Eq. (12) is the Cramér (sup) form of $J_\\ell$; $m_\\ell=\\lim N_\\ell/N$ weights $J_\\ell$; restricting to $P$ inputs gives the matrix form; bias optional (Remark 2)."
+    equations: "Eq. (12); Thm 3.2, Thm 3.3; Prop. 3.1 (LLN); Remark 2"
+    role: special-case
+  - paper: "2505.08062"
+    result: r2
+    statement: "Standard scaling (fixed noise precision $\\beta$): the exact kernel posterior tilts the prior by $e^{-\\frac12\\Psi}$, $\\Psi=2E(K^L)+\\log\\det(I+\\beta K^L)$, which is of order one, so the posterior LDP at speed $N$ has the prior rate $\\sum_\\ell m_\\ell J_\\ell$: the kernels stay lazy ($\\kappa=1/N$)."
+    mapping: "$\\kappa=\\gamma^2/N=1/N$ ($\\gamma=1$), $\\eta=1/\\beta$; $\\Sigma(K^{L+1})=K^L\\otimes1_D$; $\\beta y^\\top(1+\\beta\\Sigma)^{-1}y=y^\\top(\\Sigma+\\eta I)^{-1}y=2E$; tilt enters Prop. A.5 as $\\Phi_0=0$, $\\rho=\\tfrac12\\Psi$."
+    equations: "Prop. 4.1 (with Eq. (16) and $\\Psi$), proof in Sec. 7.5; Prop. 4.2"
+    role: special-case
+  - paper: "2505.08062"
+    result: r3
+    statement: "Mean-field likelihood $\\mathcal L(y\\mid s/\\sqrt N,N\\beta)$: the kernel posterior satisfies an LDP at speed $N$ with rate $\\sum_\\ell m_\\ell J_\\ell+\\kappa E(K^L)-F$, $E=\\tfrac12y^\\top(K^L+\\eta I)^{-1}y$, $\\kappa=1$, $\\eta=1/\\beta$, so the data move the minimiser off the NNGP kernels. Prop. 4.3 prints the energy without the $\\tfrac12$."
+    mapping: "Output $f=s/\\sqrt N$ ($\\gamma=\\sqrt N$, $\\kappa=1$), $\\beta_{\\rm umb}=N\\beta$, $\\eta=1/\\beta$; $\\Psi_N=2NE+\\log\\det(I+\\beta\\Sigma)$; correct tilt $\\Phi_0=\\tfrac\\beta2y^\\top(1+\\beta\\Sigma)^{-1}y=E$, $\\rho=\\tfrac12\\log\\det$; $\\mathcal I_0=F$; $D$ outputs add their energies."
+    equations: "Eq. (17), Prop. 4.3 and its proof; Prop. 4.1"
+    role: master
+  - paper: "2602.22925"
+    result: r3
+    statement: "Tempered posterior $\\propto e^{-NL(f)}$, $L=\\tfrac12\\sum_{i\\in D}(f(x_i)-y_i)^2$, $f=h/\\sqrt N$: LDP at speed $N$ with $\\mathcal I_{\\rm post}(f)=\\inf_K\\{L(f)+\\tfrac12f^\\top(K^L)^{+}f+\\sum_\\ell J_\\ell\\}-F$; eliminating $f$ leaves $\\sum_\\ell J_\\ell+\\tfrac12y^\\top(K^L_{DD}+I)^{-1}y$, whose minimiser differs from $K_{\\rm GP}$ when $y\\ne0$."
+    mapping: "Hidden layers $L_{\\rm paper}-1\\to L$; $\\kappa^{(\\ell)}\\to K^\\ell$ (the paper's $\\kappa$ is the kernel); $I^{(L-1)}=\\min\\sum_\\ell J_\\ell$; $f=h/\\sqrt N$ ($\\gamma=\\sqrt N$, $\\kappa=1$), $\\beta_{\\rm umb}=N$, $\\eta=1$; unit biases shift each $K^\\ell$ by $\\mathbf 1\\mathbf 1^\\top$."
+    equations: "Thm 4.3, Eq. (4.8); Cor. 4.4, Eq. (4.9); Lemma B.1, Remark B.2, App. B.3-B.4"
+    role: master
+  - paper: "2602.22925"
+    result: r1
+    statement: "Prior LDP at speed $N$, restated from Macci et al. and sketched in App. B.1-B.2: layer kernels with rate $I^{(\\ell)}=\\inf\\{J_\\ell+I^{(\\ell-1)}\\}$, minimised by $K_{\\rm GP}$; outputs $f=h/\\sqrt N$ with $\\mathcal I_{\\rm prior}(f)=\\inf_K\\{\\tfrac12f^\\top(K^L)^+f+\\sum_\\ell J_\\ell\\}$, the $\\kappa=0$ part of $F$."
+    mapping: "$J^{(\\ell)}_\\sigma$ (Legendre form of the conditional log-MGF, Eq. B.2) $=J_\\ell$; $\\Vert h\\Vert_\\kappa^2=h^\\top\\kappa^+h$; hidden layers $L_{\\rm paper}-1$; the cited theorem needs bounded $\\varphi$, so the ReLU of Sec. 5 rests on Vogel 2405.16958 (not cited)."
+    equations: "Prop. 4.1, Eq. (4.6); Thm 4.2, Eq. (4.7); App. B.1-B.2, Eqs. (B.1)-(B.5)"
+    role: special-case
+  - paper: "2602.22925"
+    result: r4
+    statement: "One hidden layer, ReLU, six Heaviside points, $D=1$: Monte Carlo prior tails $-\\tfrac1N\\log P(f\\ge y)$ approach $\\mathcal I_{\\rm prior}$ for $N=32$-$256$; MALA samples of the $N$-tempered posterior at $N=128$, $x=5$ concentrate at the LDP-MAP (mean 1.936, std 0.187), against mean 1.879, std 1.977 under standard scaling."
+    mapping: "$n\\to N$, $P=6$ training inputs, $d_{\\rm in}=1$; LDP scaling is $\\kappa=1$, $\\eta=1$; the \"NNGP scaling\" run changes output scale and tempering together (standard scaling, $\\kappa=1/N$); kernels optimised by nested Adam/L-BFGS (App. D)."
+    equations: "Sec. 5, Exps. 01-03 (03A, 03B); Figs. 1-8; App. D, Figs. 9-12"
+    role: check
+  - paper: "2603.06023"
+    result: r2
+    statement: "CNN prior, $C_\\ell=\\alpha_\\ell N\\to\\infty$ channels, $P$, depth, spatial sizes fixed: the patch-pair covariance tensors $(K^2,\\dots,K^{L+1})$, each $N_\\ell P\\times N_\\ell P$, satisfy an LDP at speed $N$ with rate $\\sum_\\ell\\alpha_\\ell J_\\ell(K^{\\ell+1}\\mid K^\\ell)$, $J_\\ell$ the Cramér transform of the patch-extracted second moment $G^{(\\ell)}(z)$, $z\\sim\\mathcal N(0,K^\\ell)$."
+    mapping: "Paper $n\\to N$, $C_\\ell$ = channels (not $N_\\ell$, which is spatial size), $\\alpha_\\ell=C_\\ell/n$ (not $P/N$), $I_\\ell\\to J_\\ell$ (sup/Cramér form, equal to the KL-min form), $G^{(\\ell)}$ = $\\varphi\\varphi^\\top$ composed with the receptive-field map, $\\lambda_\\ell^{-1}=\\sigma_\\ell^2$; FCNN is $N_\\ell=M_\\ell=1$."
+    equations: "Eqs. (5), (8), Thm 3.3; Prop. 2.1; Prop. 4.1 (Markov chain, Eq. 12)"
+    role: special-case
+  - paper: "2603.06023"
+    result: r3
+    statement: "Gaussian likelihood of fixed precision $\\beta$, unscaled outputs ($\\kappa=1/N$): the posterior law of $K^{L+1}$ is the prior tilted by $e^{-\\frac12\\Psi}\\propto\\mathcal N(y;0,I_{C_{L+1}}\\otimes K^{L+1}+\\eta I)$ and satisfies the same LDP as the prior, rate $I_{L+1}=\\inf_{K^2..K^L}\\sum_\\ell\\alpha_\\ell J_\\ell$: the lazy posterior."
+    mapping: "$\\eta=1/\\beta$; $\\Psi(K|y)=\\beta y^\\top(I+\\beta I\\otimes K)^{-1}y+\\log\\det(I+\\beta I\\otimes K)=y^\\top(K+\\eta)^{-1}y+\\log\\det(K+\\eta)+$const, i.e. $2E+$log-det at speed 1, negligible against speed $N$."
+    equations: "Lemma 3.4 (Eq. 10-11 likelihood), Prop. 3.5 (proof omitted, refers to 2505.08062 Prop. 4.2)"
+    role: special-case
+  - paper: "2603.06023"
+    result: r4
+    statement: "The rescaled output $H^{(L+1)}/\\sqrt N$ with $K^{L+1}$ satisfies an LDP at speed $N$ with rate $\\frac12\\sum_c\\Vert Z_c\\Vert^2_{K^{L+1}}+I_{L+1}(K^{L+1})$; the output rate $\\inf_K\\{\\cdot\\}$ at $Z=\\gamma_0y$ is $F$ at $\\kappa=\\gamma_0^2$, $\\eta=0$, with $C_{L+1}$ output channels sharing the patch-pair kernel."
+    mapping: "$\\Vert Z\\Vert^2_Q=Z^\\top Q^{-1}Z$ on $\\mathrm{Im}\\,Q$; $\\hat H=H/\\sqrt N$ is the output at $\\gamma=\\sqrt N$ ($\\kappa=1$ for $\\gamma_0=1$); $C_{L+1}\\to D_{\\rm out}$; rate weights $\\alpha_\\ell$."
+    equations: "Prop. 3.6 (via Example 2.1.1 of ref. [17]); Eq. (7)"
+    role: special-case
+  - paper: "2603.06023"
+    result: r1
+    statement: "CNN prior, infinite channels: the covariance tensors converge in probability to the deterministic recursion $K^{\\ell+1}=\\frac1{\\lambda_\\ell M_\\ell}\\sum_m\\mathbb E\\,T^{(i,\\ell)}_m(z_{:,\\mu})T^{(j,\\ell)}_m(z_{:,\\nu})$, $z\\sim\\mathcal N(0,K^\\ell)$, and finitely many output channels converge to $\\mathcal N(0,I_C\\otimes K^{L+1})$ (CNN-GP)."
+    mapping: "$K^\\ell\\to K^\\ell_{\\rm GP}$ over patch pairs; the recursion is the zero set of the S04 rate; $T^{(i,\\ell)}$ = activation plus pooling and receptive field; assumptions (A1)-(A3), extractors with $|T|\\le Ae^{B\\Vert z\\Vert^r}$, $r<2$."
+    equations: "Thms 3.1, 3.2, Eq. (6); Prop. 5.3"
+    role: special-case
+  - paper: "2406.03260"
+    result: r4
+    statement: "Standard scaling, $N\\to\\infty$ with $L$, $D_{\\rm out}$, $P$, $\\beta$ fixed: the Wishart factors obey an LDP at speed $N$ with rate $\\tfrac12\\sum_\\ell[\\mathrm{tr}\\,Q_\\ell-\\log\\det Q_\\ell]-\\tfrac{D_{\\rm out}L}2$, and the posterior mixing law has the same rate, independent of $\\beta$ and $y$ (lazy)."
+    mapping: "$\\kappa=1/N$ ($\\gamma=1$), $\\eta=1/\\beta$ fixed; $Q_\\ell$ = readout-side matrix $\\rho_\\ell$, so the rate is $\\sum_\\ell J_\\ell$ written in readout variables (Wishart rate) rather than kernel variables."
+    equations: "Prop. 8, Remark 9"
+    role: special-case
+  - paper: "2406.03260"
+    result: r5
+    statement: "Mean-field scaling ($f\\to f/\\sqrt N$, $\\beta\\to N\\beta$), $P$, $L$, $D_{\\rm out}$ fixed: the posterior mixing law obeys an LDP with rate $\\tfrac12\\sum_\\ell[\\mathrm{tr}\\,Q_\\ell-\\log\\det Q_\\ell]+\\tfrac12y^\\top(K^0\\otimes Q^{(L)}+\\eta I)^{-1}y-\\bar I_0$; its minimum value is $F$ at $\\kappa=1$, linear $\\varphi$."
+    mapping: "$\\gamma=\\sqrt N$, $\\kappa=1$, $\\beta_{\\rm umb}=N\\beta$, $\\eta=1/\\beta$; $Q_\\ell\\to\\rho_\\ell$; the log-det $R$ is $O(1)$ and drops; $D_{\\rm out}=1$ stationarity $\\rho_\\ell-1=v^\\top(sK^0)v$, $v=(sK^0+\\eta)^{-1}y$, $s=\\prod\\rho_\\ell$."
+    equations: "Eq. (18), Eq. (19), Prop. 10"
+    role: special-case
+  - paper: "2502.07998"
+    result: r1
+    statement: "aNBK: at fixed $P$ and $N\\to\\infty$ the μP posterior kernels solve $\\min_K\\max_{\\hat K}$ of $S=\\sum_{\\ell=1}^L[-\\frac12\\mathrm{tr}K^\\ell\\hat K^\\ell-\\ln\\mathbb E_{\\mathcal N(0,K^{\\ell-1})}e^{-\\frac12\\varphi^\\top\\hat K^\\ell\\varphi}]+\\frac{\\gamma_0^2}2y^\\top(K^L+\\eta I)^{-1}y$, i.e. $F$ with exact $J_\\ell$; $\\hat K^L=-\\gamma_0^2vv^\\top$, so $\\nu_L\\propto\\mathcal N(0,K^{L-1})e^{\\frac{\\gamma_0^2}2(v^\\top\\varphi)^2}$; predictor $K^L(x)^\\top(K^L+\\eta I)^{-1}y$."
+    mapping: "$K^\\ell=\\Phi^\\ell/\\lambda_\\ell$, $\\hat K^\\ell=\\lambda_\\ell\\hat\\Phi^\\ell$, $\\kappa=\\gamma_0^2$, $\\eta=1/\\beta$, $\\beta_{\\rm umb}=\\beta\\gamma_0^2N$; inner max is the Legendre form of $J_\\ell$; the $O(1)$ log-det from the readout integral is dropped between Eqs. (21) and (29); sum of $\\ln Z_\\ell$ runs over $\\ell=1..L$ (misprinted in (6), (30))."
+    equations: "Eqs. (5)-(8); App. A Eqs. (19)-(25), (29)-(31)"
+    role: master
+  - paper: "2502.07998"
+    result: r3
+    statement: "Deep linear μP, whitened $K^0=I$, $|y|=1$: each $K^\\ell$ moves only along $y$, with overlaps $c_\\ell=(1+\\gamma_0^2c_L/(c_L+\\eta)^2)^\\ell$ (exponential in depth) and $c_\\ell\\hat c_\\ell$ conserved; at $\\eta=0$, $c_L\\approx1+L\\gamma_0^2$ ($\\gamma_0^2L\\to0$), $\\gamma_0^{2L/(L+1)}$ ($\\gamma_0\\to\\infty$), $L\\gamma_0^2/\\ln(L\\gamma_0^2)$ ($L\\to\\infty$)."
+    mapping: "$c_\\ell=\\hat y^\\top K^\\ell\\hat y$; amplitude $\\kappa|y|^2=\\gamma_0^2$; Eq. (16) is $\\rho=1+\\kappa c_L/(c_L+\\eta)^2$, $c_L=\\rho^L$; asymptotics (17), (49)-(51) printed at $\\eta=0$; finite $\\eta$, small $\\gamma_0$: $c_L\\approx1+L\\gamma_0^2/(1+\\eta)^2$."
+    equations: "Eqs. (15)-(17); App. A.3 Eqs. (41)-(51)"
+    role: special-case
+  - paper: "2502.07998"
+    result: r4
+    statement: "Two-class CIFAR-10 (airplane vs automobile), two-layer ReLU MLP, $\\gamma_0=0.3$, $N=5000$, $P\\le1000$: aNBK and aNTK test losses fall below the lazy NNGP and NNGPK predictors at large $P$; lazy kernels win in a small window at small $P$."
+    mapping: "aNBK curve = predictor of the $F$ saddle at $\\kappa=\\gamma_0^2=0.09$, $\\eta=1/\\beta$; NNGP/NNGPK = $\\kappa=0$."
+    equations: "Fig. 3a, Sec. 5"
+    role: check
+  - paper: "2108.13097"
+    result: r1
+    statement: "Standard infinite-width deep GP at fixed $P$ ($N_\\ell=N\\nu_\\ell$, finite outputs): $\\frac1N\\log P(G_1..G_L\\mid X,Y)\\to-\\sum_\\ell\\nu_\\ell\\,\\mathrm{KL}(\\mathcal N(0,G_\\ell)\\Vert\\mathcal N(0,\\mathcal K(G_{\\ell-1})))$, the Gaussian-KL rate of the Gram chain; the posterior is a point mass at the NNGP recursion $G_\\ell=\\mathcal K(G_{\\ell-1})$, independent of $y$."
+    mapping: "$G_\\ell$ = Gram of the DGP features (preactivations); $K^\\ell=\\mathcal K(G_\\ell)$; for a DGP the Gaussian KL is the exact $J_\\ell$ ($\\varphi$ = identity, nonlinearity inside $\\mathcal K$); $\\kappa=0$ (likelihood $O(1)$); relative widths $\\nu_\\ell$ weight $J_\\ell$."
+    equations: "Eqs. (12)-(17); App. C Eqs. (44)-(49); App. D Eqs. (50)-(64)"
+    role: special-case
+  - paper: "2108.13097"
+    result: r2
+    statement: "With $N\\nu_{L+1}$ outputs made of $N$ copies of $Y$, $\\frac1N\\log P(G\\mid X,\\tilde Y)\\to\\mathcal L=\\log P(Y\\mid G_L)-\\sum_\\ell\\nu_\\ell\\,\\mathrm{KL}(\\mathcal N(0,G_\\ell)\\Vert\\mathcal N(0,\\mathcal K(G_{\\ell-1})))$; at equal $\\nu_\\ell=\\nu$, $-\\mathcal L/\\nu=\\sum_\\ell J_\\ell+\\kappa\\big[\\sum_{\\lambda}\\tfrac12y_\\lambda^\\top(K^L+\\eta I)^{-1}y_\\lambda+\\tfrac{D_{\\rm out}}2\\log\\det(K^L+\\eta I)\\big]$, point mass if the maximiser is unique."
+    mapping: "$\\kappa=1/\\nu$, $\\eta=\\sigma^2$, $D_{\\rm out}=\\nu_{L+1}$, $K^L=\\mathcal K(G_L)$, $\\gamma=1$ (NNGP readout). The log-det enters at weight $\\kappa D_{\\rm out}/2=O(1)$, not $\\frac1{2N}$: a standard-scaling posterior with $\\kappa D_{\\rm out}$ outputs per hidden unit, not the μP posterior."
+    equations: "Eqs. (18)-(21), (24); App. C Eqs. (44)-(49); App. D Eqs. (50)-(64)"
+    role: extension
+  - paper: "2108.13097"
+    statement: "For BNNs (any pointwise $\\varphi$), $\\mathcal L=\\log P(Y\\mid G_L)-\\sum_\\ell\\nu_\\ell\\,\\mathrm{KL}(P(f\\mid G_{\\ell-1},G_\\ell)\\Vert\\mathcal N(0,G_{\\ell-1}))$ with the maximum-entropy law $P(f\\mid\\cdot)\\propto\\mathcal N(f;0,G_{\\ell-1})e^{-\\frac12\\varphi(f)^\\top\\Lambda\\varphi(f)}$, $\\Lambda$ fixed by $\\mathbb E\\varphi\\varphi^\\top=G_\\ell$: each term is exactly $\\nu_\\ell J_\\ell(G_\\ell\\mid G_{\\ell-1})$. A multivariate-Gaussian variational family misses the BNN Grams."
+    mapping: "BNN Gram $G_\\ell=\\frac1N\\varphi\\varphi^\\top$ is $K^\\ell$ itself ($\\mathcal K_{\\rm BNN}$ = identity, Eqs. 34-35); $\\Lambda=-2\\times$ dual of $J_\\ell$; data term as in result 1 ($\\kappa=1/\\nu$, $\\eta=\\sigma^2$, log-det at $O(\\kappa)$)."
+    equations: "App. A Eqs. (26)-(37); App. E.1 Eqs. (65)-(75); E.3 Eqs. (81)-(84)"
+    role: extension
+  - paper: "2108.13097"
+    result: r3
+    statement: "In the label-copy limit the exact DGP posterior over each feature vector is $\\mathcal N(0,G^*_\\ell)$, iid over features, with $G^*_\\ell$ the maximiser of the DKM objective; the Gram matrix of the posterior features equals $G^*_\\ell$."
+    mapping: "The saddle single-site law of $J_\\ell$ with $\\varphi$ = identity: a quadratic tilt of $\\mathcal N(0,K^{\\ell-1})$ is Gaussian, $(\\Lambda+K^{\\ell-1,-1})^{-1}=G^*_\\ell$. The paper's $\\mathcal K(G_{\\ell-1})$ is $K^{\\ell-1}$."
+    equations: "Eqs. (22)-(23); App. E.2 Eqs. (76)-(80); Fig. 3ab"
+    role: special-case
+  - paper: "2108.13097"
+    result: r4
+    statement: "Linear kernel, $\\eta=0$, all $\\nu_\\ell$ equal including the outputs: $G^*_\\ell=G_0(G_0^{-1}G_{L+1})^{\\ell/(L+1)}$ with $G_{L+1}=YY^\\top/\\nu_{L+1}$, the unique maximum (also for unequal widths, App. K.2); needs full-rank $G_0$ and $G_{L+1}$."
+    mapping: "Linear $J_\\ell$ = Gaussian KL; $\\kappa D_{\\rm out}=1$ turns the readout term into a last Gaussian KL to $G_{L+1}=\\kappa YY^\\top$, so the objective is a chain of $L+1$ KLs pinned at both ends; stationarity $G_{\\ell-1}^{-1}=G_\\ell^{-1}G_{\\ell+1}G_\\ell^{-1}$ (Eq. 128)."
+    equations: "Eq. (25); App. K.1 Eqs. (125)-(132); K.2 Eqs. (133)-(151)"
+    role: special-case
+  - paper: "2309.09814"
+    result: r1
+    statement: "Convolutional DKM: maximise a sparse bound, $\\text{sparse GP-ELBO}(Y_t;G^L)-\\sum_\\ell\\nu_\\ell\\,\\mathrm{KL}(\\mathcal N(0,G^\\ell_{ii})\\Vert\\mathcal N(0,\\mathcal K(G^{\\ell-1})_{ii}))$, with the patch-pair kernel map $\\mathcal K_{\\rm Conv}(G)=\\Gamma(\\Omega(G))$, $\\Gamma_{ir,js}=\\frac1D\\sum_d\\Omega_{i(r+d),j(s+d)}$, $\\Omega$ the arccos kernel; it inherits Yang et al.'s label-copy limit."
+    mapping: "$\\kappa=1/\\nu$, $K^\\ell=\\Gamma(\\Omega(G^\\ell))$ over (image, location) pairs; Gaussian-KL $J_\\ell$ (exact for the deep GP) on $P_i\\times P_i$ inducing blocks only; the data term is a sparse GP-ELBO that keeps the readout log-det at $O(\\kappa)$, as in Yang et al."
+    equations: "Eqs. (5), (7), (11)-(19); App. A Eqs. (26)-(37); App. D Eq. (67)"
+    role: extension
+  - paper: "2309.09814"
+    result: r2
+    statement: "Sweep of $\\kappa=1/\\nu$ on MNIST/CIFAR-10/CIFAR-100: test accuracy 72.2/53.7/30.9% at $\\nu=\\infty$ (inducing NNGP, $\\kappa=0$), 99.2/87.9/64.1% at $\\nu=1$, flat for $\\nu\\le10^{-2}$; $\\nu=10^4$ is below $\\nu=\\infty$ on CIFAR; test log-likelihood is best at $\\nu=1$ and degrades towards $\\nu=0$."
+    mapping: "$\\nu=\\infty\\leftrightarrow\\kappa=0$ (NNGP); $\\nu=0\\leftrightarrow$ no KL (unregularised kernel learning); categorical likelihood; $P$ up to 60,000 with 128/256/512 inducing points, far outside the fixed-$P$ derivation."
+    equations: "Table 1, Table 4 (App. F.1), Sec. 5"
+    role: check
+  - paper: "2502.03210"
+    result: r1
+    statement: "At fixed $P$, $\\gamma=2$, $N\\to\\infty$ (Gärtner–Ellis, not proved): $\\Gamma_{\\rm TL}/N=F$. Linear $\\varphi$: $v=(K^\\star+\\eta I)^{-1}y$, $K^\\star=(K^{0\\,-1}-\\kappa vv^\\top)^{-1}$. Nonlinear: $K^\\star=\\mathbb E_{\\nu^\\star}\\varphi\\varphi^\\top$, $\\nu^\\star\\propto\\mathcal N(0,K^0)e^{\\frac\\kappa2(v^\\top\\varphi)^2}$, closed by cumulant expansion or VGA."
+    mapping: "$C^{(xx)}\\to K^0$; readout $g_w/N^\\gamma$ gives $\\kappa=N^{\\gamma-2}/g_w$ ($=1/g_w$ at $\\gamma=2$); noise $\\kappa_0N^{1-\\gamma}$ gives $\\eta=\\kappa_0/g_w$; $\\bar{\\tilde f}=-i\\frac N{g_w}v$; $C_{\\rm TL}C^{(xx)}=\\frac{g_w}NK^\\star$; $\\Gamma_{\\rm TL}=-S$ (Eq. 12)."
+    equations: "Eqs. (11)-(16), (22); App. A.2 Eqs. (52)-(57), (58)-(64), (73)-(74)"
+    role: special-case
+  - paper: "2502.03210"
+    result: r3
+    statement: "Linear one-hidden-layer network, tree level ($\\gamma=2$, any fixed $P$): the S04 saddle mean equals GP regression with $\\rho K^0$, $\\rho=1/(1-\\kappa\\,v^\\top K^0v)$, because $K^\\star v=\\rho K^0v$ and $J(K^\\star|K^0)=j(\\rho)$. The kernel itself adapts along $K^0v$; only its action on $v$ is a rescaling."
+    mapping: "$Q_{\\rm TL}/(g_wN^{1-\\gamma})\\to\\rho$; $K_{\\rm NNGP}=g_wN^{1-\\gamma}C^{(xx)}\\to K^0$ (readout variance absorbed in $\\kappa$); $\\frac{g_w}{N^\\gamma}\\bar{\\tilde f}^\\top C\\bar{\\tilde f}=-\\kappa\\,v^\\top K^0v$; $K_{\\rm adaptive,TL}$ (Eq. 22) $\\to K^\\star$."
+    equations: "Eqs. (21)-(23); App. A.3 Eqs. (81)-(83)"
+    role: special-case
+  - paper: "2502.03210"
+    result: r4
+    statement: "At the linear tree-level saddle the training-output covariance is $\\kappa_{\\rm n}I-\\kappa_{\\rm n}^2\\big(A+\\tfrac{2Q_{\\rm TL}^2}{N\\kappa_0^2}F\\big)^{-1}$, $A=\\kappa_0I+Q_{\\rm TL}K^0$, $F=K^0\\langle\\Delta\\rangle\\langle\\Delta\\rangle^\\top K^0$, $\\langle\\Delta\\rangle=\\eta v$: a rank-one term along $K^0v$ that the rescaled-kernel covariance lacks. On the Ising kernel it carries $(1+\\epsilon P)^2$."
+    mapping: "$\\kappa_{\\rm n}=\\kappa_0N^{1-\\gamma}$ is the paper's noise $\\kappa$ (not the umbrella $\\kappa$); $C^{(xx)}_{DD}\\to K^0$; $\\langle\\Delta\\rangle=y-\\langle f_D\\rangle$. In umbrella units the Hessian kernel is $\\rho K^0+2\\kappa\\rho^2K^0vv^\\top K^0$ (pilot 0a)."
+    equations: "Eqs. (25)-(28); App. A.2.1 Eqs. (65)-(72); App. A.4 Eq. (129)-(131); Figs. 4, 11, 12"
+    role: special-case
+  - paper: "2502.03210"
+    result: r5
+    statement: "With a Gaussian (VGA) closure of $\\nu^\\star$, $K_\\Sigma=\\mathbb E_{\\mathcal N(0,\\Sigma)}\\varphi\\varphi^\\top$, $\\Sigma^{-1}=K^{0\\,-1}-\\kappa\\,v^\\top\\partial_\\Sigma K_\\Sigma\\,v$, the saddle mean of an erf network learns the $\\epsilon H_3(w_*^\\top x)$ teacher component at $P\\sim D$, where NNGP and rescaling need $P\\sim D^3$. Checked against LSGD at $\\gamma=1$."
+    mapping: "$K=\\frac{g_w}N\\mathbb E\\varphi\\varphi^\\top\\to\\frac{g_w}NK^\\star$; $\\kappa=1/g_w$, $\\eta=\\kappa_0/g_w$ as in row 1; $\\bar{\\tilde f}_{\\rm VGA}=-i\\frac N{g_w}(K_\\Sigma+\\eta)^{-1}y$; target $y=H_1+\\epsilon H_3$ of $w_*^\\top x$, $\\epsilon=-0.1$; learnability Eq. (78)."
+    equations: "Sec. 6 (Non-linear networks); App. A.2.3 Eqs. (73)-(78); Fig. 5"
+    role: special-case
+  - paper: "2602.15593"
+    result: r1
+    statement: "RNN/DNN μP kernel functional: $\\frac1N\\ln P(y|x)\\to\\sup_\\Phi[-\\frac12\\mathrm{tr}\\,Y(v\\Phi^-+\\kappa_{\\rm p})^{-1}-\\Gamma(\\Phi|X)]$, with $\\Gamma$ the exact Cramér rate of $\\varphi\\varphi^\\top$ under $h\\sim\\mathcal N(0,w\\llbracket\\Phi^-\\rrbracket+uX^-)$ over the joint pattern×time kernel; the DNN mask (time-diagonal) reduces it to the layerwise $\\sum_tJ_t+\\kappa E$."
+    mapping: "$\\kappa=1/v$, $\\eta=\\kappa_{\\rm p}/v$ (paper's $\\kappa$ is the noise $K=\\kappa_{\\rm p}/N$), $\\beta_{\\rm umb}=N/\\kappa_{\\rm p}$; $\\Phi$ is $PT_-\\times PT_-$, $\\Phi^-$ its one-step time shift; layers = timesteps, $L=T-1$; $\\frac12\\ln|v\\Phi^-+\\kappa_{\\rm p}|$ dropped as $O(1)$ (after Eq. 25)."
+    equations: "Eqs. (3)-(5), Sec. 3.1; App. A.3.1 Eqs. (25)-(28); A.3.2 Eq. (29); A.3.4 Eqs. (30)-(32)"
+    role: extension
+  - paper: "2602.15593"
+    result: r3
+    statement: "Endpoint supervision, below the critical signal strength: a time-diagonal kernel solves the RNN saddle whenever it solves the DNN one, so RNN and DNN kernels and predictors $f^T=vH_{T_-T_-}(vH_{T_-T_-}+\\kappa_{\\rm p})^{-1}y$ coincide; they differ from the NNGP kernels, and the last-step kernel gains $y$ as an eigenvector."
+    mapping: "Predictor $K^L(K^L+\\eta I)^{-1}y$ with $K^L=H_{T_-T_-}$, $\\eta=\\kappa_{\\rm p}/v$; on time-diagonal kernels the DNN mask is the identity, so both architectures reduce to the layer chain $\\sum_tJ_t+\\kappa E$ of S04."
+    equations: "Sec. 3.2 (temporally-incoherent regime), Fig. 3; App. A.3.4 Eqs. (30)-(32)"
+    role: extension
+  - paper: "2602.15593"
+    result: r4
+    statement: "Linear, sequential task, $P=1$: expanding the saddle (34) in the label kernel, $H-H_0=\\Delta_1+\\Delta_2+O(Y^3)$ with $\\Delta_1=G_yY^+G_y$, $G_y=(vH_0+\\kappa_{\\rm p})^{-1}$, architecture-blind; $\\Delta_2$ is time-local for the DNN (Eq. 9) and a propagator chain over intermediate times for the RNN (Eq. 10), so only the RNN interpolates between supervised timesteps."
+    mapping: "$\\Delta_1$ is the deep-linear energy tilt $\\kappa K^0vv^\\top K^0$ in the map's symbols ($\\kappa=1/v$, $\\eta=\\kappa_{\\rm p}/v$, $H_0=1$ at $u=w=v=1$); $Y^+$ is the time-shifted label kernel; expansion in $Y$, not in $1/N$."
+    equations: "Eqs. (8)-(10), Sec. 3.3; App. A.4.2 Eq. (34), A.4.3; Fig. 5"
+    role: extension
+  - paper: "2403.14917"
+    statement: "Static objective of the two-timescale MFLD at $L=1$ with squared loss: $\\mathcal G_T/T=\\kappa E(K_\\nu)+\\mathrm{KL}(\\nu\\Vert\\nu_0)+$const, $K_\\nu=\\mathbb E_\\nu hh^\\top$ ($P\\times P$ Gram), so $\\min_\\nu\\mathcal G_T/T=\\min_K J_1(K\\mid K^0)+\\kappa E(K)=F$; the minimiser is $\\hat\\nu\\propto\\nu_0e^{\\frac\\kappa2(v^\\top h)^2}$, $v=(K+\\eta I)^{-1}y$."
+    mapping: "$\\lambda\\to T$; $\\kappa=\\lambda_a$, $\\eta=P\\lambda\\lambda_a$ ($n\\to P$); $\\nu=\\mathcal N(0,I/\\lambda_w)\\to\\nu_0$; $\\hat\\Sigma_\\mu\\to K$; $U=T\\kappa E$; $a_\\mu(w)=v^\\top h(X;w)$. The paper gives only $U$ (Lemma D.1) and Eq. (3); the identification with $F$ is the reader’s."
+    equations: "Sec. 5.1 display for $U_{\\hat\\rho}$, Lemma D.1; Eqs. (2), (3)"
+    role: special-case
+  - paper: "2403.14917"
+    result: r3
+    statement: "Property of the $L=1$ minimiser along a high-dimensional sequence: for a single-index target, tanh units, Gaussian inputs, $P\\ge c_3(D\\log D+\\log1/\\delta)$, $T=c_4/(D\\log D)$, $\\kappa=c_5D\\log D$, kernel alignment rises from $O(D^{-1/2})$ to $\\Omega(1)$ and parameter alignment from $O(1/D)$ to $\\Omega(1)$; $\\hat A\\ge\\frac{\\bar\\lambda_a\\Vert y\\Vert^2}{2PU}-\\bar\\lambda_a$."
+    mapping: "$n\\to P$, $d\\to D$, $\\lambda\\to T$, $\\lambda_a\\to\\kappa$ (grows with $D$), $\\eta=P\\lambda\\lambda_a=c_4c_5P$; $U=T\\kappa E$, so lowering $E$ raises the alignment bound (Lemma D.2). Outside the fixed-$P$ conditions of S04."
+    equations: "Defs 5.1, 5.3; Sec. 5.1 inequality (Lemma D.2); Thm 5.4 (App. D.2)"
+    role: extension
+  - paper: "2607.05735"
+    statement: "For fixed $d$, data and intensive $\\bar\\beta$, the width-$N$ Gibbs posterior converges along subsequences to a mixture of mean-field vacua minimising $F_D=\\sum_\\ell\\mathrm{KL}(\\nu^\\ell\\Vert\\nu^{\\ell,0}_{K^\\ell})+\\bar\\beta\\hat L_D(f_v)$ under $K^{\\ell+1}=\\mathbb E_{\\nu^\\ell}\\varphi\\varphi^\\top$; one-site laws $d\\nu^\\ell\\propto e^{-\\langle b^\\ell,\\varphi\\rangle-\\langle\\varphi,\\Gamma^\\ell\\varphi\\rangle}d\\mathcal N(0,K^\\ell)$."
+    mapping: "$\\gamma_{\\rm paper}=1\\Leftrightarrow\\kappa=1$; minimising over $\\nu^\\ell$ at fixed kernels gives $\\sum_\\ell J_\\ell$; integrating the Gaussian readout $\\alpha$ out of the last law gives $\\frac12y^\\top(K+\\eta I)^{-1}y$ with $\\eta=P/(2\\bar\\beta)$ ($\\hat L_D$ is a mean); $(b^\\ell,\\Gamma^\\ell)$ = dual of $J_\\ell$ plus a linear source."
+    equations: "App. D Eq. (16), F_D, Lemma D.1 (proof sketch); Defs. 4.1, 4.2"
+    role: variant
+  - paper: "2510.15174"
+    result: r1
+    statement: "Mean-field factorisation of the SGLD posterior of a two-layer net: each neuron follows $\\nu(w)\\propto\\nu_0(w)\\,(1+\\tilde\\varphi^\\top\\tilde\\varphi/(N\\eta))^{-1/2}\\exp[\\frac\\kappa2(v^\\top\\tilde\\varphi)^2/(1+\\tilde\\varphi^\\top\\tilde\\varphi/(N\\eta))]$, $v=(y-\\bar f)/\\eta$, closed by $\\bar f$; the S04 single-site law at $L=1$ plus a one-neuron log-det and self-energy, at finite $N,D$."
+    mapping: "Output $N^{-\\gamma_p}\\sum a\\varphi$: $\\kappa=N^{2\\gamma_p-2}$; loss $\\frac1{2\\kappa_p^2P}\\sum(f-y)^2$: $\\eta=N^{2\\gamma_p-1}\\kappa_p^2P$; $\\tilde\\varphi=\\sigma_a\\varphi$; $\\Sigma=\\varphi^\\top\\varphi/P$; $J_Y-\\sum_Am_AJ_A=\\varphi^\\top(y-\\bar f)/P$; $A(w)=\\sigma_a^{-2}(1+\\tilde\\varphi^\\top\\tilde\\varphi/(N\\eta))$."
+    equations: "Eqs. (2)-(7), Sec. 2.1-2.2; App. A.2 Eqs. (25)-(28); Thm D.2 Eqs. (61)-(65)"
+    role: extension
+  - paper: "1910.08013"
+    result: r3
+    statement: "Deep linear FC, $\\eta=0$, $P$ fixed, $N_\\ell=N\\to\\infty$, $D_{\\rm out}/N$ fixed: kernels maximise $\\sum_{\\ell=1}^{L+1}\\frac{N_\\ell}2[\\log\\det((K^{\\ell-1})^{-1}K^\\ell)-\\mathrm{Tr}((K^{\\ell-1})^{-1}K^\\ell)]$, $K^{L+1}=G_{yy}$, $N_{L+1}=D_{\\rm out}$; $T_{\\ell+1}=I+\\frac{N_\\ell}{N_{\\ell+1}}(T_\\ell-I)$. $D_{\\rm out}/N\\to0$: $K^\\ell=K^0$; $=1$: $K^\\ell=(G_{yy}(K^0)^{-1})^{\\ell/(L+1)}K^0$; $\\to\\infty$: $K^L=G_{yy}$."
+    mapping: "Divided by $N$: $J_\\ell$ = fixed-$P$ Gaussian KL (linear $\\varphi$); energy $\\kappa E$ with $\\kappa=D_{\\rm out}/N$, $E=\\frac12\\langle y_\\nu^\\top(K^L)^{-1}y_\\nu\\rangle_\\nu$, plus $\\frac\\kappa2\\log\\det K^L$ at the same order; $G_{yy}=YY^\\top/D_{\\rm out}$ ($K_{L+1}$); $T_\\ell=K^\\ell(K^{\\ell-1})^{-1}$."
+    equations: "Eqs. (24)-(27), Sec. 4; App. C Eqs. (96), (102), (106)-(112), (113)-(130)"
+    role: extension
+  - paper: "2111.11954"
+    statement: "One hidden layer, $\\eta\\to0$, $P$ fixed, $N,D_{\\rm out}\\to\\infty$ with $D_{\\rm out}/N=\\gamma_{\\rm out}$: the kernel saddle solves $(K^0)^{-1}-\\gamma_{\\rm out}K^{-1}G_{yy}K^{-1}+(\\gamma_{\\rm out}-1)K^{-1}=0$, i.e. $\\min_K J(K\\mid K^0)+\\gamma_{\\rm out}[\\tfrac12\\mathrm{tr}\\,G_{yy}K^{-1}+\\tfrac12\\log\\det K]$; at $\\gamma_{\\rm out}=1$, $K=K^0((K^0)^{-1}G_{yy})^{1/2}$."
+    mapping: "paper $\\gamma=n_d/n\\to\\gamma_{\\rm out}$ (not the umbrella $\\gamma$); $G_{yy}=YY^\\top/D_{\\rm out}$; effective $\\kappa=\\gamma_{\\rm out}$ with the log-det kept at the same order; $G_{xx}\\to K^0$."
+    equations: "Eqs. (42)-(43), Sec. V-D"
+    role: extension
+  - paper: "2112.15383"
+    result: r3
+    statement: "Langevin-equilibrated three-layer erf FCNs with mean-field readout scaling ($\\kappa=\\tfrac12$), $P=1024$, $N\\le1024$: train loss and first-layer weight-covariance spectrum approach the Gaussian-closed equations of state as $N$ grows; the top eigenvalue (along the teacher) is 2-3 times its GP value."
+    mapping: "Readout variance $\\sigma_a^2/N_2$ with $\\sigma_a^2=2/N_2$ gives $\\gamma^2=N/2$, $\\kappa=\\tfrac12$; $\\eta=\\gamma^2\\sigma^2=N\\sigma^2/2\\approx0.13$-$0.5$ ($\\sigma^2=10^{-3}$); $P/N=1$-$4$; paper $L$ counts the readout (paper $L-1$ = umbrella $L$)."
+    equations: "Sec. 2.2; Figs. 1(b), 7, 8; Methods 4.2"
+    role: check
+reduces_to:
+  - {target: S01, limit: "$\\kappa\\to0$: the minimiser is the prior kernel, the posterior is the NNGP posterior"}
+  - {target: S08, limit: "first order in $\\kappa$ (and $1/N$): energy tilt $\\frac\\kappa2\\mathrm{Cov}_0(\\varphi\\varphi^\\top,(v^\\top\\varphi)^2)$"}
+disagreements:
+  - {papers: ["2108.13097", "2502.07998"], note: "Yang et al.’s objective is $F$ plus $\\kappa\\frac{D_{\\rm out}}2\\log\\det(K^L+\\eta I)$: standard scaling with $\\kappa D_{\\rm out}$ outputs per hidden unit, not the μP posterior. Its linear Eq. 25 differs from Lauditi’s Eq. 48 by exactly that term. [verified]"}
+  - {papers: ["2505.08062", "2602.22925"], note: "Papagiannouli Eq. 4.9 equals Andreis Prop. 4.3 once Andreis’s missing factor $\\frac12$ is restored (Prop. A.5 prints $I-\\Phi_0$, $I+\\Phi_0$ is right); both equal $F$ at $\\kappa=1$. Papagiannouli proves $\\eta=1$, Andreis every $\\eta>0$; $\\eta=0$ is not covered. [verified]"}
+open_problems: [op-01, op-04]
