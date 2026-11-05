@@ -39,7 +39,7 @@
 <main id="content" class="graph-page">
   <div class="gr-head">
     <h1>Graph</h1>
-    <p class="lede" data-view="statements">Most papers in this literature state the same few results in different notations. Each dot is one <em>statement</em>: a theorem or an established physics result, written once in the map's notation, with the papers that state it. Size is the number of papers; a filled dot is a collapse (the papers' results are one formula under a mapping of symbols), a ring a grouping (a shared object, not shown equal). Arrows join a statement to the one it becomes in a limit, labelled with that limit; red marks papers that disagree; diamonds are open problems in the gaps. Left to right: data per width, from fixed $P$ to $P\propto N$ to high-dimensional $P\sim D^k$. Bottom to top: how far the kernel moves, from lazy ($\kappa\to0$) through $1/N$ corrections to mean field and μP ($\kappa=O(1)$). Click a statement for its formula, conditions and member papers; click a paper for its results. The axes are schematic.</p>
+    <p class="lede" data-view="statements">Most papers in this literature state the same few results in different notations. Each dot is one <em>statement</em>: a theorem or an established physics result, written once in the map's notation, with the papers that state it. Size is the number of papers; a filled dot is a collapse (the papers' results are one formula under a mapping of symbols), a ring a grouping (a shared object, not shown equal). Arrows join a statement to the one it becomes in a limit, labelled with that limit; red marks papers that disagree; diamonds are open problems in the gaps. Left to right: data per width, from fixed $P$ to $P\propto N$ to high-dimensional $P\sim D^k$. Bottom to top: how far the kernel moves, from lazy ($\kappa\to0$) through $1/N$ corrections to mean field and μP ($\kappa=O(1)$). Click a statement for its formula, conditions and member papers; click a paper for its results. The axes are schematic. The column on the right is the <em>renormalisation-group layer</em>: what each kind of “renormalisation” claim in the literature says, rated for maturity, with lines to the main statements it reproduces, extends or contradicts. Click a line's end to jump either way; every main statement's panel lists its “RG view”.</p>
     <p class="lede" data-view="results" hidden>Each dot is a result: one feature-learning mechanism in one limit, gathering every paper in the map that shows it (where no mechanism was analysed, results are grouped by what they compute). The number is how many papers show it. Click a dot for the statements and the papers; click a paper for all its results. Left to right: data per width, from fixed $P$ to $P\propto N$ to high-dimensional $P\sim D^k$. Bottom to top: how far the kernel moves, from lazy ($\kappa\to0$) through $1/N$ corrections to mean field and μP ($\kappa=O(1)$). Lines join results that the same paper shows. The axes are schematic.</p>
   </div>
   <div class="gr-tools" role="group" aria-label="Graph controls">
@@ -57,6 +57,7 @@
     <span class="gr-toggles" data-view="statements">
       <label><input type="checkbox" id="gr-sarrows" checked> arrows</label>
       <label><input type="checkbox" id="gr-sops" checked> open problems</label>
+      <label id="gr-srg-label"><input type="checkbox" id="gr-srg" checked> RG layer</label>
     </span>
     <span class="gr-hint">drag to pan · pinch or ⌘-scroll to zoom</span>
     <button type="button" id="gr-fit">Fit</button>
@@ -69,6 +70,8 @@
     <span><span class="ar ar-dash"></span>dashed: conjectural, outside the cited theorems</span>
     <span><span class="sw sw-red"></span>papers disagree</span>
     <span><span class="dm"></span>open problem</span>
+    <span class="gr-rgleg"><span class="sw sw-rg"></span>RG statement: sense (a)–(e), fill = maturity (solid → faint: mature, solid, partial, early, heuristic)</span>
+    <span class="gr-rgleg"><span class="ln ln-rep"></span>reproduces <span class="ln ln-ext2"></span>extends <span class="ln ln-con"></span>contradicts (unrelated: listed in the panel, not drawn)</span>
   </p>
   <p class="gr-legend" data-view="results" hidden>
     <span><span class="sw sw-bayes"></span>Bayesian posterior</span>
@@ -81,6 +84,10 @@
   <section class="gr-index" data-view="statements" aria-label="Statements">
     <h2>The statements</h2>
     <ol id="gr-slist" class="gr-slist"></ol>
+  </section>
+  <section class="gr-index" id="gr-rgindex" data-view="statements" aria-label="RG statements" hidden>
+    <h2>The RG statements</h2>
+    <ol id="gr-rlist" class="gr-slist"></ol>
   </section>
 </main>
 <div id="scrim" class="scrim" hidden></div>
