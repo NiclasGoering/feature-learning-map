@@ -157,3 +157,5 @@ disagreements:
   - {papers: ["2006.15191", "2407.03848"], note: "Mingard et al. find SGD $\\approx$ Bayes on coarse functions against the NNGP and, in App. F, at the exact posterior with $P=32$; Peleg–Hein sample that posterior and find SGD improves with width while the posterior does not. Both volumes are sign (zero-error) volumes, unlike the umbrella’s value-interpolation $Z$."}
   - {papers: ["2503.13145", "2606.31282"], note: "The volume (max-entropy) measure beats SGD on 250 MNIST images at fixed train loss with a box prior and a barely overparameterised CNN (Yang et al.); random zero-error sampling loses to GD by 8.3–16.6 points at $P=300$ (Pakman–Kreimer). The pair differs in more than data size."}
 open_problems: [op-10, op-05]
+links:
+  - {target: S22, relation: unrelated, note: "RG-on-data objects are conditional laws $p(h|v)$ of the data and their information content ($I(v;h)$ is a compression rate). S10 is a prior volume $P(f)\\lesssim2^{-a\\mathcal K(f)+b}$ over functions of a network; no member computes a prior volume or complexity bound."}

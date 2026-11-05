@@ -1,0 +1,87 @@
+id: S21
+slug: bayesian-rg
+title: "Bayesian renormalisation: inference as a flow in the data count or a Fisher scale"
+kind: grouping
+family: rg
+sense: d
+maturity: heuristic
+claim: "Bayesian updating in the data count $P$ is read as inverse exact-RG flow with the Fisher metric as scale: derived at leading order, the RG match formal. Networks: Fisher cutoff on an assumed readout posterior with frozen hidden features; no feature learning."
+formula: '$$\partial_P\bar O=-\mathrm{Cov}(O,\mathrm{KL}_*)\ \Rightarrow\ C=\frac{\mathcal I_*^{-1}}{P},\qquad \partial_\tau p_\tau=-m^a\partial_a p_\tau+\tfrac12\,\Gamma^{ab}\partial_a\partial_b\,p_\tau,\quad \tau=\tfrac1P,\qquad \mathcal I_{ii}<\Lambda:\ (\bar w_i,\Xi_{ij})\to(0,\sigma_w^2\delta_{ij})$$'
+formula_note: "$P$: data count (paper $T$); $\\tau=1/P$ (2204.12939 uses $\\tau=P/N_{\\rm events}$); $\\mathrm{KL}_*$: divergence from the true model; $\\mathcal I_*$: one-datum Fisher metric; $C$: posterior covariance; $\\Gamma=J\\mathcal I_*^{-1}J^\\top$, $J=\\partial y/\\partial\\theta$; $m$: MAP drift; $\\bar w,\\Xi,\\sigma_w^2$: last-layer mean, covariance, prior variance. The arrow assumes a Gaussian posterior; 2212.11379 Eq. (141) prints $\\Gamma$ without the $\\tfrac12$ of (133)."
+regime:
+  width_limit: finite-exact
+  learning_rule: [bayes, gd]
+  conditions: "Fixed parametric model with regular Fisher metric, $P\\to\\infty$, independent data from a model in the family, prior irrelevant; leading order in the update batch $N_k/N$ and in $1/P$; no width limit. Networks: $N=\\infty$ at fixed $P$, hidden layers frozen at their prior, last-layer posterior assumed Gaussian (Eq. (69)); trained ensembles read as posterior samples, untested against the NNGP posterior."
+status: phys
+status_note: "Formal leading-order derivations, no theorem: 2204.12939 (2.25), (2.38); 2212.11379 (111)-(116), (133)-(137); 2405.17538 (76), (86). The exact-RG match and the Wilson-shell reading are asserted. Beyond the papers (algebra, checked numerically): 2204.12939 (A.6) with $\\overline{\\mathrm{KL}_*}=n_\\theta/2P$ gives $-\\ln Z=\\tfrac{n_\\theta}2\\ln P$; 2212.11379 (141) needs the $\\tfrac12$ of (133)."
+members:
+  - paper: "2204.12939"
+    result: r1
+    statement: "For independent data from a model in the family, in batches $1\\ll N_k\\ll N$ and at leading order in $1/N_k$, the posterior is a flow in the data count: every posterior mean obeys $\\partial_P\\bar O=-\\mathrm{Cov}(O,\\mathrm{KL}_*)$, the sample average being replaced by its expectation."
+    mapping: "Paper $T=N\\tau\\to P$ ($N$ = total events, not width; paper $\\tau\\in[0,1]$ = data fraction); $D(\\theta)\\to\\mathrm{KL}_*(\\theta)=\\mathrm{KL}(p_*\\Vert p_\\theta)$; $\\mathrm{Var}(O,D)$ is a covariance; $\\alpha_*$ = true parameter."
+    equations: "Eq. (2.25) [(1.3)]; (2.7)-(2.16)"
+    role: master
+  - paper: "2204.12939"
+    result: r2
+    statement: "For a Gaussian posterior and quadratic $\\mathrm{KL}_*$ the covariance obeys $\\partial_PC=-C\\,\\mathcal I_*C$; the Cramér–Rao form $C=\\mathcal I_*^{-1}/P$ solves it (checked by substitution) and even moments scale as $P^{-l}$. Hidden parameters add $-\\beta C$. Tested on one Ising coupling."
+    mapping: "Paper $T\\to P$; $\\bar C^{ij}\\to C$; $\\mathcal I_*^{ij}\\to\\mathcal I_*^{-1}$ (one-datum Fisher metric at the truth); $\\beta=2\\mathcal I_{1I}\\bar C^{1I}$ couples the visible parameter to hidden ones, not an inverse temperature."
+    equations: "Eqs. (2.38)-(2.41), (2.57); (4.7), Table 3"
+    role: rate
+  - paper: "2204.12939"
+    result: r5
+    statement: "Adam-trained dense and convolutional networks: final loss against training-set size fits $aP^{-b}+c$, with $b=1.01\\pm0.06$ (MNIST CNN), $0.74\\pm0.06$ and $1.32\\pm0.12$ (MNIST, Fashion-MNIST dense); CIFAR-10 CNN fits an exponential. Read by analogy with (2.59); no network posterior or kernel enters."
+    mapping: "Paper $T\\to P$ = number of training images, total training matched; loss = categorical cross-entropy; exponents above and below $1$ are both attributed to hidden parameters."
+    equations: "Tables 4-5, Figs. 5-6, Sec. 5.1"
+    role: check
+  - paper: "2212.11379"
+    result: r1
+    statement: "Run backwards in $\\tau=1/P$, the posterior predictive obeys a convection–diffusion equation to first order in $\\tau$: drift $m$ from the MAP path, diffusion $\\Gamma$. By choice of scheme data it is matched to a Wegner–Morris flow, a Wasserstein gradient flow of $\\mathrm{KL}(p_\\tau\\Vert q_\\tau)$."
+    mapping: "$T\\to P$; $u\\to\\theta$; $D\\to\\mathrm{KL}_*$; $K^{ij}\\to\\Gamma^{ab}=J\\mathcal I_*^{-1}J^\\top$; $m^a$ = MAP drift; $q_\\tau\\propto e^{-\\Phi(\\gamma_\\tau;y)}$, $\\Phi$ = negative log-likelihood. (141) lacks the $\\tfrac12$ of (133)."
+    equations: "Eqs. (133)-(137), (141), (143)-(144), Table 3"
+    role: master
+  - paper: "2212.11379"
+    result: r2
+    statement: "Normal mean, known variance: the data-count posterior $\\mathcal N(\\mu_*,\\sigma^2/P)$ is a Brownian density in $\\tau=1/P$, and the posterior predictive is its convolution with the noise density, a heat-kernel step. This case is exact; the general flow is first order in $\\tau$."
+    mapping: "$T\\to P$; $\\mu_*$ = true mean; $\\sigma^2$ = observation-noise variance (the map's $\\eta$); posterior = population form $\\propto e^{-P\\,\\mathrm{KL}_*(\\mu)}$, $\\mathrm{KL}_*=(\\mu-\\mu_*)^2/2\\sigma^2$, centred on the truth."
+    equations: "Eqs. (108)-(116)"
+    role: special-case
+  - paper: "2305.10491"
+    result: r1
+    statement: "The Gaussian posterior $\\mathcal N(\\mu_\\tau,\\tau\\mathcal I_*^{-1})$ pushed through the model map $G$ gives a predictive heat kernel of covariance $\\tau\\Gamma$ and a Fokker–Planck flow identified with exact RG. Eq. (45) is read off the form (43); the posterior is continued from small to all $\\tau$ (fn. 10)."
+    mapping: "$T\\to P$, $\\tau=1/P$; $\\mathcal I\\to\\mathcal I_*$; $K_\\tau^{-1}\\to\\Gamma$; $G$: parameters to data space; $\\mu_\\tau$ = MAP path; $V_\\tau$ = potential whose gradient flow is the MAP path."
+    equations: "Eqs. (38)-(39), (43)-(47)"
+    role: extension
+  - paper: "2305.10491"
+    result: r2
+    statement: "The Fisher metric is the scale: $\\mathrm{KL}\\approx\\tfrac12\\mathcal I_{ij}\\delta\\theta^i\\delta\\theta^j$ and the posterior covariance is $\\tau\\mathcal I_*^{-1}$. Sloppy directions (small Fisher eigenvalue) play the role of high-energy modes and are discarded first; $\\mathcal I$ is called a correlation length. A definition, not a derived flow."
+    mapping: "$\\mathcal I_{ij}\\to\\mathcal I_{*ij}$, $\\tau=1/P$; sloppy = poorly determined by the data, stiff = well determined; no momentum or spatial locality is present."
+    equations: "Eqs. (31), (38), Sec. 3.1"
+    role: extension
+  - paper: "2405.17538"
+    result: r1
+    statement: "Weights with Fisher diagonal $\\mathcal I_{ii}<\\Lambda$ at the MAP are averaged out and given the Jeffreys prior (54); the cutoff of 2305.10491 Eq. (55) removed them. Renormalised correlators $G_\\Lambda^{(n)}$ and actions $S_\\Lambda$ follow through the network–field-theory map. Any architecture; no flow equation in $\\Lambda$."
+    mapping: "$\\Lambda$: Fisher cutoff; $\\lambda_A=\\mathcal I_{AA}$ at the MAP; $\\pi_*$ = trained parameter law, taken from a gradient-descent ensemble; $S_\\Lambda$ = action of the predictive; $G_\\Lambda^{(n)}$ = renormalised $n$-point functions."
+    equations: "Eqs. (53)-(58), Sec. 3.3"
+    role: extension
+  - paper: "2405.17538"
+    result: r2
+    statement: "Infinite width, hidden layers frozen at their prior and independent of the readout (63), readout posterior assumed $\\mathcal N(\\bar w,\\Xi)$ (69): resetting weights with $\\mathcal I_{ii}<\\Lambda$ to mean $0$, variance $\\sigma_w^2$, decorrelated (74)-(75) leaves a GP with mean $\\bar w(\\Lambda)V$ and covariance (76)."
+    mapping: "$\\bar w,\\Xi$: last-layer posterior mean, covariance; $V^i,V^{ij}$: first and second moments of last-hidden-layer features over the frozen layers; $\\sigma_w^2$: readout prior variance; $N\\to\\infty$, $P$ fixed."
+    equations: "Eqs. (63)-(69), (74)-(76), Sec. 4.1"
+    role: special-case
+  - paper: "2405.17538"
+    result: r3
+    statement: "One hidden layer, cos-net activation, scalar output: the predictive is a zero-mean GP with covariance $C_d\\sigma_w(\\Lambda)^2/(p^2+m^2)$, $\\sigma_w(\\Lambda)^2=\\sum_i(\\Xi_{ii}+\\bar w_i^2)$, so only the amplitude of a fixed kernel flows. Eq. (90) reads it as a shrinking cutoff $R$ if $\\sigma_w(\\Lambda)^2$ grows; not shown."
+    mapping: "Covariance $\\to$ kernel; $\\sigma_w(\\Lambda)^2$ = trained readout second moment; $m$ = mass and $C_d$ = constant of the cos-net kernel in momentum $p$; $R$ = momentum cutoff of the hidden-weight law."
+    equations: "Eqs. (85)-(90), Sec. 4.1.1"
+    role: special-case
+disagreements:
+  - {papers: ["2305.10491", "2405.17538"], note: "One Fisher-diagonal cutoff, different action on sloppy weights: removed (2305.10491, Eq. (55)); marginalised and given the Jeffreys prior (2405.17538, Eq. (54)); zero mean and prior variance in the GP example (Eqs. (74)-(75)); resampled from the prior in the numerics (Eq. (96))."}
+  - {papers: ["2212.11379", "2405.17538"], note: "2405.17538 calls its Fisher-shell scheme a perturbative form of the exact flow of 2212.11379 (Sec. 3.3, fn. 17) and elsewhere a non-perturbative exact RG (fn. 3). Neither paper derives the shell scheme from (141)."}
+open_problems: [op-04, op-10]
+links:
+  - {target: S01, relation: unrelated, note: "Not S01's posterior: (76) is a GP from an assumed Gaussian readout posterior, with hidden features averaged independently of it (63); the cos-net mean is $0$ at every $\\Lambda$ (86). S01 conditions on the training kernel: mean $k_*^\\top(K+\\eta I)^{-1}y$."}
+  - {target: S03, relation: unrelated, note: "(65), (73) average over hidden-layer draws from their prior (63) and keep two moments (68). S03's mixing law over a scale $s$ is evidence-tilted, $\\pi(ds\\mid y)\\propto\\pi(ds)\\,\\mathcal N(y;0,sK^0+\\eta I)$; nothing here tilts it."}
+  - {target: S11, relation: unrelated, note: "Agrees only for regular models: 2204.12939 (A.6) with $\\overline{\\mathrm{KL}_*}=n_\\theta/2P$ gives $-\\ln Z=\\tfrac{n_\\theta}2\\ln P$, i.e. $\\lambda_{\\rm LC}=n_\\theta/2$, $m=1$. For degenerate Fisher ($\\mathrm{KL}_*\\propto w^4$) the same posterior gives $\\lambda_{\\rm LC}=\\tfrac14$, $\\langle w^2\\rangle\\propto P^{-1/2}$; (2.38)-(2.39) do not apply."}
+  - {target: S12, relation: unrelated, note: "$\\tau=1/P$ counts data at $\\beta=1$ and is not a temperature; the sample loss becomes $P\\,\\mathrm{KL}_*$ with no prior. S12 tempers one fixed data set. Formally $e^{-P\\mathrm{KL}_*}$ is Gibbs at inverse temperature $P$ so (A.6) mirrors S12's $\\log Z(\\beta)$ integral."}
+  - {target: S13, relation: unrelated, note: "Both flows are called RG. S13 integrates out kernel eigenmodes above $k_T$ at $N=\\infty$, $P$ a parameter (ridge $\\eta_{\\rm eff}$ rises). Here $P$ itself is the flow variable, acting on the parameters of one model; no kernel spectrum enters."}

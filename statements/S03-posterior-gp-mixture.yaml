@@ -96,3 +96,8 @@ members:
 reduces_to:
   - {target: S01, limit: "$\\alpha\\to0$ or $N\\to\\infty$: the mixing law concentrates, the posterior is the NNGP posterior"}
   - {target: S06, limit: "$P,N\\to\\infty$ with $\\alpha$ fixed: Laplace in $s$ gives the scalar saddle equation"}
+links:
+  - {target: S18, relation: extended-by, note: "S03's mixing variable is the random kernel of a linear network, $K^L=sK^0$, $\\mathrm{Var}\\,s\\simeq2\\sum_\\ell N_\\ell^{-1}$. This flow gives the first-order prior covariance of $K^L$ for any $\\varphi$; S03 adds the evidence tilt."}
+  - {target: S19, relation: reproduced-by, note: "One linear hidden layer: S03’s posterior mean and variance expanded to first order in $\\mathrm{Var}\\,s=2/N$ equal Eq. (11) with $U=2\\sum_3KK$. Mean: algebra; variance: numerics, relative $10^{-4}$ at $N=3\\times10^4$. Nonlinear $\\varphi$ has no mixture form."}
+  - {target: S21, relation: unrelated, note: "(65), (73) average over hidden-layer draws from their prior (63) and keep two moments (68). S03's mixing law over a scale $s$ is evidence-tilted, $\\pi(ds\\mid y)\\propto\\pi(ds)\\,\\mathcal N(y;0,sK^0+\\eta I)$; nothing here tilts it."}
+  - {target: S24, relation: reproduced-by, note: "Laplace in S03's scale $s$ at speed $N$ is $F_B$: $sK^0=\\prod_\\ell\\rho_\\ell K^L_{\\rm GP}$, the $\\chi^2_N/N$ prior gives $j$, the GP evidence gives energy plus determinant (an Occam factor). S06 reports a numerical check at $N=4000$."}

@@ -1,0 +1,82 @@
+id: S17
+slug: finite-width-ridge-flow
+title: "Finite-width quartic vertex: the flowing ridge is the kernel scale at first order"
+kind: grouping
+family: rg
+sense: a
+maturity: early
+claim: "Integrating out kernel eigenmodes shell by shell, a network with a quartic vertex $U$ on power-law data flows its ridge $r=P/\\eta$ and $U$. For a linear hidden layer (App. B) the first-order ridge shift, summed over modes, is the S07 scalar $\\rho-1$."
+formula: '$$\ell\,\partial_\ell(s\,r)=b\,s\,r+4k_{\rm c}P\,U\big[d^2+c/\ell\big],\qquad \ell\,\partial_\ell U=2b\,U-2k_{\rm c}PU^2\big[c^2/\ell+c\,d^2\big]$$ First order, unrescaled, with the App. B coupling $U=-P/(4N\eta^2)$: $$\frac{\delta r(k)}{r_0}=\frac1N\sum_{q>k}\Big[\frac{P^2\lambda y^2}{(P\lambda+\eta)^2}-\frac{P\lambda}{P\lambda+\eta}\Big]_{q}\ \xrightarrow{\ k\to0,\ \eta\to0\ }\ \alpha(\bar r-1)$$'
+formula_note: "$r=P/\\eta$ is the ridge (the paper's mass); $\\lambda_q,y_q$ kernel eigenvalue and target of mode $q$, $\\Lambda_q=P\\lambda_q$, $Y_q^2=Py_q^2$ on the $P$ points; $\\lambda_k=k^{-1-a}$, $y_k^2=k^{-1-b}$; $k_{\\rm c}$ cutoff, $\\ell$ scale, $s=\\ell^{b-a-1}$; $d,c$ mean and propagator at the cutoff (App. B dual source in the second display); $g_w=1$; $\\bar r=y^\\top K^{-1}y/P$."
+regime:
+  width_limit: large-width-1/N
+  learning_rule: [bayes]
+  conditions: "One hidden layer, linear $\\varphi$ explicit (App. B); Gaussian truncation of the inner-kernel cumulants (first order in $1/N$ at fixed $P$); equivalent-kernel data average, strong ridge; small $U$. Langevin runs (Figs. 3-4): linear model, quartic loss, $U=+0.05$. The finite-width $U<0$ grows with $P/N$; Eqs. (41)-(42) with it give corrections $\\propto k_P/N$, $k_P=(P/\\eta)^{1/(1+a)}$, so universality at large $P$ needs $N\\gtrsim k_P$."
+status: phys
+status_note: "Physics. The identification with S07 and S08, and the $k_P/N$ scaling, are algebra the paper does not print: a shell contraction of the App. B vertex, dual source $\\langle\\Delta\\rangle^2=-\\eta\\Lambda Y^2/(\\Lambda+\\eta)^2$, gives $\\frac1N$(energy $-$ log-det) per mode. Checked against $F_B'(\\rho)=0$ at $\\rho=1$ and numerically."
+members:
+  - paper: "2510.25553"
+    statement: "A Gaussian process in the kernel eigenbasis plus the vertex $-UP[\\int\\tilde\\delta\\,\\Delta\\Delta]^2$ (quartic loss, or the App. B finite-width term). Eliminating modes above $k$ flows $r$ and $U$ by Eqs. (25)-(26): self-energy at first order in $U$, a $U^2$ term, six-point vertex dropped. Tested against Langevin only at $U=+0.05$."
+    mapping: "$\\kappa_{\\rm paper}\\to\\eta$, $r=P/\\eta$; $\\alpha,\\beta\\to a,b$ (spectral, not $P/N$); $\\Lambda\\to k_{\\rm c}$; $\\ell$ RG scale; $d,c$ mean and propagator at the cutoff; $U=-g_w^2P/(4N\\eta^2)$ from Eq. (89) against (69) [PDF (B7), (A26)]; $g_w=1$."
+    equations: "Eqs. (7), (18)-(20), (25)-(27), (32)-(33); App. B (87)-(89) [PDF (B5)-(B7)]"
+    role: master
+  - paper: "2510.25553"
+    result: r1
+    statement: "Tree level: rescaling gives $r(\\ell)=\\frac P\\eta\\ell^{1+a}$ and $U\\to\\ell^{2b}U$. The vertex pairs legs by a point-split $\\tilde\\delta$, non-local in mode space, so diagrams scale within an interval $[2b-1,2b]$. $U$ is IR-relevant, hence UV-irrelevant: at fixed $U$ its effect on learnable modes fades as $P$ grows."
+    mapping: "$\\gamma_U=2\\beta\\to2b$; scaling interval $[\\gamma_U-1,\\gamma_U]$; $\\ell_P=k_{\\rm c}/k_P$, $k_P=(P/\\eta)^{1/(1+a)}$ the learnability scale; $\\tilde\\delta$ point-split delta; no Wilson-Fisher fixed point; the Gaussian theory, $r=U=0$, is the UV fixed point."
+    equations: "Eq. (16), Sec. III-IV, Eqs. (17)-(24)"
+    role: special-case
+  - paper: "2510.25553"
+    result: r5
+    statement: "Hyperparameter transfer: eliminating the top $P-P'$ modes ($\\ell=P/P'$) and undoing the rescaling gives $\\tilde r=\\ell^{-(1+a)}r(\\ell)$, $\\tilde U=\\frac P{P'}\\ell^{-2b}U(\\ell)$. A system with $P'$ points at $(\\tilde\\eta,\\tilde U)$ matches the mean discrepancies of the $P$-point system on shared modes; shown for $1000\\to500$ points."
+    mapping: "$\\tilde\\kappa\\to\\tilde\\eta=P'/\\tilde r$; $\\Lambda\\to P'$; $\\alpha,\\beta\\to a,b$ ($0.2$, $0.3$); $\\kappa\\simeq3.98$, $U_0=+0.05$; change in $P$ only, not width or depth."
+    equations: "Eq. (36), Fig. 4, Sec. V.3; App. E"
+    role: extension
+  - paper: "1610.09733"
+    result: r1
+    statement: "Shell elimination over eigenmodes of the inverse covariance $K$ of data variables (no network): drop the smallest-variance modes, rescale to fixed variance. A weak quartic $g\\sum_{\\rm i}\\phi_{\\rm i}^4$ has $d\\ln\\tilde g/d\\ln\\Lambda$ set by the eigenvalue density; $\\rho\\propto\\lambda^{\\alpha-1}$ gives $\\alpha-2$, relevant for $D<4$ on a lattice."
+    mapping: "$K_{\\rm ij}$ inverse covariance of the data variables, $\\lambda_\\mu$ its eigenvalues, cutoff $\\Lambda$; $\\tilde g$ rescaled quartic coupling; $\\rho(\\lambda)\\propto\\lambda^{\\alpha-1}$ (paper $\\alpha$, not $P/N$); the vertex is local in the variable index, unlike the pair-diagonal one."
+    equations: "Eqs. (14), (15), (18), Sec. III"
+    role: variant
+  - paper: "1610.09733"
+    result: r2
+    statement: "Integrating out the last kept mode $\\psi$, $\\langle\\psi^2\\rangle=1/\\Lambda$, adds a mass-like term to $K$ (Eq. 19, noted, not followed) and a $-\\tfrac32\\tilde g^2/\\Lambda^2$ term to $\\tilde g$ (Eq. 23, up to mode-count factors). With gradient terms dropped, a power-law density gives a fixed point $\\tilde g_*\\propto\\alpha-2$, Wilson-Fisher-like."
+    mapping: "Mass-like term in $K$ $\\leftrightarrow$ the ridge shift from the $c$-contraction (the mean is zero, so no $d^2$ term); $\\tilde g$, $\\Lambda$, $\\alpha$ as above; slowly-varying approximation $\\phi_{\\rm i}\\approx\\phi_{\\rm j}$."
+    equations: "Eqs. (19)-(25), Sec. IV"
+    role: variant
+  - paper: "2405.06008"
+    statement: "At $N=\\infty$ the same marginalisation of kernel modes above a cutoff, on the data-averaged replica action. For Gaussian features each shell of weight $\\delta c\\ll\\eta$ adds to the ridge, $\\eta_c=\\eta+\\sum_{k>k_{\\rm c}}\\lambda_k$ (Eq. 34), until the first learnable mode. No rescaling step; finite width is deferred."
+    mapping: "$\\sigma^2\\to\\eta$, $\\sigma_c^2\\to\\eta_c$; paper $\\eta$ (Poisson mean data size) $\\to P$; cutoff $\\kappa\\to k_{\\rm c}$; $\\lambda_k$ eigenvalues of $K^L_{\\rm GP}$ on the data measure, as in S13."
+    equations: "Sec. III, Eqs. (30)-(34)"
+    role: variant
+disagreements:
+  - papers: ["2405.06008", "2510.25553"]
+    note: "Howard et al. flow the ridge at $N=\\infty$ from the replica interaction of the quenched data average; no width vertex. Peraza Coppola start from the annealed equivalent-kernel action, where the Gaussian theory has $\\tilde r=P/\\eta$ constant and only $U$ moves $r$. Their Sec. VII lists the annealed average as a limit and proposes combining replicas with this RG; not done."
+links:
+  - target: S07
+    relation: reproduces
+    note: "Linear $\\varphi$, one hidden layer: with $r=P/\\eta$ ($\\eta=\\kappa_{\\rm paper}$), $\\Lambda=P\\lambda$, $Y^2=Py^2$, the ridge $r(k)/r_0$ is $\\rho(k)$, $\\delta r/r_0=\\rho-1$ from $F_B'(\\rho)=0$ at $\\rho=1$, summed over modes above $k$. First order only; no $P\\propto N$ saddle."
+  - target: S06
+    relation: reproduces
+    note: "$L=1$ linear: $\\rho-1=\\frac1N[v^\\top Kv-\\mathrm{Tr}K(K+\\eta)^{-1}]$ (S06 r3 with $\\rho=1$ on the right) is the sum of the mode shifts over all modes; at $\\eta\\to0$ it is $\\alpha(\\bar r-1)$, the first order of $\\rho=1-\\alpha+\\alpha\\bar r/\\rho$."
+  - target: S08
+    relation: reproduces
+    note: "Energy tilt: two-mean contraction ($d^2$); log-det tilt: propagator contraction ($c$). The pair-diagonal vertex keeps one number per eliminated mode, $\\delta K_{qq}/\\Lambda_q$, summing to $\\rho-1$. Absent: S08's matrix structure, prior-mean shift, fluctuation term."
+  - target: S13
+    relation: extends
+    note: "Same coarse-graining (marginalise kernel modes above a cutoff, ridge $\\eta$), now with a rescaling step and a quartic vertex. Not nested: at $U=0$ the equivalent-kernel ridge does not flow, while S13's $\\eta_{\\rm eff}=\\eta+\\sum\\lambda_k$ comes from the quenched average."
+  - target: S16
+    relation: extends
+    note: "Adds to the shell-by-shell ridge flow of S16 a rescaling step (relevance, scaling intervals) and a quartic vertex whose self-energy shifts $r$; with $U=0$ the equivalent-kernel ridge does not flow, so this flow is vertex-driven."
+  - target: S02
+    relation: extends
+    note: "The vertex is S02's one-hidden-layer kernel covariance: $S=\\frac{g_w^2}N\\mathrm{Cov}_0(\\varphi\\varphi,\\varphi\\varphi)$, the $O(1/N)$ fourth cumulant, kept as $\\frac18S\\tilde f^4$ in the dual (Eq. 86 [PDF (B4)]). S17 adds the likelihood and the mode elimination."
+  - target: S01
+    relation: extends
+    note: "At $U=0$ the theory is S01's regression in equivalent-kernel form, mean $\\bar f_k=\\lambda_ky_k/(\\lambda_k+\\eta/P)$, averaged over data with the ridge fixed at $\\eta$; the quartic vertex is the added ingredient."
+  - target: S15
+    relation: unrelated
+    note: "S15: μP ($\\kappa=\\gamma_0^2$) at $P\\propto N$, no finite limit. Here the likelihood is not scaled with $N$ ($\\eta$ fixed), the vertex is first order in $1/N$ at fixed $P$, and $a,b$ are spectral exponents."
+  - target: S09
+    relation: unrelated
+    note: "'Critical', 'separatrix', 'nullcline' and 'fixed point' here describe a scale-free power-law spectrum and a scale-dependent flow field. There is no symmetry-breaking saddle, bifurcation of $F$ or critical control parameter."

@@ -1,0 +1,80 @@
+id: S20
+slug: nnft-coupling-flow
+title: "Neural-network field theory: couplings run with a cutoff"
+kind: grouping
+family: rg
+sense: c
+maturity: early
+claim: "Untrained one-hidden-layer networks read as a field theory on input space: a cutoff on input-space or Fourier-mode integrals, with output correlators held fixed, makes the $O(1/N)$ quartic coupling run. Tree level for ReLU ($\\Lambda^{-(D+4)}$); truncated Wetterich flows, with weight scale $\\sigma$ as scale."
+formula: '$$\frac{dG^{(n)}}{d\Lambda}=0\ \Rightarrow\ \beta(\lambda)=\frac{d\lambda}{d\ln\Lambda}=-(D+4)\,\lambda,\ \ \lambda\propto\Lambda^{-(D+4)}\quad(\text{ReLU, }\sigma_b=0,\ \text{tree level})$$ Active flow, scale $k^2=2\sigma^2/D$, as printed: $$\sigma\,\frac{du_4}{d\sigma}=(4-D)\,u_4,\qquad \sigma\,\frac{du_6}{d\sigma}=(6-2D)\,u_6$$'
+formula_note: "$G^{(n)}$: $n$-point output correlators over the weight prior; $D$: input dimension; $\\Lambda$ bounds each coordinate of the vertex integral $\\int_{-\\Lambda}^{\\Lambda}d^Dy$. $u_4=4!\\lambda\\sim1/N$, $u_6\\sim1/N^2$; $\\sigma^2$ weight variance, $k$ the Wetterich scale. Passive flow: data resolution $1/a_0$ is the cutoff. Both papers' figures plot the opposite sign for the $\\sigma$ law (disagreements)."
+regime:
+  width_limit: large-width-1/N
+  learning_rule: [bayes]
+  conditions: "Prior only: random one-hidden-layer network, Gaussian weights, one output; no likelihood, data or training. A local quartic ansatz matched to measured correlators; $\\lambda\\sim1/N$, sextic coupling $\\sim1/N^2$. The $\\Lambda$ law: ReLU, $\\sigma_b=0$, $N=20$, $D\\le3$. The $\\sigma$ law: Gauss-net, $D=1$, $N=2$ to $1000$. The Wetterich flows are non-perturbative in the couplings, truncated at $\\phi^6$."
+status: phys
+status_note: "Physics. Halverson: tree level, first order in $\\lambda$; Fig. 7 divides one measured $\\Delta G^{(4)}$ by the cutoff integral. Erbin: $\\sigma$ law tested at $D=1$ only. Howard: no $\\beta$. Demirtas et al. (2307.03223): one Callan-Symanzik remark, no equation. Beyond the papers: S02 link (algebra), sign check (exact moments)."
+members:
+  - paper: "2008.08601"
+    result: r2
+    statement: "Holding $G^{(4)}$, $G^{(6)}$ fixed under a cutoff $\\Lambda$ defines $\\beta(g)=dg/d\\ln\\Lambda$. For ReLU with the sextic coupling dropped, $G^{(4)}=\\text{const}-\\lambda j_1\\Lambda^{D+4}$, so $\\beta(\\lambda)=-(D+4)\\lambda$. Fig. 7: one measured $\\Delta G^{(4)}$ ($N=20$) over the $\\Lambda$-dependent integral gives slopes $-5.003,-6.004,-7.004$ for $D=1,2,3$."
+    mapping: "$d_{\\rm in}\\to D$; $K\\to K^1_{\\rm GP}$, $K_W=K-\\sigma_b^2$; $\\lambda$ quartic coupling ($u_4=4!\\lambda$); paper $\\kappa$ is the sextic coupling, not the umbrella $\\kappa$; $\\sigma_b=0$; one hidden layer."
+    equations: "Eqs. (4.6)-(4.7), (4.25)-(4.28), Fig. 7"
+    role: master
+  - paper: "2108.01403"
+    result: r1
+    statement: "Active RG: with $k^2=2\\sigma^2/D$, the effective propagator shape fixed and vertex momentum dependence dropped inside the loop, $u_4$ and $u_6$ scale purely, $\\sigma\\,du_4/d\\sigma=(4-D)u_4$ and $\\sigma\\,du_6/d\\sigma=(6-2D)u_6$, without a small-coupling assumption; the paper calls it formally the flow of 2008.08601."
+    mapping: "$\\sigma_W\\to\\sigma$, $d_{\\rm in}\\to D$; the paper's $\\Lambda^2=k^2=2\\sigma^2/D$ is a momentum scale, not the input-space cutoff of 2008.08601; $u_4=4!\\lambda$, $u_6=6!\\kappa_{\\rm Halverson}$; Gauss-net."
+    equations: "Eqs. (4.3)-(4.4), (4.11)-(4.14)"
+    role: extension
+  - paper: "2108.01403"
+    result: r3
+    statement: "Passive RG: with data resolution $1/a_0$ as the cutoff and the Wetterich flow truncated at $\\phi^6$ in the symmetric phase (effects to $O(1/N^2)$), closed beta functions for $\\bar u_2,\\bar u_4,\\bar u_6$ with canonical terms $-(4-D)\\bar u_4$, $-(6-2D)\\bar u_6$; for $D>4$ all but the mass are irrelevant. Integrated only from arbitrary initial values."
+    mapping: "$k\\in[0,1/a_0]$ running scale; $\\bar u_2=m^2/k^2$, $\\bar u_{2n}=k^{-2n+(n-1)D}u_{2n}$; $K_D$ sphere-volume factor; Litim regulator; $d_{\\rm in}\\to D$; Gauss-net."
+    equations: "Eqs. (3.5)-(3.26), Figs. 6-7"
+    role: extension
+  - paper: "2108.01403"
+    result: r5
+    statement: "Deep-UV regime ($1/a_0>k\\gtrsim\\xi^{-1}$): keeping the exact two-point function $\\Gamma^{(2)}=m^2e^{p^2/m^2}$ and dropping vertex momentum dependence in loops, a Blaizot-Mendez-Wschebor-type closure gives the flows of $\\bar u_2,\\bar u_4,\\bar u_6$ at sextic truncation, with the same canonical terms $-(4-D)\\bar u_4$, $-(6-2D)\\bar u_6$."
+    mapping: "$m^2(k)=k^2\\bar u_2$; $F_n$, $L_k$ auxiliary functions (Eq. 3.54); $\\xi^2=D/2\\sigma^2$ the correlation length; $d_{\\rm in}\\to D$; Gauss-net."
+    equations: "Prop. 2, Eqs. (3.46)-(3.57)"
+    role: extension
+  - paper: "2212.11811"
+    result: r1
+    statement: "Proceedings version of the active law: at zeroth order in momentum with the Litim regulator, $\\sigma\\,du_4/d\\sigma=(4-D)u_4$, printed as $\\log u_4=(4-D)\\log\\sigma+\\text{cst}$; the $u_6$ law with $(6-2D)$ is stated without derivation. Numerics use $D=1$."
+    mapping: "$\\sigma_W\\to\\sigma$, $d_{\\rm in}\\to D$; paper $\\Lambda^2=2\\sigma^2/D$ is the momentum scale; $u_4$ = zero-momentum $\\Gamma^{(4)}$; Gauss-net, one hidden layer."
+    equations: "Eqs. (4.2)-(4.6), Fig. 2"
+    role: variant
+  - paper: "2608.20403"
+    result: r1
+    statement: "Conceptual proposal: the infinite-width Gaussian action is a Wilsonian fixed point and finite-width terms $\\sum_ig_i\\mathcal O_i$ flow as $dg_i/d\\ell=\\beta_i$, linearised to $y_ig_i$, drawn schematically as $\\beta=yg-ag^2$. No scale $\\ell$, $\\beta_i$ or $y_i$ is computed for any network."
+    mapping: "$S_*$ = NNGP action; $g_i(N)\\sim N^{-\\alpha_i}$ assumed; $\\ell$ an unspecified RG scale, not tied to $N$ or $L$; control parameters include $\\sigma_w\\to\\sigma$."
+    equations: "Eqs. (9)-(12), (33)-(35), Fig. 7"
+    role: extension
+disagreements:
+  - papers: ["2108.01403", "2212.11811"]
+    note: "Both print $\\sigma\\,du_4/d\\sigma=(4-D)u_4$, slope $+3$ of $\\log|u_4|$ on $\\log\\sigma$ at $D=1$ (the proceedings write it out). Both figures plot a theory slope $-3.00$ and the data fall with $\\sigma$. Exact Gauss-net moments with $\\sigma_b=1$, evaluated numerically, give $u_4\\propto\\sigma^{D-4}$ (slope $-3.0$ at $D=1$), the plotted sign."
+  - papers: ["2008.08601", "2108.01403"]
+    note: "2108.01403 (Remark 4, Sec. 5) calls its active flow formally that of 2008.08601. The printed laws differ: $\\beta(\\lambda)=-(D+4)\\lambda$ in the input-space cutoff $\\Lambda$ (ReLU, $\\sigma_b=0$), against $\\sigma\\,du_4/d\\sigma=(4-D)u_4$ in the weight scale (Gauss-net). The paper notes that the activations differ."
+links:
+  - target: S19
+    relation: extends
+    note: "Takes the dictionary of S19 (kernel as propagator, finite-width cumulants as interaction strengths) and adds a cutoff on the input-space or Fourier-mode integrals plus the flow of the couplings, to tree level or a $\\phi^6$ truncation."
+  - target: S02
+    relation: extends
+    note: "Given the hidden kernel the output is Gaussian, so $G^{(4)}_c=\\sum_{3}\\mathrm{Cov}(K^1_{ab},K^1_{cd})=O(1/N)$, the S02 vertex. Here it is read as the local vertex $-24\\lambda\\int_{-\\Lambda}^{\\Lambda}\\prod K_W$; S20 adds $\\Lambda$ and $\\beta(\\lambda)$."
+  - target: S01
+    relation: unrelated
+    note: "The cutoff acts on input-space or Fourier modes of an untrained network: no likelihood, no data, no posterior. At $N=\\infty$ the couplings vanish and the free theory is the NNGP prior that S01 conditions on; no coupling flows."
+  - target: S08
+    relation: unrelated
+    note: "S08 tilts the posterior kernel at $O(1/N)$ through the likelihood (energy and log-determinant). The $O(1/N)$ coupling here is a prior four-point vertex; there is no likelihood and no kernel adaptation."
+  - target: S04
+    relation: unrelated
+    note: "S04 minimises a kernel rate function against the likelihood at fixed $P$. Here no kernel is optimised and no data enter; the cutoff acts on input-space modes of the prior."
+  - target: S07
+    relation: unrelated
+    note: "S07's order parameter comes from integrating out the hidden layer with the likelihood at $P\\propto N$. Here there is no data and no $P\\propto N$; the $1/N$ coupling is a fixed prior vertex."
+  - target: S13
+    relation: unrelated
+    note: "S13's cutoff is on data-kernel eigenmodes at $N=\\infty$ and flows an effective ridge. Here the cutoff is on input-space or momentum modes of the prior and flows an $O(1/N)$ vertex; both are Wilsonian, the objects differ."

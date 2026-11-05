@@ -1,0 +1,81 @@
+id: S18
+slug: depth-recursion-flow
+title: 'Depth as the RG scale: kernel and four-point vertex flow layer by layer'
+kind: grouping
+family: rg
+sense: b
+maturity: solid
+claim: 'At initialisation depth is the scale. Kernel obeys $K^\ell_{\rm GP}=F[K^{\ell-1}_{\rm GP}]$ at $N=\infty$; the four-point vertex obeys a linear recursion, Jacobian $\chi=\partial F/\partial K$, with a $1/N$ source, growing as $L/N$ at $\chi=1$. An analogy: earlier layers are marginalised; no width, data or mode is coarse-grained.'
+formula: '$$K^{\ell}_{\rm GP}=F_\ell\big[K^{\ell-1}_{\rm GP}\big],\qquad \mathrm{Cov}\,K^{\ell}=\chi_\ell\,\mathrm{Cov}\,K^{\ell-1}\,\chi_\ell^{\top}+\frac{T_\ell}{N_\ell}+O(N^{-2})$$ At criticality ($\chi=1$, one input, equal widths) $\mathrm{Var}\,K^{L}/(K^{L}_{\rm GP})^2=\nu\,L/N$: $\nu=6(a_+^4+a_-^4)/(a_+^2+a_-^2)^2-1$ ($5$ ReLU, $2$ linear) for $\varphi=a_\pm t$ ($t\gtrless0$), $\nu=\tfrac23$ for the $K_*=0$ class (tanh).'
+formula_note: '$F_\ell[K]=\sigma_\ell^2\,\mathbb E_{h\sim\mathcal N(0,K)}\varphi\varphi^\top$ (biases absorbed). $K^\ell=\frac{\sigma_\ell^2}{N_\ell}\sum_j\varphi(h^\ell_j)\varphi(h^\ell_j)^\top$ is the random kernel; $\chi_\ell=\partial F_\ell/\partial K$ and $T_\ell=\sigma_\ell^4\,\mathrm{Cov}_{h\sim\mathcal N(0,K^{\ell-1}_{\rm GP})}(\varphi\varphi^\top,\varphi\varphi^\top)$ sit at $K^{\ell-1}_{\rm GP}$; $K^0$ is the input Gram, $\mathrm{Cov}\,K^0=0$. Solved: $\mathrm{Cov}\,K^L=\sum_\ell R_{L\ell}(T_\ell/N_\ell)R_{L\ell}^\top$, $R_{L\ell}=\chi_L\cdots\chi_{\ell+1}$; $L$ hidden layers.'
+regime:
+  width_limit: large-width-1/N
+  learning_rule: [bayes]
+  conditions: 'Prior at initialisation, no data. Gaussian iid weights, $L$ hidden layers, widths $N_\ell\sim N\to\infty$ with $L\ll N$ (perturbative cutoff $L/N$), any fixed number of inputs. Leading order in $1/N$ for each cumulant; the mean shift of $K$ is a separate NLO recursion, zero for scale-invariant $\varphi$ with one input. $L/N$ fixed: exact only for 1-homogeneous $\varphi$ (log-normal law), conjectural otherwise.'
+status: phys
+status_note: 'Proved: $N=\infty$ kernel (Hanin Thm 2.2); one-input vertex recursion at fixed $L$ (Hanin Cor. 3.4). Multi-input form and the S04, S08 links go beyond the members: law of total covariance, quadratic expansion of $\sum_\ell J_\ell$; one-input simulations (tanh, ReLU) agree. RG reading is analogy; $L/N$ fixed is conjecture.'
+members:
+  - paper: "2106.10165"
+    statement: 'Layer-to-layer recursions for the kernel, $K^\ell_{\rm GP}=F[K^{\ell-1}_{\rm GP}]$, and the four-point vertex, $V=\chi^2V+$ source (one input), from marginalising earlier layers. Vertex couplings are relevant: $V/(NK^2)$ grows as $\ell/n$ in both universality classes ($p_V-2p_0=-1$); the NLO metric is marginal after finite-width tuning.'
+    mapping: 'Book layer $\ell+1$ is the map layer $\ell$: $G^{(\ell)}\to K^{\ell-1}$, $C_W\to\sigma^2$, $n\to N$; $V^{(\ell)}/n_{\ell-1}=\mathrm{Cov}\,K^{\ell-1}$; $\chi_\parallel=\chi$; $L_{\rm book}=L+1$.'
+    equations: 'Eqs. (4.118)-(4.119), (5.108)-(5.110), (5.129)-(5.131); Sec. 4.6'
+    role: master
+  - paper: "1910.00019"
+    statement: 'First derivation of the same recursions for any activation: kernel (R1), connected four-point vertex (R2) and self-energy (R3), with a Gaussian first layer (R0). Called a running of couplings that resembles RG flow; fixed points beyond the Gaussian one are left open.'
+    mapping: '$\tilde K^{(\ell)}=K^{\ell-1}_{\rm GP}$ ($C_W\to\sigma^2$); $\tilde V^{(\ell)}/n_{\ell-1}=\mathrm{Cov}\,K^{\ell-1}$; $\tilde S$: $O(1/N)$ mean shift; $n\to N$.'
+    equations: 'Eqs. (R0)-(R3), Sec. III.B'
+    role: variant
+  - paper: "2204.01058"
+    statement: 'Rigorous version for one input at fixed $L$: cumulants of order $2k$ are $O(N^{1-k})$ (Thm 3.1) and $\mathrm{Var}\,K^{\ell}=\chi^2\,\mathrm{Var}\,K^{\ell-1}+T/N+O(N^{-2})$ (Cor. 3.4), with 6th and 8th analogues. At criticality $\mathrm{Var}\,K^L/K^2=\frac23\frac LN$ for $K_*=0$ activations (Cor. 4.1).'
+    mapping: '$n\to N$, $C_W\to\sigma^2$; $\kappa_4^{(\ell+1)}=\mathrm{Var}\,\Sigma^{(\ell)}_{\alpha\alpha}=\mathrm{Var}\,K^\ell$ (the example after Eq. 4.6 sums $1/n_{\ell^\prime}$, $\ell^\prime\le\ell$); $\chi_\parallel=\chi$; $\xi=L/N$.'
+    equations: 'Thm 3.1; Cor. 3.4, Eqs. (3.12), (3.15)-(3.17); Cor. 4.1; Conj. 4.3'
+    role: special-case
+  - paper: "2305.02334"
+    result: r3
+    statement: 'A Feynman rule for the conditionally Gaussian action gives the kernel recursion and the vertex flow, $V=$ source $+\,\chi^2V$ with symmetry factor $\frac14$. An equivalent tower of layer-$\ell$ EFTs has couplings $\mu^{(\ell)},\lambda^{(\ell)}=O(1/N)$. The paper calls this RG flow.'
+    mapping: '$\mathcal K_0^{(\ell)}=K^{\ell-1}_{\rm GP}$, $n\to N$, $C_W\to\sigma^2$; $V_4^{(\ell)}/n_{\ell-1}=\mathrm{Cov}\,K^{\ell-1}$ as in the book; $\Delta_j$ = fluctuation of $\varphi\varphi^\top$.'
+    equations: 'Eqs. (7), (11), (14)+(15), (16)'
+    role: variant
+  - paper: "2305.02334"
+    result: r1
+    statement: 'One susceptibility governs every connected correlator: $\chi$ drives the kernel (Eq. 23), $V_4$ as $\chi\otimes\chi$ (Eq. 27) and $V_{2k}$ (Eq. 30). At the fixed point $\chi$ equals the identity on symmetric pairs (Eq. 31), so all of them flow as power laws; shown for scale-invariant and $K_*=0$ activations.'
+    mapping: '$\chi^{(\ell)}(x_1,x_2;y_1,y_2)=\chi_\ell$, the Jacobian of $F$ ($\chi_\parallel$, $\chi_\perp$ for nearby inputs); $V_{2k}/n^{k-1}$ = connected $2k$-point function; $n_\ell\to N_\ell$.'
+    equations: 'Eqs. (23)-(24), (27), (30), (31)'
+    role: extension
+  - paper: "2305.07715"
+    result: r1
+    statement: 'ResNet with residual scale $\rho$: the kernel adds up, $K^{(l)}=K^{(l-1)}+C_*^{(l)}$, and its linear response to the input kernel is a product of per-layer factors $1+\rho^2\chi$. Kernel fluctuations are response times source, $\mathcal G_{11}=\mathcal G_{12}\mathcal S_{22}\mathcal G_{21}$, not evaluated.'
+    mapping: '$\sigma_w^2\to\sigma^2$, $N_\ell=N$; $\eta^{(l)}=\partial C^{(l)}/\partial K^{(0)}$ is the infinite-width derivative, $\Delta=N\mathcal G_{12}$; $\mathcal G_{11}\sim\mathrm{Cov}$ of residual kernels; $K^{(l)}$ is the preactivation kernel.'
+    equations: 'Eqs. (29)-(30), (44)-(58)'
+    role: extension
+  - paper: "2109.13247"
+    result: r2
+    statement: 'Double-copy mean field of a shared-weight recurrent network, time read as layer: perturbations grow at $\lambda_0=-\gamma+\sqrt{\gamma^2-E_0}$. A necessary condition for chaos is $\sigma^2\langle\varphi^{\prime2}\rangle\ge\gamma^2-\sigma_A^2$, which at $\gamma=1$, $\sigma_A=0$ is the usual criticality condition $\chi_\perp=1$.'
+    mapping: '$\sigma_w^2\to\sigma^2$, $c_0\to K_*$, $t\to\ell$; weights are shared across time (an MLP has fresh weights per layer); $\gamma=1$, $A=B=U=0$ for the MLP reading; $\sigma^2\langle\varphi^{\prime2}\rangle=\chi_\perp$.'
+    equations: 'Eqs. (3.33), (3.38)-(3.39) [HTML (85), (90)-(91)]'
+    role: special-case
+  - paper: "2210.04909"
+    result: r2
+    statement: 'Same depth recursions applied to the NTK differentials: at the output layer the dNTK scales as $L/N$ and the ddNTKs as $L/N^{1-s}$ (last-layer weight variance $\propto N^{-(1+s)}$, learning rate $\propto N^{s}$). Power counting only; no flow is solved; gradient descent, not Bayes.'
+    mapping: '$n\to N$; $s\in[0,1]$ is Yaida’s exponent, not the map’s; $s=0$ NTK scaling, $s=1$ mean field; emergent scale $\gamma_{\rm Y}=L/N^{1-s}$; $L$ counts the output layer.'
+    equations: 'Eqs. (39), (42), (45), (46) [PDF (4.3), (4.6), (4.9), (4.10)]'
+    role: extension
+  - paper: "1909.11304"
+    result: r1
+    statement: 'Conjecture: a correlation function of $m$ derivative tensors of the network function, with $n_e$ even and $n_o$ odd clusters of contracted indices, is $O(N^{n_e+n_o/2-m/2})$. Proved for linear networks, ReLU at equal inputs and one hidden layer; otherwise tested numerically. A counting rule, no layer recursion.'
+    mapping: '$n\to N$; correlation functions are ensemble averages of products of $f$ and its parameter derivatives; clusters are connected components of the contraction graph.'
+    equations: 'Conj. 1, Eq. (4); Thms 1-2; Table 1'
+    role: extension
+reduces_to:
+  - {target: S01, limit: '$N\to\infty$: $\mathrm{Cov}\,K^\ell\to0$, the flow is the NNGP kernel recursion'}
+  - {target: S02, limit: 'Critical, one input, equal widths: $\mathrm{Var}\,K^L/K^2=\nu L/N$, the $c_\varphi L/N$ law'}
+disagreements:
+  - {papers: ["2608.19331", "2109.13247", "2204.01058"], note: 'Jefferson-Ramakrishnan (Eq. 3.9, Sec. 5) and Grosvenor-Jefferson (Secs. 1, 4) report O(1) corrections to the two-point function that survive at infinite width. Hanin Thm 2.2 and the book (4.86) give $K^\ell_{\rm GP}=F[K^{\ell-1}_{\rm GP}]$ with $O(1/N)$ corrections. The networks differ: shared weights (G-J); a lattice-spacing term and a free action at large $N$ (J-R, below Eq. 2.22). Not reconciled here.'}
+open_problems: [op-09]
+links:
+  - {target: S01, relation: reproduces, note: 'At $N=\infty$ the flow is $K^\ell_{\rm GP}=\sigma_\ell^2\,\mathbb E_{h\sim\mathcal N(0,K^{\ell-1}_{\rm GP})}\varphi\varphi^\top$, S01''s kernel recursion (book $K^{(\ell+1)}$, Hanin Eq. 2.4). S01 is the zeroth order of this flow; $\mathrm{Cov}\,K^\ell\to0$.'}
+  - {target: S02, relation: reproduces, note: 'S02''s cumulants are this recursion''s solution: critical one input, $\mathrm{Var}\,K^L/(K^L_{\rm GP})^2=\nu L/N$ with $\nu=c_\varphi$ (5, 2, $\frac23$); deep linear gives $2\sum_\ell N_\ell^{-1}$, S02''s $\mathrm{Var}\ln s$ at first order.'}
+  - {target: S08, relation: extends, note: 'S08''s tilts contract the targets with the prior kernel covariance. One hidden layer: $\mathrm{Cov}_0(\varphi\varphi^\top,\cdot)=T/\sigma^4$. Deep: $\mathrm{Cov}(K^\ell,K^L)=\mathrm{Cov}\,K^\ell\,(\chi_L\cdots\chi_{\ell+1})^\top$, forward term $\chi_\ell[\delta K^{\ell-1}]$. Prior side only.'}
+  - {target: S04, relation: reproduces, note: 'Quadratic expansion of $\sum_\ell\gamma_\ell J_\ell$ about its minimiser, $J_\ell\simeq\frac12\delta K^\top T_\ell^{-1}\delta K$, $\gamma_\ell=N_\ell/N$, gives the covariance recursion. The data term $\kappa E$ is absent. Beyond the members: algebra.'}
+  - {target: S03, relation: extends, note: 'S03''s mixing variable is the random kernel of a linear network, $K^L=sK^0$, $\mathrm{Var}\,s\simeq2\sum_\ell N_\ell^{-1}$. This flow gives the first-order prior covariance of $K^L$ for any $\varphi$; S03 adds the evidence tilt.'}
+  - {target: S06, relation: unrelated, note: 'S06 is a $P\propto N$ posterior effect (readout scalar $\rho$ from the Wishart Jacobian); this is a prior effect at fixed $P$, set by $L/N$. Both reduce to $K^L_{\rm GP}$ as $\alpha\to0$, $N\to\infty$.'}

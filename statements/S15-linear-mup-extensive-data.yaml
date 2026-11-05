@@ -24,3 +24,6 @@ members:
     mapping: "as in the statement text"
     role: special-case
 open_problems: [op-07]
+links:
+  - {target: S17, relation: unrelated, note: "S15: μP ($\\kappa=\\gamma_0^2$) at $P\\propto N$, no finite limit. Here the likelihood is not scaled with $N$ ($\\eta$ fixed), the vertex is first order in $1/N$ at fixed $P$, and $a,b$ are spectral exponents."}
+  - {target: S24, relation: extended-by, note: "Same running variable $\\mathcal Q=\\prod_\\ell\\rho_\\ell$ at $\\kappa=\\gamma_0^2$, $P=\\alpha N$: $\\kappa P\\to\\infty$, so $\\rho^{L+1}\\simeq\\kappa P\\bar r$ and $\\mathcal Q\\sim N^{L/(L+1)}$. No finite limit; the energy overwhelms the determinant."}

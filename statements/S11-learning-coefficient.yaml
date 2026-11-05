@@ -83,3 +83,6 @@ members:
 disagreements:
   - {papers: ["2503.22478", "2505.24060"], note: "Hennick et al.: SGD over-weights accessible regions of the posterior (low learning coefficient only empirically, Fig. 4a). Mingard et al. (Boolean data): greedy SGD-like search tracks the Metropolis posterior qualitatively, while their one continuous SGD run (App. E.6) beats the discrete Bayesian sampler on 6/7-parity, confounded by the architecture."}
 open_problems: [op-10]
+links:
+  - {target: S21, relation: unrelated, note: "Agrees only for regular models: 2204.12939 (A.6) with $\\overline{\\mathrm{KL}_*}=n_\\theta/2P$ gives $-\\ln Z=\\tfrac{n_\\theta}2\\ln P$, i.e. $\\lambda_{\\rm LC}=n_\\theta/2$, $m=1$. For degenerate Fisher ($\\mathrm{KL}_*\\propto w^4$) the same posterior gives $\\lambda_{\\rm LC}=\\tfrac14$, $\\langle w^2\\rangle\\propto P^{-1/2}$; (2.38)-(2.39) do not apply."}
+  - {target: S22, relation: unrelated, note: "Mehta-Schwab $D_{\\rm KL}(p\\Vert p_\\Lambda)$ is the population log-loss of an RBM density model ($L_P\\to D_{\\rm KL}+$ const in S11), but no member forms a posterior or an evidence law $\\lambda_{\\rm LC}\\log P$; RG free energies are those of the data law."}

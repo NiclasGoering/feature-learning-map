@@ -1,0 +1,70 @@
+id: S24
+slug: kernel-renormalisation-rg
+title: "Kernel renormalisation at $P\\propto N$: layer-by-layer integration, tree-level rate plus a determinant"
+kind: grouping
+family: rg
+sense: e
+maturity: solid
+claim: "Integrating layers out from the readout backward renormalises the kernel by one scalar $\\rho_\\ell$ per layer. Tree level: rate $j(\\rho)$ plus energy; the log-determinant, one loop at fixed $P$, adds $-\\alpha$ at $P\\propto N$. Running variable: the layer index; no beta function."
+formula: "$$F_B(\\rho)=\\underbrace{\\sum_{\\ell=1}^{L}j(\\rho_\\ell)+\\tfrac\\kappa2\\,y^\\top(K_e+\\eta I)^{-1}y}_{\\rm tree\\ level}+\\underbrace{\\tfrac1{2N}\\log\\det(K_e+\\eta I)}_{\\rm determinant},\\qquad K_e=\\textstyle\\prod_\\ell\\rho_\\ell\\,K^L_{\\rm GP},\\quad j(\\rho)=\\tfrac12(\\rho-1-\\ln\\rho)$$ $$\\rho_\\ell-1=\\kappa\\,v^\\top K_ev-\\tfrac1N{\\rm Tr}\\,K_e(K_e+\\eta I)^{-1}\\ \\ \\xrightarrow{\\ \\eta\\to0\\ }\\ \\ \\rho=1-\\alpha+\\kappa P\\,\\bar r\\,\\rho^{-L}$$"
+formula_note: "$j$ is the rate of $\\rho_\\ell=\\chi^2_N/N$, the readout norm; $v=(K_e+\\eta I)^{-1}y$, $\\alpha=P/N$, $\\kappa=\\gamma^2/N$, $\\bar r=\\tfrac1Py^\\top(K^L_{\\rm GP})^{-1}y$; the last form is for equal widths. The loop language only sorts terms: energy $\\propto\\kappa P\\bar r$, determinant $\\propto\\alpha$. Mean field at fixed $P$ is tree-dominated, $\\kappa=1/N$ weighs both, $\\kappa=\\gamma_0^2$ at $P\\propto N$ is energy-dominated (S15). The split depends on the order parameter."
+regime:
+  width_limit: finite-proportional
+  learning_rule: [bayes]
+  conditions: "Linear activation: exact at leading order ($P<D$; theorem for deep linear at $\\eta=0$, S06). One hidden layer, nonlinear $\\varphi$: Gaussian equivalence. Deep nonlinear MLPs: equivalent Wishart ansatz, factorised closure, tested to $L\\sim10$. $P,N\\to\\infty$ with $\\alpha$ fixed, $L$ fixed, one output. Not a Wilsonian RG: no cutoff, no scale transformation, no beta function."
+status: phys
+status_note: "Solid overall: mature for deep linear networks (theorem at $\\eta=0$), approximate for deep nonlinear ones. Beyond the papers, checked here by algebra and numerics ($P\\le100$, $N\\le200$): $F=\\min_\\rho[j+{\\rm energy}]$ for linear $\\varphi$, $L=1$; $1/\\rho=1/\\rho_0+{\\rm Tr}/N$; the $O(\\alpha)$ spike norm (Eq. 50)."
+members:
+- paper: "2012.04030"
+  statement: "Weights are integrated out from the readout backward, layer by layer. Each step leaves a Hamiltonian of the same form, the remaining top kernel multiplied by a scalar, $u_{L-l}^lK_{L-l}$, with $1-\\sigma^{-2}u=\\alpha(1-u^{-l}r)$; all $u_\\ell$ coincide at the saddle. The paper calls the RG analogy limited: no coarse graining."
+  mapping: "$u_\\ell=\\sigma^2\\rho_\\ell$; $r_\\ell=\\tfrac1PY^\\top K_\\ell^{-1}Y$; $K_0=\\sigma^2X^\\top X/N_0$; $T=\\eta$, $\\kappa=1/N$; GP value $u=\\sigma^2$ is $\\rho=1$."
+  equations: "Eqs. (6)-(13), (45); App. A (A5)-(A29) [HTML (65)-(89)]"
+  role: master
+- paper: "2012.04030"
+  result: r2
+  statement: "At $T\\to0$, $L\\to\\infty$, $\\sigma^2(1-\\alpha)<1$: $u_0\\simeq1-v_0/L$ and $u_0^L\\to e^{-v_0}=\\alpha\\sigma^2r_0/[1-\\sigma^2(1-\\alpha)]$; the per-layer scalar tends to 1 and only the product carries the limit. For $\\sigma^2(1-\\alpha)>1$, $u_0^L$ diverges exponentially in $L$."
+  mapping: "$u_0=\\sigma^2\\rho$; $r_0=\\sigma^{2L}\\bar r$; $u_0^LK_0=\\rho^LK^L_{\\rm GP}$ is the effective kernel; at $\\sigma=1$, $\\rho^L\\to\\bar r$."
+  equations: "Eqs. (29)-(30), Sec. III C"
+  role: special-case
+- paper: "2012.04030"
+  result: r5
+  statement: "At $T=0$ the mean layer kernels are GP plus a rank-one task term, $\\langle K_l\\rangle=\\sigma^{2l}(1-\\tfrac1N)^lK_0+\\tfrac{m_l}NYY^\\top$ (operator norm $O(\\alpha)$ along $Y$), and $\\langle K_l^{-1}\\rangle=K_0^{-1}/[\\sigma^{2l}(1-\\alpha)^l]$. The scalar rescales the kernel in the Hamiltonian, not the layer kernels."
+  mapping: "$K_l=\\sigma^2X_l^\\top X_l/N$; $m_l=\\sigma^{2l}u_0^{-L}\\tfrac{u_0^l\\sigma^{-2l}-1}{u_0\\sigma^{-2}-1}$; $u_0=\\sigma^2\\rho$; for labels of order one $\\|Y\\|^2\\propto P$, so $\\tfrac{m_l}N\\|Y\\|^2=O(\\alpha)$."
+  equations: "Eqs. (49)-(53), Sec. V; App. D"
+  role: extension
+- paper: "2502.03210"
+  statement: "Same posterior, order parameter the $P$-vector of mean discrepancies $v$. Tree level is the saddle, $F$ of S04; for linear $\\varphi$ the mean is GP with $\\rho K^0$, $\\rho=1/(1-\\kappa v^\\top K^0v)$. One loop adds the fluctuation determinant of $-\\mathcal S^{(2)}$ (Eq. 18); at $N\\propto P$: $\\rho_{\\rm 1loop}=\\rho-\\tfrac{\\rho^2}N{\\rm Tr}[(\\rho K^0+\\eta)^{-1}K^0]$."
+  mapping: "$\\kappa=N^{\\gamma-2}/g_w$ ($1/(g_wN)$ at $\\gamma=1$), $\\eta=\\kappa_0/g_w$; $Q_{\\rm TL}/(g_wN^{1-\\gamma})\\to\\rho$; $C^{(xx)}\\to K^0$; $\\bar{\\tilde f}=-iN^{\\gamma-1}v/g_w$; $\\Gamma_{\\rm TL}=-\\mathcal S$; App. A.4: $\\|w\\|^2=g_w\\rho$."
+  equations: "Eqs. (12)-(16), (17)-(24); Secs. 4.3-4.4, 5; App. A.4 (108)"
+  role: variant
+- paper: "2209.04882"
+  statement: "Under Gaussian equivalence $Z=\\int dQ\\,d\\bar Q\\,e^{-N S/2}$; eliminating $Q$ by $\\bar Q=1/(1+Q)$ gives $\\tfrac12S=j(\\bar Q)+\\tfrac1{2N}[{\\rm Tr}\\log+y^\\top(\\cdot)^{-1}y]$. The deep recursion, forward in the layers, is called a kernel renormalisation group; $\\bar Q_\\ell$ is nested in each layer's kernel map."
+  mapping: "$\\bar Q_\\ell\\to\\rho_\\ell$, $Q_\\ell\\to1/\\rho_\\ell-1$; $K/\\lambda_1\\to K^1_{\\rm GP}$; $\\beta^{-1}\\to\\eta$; $\\alpha_1/P=1/N_1\\to\\kappa$; $\\tfrac12S\\to F_B$ + const; $K^{(R)}_\\ell=\\rho_\\ell\\Phi_\\ell(K^{(R)}_{\\ell-1})$."
+  equations: "Eqs. (6)-(7), (13)-(17), (49)-(50); Methods III.7"
+  role: extension
+- paper: "2605.29684"
+  statement: "Equivalent Wishart ansatz: $\\bar f^\\top K^{(L)}_E\\bar f/\\bar f^\\top\\Theta^L(C)\\bar f=\\prod_\\ell q_\\ell$, independent $q_\\ell=\\chi^2_{N_\\ell}/N_\\ell$ of rate $\\tfrac12(x-1-\\ln x)$; $S(q)=\\sum_\\ell[q_\\ell-\\ln q_\\ell]+U(q)$, $U$ the GP evidence term (log-determinant plus energy). Tested to $L\\sim10$; $\\mu$P ($L=4$, $N=4000$): $\\mathcal Q^*=238.5$."
+  mapping: "$q_\\ell\\to\\rho_\\ell$; $\\mathcal I_q\\to j$; $S=2F$ + const; $\\alpha/P=1/N=\\kappa$; $\\beta^{-1}\\to\\eta$; $\\Theta^L(C)\\to K^L_{\\rm GP}$; $K^{(R)}_{\\mathcal Q}=\\mathcal Q\\Theta^L(C)$, $\\mathcal Q=\\prod_\\ell q_\\ell$."
+  equations: "Eqs. (27), (29), (43)-(50); App. F (F1)-(F6)"
+  role: extension
+- paper: "2502.18553"
+  result: r4
+  statement: "Dataset-averaged one hidden layer: a Gaussian closure of the first layer leaves $\\tfrac N2\\log(1+C[\\tilde f]/N)$; a mean-field Taylor step turns it into one kernel scale $\\mathcal Q=1+C_{\\rm MF}/N$. Sec. 3.2: its $1/N$ perturbation theory has no RG justification. Sec. 3.5: the ${\\rm Tr}\\log$ term, GP fluctuations, is negligible at mean field."
+  mapping: "$\\mathcal Q=1/\\rho$; $K^{(1)}\\to K^1_{\\rm GP}$; ridge $\\kappa^2\\to\\eta$; $C_{\\rm MF}=N(1/\\rho-1)$; $d\\to D$; on-data saddle $\\bar Q=[1-(\\chi/N)t^\\top Kt]^{-1}\\to\\rho_0$."
+  equations: "Eqs. (3.26)-(3.33); Sec. 3.2 end; Eqs. (3.53)-(3.55)"
+  role: variant
+reduces_to:
+- {target: S01, limit: "$\\alpha\\to0$, $\\kappa P\\to0$: $\\rho_\\ell=1$, the NNGP posterior"}
+disagreements:
+- {papers: ["2012.04030", "2209.04882"], note: "Is it an RG? Li–Sompolinsky say the analogy is limited, with no coarse graining of degrees of freedom. Pacelli et al. call their forward layer recursion a kernel renormalisation group. Same exact marginalisation, opposite directions (equal for linear networks, SM Eq. (101) [HTML (102)]); neither defines a scale transformation or a beta function."}
+- {papers: ["2209.04882", "2605.29684"], note: "What runs with depth. Pacelli nests each scalar in the next layer's kernel map, $K^{(R)}_\\ell=\\rho_\\ell\\Phi_\\ell(K^{(R)}_{\\ell-1})$; the Wishart ansatz multiplies, $\\prod_\\ell\\rho_\\ell K^L_{\\rm GP}$. Equal for degree-one homogeneous $\\varphi$ (linear, ReLU), different for erf. Only the factorised form makes the running variable a product of scalars."}
+open_problems: [op-07, op-09]
+links:
+- {target: S06, relation: reproduces, note: "Same equation: $\\rho_\\ell=u_\\ell/\\sigma^2$, $u_0=\\sigma^2\\rho$, $r_0=\\sigma^{2L}\\bar r$, $\\kappa P=\\alpha$, $T=\\eta$. Stationarity of $F_B$ at $\\eta=0$ is S06's $\\rho=1-\\alpha+\\alpha\\bar r\\rho^{-L}$ (algebra checked); S24 reads it as rate, energy and determinant."}
+- {target: S07, relation: reproduces, note: "Under Gaussian equivalence $F_B$ is S07's functional: $L=1$ identical with $\\kappa=1/N$; deep, the factorised closure $K_e=\\prod_\\ell\\rho_\\ell K^L_{\\rm GP}$. Pacelli's nested closure differs for erf. S07's matrix order parameters are not read here."}
+- {target: S04, relation: extends, note: "Tree level is S04's saddle $F$ at fixed $P$: for linear $\\varphi$, $L=1$, $J(K^\\star|K^0)=j(\\rho)$ and $\\rho=1/(1-\\kappa v^\\top K^0v)$, so $F=\\min_\\rho[j+{\\rm energy}]$ (Rubin Eq. (23)). The log-determinant is the added $P\\propto N$ term."}
+- {target: S08, relation: extends, note: "Same posterior, other variables. S08 is the fixed-$P$, $O(1/N)$ kernel-variable expansion (energy tilt $\\kappa K^0vv^\\top K^0$ gives $\\rho-1=\\kappa v^\\top K^0v$). At $P\\propto N$ S08 needs its log-determinant and fluctuation terms; S24 resums in $\\alpha$ but keeps only the scalar."}
+- {target: S15, relation: extends, note: "Same running variable $\\mathcal Q=\\prod_\\ell\\rho_\\ell$ at $\\kappa=\\gamma_0^2$, $P=\\alpha N$: $\\kappa P\\to\\infty$, so $\\rho^{L+1}\\simeq\\kappa P\\bar r$ and $\\mathcal Q\\sim N^{L/(L+1)}$. No finite limit; the energy overwhelms the determinant."}
+- {target: S03, relation: reproduces, note: "Laplace in S03's scale $s$ at speed $N$ is $F_B$: $sK^0=\\prod_\\ell\\rho_\\ell K^L_{\\rm GP}$, the $\\chi^2_N/N$ prior gives $j$, the GP evidence gives energy plus determinant (an Occam factor). S06 reports a numerical check at $N=4000$."}
+- {target: S02, relation: reproduces, note: "The rate $j$ is the Gärtner–Ellis rate of S02's scale factors $\\chi^2_{N_\\ell}/N_\\ell$ (EWA Eq. (43)); at second order $j\\simeq(\\rho-1)^2/4$ gives ${\\rm Var}\\,\\rho_\\ell=2/N_\\ell$, S02's ${\\rm Var}\\ln s=2\\sum_\\ell1/N_\\ell$ for deep linear networks."}
+- {target: S13, relation: unrelated, note: "Both renormalise a ridge, but S13 adds unresolved mode weights to the ridge by averaging over training sets at $N=\\infty$ (additive, no width). Here $\\rho$ multiplies the kernel at fixed data; they meet only in the mean, $\\eta_{\\rm eff}=\\eta/\\rho$."}

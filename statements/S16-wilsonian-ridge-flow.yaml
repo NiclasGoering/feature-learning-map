@@ -1,0 +1,79 @@
+id: S16
+slug: wilsonian-ridge-flow
+title: "Integrating out kernel modes renormalises the ridge: a Wilsonian flow at $N=\\infty$"
+kind: grouping
+family: rg
+sense: a
+maturity: solid
+claim: "At $N=\\infty$, integrating out kernel eigenmodes of the training-set average shell by shell, smallest eigenvalue first, adds each shell's weight to the ridge: $d\\eta_c/dc=1$. The kernel does not flow. It stops at the first learnable mode; power-law spectra give the loss's data exponent."
+formula: '$$\frac{d\eta_c}{dc}=1,\ c=\sum_{k>k_c}\lambda_k\ \Rightarrow\ \eta_{\rm eff}=\eta+\sum_{k>k_T}\lambda_k,\quad P\lambda_{k_T}=\eta_{\rm eff},\quad \bar f_k=\frac{\lambda_k\,y_k}{\lambda_k+\eta_{\rm eff}/P}$$ Power law, $\lambda_k=\lambda_1k^{-(1+a)}$, $y_k^2\propto k^{-(1+a)}$, $\eta=0$: $\eta_{\rm eff}\simeq\lambda_1k_T^{-a}/a$, $k_T\simeq aP$, loss $\propto P^{-a}$.'
+formula_note: "$\\lambda_k$: eigenvalues of $K^L_{\\rm GP}$ over the data measure; $y_k$: target coefficients; $P$: Poisson-mean training-set size; $\\eta$: bare ridge; $\\eta_c$: running ridge, $\\eta_{\\rm eff}$ at the stop $k_T$ (first learnable mode); $c$: trace $\\int d\\mu\\,K_>(x,x)$ of the kernel part above cutoff $k_c$; $a$: spectral exponent, not $P/N$. The soft counterpart (Canatar, Atanasov) is a self-consistent ridge that also adds the learnable modes' posterior variance."
+regime:
+  width_limit: inf-kernel
+  learning_rule: [bayes, gd]
+  conditions: "$N=\\infty$ first ($\\kappa\\to0$, no finite-width coupling); training sets from $p_{\\rm data}$, size $P\\to\\infty$ (Poisson mean in Howard, Cohen, Ringel; fixed in Canatar, Atanasov), replica symmetric; Gaussian data features (or Gaussian discrepancy). First order in the shell weight, $\\delta c\\ll\\eta_c$, and $P\\lambda_k\\ll\\eta_c$ for integrated modes; stop at $P\\lambda_{k_T}=\\eta_{\\rm eff}$. Predictor: equivalent kernel with $\\eta_{\\rm eff}$. NNGP posterior mean, or NTK regression at $\\eta\\approx0$."
+status: phys
+status_note: "Physics. Higher orders are argued to vanish as shells shrink (Howard, Apps. C-D); no relevance or fixed-point analysis; non-Gaussian features are early (S13). The link to the self-consistent ridge (learnable-mode term, $\\eta=0$ prefactors) is this statement's algebra, checked numerically for $\\lambda_k=k^{-(1+a)}$, $a=0.5,1,2$."
+members:
+  - paper: "2405.06008"
+    statement: "For Gaussian features, integrating out modes $k>k_c$ in shells $\\delta c\\ll\\eta_c$ replaces the replica covariance by its free average, so $\\eta\\to\\eta+\\delta c$ per shell and $\\eta_c=\\eta+c$, until the first learnable mode. Power-law spectra give loss $\\propto P^{-a}$. Non-Gaussian features give an input-dependent ridge $\\eta_c/W_c(x)$."
+    mapping: "$\\sigma^2\\to\\eta$, $\\sigma_c^2\\to\\eta_{\\rm eff}$; Poisson mean $\\eta_{\\rm paper}\\to P$; cutoff index $\\kappa\\to k_c$ ($k_T$ at the stop); $\\alpha\\to a$ (not $P/N$); learnability factor $L_k=\\eta_{\\rm eff}/(P\\lambda_k+\\eta_{\\rm eff})$, threshold $T$ (not a temperature; $T=0.01$ cuts at $P\\lambda_k=99\\,\\eta_{\\rm eff}$)."
+    equations: "Eqs. (30)-(34), (36)-(37); Secs. III-IV"
+    role: master
+  - paper: "2502.18553"
+    result: r1
+    statement: "Re-derivation of the shell flow: for $\\lambda_\\Lambda,y_\\Lambda^2\\ll\\eta_{\\rm RG}$, first order in the mode's coupling, $\\eta_{\\rm RG}\\to\\eta_{\\rm RG}+\\lambda_\\Lambda$, so $\\eta_{\\rm RG}=\\eta+\\sum_{k>\\Lambda'}\\lambda_k$, stopped at $P\\lambda_{\\Lambda'}/\\eta_{\\rm RG}=\\epsilon$. Solving the self-consistent ridge (Eq. 2.38) over the remaining modes with $\\eta_{\\rm RG}$ as bare ridge gives the same final result."
+    mapping: "$\\kappa^2\\to\\eta$ (the paper's noise, not $\\gamma^2/N$), $\\kappa^2_{\\rm RG}\\to\\eta_{\\rm eff}$ ($\\eta_{\\rm RG}$ along the flow), $\\Lambda'\\to k_T$, Poisson mean $P$ unchanged, $\\epsilon$ = learnability threshold."
+    equations: "Eqs. (2.44)-(2.45), Sec. 2.4.4"
+    role: variant
+  - paper: "2502.18553"
+    result: r2
+    statement: "Power-law spectra $\\lambda_k\\propto k^{-1-a}$, $y_k^2\\propto k^{-1-a}$: equivalent kernel loss $\\propto P^{-a/(1+a)}$; RG ridge at $\\eta=0$, $\\eta_{\\rm eff}\\simeq k_T^{-a}/a$, $k_T\\propto P$, loss $\\propto P^{-a}$, the data exponent Bahri et al. obtained from Canatar's self-consistent equations. Stated to sit at the edge of equivalent-kernel validity."
+    mapping: "Paper $\\alpha\\to a$ (not $P/N$); $\\kappa^2=0\\to\\eta=0$; $\\kappa^2_{\\rm RG}\\to\\eta_{\\rm eff}$; $\\Lambda'\\to k_T$; $\\alpha_P\\to$ the exponent of the loss in $P$."
+    equations: "Sec. 2.6, Eq. (2.47)"
+    role: rate
+  - paper: "1906.05301"
+    result: r3
+    statement: "One-step truncation, no flow equation: a dot-product kernel $\\sum_qb_q(x\\cdot x')^q$ on the sphere is cut at order $r$, and the diagonal of the removed Taylor tail, $\\sigma_r^2=\\sum_{q>r}b_q$, is added to the noise. Off-diagonals are dropped (error $O(\\sqrt P\\,D^{-(r+1)/2}/K_{xx})$, a scaling argument); retained eigenvalues shift."
+    mapping: "$\\sigma^2\\to\\eta$; $\\sigma_r^2\\to c$ (trace $\\int d\\mu\\,K_>(x,x)$ of the removed Taylor tail); $d\\to D$; $N$ (training points) $\\to P$; Poisson mean $\\eta_{\\rm paper}\\to P$; $K^{(r)}$ = trimmed kernel."
+    equations: "Sec. VI (unnumbered); App. K"
+    role: special-case
+  - paper: "2405.00592"
+    result: r1
+    statement: "All training-set fluctuations are integrated at once: the renormalised ridge is the fixed point $\\eta_{\\rm eff}=\\eta+\\sum_k\\lambda_k\\eta_{\\rm eff}/(P\\lambda_k+\\eta_{\\rm eff})$ (multiplicative form $\\kappa=\\lambda S_W$); modes with $P\\lambda_k\\gg\\eta_{\\rm eff}$ are learned. The only flow the paper names is in the data count, not over eigenmodes."
+    mapping: "$\\lambda_{\\rm paper}\\to\\eta/P$ and $\\kappa\\to\\eta_{\\rm eff}/P$ (ridge per sample); $S_W\\to\\eta_{\\rm eff}/\\eta$; eigenvalues $\\eta_k\\to\\lambda_k$; $N$ counts modes, not width; kernel case by Gaussian equivalence (Sec. III.4)."
+    equations: "Eqs. (59), (67), (74) [PDF (25)]; Secs. II.7, III.4"
+    role: extension
+  - paper: "2006.13198"
+    result: r1
+    statement: "Replica saddle point for kernel ridge regression averaged over training sets: the effective ridge solves $\\eta_{\\rm eff}=\\eta+\\sum_k\\lambda_k\\eta_{\\rm eff}/(\\eta_{\\rm eff}+P\\lambda_k)$ over all modes, and the average predictor is $\\lambda_ky_k/(\\lambda_k+\\eta_{\\rm eff}/P)$. Unlearnable modes add $\\lambda_k$; learnable ones add at most $\\eta_{\\rm eff}/P$ each."
+    mapping: "$\\lambda\\to\\eta$ (ridge); $\\kappa\\to\\eta_{\\rm eff}$; $\\eta_\\rho\\to\\lambda_k$; $y_k=\\sqrt{\\lambda_k}\\,\\bar w_\\rho$; $N$ counts modes, not width."
+    equations: "Eq. (4), Sec. Results"
+    role: extension
+  - paper: "2006.13198"
+    result: r3
+    statement: "Spherical data, $P,D\\to\\infty$ with $\\alpha_C=P/N(D,L)$ fixed: stage $L$ has effective ridge $\\tilde\\lambda_L=(\\eta+\\sum_{K>L}\\bar\\eta_K)/\\bar\\eta_L$, the Wilsonian sum over the levels above. $\\tilde\\kappa(\\infty)=\\tilde\\lambda_L$ and $\\tilde\\kappa(0)=1+\\tilde\\lambda_L$ are the two sharp-cut values; $\\tilde\\kappa(\\alpha_C)$ interpolates near $\\alpha_C\\sim1$."
+    mapping: "$\\bar\\eta_K=N(D,K)\\eta_K\\to$ summed $\\lambda_k$ of level $K$; $\\lambda\\to\\eta$; $\\tilde\\kappa=\\eta_{\\rm eff}/\\bar\\eta_L$; $\\alpha_C=P/N(D,L)$ is not the map's $\\alpha$; $N(D,L)$ is a degeneracy, not width."
+    equations: "Eqs. (9)-(10); Suppl. Eqs. (96), (98)"
+    role: special-case
+disagreements:
+  - papers: ["2405.06008", "2006.13198"]
+    note: "Howard (p. 14) reads Canatar's $\\kappa$ as the bare ridge plus the unlearnable eigenvalues; Eq. (4) also adds the learnable modes' posterior variance, up to $\\eta_{\\rm eff}/P$ each, so they agree for $k_T\\ll P$. At $\\eta=0$, $\\lambda_k\\propto k^{-(1+a)}$: same exponent, but the sharp ridge is 0.75, 0.41, 0.07 of Canatar's for $a=0.5,1,2$, and its $k_T=aP$ exceeds $P$ for $a>1$."
+open_problems: [op-04]
+links:
+  - target: S13
+    relation: reproduces
+    note: "Integrating $d\\eta_c/dc=1$ from the bare ridge $\\eta$ to the stop gives S13's $\\eta_{\\rm eff}=\\eta+\\sum_{k>k_T}\\lambda_k$, $P\\lambda_{k_T}=\\eta_{\\rm eff}$, in S13's symbols (Howard: $\\sigma^2,\\sigma_c^2,\\eta,\\kappa\\to\\eta,\\eta_{\\rm eff},P,k_T$). S13 also holds the non-Gaussian $W_c(x)$ flow."
+  - target: S01
+    relation: extends
+    note: "Averages S01's mean $k_*^\\top(K^L_{\\rm GP}+\\eta I)^{-1}y$ over training sets at $N=\\infty$. With no shell integrated ($\\eta_{\\rm eff}=\\eta$) and $P,\\eta\\to\\infty$ at fixed $\\eta/P$ it is the equivalent-kernel mean $\\lambda_ky_k/(\\lambda_k+\\eta/P)$; the unlearnable tail then adds to $\\eta$."
+  - target: S06
+    relation: unrelated
+    note: "The ridge shifts additively, $\\eta\\to\\eta+\\sum\\lambda_k$, by training-set averaging at $N=\\infty$ (no $y$). S06's $\\rho^L$ rescales the kernel through $\\bar r$, from width at fixed $\\alpha$. In the mean, $\\rho^LK$ at ridge $\\eta$ is $K$ at $\\eta/\\rho^L$."
+  - target: S07
+    relation: unrelated
+    note: "Same contrast: S07's $\\rho$ rescales $K^1_{\\rm GP}$ at a fixed training set (Gaussian equivalence); here the kernel is fixed and the ridge shifts. In the mean, $\\rho K^1_{\\rm GP}$ at ridge $\\eta$ equals $K^1_{\\rm GP}$ at $\\eta/\\rho$; the variance is $\\rho$ times that."
+  - target: S08
+    relation: unrelated
+    note: "S08 shifts the kernel at $O(1/N)$ and fixed $P$, along the target and through the log-determinant. Here $N=\\infty$ and the kernel is fixed; only the ridge moves, by a $y$-independent trace. Different coupling."
+  - {target: S17, relation: extended-by, note: "Adds to the shell-by-shell ridge flow of S16 a rescaling step (relevance, scaling intervals) and a quartic vertex whose self-energy shifts $r$; with $U=0$ the equivalent-kernel ridge does not flow, so this flow is vertex-driven."}

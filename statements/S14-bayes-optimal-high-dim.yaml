@@ -83,3 +83,5 @@ members:
     equations: "Fig. 1 (right); Sec. 3 \"Scaling with data\"; Result 1, Eqs. (6), (7)"
     role: check
 open_problems: [op-10]
+links:
+  - {target: S22, relation: unrelated, note: "S14 is supervised teacher-student inference on Gaussian inputs, error $\\rho_0-q^*$ over overlaps. RG-on-data is unsupervised: the object is the input law and a map or a hierarchical generative model (Bény); no teacher, Bayes-optimal error or overlap matrix is computed."}

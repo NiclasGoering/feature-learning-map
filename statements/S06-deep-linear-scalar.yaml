@@ -152,3 +152,9 @@ reduces_to:
 disagreements:
   - {papers: ["2405.10761", "2012.04030"], note: "Fischer et al. claim their $P=\\alpha N$ kernel action exact at linear order; its linear rate (PDF Eq. 88) lacks the Wishart term $+\\frac{P+1}2\\ln\\det$, and its scalar projection gives $u-1=(r-1)/N$, missing the $O(\\alpha)$ renormalisation of Li–Sompolinsky Eq. 27. Kernel variables need the $N-P$ term. [verified]"}
 open_problems: [op-07]
+links:
+  - {target: S16, relation: unrelated, note: "The ridge shifts additively, $\\eta\\to\\eta+\\sum\\lambda_k$, by training-set averaging at $N=\\infty$ (no $y$). S06's $\\rho^L$ rescales the kernel through $\\bar r$, from width at fixed $\\alpha$. In the mean, $\\rho^LK$ at ridge $\\eta$ is $K$ at $\\eta/\\rho^L$."}
+  - {target: S17, relation: reproduced-by, note: "$L=1$ linear: $\\rho-1=\\frac1N[v^\\top Kv-\\mathrm{Tr}K(K+\\eta)^{-1}]$ (S06 r3 with $\\rho=1$ on the right) is the sum of the mode shifts over all modes; at $\\eta\\to0$ it is $\\alpha(\\bar r-1)$, the first order of $\\rho=1-\\alpha+\\alpha\\bar r/\\rho$."}
+  - {target: S18, relation: unrelated, note: "S06 is a $P\\propto N$ posterior effect (readout scalar $\\rho$ from the Wishart Jacobian); this is a prior effect at fixed $P$, set by $L/N$. Both reduce to $K^L_{\\rm GP}$ as $\\alpha\\to0$, $N\\to\\infty$."}
+  - {target: S19, relation: reproduced-by, note: "At $\\eta\\to0$, one linear hidden layer: $\\bar f_U\\to0$, $\\Sigma_U=\\Sigma_{\\rm GP}(y^\\top K^{-1}y-P)$, the first order in $\\alpha=P/N$ of S06’s $\\rho^L$ (numerical check). S06 holds at $P\\propto N$; this expansion needs $P/N$ small."}
+  - {target: S24, relation: reproduced-by, note: "Same equation: $\\rho_\\ell=u_\\ell/\\sigma^2$, $u_0=\\sigma^2\\rho$, $r_0=\\sigma^{2L}\\bar r$, $\\kappa P=\\alpha$, $T=\\eta$. Stationarity of $F_B$ at $\\eta=0$ is S06's $\\rho=1-\\alpha+\\alpha\\bar r\\rho^{-L}$ (algebra checked); S24 reads it as rate, energy and determinant."}
