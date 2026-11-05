@@ -1126,33 +1126,41 @@
 
 
   // ------------------------------------------------------------ regimes view
-  // The team's regime table: how the output scale and the data scale with width decide
-  // which Θ(N) term the posterior pays, what moves, and what the posterior is. Every
-  // statement sits in its row as a clickable chip; open problems and experiments too.
+  // A grid of regimes: output scale (rows) by amount of data (columns). The team's
+  // regime table fills five cells; every statement sits in its cell as a clickable chip,
+  // split into linear and nonlinear where that is where the open question is.
 
-  var REGIME_ROWS = [
-    { id: "ntk-fixed", name: "NTK, $P$ fixed", scaling: "$\\gamma=1,\\ \\kappa=1/N$", term: "none", logz: "$O(1)$",
-      moves: "nothing", posterior: "NNGP", stmts: ["S01", "S08"], ops: ["op-01"],
-      note: "S08 is the first finite-width correction: at order $1/N$ the kernel tilts toward the target." },
-    { id: "ntk-prop", name: "NTK, $P\\propto N$", scaling: "$\\gamma=1,\\ P=\\alpha N$",
-      term: "volume $\\tfrac12\\log\\det K$; energy too if the target is hard", logz: "$\\Theta(N)$",
+  // Rows: how the output scale grows with width. Columns: how much data. The team's
+  // regime table fills five cells (pays / moves / posterior); the others are gaps.
+  var GRID_ROWS = [
+    { id: "ntk", name: "NTK", scaling: "$\\gamma=1,\\ \\kappa=1/N$" },
+    { id: "mup", name: "μP", scaling: "$\\gamma=\\gamma_0\\sqrt N,\\ \\kappa=\\gamma_0^2$" },
+    { id: "beyond", name: "Beyond μP", scaling: "$\\gamma=N^{s},\\ s>\\tfrac12$" }
+  ];
+  var GRID_COLS = [
+    { id: "fixed", name: "$P$ fixed" },
+    { id: "prop", name: "$P\\propto N$" },
+    { id: "hd", name: "$P\\sim D^k$ (high-dimensional)" }
+  ];
+  var GRID = {
+    "ntk|fixed": { pays: "nothing", logz: "$O(1)$", moves: "nothing", posterior: "NNGP",
+      all: ["S01", "S08"], ops: ["op-01"], note: "S08: at order $1/N$ the kernel tilts toward the target." },
+    "ntk|prop": { pays: "volume $\\tfrac12\\log\\det K$; energy too if the target is hard", logz: "$\\Theta(N)$",
       moves: "the scale of $K$; the shape too if the target is hard", posterior: "scale-renormalised kernel",
-      stmts: ["S06", "S07", "S03"], ops: ["op-08", "op-06"], experiment: "ntk-prop",
-      note: "A hard (surprising) target has a large $\\bar r=y^\\top(K_{\\rm GP})^{-1}y/P$, its size in prior units. In S06 a typical target ($\\bar r=1$) gives $\\rho=1$: energy and volume balance and nothing moves; $\\bar r>1$ rescales the kernel. A surprising enough target makes the energy compete with the volume even at NTK scaling, so the shape of the kernel, not only its scale, can move: feature learning without μP. Whether it does for a nonlinear layer is open (S07 assumes Gaussian equivalence)." },
-    { id: "mup-fixed", name: "μP, $P$ fixed", scaling: "$\\gamma=\\gamma_0\\sqrt N,\\ \\kappa=\\gamma_0^2$", term: "energy", logz: "$\\Theta(N)$",
-      moves: "the shape of $K$, toward the labels", posterior: "tilted law $\\rho$", stmts: ["S04", "S05", "S09"], ops: ["op-04", "op-03", "op-02"] },
-    { id: "beyond-mup", name: "Beyond μP", scaling: "$\\gamma=N^{s},\\ s>\\tfrac12,\\ \\kappa=N^{2s-1}$", term: "energy dominates", logz: "$\\gg N$",
-      moves: "the shape, strongly: $\\rho$ concentrates on the best features", posterior: "strong-tilt limit", stmts: [],
-      mechanisms: ["ridge-atoms"], ops: [],
-      note: "No main statement yet: the results that reach this corner (the single-site law collapsing onto a few ridge directions, costs becoming variation or weight-decay norms) are listed under the mechanism “ridge atoms”." },
-    { id: "mup-prop", name: "μP and $P\\propto N$", scaling: "$\\gamma=\\gamma_0\\sqrt N,\\ P=\\alpha N$", term: "energy and volume", logz: "$\\Theta(N)$",
-      moves: "shape and scale", posterior: "active research", stmts: ["S15"], ops: ["op-07"], experiment: "mup-prop",
-      note: "Linear networks are settled (S15: no finite limit, $\\rho\\sim N^{1/(L+1)}$). Nonlinear networks are open (op-07): the first place where the bulk of the kernel could move at leading order." }
-  ];
-  var OTHER_ROWS = [
-    { id: "high-dim", name: "High-dimensional, $P\\sim D^k$", text: "teacher–student and kernel learning curves at large $P$", stmts: ["S14", "S13"], ops: ["op-05"] },
-    { id: "any-width", name: "Any width, no limit", text: "exact finite-width laws and identities about the Gibbs measure itself", stmts: ["S02", "S03", "S10", "S11", "S12"], ops: ["op-10"] }
-  ];
+      linear: ["S06"], nonlinear: ["S07"], ops: ["op-08", "op-06"], experiment: "ntk-prop",
+      note: "A surprising target ($\\bar r=y^\\top K_{\\rm GP}^{-1}y/P>1$) moves the scale; if it is surprising enough the energy competes with the volume and the shape can move too: feature learning without μP. Open for nonlinear layers (S07 assumes Gaussian equivalence)." },
+    "ntk|hd": { head: "teacher–student and learning curves at large $P$", all: ["S13", "S14"], ops: ["op-05"] },
+    "mup|fixed": { pays: "energy", logz: "$\\Theta(N)$", moves: "the shape of $K$, toward the labels", posterior: "tilted law $\\rho$",
+      all: ["S04", "S05", "S09"], ops: ["op-04", "op-03", "op-02"] },
+    "mup|prop": { pays: "energy and volume", logz: "$\\Theta(N)$", moves: "shape and scale", posterior: "active research",
+      linear: ["S15"], nonlinear: [], ops: ["op-07"], experiment: "mup-prop", frontier: true },
+    "mup|hd": { gap: "sparse: Bayesian posteriors in μP at high dimension" },
+    "beyond|fixed": { pays: "energy dominates", logz: "$\\gg N$", moves: "the shape, strongly: $\\rho$ concentrates on the best features",
+      posterior: "strong-tilt limit", mechanisms: ["ridge-atoms"], note: "No main statement yet; the results that reach this corner are under the mechanism “ridge atoms”." },
+    "beyond|prop": { gap: "not studied" },
+    "beyond|hd": { gap: "not studied" }
+  };
+  var ANY_WIDTH = { all: ["S02", "S03", "S10", "S11", "S12"], ops: ["op-10"] };
   var STATUS_CLASS = { thm: "st-thm", phys: "st-phys", num: "st-num", conj: "st-conj" };
 
   function rgFor(id) {
@@ -1169,7 +1177,10 @@
       type: "button", class: "rg-chip " + (STATUS_CLASS[s.status] || "") + (s.kind === "grouping" ? " grouping" : ""),
       title: h.lab("status", s.status) + " · " + (s.kind === "grouping" ? "grouping" : "collapse") + " · " + plural(n.np, "paper"),
       onclick: function (ev) { ev.stopPropagation(); openStatement(n, false); }
-    }, h.el("span", { class: "rg-id" }, s.id), " ", h.el("span", { class: "rg-t" }, s.title));
+    }, h.el("span", { class: "rg-id" }, s.id), " ", h.el("span", { class: "rg-t" }, s.title,
+      (s.reduces_to || []).length ? h.el("span", { class: "rg-red" }, (s.reduces_to || []).map(function (r) {
+        return "→ " + r.target + " as " + (r.limit || "").split(": ")[0];
+      }).join(" · ")) : null));
     var rgs = rgFor(id);
     var badges = rgs.map(function (r) {
       return h.el("button", { type: "button", class: "rg-badge", title: "RG statement " + r.id + " reproduces this: " + plainTex(r.s.title),
@@ -1234,19 +1245,40 @@
     ], "x:" + encodeURIComponent(x.id));
   }
 
-  // One wrapper per cell, so text and maths stay one block in the phone layout.
-  function cell(label, content, cls) {
-    return h.el("td", { "data-label": label, class: cls || null }, h.el("div", { class: "rg-cell" }, content));
+  function chipList(ids) { return (ids || []).map(stmtChip).filter(Boolean); }
+
+  function cellOpen(c) {
+    var out = (c.ops || []).map(opChip).filter(Boolean);
+    return out.concat(c.experiment ? expChips(c.experiment) : []);
   }
 
-  function chipsFor(row) {
-    var chips = (row.stmts || []).map(stmtChip);
-    (row.mechanisms || []).forEach(function (m) { chips = chips.concat(mechanismChips(m)); });
-    var open = (row.ops || []).map(opChip).concat(row.experiment ? expChips(row.experiment) : []);
-    return [
-      h.el("div", { class: "rg-chips" }, chips.filter(Boolean).length ? chips : h.el("span", { class: "muted" }, "no statement yet")),
-      open.filter(Boolean).length ? h.el("div", { class: "rg-chips rg-open" }, open) : null
-    ];
+  function gridCell(row, col) {
+    var el = h.el, c = GRID[row.id + "|" + col.id] || { gap: "not studied" };
+    var where = el("div", { class: "rg-where" }, row.name + " · ", el("span", null, col.name));
+    if (c.gap) {
+      return el("div", { class: "rg-gcell gap", role: "cell" }, where, el("div", { class: "rg-gap" }, el("strong", null, "open"), " — " + c.gap));
+    }
+    var meta = c.pays ? el("dl", { class: "rg-meta" },
+      el("dt", null, "pays"), el("dd", null, c.pays, c.logz ? el("span", { class: "rg-logz" }, " · −log Z = ", c.logz) : null),
+      el("dt", null, "moves"), el("dd", null, c.moves),
+      el("dt", null, "posterior"), el("dd", null, c.posterior)) : el("p", { class: "rg-meta rg-head" }, c.head || "");
+    var body;
+    if (c.linear || c.nonlinear) {
+      var nl = chipList(c.nonlinear);
+      body = el("div", { class: "rg-split" },
+        el("div", null, el("div", { class: "rg-sub" }, "linear"), el("div", { class: "rg-chips" }, chipList(c.linear))),
+        el("div", null, el("div", { class: "rg-sub" }, "nonlinear"),
+          el("div", { class: "rg-chips" }, nl.length ? nl : el("span", { class: "rg-gap" }, el("strong", null, "open")))));
+    } else {
+      var chips = chipList(c.all);
+      (c.mechanisms || []).forEach(function (m) { chips = chips.concat(mechanismChips(m).filter(Boolean)); });
+      body = el("div", { class: "rg-chips" }, chips.length ? chips : el("span", { class: "muted" }, "no statement yet"));
+    }
+    var open = cellOpen(c);
+    return el("div", { class: "rg-gcell" + (c.frontier ? " frontier" : ""), role: "cell", id: "cell-" + row.id + "-" + col.id },
+      where, meta, body,
+      open.length ? el("div", { class: "rg-chips rg-open" }, open) : null,
+      c.note ? el("p", { class: "rg-note" }, c.note) : null);
   }
 
   function buildRegimes() {
@@ -1254,31 +1286,27 @@
     if (!box) return;
     box.innerHTML = "";
     var el = h.el;
-    var head = el("thead", null, el("tr", null,
-      ["Regime", "Scaling", "$\\Theta(N)$ term", "$-\\log Z_D(P)$", "What moves", "Posterior", "In the map: statements, open problems, new results"]
-        .map(function (t) { return el("th", { scope: "col" }, t); })));
-    var body = el("tbody");
-    REGIME_ROWS.forEach(function (row) {
-      body.appendChild(el("tr", { id: "regime-" + row.id, class: "rg-row" + (row.id === "mup-prop" ? " frontier" : "") },
-        cell("Regime", el("strong", null, row.name), "rg-name"),
-        cell("Scaling", row.scaling),
-        cell("Θ(N) term", row.term),
-        cell("−log Z", row.logz),
-        cell("What moves", row.moves),
-        cell("Posterior", row.posterior),
-        cell("In the map", [chipsFor(row), row.note ? el("p", { class: "rg-note" }, row.note) : null], "rg-map")));
+    var grid = el("div", { class: "rg-grid", role: "table", "aria-label": "Regimes: output scale by amount of data" });
+    grid.appendChild(el("div", { class: "rg-corner", role: "columnheader" }, el("span", null, "output scale ↓ · data →")));
+    GRID_COLS.forEach(function (col) { grid.appendChild(el("div", { class: "rg-colh", role: "columnheader" }, col.name)); });
+    GRID_ROWS.forEach(function (row) {
+      grid.appendChild(el("div", { class: "rg-rowh", role: "rowheader" }, el("strong", null, row.name), el("div", null, row.scaling)));
+      GRID_COLS.forEach(function (col) { grid.appendChild(gridCell(row, col)); });
     });
-    var table = el("table", { class: "rg-table" }, head, body);
-    box.appendChild(table);
-    var other = el("table", { class: "rg-table rg-other" },
-      el("thead", null, el("tr", null, el("th", { scope: "col" }, "Other settings"), el("th", { scope: "col" }, ""), el("th", { scope: "col" }, "In the map"))),
-      el("tbody", null, OTHER_ROWS.map(function (row) {
-        return el("tr", { id: "regime-" + row.id, class: "rg-row" },
-          cell("Setting", el("strong", null, row.name), "rg-name"),
-          cell("", row.text),
-          cell("In the map", chipsFor(row), "rg-map"));
-      })));
-    box.appendChild(other);
+    box.appendChild(grid);
+    var anyOpen = cellOpen(ANY_WIDTH);
+    box.appendChild(el("div", { class: "rg-any" },
+      el("div", { class: "rg-rowh" }, el("strong", null, "Any width"), el("div", null, "exact laws and identities, no limit")),
+      el("div", { class: "rg-gcell" }, el("div", { class: "rg-chips" }, chipList(ANY_WIDTH.all)),
+        anyOpen.length ? el("div", { class: "rg-chips rg-open" }, anyOpen) : null)));
+    box.appendChild(el("p", { class: "rg-legend" },
+      el("span", null, el("i", { class: "rg-sw st-thm" }), "proved or mature"),
+      el("span", null, el("i", { class: "rg-sw st-phys" }), "physics"),
+      el("span", null, el("i", { class: "rg-sw st-num" }), "numerics"),
+      el("span", null, el("i", { class: "rg-sw dashed" }), "grouping (shared object, not shown equal)"),
+      el("span", null, el("i", { class: "rg-sw open" }), "open"),
+      el("span", null, el("span", { class: "rg-badge static" }, "RG"), " an RG statement reproduces it"),
+      el("span", null, "→ the statement it reduces to")));
     var loose = RGS.filter(function (n) {
       return !(n.s.links || []).some(function (l) { return l.relation === "reproduces" || l.relation === "extends" || l.relation === "contradicts"; });
     });
