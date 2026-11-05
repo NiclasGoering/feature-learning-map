@@ -39,15 +39,17 @@
 <main id="content" class="graph-page">
   <div class="gr-head">
     <h1>Graph</h1>
-    <p class="lede" data-view="statements">Most papers in this literature state the same few results in different notations. Each dot is one <em>statement</em>: a theorem or an established physics result, written once in the map's notation, with the papers that state it. Size is the number of papers; a filled dot is a collapse (the papers' results are one formula under a mapping of symbols), a ring a grouping (a shared object, not shown equal). Arrows join a statement to the one it becomes in a limit, labelled with that limit; red marks papers that disagree; diamonds are open problems in the gaps. Left to right: data per width, from fixed $P$ to $P\propto N$ to high-dimensional $P\sim D^k$. Bottom to top: how far the kernel moves, from lazy ($\kappa\to0$) through $1/N$ corrections to mean field and μP ($\kappa=O(1)$). Click a statement for its formula, conditions and member papers; click a paper for its results. The axes are schematic. The column on the right is the <em>renormalisation-group layer</em>: what each kind of “renormalisation” claim in the literature says, rated for maturity, with lines to the main statements it reproduces, extends or contradicts. Click a line's end to jump either way; every main statement's panel lists its “RG view”.</p>
+    <p class="lede" data-view="regimes">How the output scale $\gamma$ and the amount of data $P$ grow with the width $N$ decides which term of order $N$ the posterior pays, what moves, and what the posterior is. Each row is one regime; every statement of the map sits in its row. Click a statement for its formula, conditions and papers, a dashed chip for an open problem, and a “new” chip for the map's own experiments. The <em>Statements</em> view draws the same statements as a graph of limits; <em>All results</em> shows every result in the map.</p>
+    <p class="lede" data-view="statements" hidden>Most papers in this literature state the same few results in different notations. Each dot is one <em>statement</em>: a theorem or an established physics result, written once in the map's notation, with the papers that state it. Size is the number of papers; a filled dot is a collapse (the papers' results are one formula under a mapping of symbols), a ring a grouping (a shared object, not shown equal). Arrows join a statement to the one it becomes in a limit, labelled with that limit; red marks papers that disagree; diamonds are open problems in the gaps. Left to right: data per width, from fixed $P$ to $P\propto N$ to high-dimensional $P\sim D^k$. Bottom to top: how far the kernel moves, from lazy ($\kappa\to0$) through $1/N$ corrections to mean field and μP ($\kappa=O(1)$). Click a statement for its formula, conditions and member papers; click a paper for its results. The axes are schematic. The column on the right is the <em>renormalisation-group layer</em>: what each kind of “renormalisation” claim in the literature says, rated for maturity, with lines to the main statements it reproduces, extends or contradicts. Click a line's end to jump either way; every main statement's panel lists its “RG view”.</p>
     <p class="lede" data-view="results" hidden>Each dot is a result: one feature-learning mechanism in one limit, gathering every paper in the map that shows it (where no mechanism was analysed, results are grouped by what they compute). The number is how many papers show it. Click a dot for the statements and the papers; click a paper for all its results. Left to right: data per width, from fixed $P$ to $P\propto N$ to high-dimensional $P\sim D^k$. Bottom to top: how far the kernel moves, from lazy ($\kappa\to0$) through $1/N$ corrections to mean field and μP ($\kappa=O(1)$). Lines join results that the same paper shows. The axes are schematic.</p>
   </div>
   <div class="gr-tools" role="group" aria-label="Graph controls">
     <span class="gr-views" role="tablist" aria-label="View">
-      <button type="button" role="tab" id="gr-v-statements" aria-selected="true">Statements</button>
+      <button type="button" role="tab" id="gr-v-regimes" aria-selected="true">Regimes</button>
+      <button type="button" role="tab" id="gr-v-statements" aria-selected="false">Statements</button>
       <button type="button" role="tab" id="gr-v-results" aria-selected="false">All results</button>
     </span>
-    <label class="gr-search">Find <input id="gr-q" type="search" placeholder="statement, result, author, arXiv id" autocomplete="off"></label>
+    <label class="gr-search" data-view="statements results">Find <input id="gr-q" type="search" placeholder="statement, result, author, arXiv id" autocomplete="off"></label>
     <span class="gr-toggles" data-view="results" hidden>
       <label><input type="checkbox" id="gr-bayes" checked> <span class="sw sw-bayes"></span>Bayes</label>
       <label><input type="checkbox" id="gr-gd" checked> <span class="sw sw-gd"></span>GD</label>
@@ -59,10 +61,13 @@
       <label><input type="checkbox" id="gr-sops" checked> open problems</label>
       <label id="gr-srg-label"><input type="checkbox" id="gr-srg" checked> RG layer</label>
     </span>
-    <span class="gr-hint">drag to pan · pinch or ⌘-scroll to zoom</span>
-    <button type="button" id="gr-fit">Fit</button>
+    <span class="gr-hint" data-view="statements results">drag to pan · pinch or ⌘-scroll to zoom</span>
+    <button type="button" id="gr-fit" data-view="statements results">Fit</button>
   </div>
-  <div id="graph" class="gr-box" aria-label="Graph of statements by limit"></div>
+  <section id="gr-regimes" data-view="regimes" aria-label="Regimes">
+    <div id="gr-regimes-table"></div>
+  </section>
+  <div id="graph" data-view="statements results" class="gr-box" aria-label="Graph of statements by limit"></div>
   <p class="gr-legend" data-view="statements">
     <span><span class="sw sw-stmt"></span>collapse: the papers' results are one formula (size: papers)</span>
     <span><span class="sw sw-stmt-ring"></span>grouping: a shared object, not shown equal</span>

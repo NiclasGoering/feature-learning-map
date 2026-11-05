@@ -1124,15 +1124,185 @@
     }
   }
 
+
+  // ------------------------------------------------------------ regimes view
+  // The team's regime table: how the output scale and the data scale with width decide
+  // which Θ(N) term the posterior pays, what moves, and what the posterior is. Every
+  // statement sits in its row as a clickable chip; open problems and experiments too.
+
+  var REGIME_ROWS = [
+    { id: "ntk-fixed", name: "NTK, $P$ fixed", scaling: "$\\gamma=1,\\ \\kappa=1/N$", term: "none", logz: "$O(1)$",
+      moves: "nothing", posterior: "NNGP", stmts: ["S01", "S08"], ops: ["op-01"],
+      note: "S08 is the first finite-width correction: at order $1/N$ the kernel tilts toward the target." },
+    { id: "ntk-prop", name: "NTK, $P\\propto N$", scaling: "$\\gamma=1,\\ P=\\alpha N$",
+      term: "volume $\\tfrac12\\log\\det K$; energy too if the target is hard", logz: "$\\Theta(N)$",
+      moves: "the scale of $K$; the shape too if the target is hard", posterior: "scale-renormalised kernel",
+      stmts: ["S06", "S07", "S03"], ops: ["op-08", "op-06"], experiment: "ntk-prop",
+      note: "A hard (surprising) target has a large $\\bar r=y^\\top(K_{\\rm GP})^{-1}y/P$, its size in prior units. In S06 a typical target ($\\bar r=1$) gives $\\rho=1$: energy and volume balance and nothing moves; $\\bar r>1$ rescales the kernel. A surprising enough target makes the energy compete with the volume even at NTK scaling, so the shape of the kernel, not only its scale, can move: feature learning without μP. Whether it does for a nonlinear layer is open (S07 assumes Gaussian equivalence)." },
+    { id: "mup-fixed", name: "μP, $P$ fixed", scaling: "$\\gamma=\\gamma_0\\sqrt N,\\ \\kappa=\\gamma_0^2$", term: "energy", logz: "$\\Theta(N)$",
+      moves: "the shape of $K$, toward the labels", posterior: "tilted law $\\rho$", stmts: ["S04", "S05", "S09"], ops: ["op-04", "op-03", "op-02"] },
+    { id: "beyond-mup", name: "Beyond μP", scaling: "$\\gamma=N^{s},\\ s>\\tfrac12,\\ \\kappa=N^{2s-1}$", term: "energy dominates", logz: "$\\gg N$",
+      moves: "the shape, strongly: $\\rho$ concentrates on the best features", posterior: "strong-tilt limit", stmts: [],
+      mechanisms: ["ridge-atoms"], ops: [],
+      note: "No main statement yet: the results that reach this corner (the single-site law collapsing onto a few ridge directions, costs becoming variation or weight-decay norms) are listed under the mechanism “ridge atoms”." },
+    { id: "mup-prop", name: "μP and $P\\propto N$", scaling: "$\\gamma=\\gamma_0\\sqrt N,\\ P=\\alpha N$", term: "energy and volume", logz: "$\\Theta(N)$",
+      moves: "shape and scale", posterior: "active research", stmts: ["S15"], ops: ["op-07"], experiment: "mup-prop",
+      note: "Linear networks are settled (S15: no finite limit, $\\rho\\sim N^{1/(L+1)}$). Nonlinear networks are open (op-07): the first place where the bulk of the kernel could move at leading order." }
+  ];
+  var OTHER_ROWS = [
+    { id: "high-dim", name: "High-dimensional, $P\\sim D^k$", text: "teacher–student and kernel learning curves at large $P$", stmts: ["S14", "S13"], ops: ["op-05"] },
+    { id: "any-width", name: "Any width, no limit", text: "exact finite-width laws and identities about the Gibbs measure itself", stmts: ["S02", "S03", "S10", "S11", "S12"], ops: ["op-10"] }
+  ];
+  var STATUS_CLASS = { thm: "st-thm", phys: "st-phys", num: "st-num", conj: "st-conj" };
+
+  function rgFor(id) {
+    return RGS.filter(function (n) {
+      return (n.s.links || []).some(function (l) { return l.target === id && l.relation === "reproduces"; });
+    });
+  }
+
+  function stmtChip(id) {
+    var n = sById[id];
+    if (!n) return null;
+    var s = n.s;
+    var chip = h.el("button", {
+      type: "button", class: "rg-chip " + (STATUS_CLASS[s.status] || "") + (s.kind === "grouping" ? " grouping" : ""),
+      title: h.lab("status", s.status) + " · " + (s.kind === "grouping" ? "grouping" : "collapse") + " · " + plural(n.np, "paper"),
+      onclick: function (ev) { ev.stopPropagation(); openStatement(n, false); }
+    }, h.el("span", { class: "rg-id" }, s.id), " ", h.el("span", { class: "rg-t" }, s.title));
+    var rgs = rgFor(id);
+    var badges = rgs.map(function (r) {
+      return h.el("button", { type: "button", class: "rg-badge", title: "RG statement " + r.id + " reproduces this: " + plainTex(r.s.title),
+        onclick: function (ev) { ev.stopPropagation(); openStatement(r, false); } }, "RG " + r.id);
+    });
+    return h.el("span", { class: "rg-chipwrap" }, chip, badges);
+  }
+
+  function opChip(id) {
+    var o = (D.open_problems || []).filter(function (x) { return x.id === id; })[0];
+    if (!o) return null;
+    return h.el("button", { type: "button", class: "rg-chip open", title: "Open problem " + o.rank,
+      onclick: function (ev) {
+        ev.stopPropagation();
+        var sop = sops.filter(function (x) { return x.o.id === id; })[0];
+        if (sop) openOpS(sop); else location.href = "open-problems.html#" + id;
+      } }, h.el("span", { class: "rg-id" }, o.id), " ", h.el("span", { class: "rg-t" }, o.title));
+  }
+
+  function mechanismChips(slug) {
+    return nodes.filter(function (x) { return x.analysed && x.slug === slug; }).map(resultChip);
+  }
+
+  function resultChip(n) {
+    if (!n) return null;
+    return h.el("button", { type: "button", class: "rg-chip result", title: "Results in the map with this mechanism",
+      onclick: function (ev) { ev.stopPropagation(); openNode(n, false); } },
+      h.el("span", { class: "rg-id" }, "results"), " ", h.el("span", { class: "rg-t" }, n.name + " · " + REGION[n.region].label + " (" + plural(n.np, "paper") + ")"));
+  }
+
+  function expChips(regime) {
+    return (D.experiments || []).filter(function (x) { return x.regime_id === regime; }).map(function (x) {
+      return h.el("button", { type: "button", class: "rg-chip experiment", title: "The map's own experiment",
+        onclick: function (ev) { ev.stopPropagation(); openExperiment(x); } },
+        h.el("span", { class: "rg-id" }, "new"), " ", h.el("span", { class: "rg-t" }, x.title));
+    });
+  }
+
+  function openExperiment(x) {
+    var el = h.el;
+    showPanel([
+      el("p", { class: "gr-kind" }, "The map's own experiment · " + (x.date || "")),
+      el("h2", null, x.title),
+      el("div", { class: "authors" }, x.regime + (x.tests && x.tests.length ? " · tests " + x.tests.join(", ") : "")),
+      el("p", { class: "oneline" }, x.claim),
+      x.formula ? el("div", { class: "gr-formula" }, x.formula) : null,
+      x.verdict ? el("p", null, el("strong", null, "Verdict: "), x.verdict) : null,
+      (x.figures || []).map(function (f) {
+        return el("figure", { class: "gr-fig" }, el("img", { src: f.src, alt: f.caption, loading: "lazy" }), el("figcaption", null, f.caption));
+      }),
+      x.numbers_html ? el("h3", null, "Numbers") : null,
+      x.numbers_html ? el("div", { class: "gr-numbers", html: x.numbers_html }) : null,
+      x.setup_html ? el("h3", null, "Set-up") : null,
+      x.setup_html ? el("div", { class: "notes", html: x.setup_html }) : null,
+      (x.caveats || []).length ? el("h3", null, "Caveats") : null,
+      (x.caveats || []).length ? el("ul", null, x.caveats.map(function (c) { return el("li", null, c); })) : null,
+      (x.tests || []).filter(function (t) { return sById[t]; }).length ? el("h3", null, "Statements it tests") : null,
+      el("ul", { class: "plain" }, (x.tests || []).filter(function (t) { return sById[t]; }).map(function (t) {
+        var n = sById[t];
+        return el("li", null, el("button", { type: "button", class: "linklike gr-nbtn", onclick: function () { openStatement(n, false); } }, n.id + " · " + plainTex(n.s.title)));
+      }))
+    ], "x:" + encodeURIComponent(x.id));
+  }
+
+  // One wrapper per cell, so text and maths stay one block in the phone layout.
+  function cell(label, content, cls) {
+    return h.el("td", { "data-label": label, class: cls || null }, h.el("div", { class: "rg-cell" }, content));
+  }
+
+  function chipsFor(row) {
+    var chips = (row.stmts || []).map(stmtChip);
+    (row.mechanisms || []).forEach(function (m) { chips = chips.concat(mechanismChips(m)); });
+    var open = (row.ops || []).map(opChip).concat(row.experiment ? expChips(row.experiment) : []);
+    return [
+      h.el("div", { class: "rg-chips" }, chips.filter(Boolean).length ? chips : h.el("span", { class: "muted" }, "no statement yet")),
+      open.filter(Boolean).length ? h.el("div", { class: "rg-chips rg-open" }, open) : null
+    ];
+  }
+
+  function buildRegimes() {
+    var box = document.getElementById("gr-regimes-table");
+    if (!box) return;
+    box.innerHTML = "";
+    var el = h.el;
+    var head = el("thead", null, el("tr", null,
+      ["Regime", "Scaling", "$\\Theta(N)$ term", "$-\\log Z_D(P)$", "What moves", "Posterior", "In the map: statements, open problems, new results"]
+        .map(function (t) { return el("th", { scope: "col" }, t); })));
+    var body = el("tbody");
+    REGIME_ROWS.forEach(function (row) {
+      body.appendChild(el("tr", { id: "regime-" + row.id, class: "rg-row" + (row.id === "mup-prop" ? " frontier" : "") },
+        cell("Regime", el("strong", null, row.name), "rg-name"),
+        cell("Scaling", row.scaling),
+        cell("Θ(N) term", row.term),
+        cell("−log Z", row.logz),
+        cell("What moves", row.moves),
+        cell("Posterior", row.posterior),
+        cell("In the map", [chipsFor(row), row.note ? el("p", { class: "rg-note" }, row.note) : null], "rg-map")));
+    });
+    var table = el("table", { class: "rg-table" }, head, body);
+    box.appendChild(table);
+    var other = el("table", { class: "rg-table rg-other" },
+      el("thead", null, el("tr", null, el("th", { scope: "col" }, "Other settings"), el("th", { scope: "col" }, ""), el("th", { scope: "col" }, "In the map"))),
+      el("tbody", null, OTHER_ROWS.map(function (row) {
+        return el("tr", { id: "regime-" + row.id, class: "rg-row" },
+          cell("Setting", el("strong", null, row.name), "rg-name"),
+          cell("", row.text),
+          cell("In the map", chipsFor(row), "rg-map"));
+      })));
+    box.appendChild(other);
+    var loose = RGS.filter(function (n) {
+      return !(n.s.links || []).some(function (l) { return l.relation === "reproduces" || l.relation === "extends" || l.relation === "contradicts"; });
+    });
+    if (loose.length) {
+      box.appendChild(el("p", { class: "rg-note" }, "RG statements with no link to a main statement yet: ",
+        loose.map(function (n, i) {
+          return [i ? ", " : "", el("button", { type: "button", class: "linklike", onclick: function () { openStatement(n, false); } }, n.id + " " + plainTex(n.s.title))];
+        }), "."));
+    }
+    h.math(box);
+  }
+
   // ------------------------------------------------------------------ init
 
   function setView(v, keepHash) {
     VIEW = v;
     if (!panel.hidden) closePanel();
     svg.classed("v-statements", v === "statements").classed("v-results", v === "results");
-    d3.selectAll(".graph-page [data-view]").each(function () { this.hidden = this.getAttribute("data-view") !== v; });
-    ["statements", "results"].forEach(function (x) {
-      document.getElementById("gr-v-" + x).setAttribute("aria-selected", x === v ? "true" : "false");
+    d3.selectAll(".graph-page [data-view]").each(function () {
+      this.hidden = this.getAttribute("data-view").split(" ").indexOf(v) < 0;
+    });
+    ["regimes", "statements", "results"].forEach(function (x) {
+      var b = document.getElementById("gr-v-" + x);
+      if (b) b.setAttribute("aria-selected", x === v ? "true" : "false");
     });
     d3.selectAll(".gr-rsub").text(function (r) { return regionSub(r); });
     if (v === "results") setViewBox(false);
@@ -1141,7 +1311,7 @@
     document.getElementById("graph").setAttribute("aria-label", v === "statements" ? "Graph of statements by limit" : "Graph of results by limit");
     document.getElementById("gr-q").placeholder = v === "statements" ? "statement, author, title, arXiv id" : "result, author, title, arXiv id";
     svg.call(zoom.transform, d3.zoomIdentity);
-    if (v === "statements") applySFilters(); else applyFilters();
+    if (v === "statements") applySFilters(); else if (v === "results") applyFilters();
     if (!keepHash && location.hash) history.replaceState(null, "", location.pathname + location.search);
   }
 
@@ -1159,6 +1329,7 @@
     smodel();
     render(box);
     buildIndex();
+    buildRegimes();
     var haveStmts = ALLS.length > 0;
     if (!RGS.length) {
       var rgt = document.getElementById("gr-srg-label"); if (rgt) rgt.hidden = true;
@@ -1167,6 +1338,7 @@
     if (!haveStmts) {
       document.getElementById("gr-v-statements").hidden = true;
       document.getElementById("gr-v-results").hidden = true;
+      document.getElementById("gr-v-regimes").hidden = true;
       d3.selectAll(".gr-index").remove();
     }
     ["gr-bayes", "gr-gd", "gr-na", "gr-ops"].forEach(function (id) {
@@ -1175,6 +1347,7 @@
     ["gr-sarrows", "gr-sops", "gr-srg"].forEach(function (id) {
       document.getElementById(id).addEventListener("change", applySFilters);
     });
+    document.getElementById("gr-v-regimes").addEventListener("click", function () { if (VIEW !== "regimes") setView("regimes"); });
     document.getElementById("gr-v-statements").addEventListener("click", function () { if (VIEW !== "statements") setView("statements"); });
     document.getElementById("gr-v-results").addEventListener("click", function () { if (VIEW !== "results") setView("results"); });
     var qi = document.getElementById("gr-q");
@@ -1199,18 +1372,20 @@
     document.addEventListener("keydown", function (ev) { if (ev.key === "Escape" && !panel.hidden) closePanel(); });
 
     var want = decodeURIComponent(location.hash.slice(1));
-    var start = haveStmts && want.indexOf("r:") !== 0 ? "statements" : "results";
-    if (!haveStmts) start = "results";
+    var start = !haveStmts || want.indexOf("r:") === 0 ? "results" : want.indexOf("s:") === 0 ? "statements" : "regimes";
     setView(start, true);
     if (want.indexOf("p:") === 0 && papers[want.slice(2)]) openPaper(want.slice(2), true);
     else if (want.indexOf("s:") === 0 && sById[want.slice(2)]) openStatement(sById[want.slice(2)], true);
     else if (want.indexOf("r:") === 0) {
       var n = nodes.filter(function (x) { return x.id === want.slice(2); })[0];
       if (n) openNode(n, true);
+    } else if (want.indexOf("x:") === 0) {
+      var xp = (D.experiments || []).filter(function (x) { return x.id === want.slice(2); })[0];
+      if (xp) openExperiment(xp);
     } else {
       var sop = sops.filter(function (x) { return x.o.id === want; })[0];
       var op = ops.filter(function (x) { return x.o.id === want; })[0];
-      if (VIEW === "statements" && sop) openOpS(sop);
+      if (VIEW !== "results" && sop) openOpS(sop);
       else if (op) openOp(op);
     }
   }
