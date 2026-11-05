@@ -1,0 +1,93 @@
+id: S19
+slug: nnft-dictionary
+title: "A finite-width network is a non-Gaussian field theory: posterior at first order in $1/N$"
+kind: grouping
+family: rg
+sense: c
+maturity: solid
+claim: "A wide network’s output is a field: the kernel is the propagator of the free (Gaussian-process) theory, the connected four-point cumulant $U/N$ the interaction. With data, $S=S_{\\rm GP}+S_{\\rm data}+S_U/N$, and at first order in $U/N$ the posterior mean is GP regression with a shifted kernel."
+formula: '$$S[f]=\tfrac12 f^\top K^{-1}f+\tfrac1{2\eta}\sum_{\mu\le P}(f_\mu-y_\mu)^2+\tfrac1N S_U[f],\qquad S_U=-\tfrac1{4!}\,U\!\cdot\!H_4[f],\quad \kappa_4=\tfrac UN$$ $$\bar f_*=k_*^\top v+\big[\delta K_{*R}-k_*^\top\tilde K^{-1}\delta K_{RR}\big]v+O(N^{-2}),\qquad v=\tilde K^{-1}y,\ \ \tilde K=K+\eta I$$ $$\delta K_{ab}=\tfrac12 V_{(ab)(cd)}\big(v_cv_d-\tilde K^{-1}_{cd}\big)-V_{(ac)(bd)}\tilde K^{-1}_{cd}$$'
+formula_note: "$K$ is the exact second cumulant, $K^L_{\\rm GP}$ plus S08’s prior mean shift at $O(1/N)$ (none for one hidden layer); $\\eta=\\sigma^2$, repeated indices summed over the $P$ training points, $D_{\\rm out}=1$. $V_{(ab)(cd)}=\\mathrm{Cov}(K^L_{ab},K^L_{cd})=O(1/N)$, $\\kappa_4=\\sum_3V$; one hidden layer: $V=\\mathrm{Cov}_0(\\psi_a\\psi_b,\\psi_c\\psi_d)/N$, $\\psi$ the readout-scaled feature. $\\delta K$ = energy, log-determinant, fluctuation tilt."
+regime:
+  width_limit: large-width-1/N
+  learning_rule: [bayes]
+  conditions: "$P,D,L$ fixed, $P/N$ and $L/N$ small (one test: $P=110$, correction helps from $N\\approx100$). Scalar output, i.i.d. Gaussian weights, readout variance $\\propto1/N$ so odd cumulants vanish and the $2r$-th is $O(N^{1-r})$; MSE loss, $\\eta>0$. Posterior by sampling or by ergodic Langevin training ($\\eta=T/2$, ergodicity assumed). Halverson and Demirtas treat the prior only, no data."
+status: phys
+status_note: "Physics. Edgeworth expansion and first-order perturbation theory are derived by Naveh et al. The shifted-kernel rewriting is algebra; Eq. (11), mean and variance, matches the exact scale-mixture posterior of S03 (one linear hidden layer, $\\mathrm{Var}\\,s=2/N$) numerically. Couplings are bare: nothing is integrated out and no flow is computed."
+members:
+  - paper: "2008.08601"
+    result: r4
+    statement: "As $N\\to\\infty$ the output is a zero-mean Gaussian process, a free field: the kernel is the propagator and $G^{(2k)}=\\sum_{\\rm Wick}\\prod K$ (Eq. 2.16). Measured four- and six-point deviations from Wick sums fall as $1/N$ for Erf-, ReLU- and Gauss-net, the two-point function staying equal to $K$."
+    mapping: "Paper $f_{\\theta,N}$ (one hidden layer, $d_{\\rm out}=1$) $\\to f$; $\\Xi=K^{-1}$ (Eq. 2.6), $S_{\\rm GP}=\\tfrac12f^\\top K^{-1}f$; $d_{\\rm in}\\to D$; random initialisation, no data. Dictionary: input = point in space, kernel = propagator, non-Gaussianity = interaction (Tables 1, 3)."
+    equations: "Eqs. (2.16), (2.38), Tables 1, 3, Fig. 2"
+    role: master
+  - paper: "2008.08601"
+    result: r3
+    statement: "For one hidden layer with linear output the connected four-point function is $\\propto1/N$ (Eq. 2.43) and the connected six-point function $\\propto1/N^2$ (Eq. 2.50); $G^{(2k)}_{\\rm conn}\\propto N^{1-k}$ is conjectured (Eq. 2.54). Measured slopes are about $-1$ and $-2$; the Erf-net six-point function stays below noise."
+    mapping: "$G^{(2k)}_{\\rm conn}=\\kappa_{2k}$ of $f$; $\\sigma_W^2\\to\\varsigma_a^2$ (readout variance), so $\\kappa_4=U/N$ with $U$ of Naveh Eq. (9); $N$ = hidden width. The paper says deep fully connected networks follow; the derivation shown is for one hidden layer."
+    equations: "Eqs. (2.43), (2.50), (2.54); Figs. 2-3"
+    role: rate
+  - paper: "2008.08601"
+    result: r1
+    statement: "Effective action $S=S_{\\rm GP}+\\int d^{d_{\\rm in}}x\\,(\\lambda f^4+g_6f^6)$ with $\\lambda\\sim1/N$, $g_6\\sim1/N^2$, local operators. Tree-level diagrams give $G^{(4)}=\\mathrm{Wick}-24\\lambda\\!\\int\\!dy\\prod_iK_W(x_i,y)$ (Eq. 3.18); $\\lambda$ fitted from $G^{(4)}$ predicts $G^{(6)}$ for three networks."
+    mapping: "Paper $\\kappa$ (sextic) $\\to g_6$, not the map’s $\\kappa$; $K_W$ = readout part of the kernel; $d_{\\rm in}\\to D$. Tree level: $U(x_1..x_4)/N=-24\\int dy\\,\\lambda(y)\\prod_iK_W(x_i,y)$, a local vertex; the exact kernel is kept as two-point function (Eq. 3.14)."
+    equations: "Eqs. (3.12), (3.14), (3.18)-(3.19), (3.32); Figs. 4-6"
+    role: variant
+  - paper: "2004.01190"
+    result: r1
+    statement: "Full-batch gradient descent with weight decay $\\gamma$ and noise $T$ equilibrates, ergodicity assumed, to the Bayes posterior with $\\sigma_w^2=T/\\gamma$ and noise $\\eta=\\sigma^2=T/2$; the time-averaged output is the posterior mean. At $N\\to\\infty$ this is the NNGP posterior, not the NTK."
+    mapping: "$n\\to P$, $\\sigma^2\\to\\eta$, $\\sigma_w^2$ = prior weight variance; readout decay $\\gamma\\propto N$ keeps $\\eta$ and $K$ fixed. The kernel is the NNGP of the weight-decay prior, not of the initialisation."
+    equations: "Eqs. (1)-(5), Secs. II.1-II.2"
+    role: extension
+  - paper: "2004.01190"
+    result: r2
+    statement: "$P_0[f]\\propto e^{-S_{\\rm GP}}(1-S_U/N)$ with fourth cumulant $U/N$. Posterior mean and variance are the GP ones plus $N^{-1}\\bar f_U$, $N^{-1}\\Sigma_U$, $\\bar f_U=\\tfrac16\\tilde U^*_{abc}(\\tilde y_a\\tilde y_b\\tilde y_c-3\\tilde K^{-1}_{ab}\\tilde y_c)$: cubic and linear in $y$, error $O(N^{-2})$."
+    mapping: "$n\\to P$, $\\sigma^2\\to\\eta$, $\\tilde y=v=\\tilde K^{-1}y$; $\\tilde U^*_{abc}=U^*_{abc}-U_{abcd}(\\tilde K^{-1}k_*)_d$ (Eq. 12); $U=N\\kappa_4$ (App. E prints $U$ with the $1/N$ inside); $\\Sigma_U$ has no counterpart in S08."
+    equations: "Eqs. (7)-(12), Sec. III.1; App. B Eqs. (25)-(37) [PDF B1-B13]"
+    role: master
+  - paper: "2004.01190"
+    result: r3
+    statement: "For large $P$ the mean correction takes the equivalent-kernel form: $\\tilde K^{-1}\\to(P/\\eta)\\tilde\\delta$ in Eq. (11), with $\\tilde\\delta$ the GP discrepancy operator; it vanishes when the GP learns the target perfectly. The ridge stays the bare $\\eta/P$."
+    mapping: "$n\\to P$, $\\sigma^2\\to\\eta$, $g\\to y$; $\\tilde\\delta$ acts on a function $\\varphi$ as $\\varphi-\\bar f^{\\rm EK}_{\\rm GP}$ (Eq. 13); Poisson-averaged training sets by the replica trick of Cohen et al. (App. K), first order in $1/N$ and leading order in $1/P$."
+    equations: "Eqs. (13)-(14), Sec. III.2; App. K Eqs. (82)-(85) [PDF K1-K4]"
+    role: special-case
+  - paper: "2307.03223"
+    result: r1
+    statement: "The action follows from connected correlators by the Edgeworth expansion, $e^{-S}\\propto\\exp[\\sum_{r\\ge3}\\tfrac{(-1)^r}{r!}\\!\\int\\!G_c^{(r)}\\delta^r/\\delta\\phi^r]\\,e^{-S_G}$ (Eq. 3.7); couplings are connected diagrams with cumulant vertices. One hidden layer: $S=S_G+\\int g_4\\phi^4+O(N^{-2})$, $g_4$ from one $G_c^{(4)}$ vertex (Eq. 3.40)."
+    mapping: "$\\phi\\to f$, $G_c^{(2)}\\to K$, $G_c^{(4)}\\to U/N$, $S_G=S_{\\rm GP}$. $g_4=-\\tfrac1{4!}\\int G_c^{(4)}\\prod_iK^{-1}(y_i,x_i)$ is the quartic term of $S_U/N$ (Eq. 3.45, “+perms” read as symmetrisation, as the one-variable Eq. 3.15 requires)."
+    equations: "Eqs. (3.7), (3.15), (3.38)-(3.40), (3.45), Table 2"
+    role: variant
+  - paper: "2307.03223"
+    result: r2
+    statement: "Cos-net: the free action is $\\propto\\int\\phi\\,e^{-\\sigma_{W_0}^2\\nabla^2/2d}\\phi$ and the $O(1/N)$ quartic coupling is non-local (Eqs. 3.49-3.50). Gauss-net has the same propagator and a different non-local quartic term (Eqs. 3.52-3.53), the local $\\lambda f^4$ of Halverson r1 approximates it."
+    mapping: "$\\sigma_{W_1}^2\\to\\varsigma_a^2$ (readout variance), $\\sigma_{W_0}^2\\to\\varsigma_w^2$ (first-layer weight variance times $d$), $d\\to D$; $\\nabla^2$ acts on input differences. One hidden layer, cosine and normalised-exponential activations, one output; coefficients not re-derived."
+    equations: "Eqs. (3.46)-(3.53)"
+    role: special-case
+  - paper: "2106.04110"
+    statement: "Beyond first order: for large $P$ the saddle point of the dual variables gives GP regression on the shifted target $g-\\Delta g$, $\\Delta g=\\sum_{r\\ge3}\\kappa_r(\\cdot,v,..,v)/(r-1)!$ (Eqs. 7-8), resumming the energy tilt. At $r=4$ it is the cubic term of Eq. (11); the linear terms are beyond-saddle (A.34)."
+    mapping: "$n\\to P$, channels $C\\to N$, $\\sigma^2\\to\\eta$; $\\kappa_r\\propto N^{1-r/2}$ are the prior cumulants of $f$, $\\kappa_4=U/N$; $\\langle it\\rangle=\\hat\\delta g/\\sigma^2=v$ at leading order. Covariance from kernel $K+\\Delta K$ (Eqs. 9-10)."
+    equations: "Eqs. (4)-(11), Sec. III; App. A (A.34)"
+    role: extension
+reduces_to:
+  - {target: S01, limit: "$U/N\\to0$: free action, NNGP posterior"}
+open_problems: [op-03, op-10]
+links:
+  - target: S02
+    relation: reproduces
+    note: "For $L=1$: $U/N=\\kappa_4(f)=\\sum_3V$, $V=\\mathrm{Cov}(K^L,K^L)$, S02’s hidden-kernel covariance. One input: $3K^2\\,\\mathrm{Var}\\ln s=6K^2/N$ (linear), $15K^2/N$ (ReLU, $c_\\varphi=5$). Deeper: Naveh Eq. (41) recursion, not compared."
+  - target: S08
+    relation: reproduces
+    note: "Predictor at $D_{\\rm out}=1$, first order: Eqs. (11)-(12) are GP regression on $K+\\delta K$. Cubic-in-$y$ term = energy tilt; linear terms = log-determinant tilt plus fluctuation term; mean shift sits in $K$. Hidden-layer kernels and $D_{\\rm out}>1$ absent."
+  - target: S01
+    relation: extends
+    note: "$U/N\\to0$ leaves $S_{\\rm GP}+S_{\\rm data}$ and $\\bar f_*=k_*^\\top(K^L_{\\rm GP}+\\eta I)^{-1}y$ with variance $\\Sigma_{\\rm GP}$, the NNGP posterior (Naveh Eq. 6); the $U/N$ terms are the addition."
+  - target: S03
+    relation: reproduces
+    note: "One linear hidden layer: S03’s posterior mean and variance expanded to first order in $\\mathrm{Var}\\,s=2/N$ equal Eq. (11) with $U=2\\sum_3KK$. Mean: algebra; variance: numerics, relative $10^{-4}$ at $N=3\\times10^4$. Nonlinear $\\varphi$ has no mixture form."
+  - target: S06
+    relation: reproduces
+    note: "At $\\eta\\to0$, one linear hidden layer: $\\bar f_U\\to0$, $\\Sigma_U=\\Sigma_{\\rm GP}(y^\\top K^{-1}y-P)$, the first order in $\\alpha=P/N$ of S06’s $\\rho^L$ (numerical check). S06 holds at $P\\propto N$; this expansion needs $P/N$ small."
+  - target: S13
+    relation: unrelated
+    note: "S13 is a data-averaged theory at $N=\\infty$ with renormalised ridge (Cohen: expansion in $1/P$, $P$ the Poisson-mean dataset size). Here: fixed data, expansion in $U/N$; Naveh’s equivalent-kernel limit (Eq. 14) keeps the bare ridge $\\eta/P$."
+  - {target: S20, relation: extended-by, note: "Takes the dictionary of S19 (kernel as propagator, finite-width cumulants as interaction strengths) and adds a cutoff on the input-space or Fourier-mode integrals plus the flow of the couplings, to tree level or a $\\phi^6$ truncation."}

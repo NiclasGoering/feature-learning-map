@@ -188,7 +188,7 @@ members:
   - paper: "2502.03210"
     result: r4
     statement: "At the linear tree-level saddle the training-output covariance is $\\kappa_{\\rm n}I-\\kappa_{\\rm n}^2\\big(A+\\tfrac{2Q_{\\rm TL}^2}{N\\kappa_0^2}F\\big)^{-1}$, $A=\\kappa_0I+Q_{\\rm TL}K^0$, $F=K^0\\langle\\Delta\\rangle\\langle\\Delta\\rangle^\\top K^0$, $\\langle\\Delta\\rangle=\\eta v$: a rank-one term along $K^0v$ that the rescaled-kernel covariance lacks. On the Ising kernel it carries $(1+\\epsilon P)^2$."
-    mapping: "$\\kappa_{\\rm n}=\\kappa_0N^{1-\\gamma}$ is the paper's noise $\\kappa$ (not the umbrella $\\kappa$); $C^{(xx)}_{DD}\\to K^0$; $\\langle\\Delta\\rangle=y-\\langle f_D\\rangle$. In umbrella units the Hessian kernel is $\\rho K^0+2\\kappa\\rho^2K^0vv^\\top K^0$ (pilot 0a)."
+    mapping: "$\\kappa_{\\rm n}=\\kappa_0N^{1-\\gamma}$ is the paper's noise $\\kappa$ (not the umbrella $\\kappa$); $C^{(xx)}_{DD}\\to K^0$; $\\langle\\Delta\\rangle=y-\\langle f_D\\rangle$. In umbrella units the Hessian kernel is $\\rho K^0+2\\kappa\\rho^2K^0vv^\\top K^0$ (identification by algebra; not printed in the paper)."
     equations: "Eqs. (25)-(28); App. A.2.1 Eqs. (65)-(72); App. A.4 Eq. (129)-(131); Figs. 4, 11, 12"
     role: special-case
   - paper: "2502.03210"
@@ -261,3 +261,8 @@ disagreements:
   - {papers: ["2108.13097", "2502.07998"], note: "Yang et al.’s objective is $F$ plus $\\kappa\\frac{D_{\\rm out}}2\\log\\det(K^L+\\eta I)$: standard scaling with $\\kappa D_{\\rm out}$ outputs per hidden unit, not the μP posterior. Its linear Eq. 25 differs from Lauditi’s Eq. 48 by exactly that term. [verified]"}
   - {papers: ["2505.08062", "2602.22925"], note: "Papagiannouli Eq. 4.9 equals Andreis Prop. 4.3 once Andreis’s missing factor $\\frac12$ is restored (Prop. A.5 prints $I-\\Phi_0$, $I+\\Phi_0$ is right); both equal $F$ at $\\kappa=1$. Papagiannouli proves $\\eta=1$, Andreis every $\\eta>0$; $\\eta=0$ is not covered. [verified]"}
 open_problems: [op-01, op-04]
+links:
+  - {target: S18, relation: reproduced-by, note: "Quadratic expansion of $\\sum_\\ell\\gamma_\\ell J_\\ell$ about its minimiser, $J_\\ell\\simeq\\frac12\\delta K^\\top T_\\ell^{-1}\\delta K$, $\\gamma_\\ell=N_\\ell/N$, gives the covariance recursion. The data term $\\kappa E$ is absent. Beyond the members: algebra."}
+  - {target: S20, relation: unrelated, note: "S04 minimises a kernel rate function against the likelihood at fixed $P$. Here no kernel is optimised and no data enter; the cutoff acts on input-space modes of the prior."}
+  - {target: S23, relation: unrelated, note: "S04’s $F$ is a stationary Bayesian saddle over activation kernels $K^\\ell$ at fixed $P$; lazy end $\\kappa\\to0$. Zhang’s $\\Theta_t$ is a time-dependent tangent-kernel operator under gradient flow; lazy end $\\dot\\Theta=0$. No equation links $K^\\ell$ to $\\Theta_t$."}
+  - {target: S24, relation: extended-by, note: "Tree level is S04's saddle $F$ at fixed $P$: for linear $\\varphi$, $L=1$, $J(K^\\star|K^0)=j(\\rho)$ and $\\rho=1/(1-\\kappa v^\\top K^0v)$, so $F=\\min_\\rho[j+{\\rm energy}]$ (Rubin Eq. (23)). The log-determinant is the added $P\\propto N$ term."}

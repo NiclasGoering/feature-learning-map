@@ -154,7 +154,7 @@ def compile_statements(stmts, papers):
             "reduces_to": list(m.get("reduces_to") or []),
             "disagreements": [], "open_problems": m.get("open_problems") or [], "links": list(m.get("links") or []),
         }
-        for key in ("formula_note", "status_note", "family"):
+        for key in ("formula_note", "status_note", "family", "sense", "maturity"):
             if m.get(key):
                 rec[key] = m[key]
         for d in m.get("disagreements") or []:

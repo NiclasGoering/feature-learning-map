@@ -1,0 +1,97 @@
+id: S23
+slug: coarse-graining-training
+title: "RG-style coarse-graining of gradient-descent training and of trained networks"
+kind: grouping
+family: rg
+sense: b
+maturity: early
+claim: 'Four papers read the coarse-graining of a trained network, or of its gradient-descent training, as an RG flow of four different objects: spectral-shell error energy (Zhang), a depth-normalised Gram channel (Le Pera–Nordio), decimated-layer couplings (Lee et al.), neuron-block couplings (Chen et al.).'
+formula: '$$\underbrace{\dot E_\alpha=-D_\alpha+\sum_{\alpha^\prime\ne\alpha}F_{\alpha^\prime\to\alpha}}_{\text{Zhang}}\qquad\underbrace{\ell\,\partial_\ell\hat{\mathcal C}=\beta(\hat{\mathcal C})}_{\text{Le Pera, Nordio}}\qquad\underbrace{(A,B,C)\mapsto(A^\prime,B^\prime,C^\prime)}_{\text{Lee et al.}}\qquad\underbrace{K^\prime\simeq c+TK}_{\text{Chen et al.}}$$'
+formula_note: 'Zhang: exact balance of the error energy $E_\alpha$ in log-spaced shells of the tangent-kernel spectrum, with dissipation $D_\alpha$ and antisymmetric inter-shell flux $F$; $F$ is closed only by assumption. Le Pera–Nordio: depth flow of the trace-normalised Gram channel. Lee et al.: one decimation step of a Gibbs chain. Chen et al.: fitted map of two coupling bands between merged neurons. No common map: the four objects differ.'
+regime:
+  width_limit: finite-exact
+  learning_rule: [gd, bayes]
+  conditions: 'No width or sample limit is taken. Zhang: gradient flow on squared loss, population operator. Le Pera–Nordio: GD in a fixed ReLU chamber, depth continued to $\ell\in[0,L]$, first order in the anisotropy. Lee et al.: long-time Langevin Gibbs law (assumed) at fixed $\beta$, $N=1$, $P=1$, Heaviside units, $\pm1$ weights. Chen et al.: AdamW, $N=500$, $P=4704$, $D=194$, quadratic units.'
+status: phys
+status_note: 'Physics and numerics. Exact: Zhang’s shell balance, Lee et al.’s toy decimation. Checked here beyond the papers, by hand and numerically: Zhang’s net-flux form (Def. 4.1) is an identity; his Eq. (13) lacks a factor $t^{-c_0}$ relative to Eq. (7); Lee et al.’s Eq. (27) matches direct summation.'
+members:
+  - paper: "2512.10427"
+    result: r1
+    statement: 'Exact for MSE gradient flow of a finite network with simple spectrum: in log-spaced shells of the tangent-kernel spectrum the shell-internal mode coupling cancels, so $\dot E_\alpha=-D_\alpha+\sum_{\alpha^\prime\ne\alpha}F_{\alpha^\prime\to\alpha}$ with $F_{\alpha^\prime\to\alpha}=-F_{\alpha\to\alpha^\prime}$. Nothing is integrated out, no flux is closed. Maturity: partial.'
+    mapping: 'Paper $M=JJ^*\to\Theta_t$, tangent-kernel operator on $L^2(p)$; $e_t=f^*-f_t$; $g_u=\langle e_t,\varphi_u\rangle$ along its eigenvectors, eigenvalues $\lambda_u$; $E_\alpha=\frac12\sum_{u\in S_\alpha}g_u^2$ for shells $[\lambda_0q^\alpha,\lambda_0q^{\alpha+1})$; paper $N$ is the parameter count, not the width.'
+    equations: "Prop. 1, Eqs. (1)-(3), Secs. 3.3-3.5"
+    role: master
+  - paper: "2512.10427"
+    result: r2
+    statement: 'Def. 4.1: net shell exchange $=J_{\le\alpha}-J_{\le\alpha-1}+R_\alpha$, $R_\alpha\ll D_\alpha$; $R_\alpha=0$ identically (checked), so the assumptions are an integrability bound, a local continuum and the closure $J=v\varepsilon$, giving $\partial_t\varepsilon+\partial_\lambda J=-2\lambda\varepsilon$. Frozen features ($\dot\Theta=0$): no transport (lazy). Maturity: early.'
+    mapping: '$\varepsilon(\lambda,t)$: shell energy density, $E_\alpha\approx\int\varepsilon\,d\lambda$; $J_{\le\alpha}$: cumulative flux across the boundary of shell $\alpha$; $v=J/\varepsilon$: effective drift, not derived from the network; $2\lambda$ comes from $\dot g_u=-\lambda_ug_u$.'
+    equations: "Def. 4.1, Eqs. (4), (7), Secs. 4.3-4.6"
+    role: extension
+  - paper: "2512.10427"
+    result: r3
+    statement: 'Assumed scale-free drift $v=c_0\lambda/t$ on $t_0<t<T$, selected by log-log straightness, not derived here. As printed: $\varepsilon=\varepsilon_0(\lambda t^{-c_0})e^{-2\lambda t/(1+c_0)}$, and for $\varepsilon_0\propto\lambda^p$ the loss falls as $t^{-[(1+c_0)p+1]}$; keeping the flux form (7) gives $t^{-(1+c_0)(p+1)}$. Maturity: early.'
+    mapping: '$c_0$: drift constant and $p$: initial-spectrum exponent, both free; $\mathcal L=\frac12\|e_t\|^2=\sum_\alpha E_\alpha$; $\varepsilon_0$: initial profile in the Lagrangian coordinate $u=\lambda(t/t_0)^{-c_0}$.'
+    equations: "Eqs. (6)-(13), (15), (21), Sec. 5"
+    role: rate
+  - paper: "2607.10770"
+    result: r1
+    statement: 'First order in the anisotropy, generators put in by hand: $\partial_\ell\mathcal C=\Gamma\mathcal C+\mathcal S$. The isotropic rate $\Gamma=\gamma-\tilde\gamma$ cancels in $\hat{\mathcal C}=\mathcal C/\mathrm{Tr}\,\mathcal C$, so $\beta(\hat{\mathcal C})=\ell\,\partial_\ell\hat{\mathcal C}$ is driven by $\mathcal S$ alone and vanishes if $\omega_F=\omega_B=0$. Maturity: early.'
+    mapping: 'GD on a ReLU net. Depth $r\to\ell\in[0,L]$; $\mathcal C=\Sigma_{\ell\to L}\otimes T_{0\to\ell-1}$: backward push-forward times forward pullback Gram metrics; $\tau_r\approx1+\gamma\,d\ell$, $\epsilon\Omega^F\approx\omega_F\,d\ell$; $\mathcal S=\Sigma\otimes(\omega_FT)-(\omega_B\Sigma)\otimes T$; the learning kernel $\zeta^\top\mathcal N\zeta$ drives the residual update as $\Theta_t$ does in Zhang.'
+    equations: "Eqs. (5)-(8), App. A (A1)-(A5) [HTML (41)-(45)]"
+    role: special-case
+  - paper: "2607.10770"
+    result: r3
+    statement: 'Assumed (strain continuity, local flatness, fixed ReLU chamber): the target-active symmetric traceless strain obeys $F^-_{\ell+1}\simeq\mathcal R_\ell[F^-_\ell]$, $\mathcal R[X]=\Pi\,\tau^{-1}JXJ^\top$; eigentensors scale as $g_a(\ell+k)\simeq\lambda_a^kg_a(\ell)$, relevant for $\lambda_a>1$. No $\lambda_a$ is evaluated. Maturity: early.'
+    mapping: '$F^\mp_r$: strains of the input- and output-side Gram metrics, first order in the paper’s step size $\eta$ (not the map’s $\eta$); $J_r=A_rW^{(r)}$ masked layer Jacobian; $\Pi$: target projection and trace removal; continuum form with $s$ for depth.'
+    equations: "Eqs. (28)-(33), Secs. VI.2-VI.3"
+    role: extension
+  - paper: "2607.10770"
+    result: r4
+    statement: 'First order, isolated target-active mode (Hellmann–Feynman): $\beta_k=\ell\,[f_k^--f_k^+-\mathrm{Tr}_{\mathcal T}(P\mathcal SP/Z)]$. A fixed point needs the centred forward–backward strain mismatch to vanish, not the strains. App. A.4 reduces the condition to one scalar equation under a rank-one ansatz; no numerics. Maturity: early.'
+    mapping: '$f_k^\mp=\langle\psi|F^\mp|\psi\rangle$: scalar strains on the matched legs; $\hat\nu_k$: normalised eigenvalue of $\hat{\mathcal C}$; $\beta_k=\ell\,\partial_\ell\ln\hat\nu_k$; identifying the generators $\omega$ with the GD strains of Eqs. (23)-(26) is asserted.'
+    equations: "Eqs. (9), (36)-(40), App. A.2, A.4"
+    role: extension
+  - paper: "2410.00396"
+    result: r2
+    statement: 'Exact for the toy ($N=1$, one datum, Heaviside units, weights and biases $\pm1$, Gibbs weight $e^{-\beta H}$, nearest-layer couplings): summing out every second layer maps $(A,B,C)$ by Eq. (27). Flows reach the plane $e^{A^*}=1$ (no transition); $(e^A,e^B,e^C)=(3,-2/3,-1/3)$ needs imaginary couplings. Maturity: partial.'
+    mapping: 'Paper $N$ (width) $=1$, $M$ (depth) $\to L$, $L$ (data) $\to P=1$, $\beta=1/T$; $\beta_v$: strength of the soft constraint tying neurons $h^{(m)}$ to $\sigma^{(m)}$; $(A,B,C)$ in $-\beta H=\sum_m(Ah\sigma+Bh+C\sigma+D)$.'
+    equations: "Eqs. (14), (21)-(30), Fig. 4"
+    role: special-case
+  - paper: "2610.36113"
+    result: r2
+    statement: 'Fitted, not derived: on 65 configurations (13 epochs, 5 weight decays) of a two-layer net, a weighted affine fit of the one-step block map $K^\prime\simeq c+TK$ gives $\Lambda_h=1.5708$, $\Lambda_t=-1.6159$ ($\approx\pm|\det T|^{1/2}$), so $y_h=0.6515$, $y_t=0.6923$. No fixed point is located, no error bars. Maturity: early.'
+    mapping: 'AdamW, full batch. $K=(K_1,K_2)$: mean $|J|$ on the first and second off-diagonals of the loss Hessian in per-neuron norms $s_i$, neurons in Fiedler order; block factor $b=2$; epoch $e$ and weight decay $\lambda$ are the controls.'
+    equations: "Eqs. (6)-(12), Fig. 4"
+    role: special-case
+  - paper: "2610.36113"
+    result: r3
+    statement: 'Assumed: homogeneous singular free energy, $d=1$ for the Fiedler chain, epoch as inverse temperature, weight decay as field. Then $\alpha,\beta,\gamma,\nu,\delta$ follow from $(y_t,y_h)$ and obey the scaling identities by construction: $(0.556,0.503,0.438,1.444,1.870)$. Five direct estimates differ by 1.2-9.7%. Maturity: heuristic.'
+    mapping: '$t=(e-e_c)/e_c$, $e_c=145$; $h=-(\lambda-\lambda_c)/2$, $\lambda_c=15$; $y_t=\log_2|\Lambda_t|$, $y_h=\log_2|\Lambda_h|$; order parameter $S$: total squared weight norm over 30 seeds; cross-seed variances stand for susceptibility and heat capacity.'
+    equations: "Eqs. (13)-(15), App. D Eq. (36), Table 1"
+    role: rate
+links:
+  - target: S09
+    relation: unrelated
+    note: 'Le Pera–Nordio: instability = relevant ($\lambda_a>1$) strain under depth transport; no order parameter computed. Chen et al.: fitted scaling ansatz in AdamW epoch. S09/Rubin et al.: Langevin-equilibrium saddle, first order in noise. Different control and ensemble: no contradiction.'
+  - target: S08
+    relation: unrelated
+    note: 'Both are first-order, target-aligned corrections to a reference state. S08’s $\delta K^L$ is the Bayesian shift of the $P\times P$ kernel, $O(\kappa)$ or $O(1/N)$; Le Pera–Nordio’s strain is a per-layer feature-space operator, first order in the GD step. No map derived.'
+  - target: S04
+    relation: unrelated
+    note: 'S04’s $F$ is a stationary Bayesian saddle over activation kernels $K^\ell$ at fixed $P$; lazy end $\kappa\to0$. Zhang’s $\Theta_t$ is a time-dependent tangent-kernel operator under gradient flow; lazy end $\dot\Theta=0$. No equation links $K^\ell$ to $\Theta_t$.'
+  - target: S05
+    relation: unrelated
+    note: 'S05: $N\to\infty$ proximal Gibbs measure of two-layer Langevin training, likelihood scaled with $N$. Lee et al. also use the long-time Langevin Gibbs law, at fixed $\beta$, $N=1$, over a depth chain: no mean-field limit, no neuron measure.'
+  - target: S02
+    relation: unrelated
+    note: 'S02 gives the random isotropic scale $s=\prod_\ell\sigma_\ell^2\chi^2_{N_\ell}/N_\ell$ of the deep-linear prior kernel, $\mathrm{Var}\ln s\simeq2\sum_\ell N_\ell^{-1}$. Le Pera–Nordio’s isotropic scales $\tau_r$ are deterministic, carry no width, and are divided out by trace normalisation.'
+  - target: S13
+    relation: unrelated
+    note: 'Both group kernel eigenmodes into shells. S13 integrates unresolved modes into a ridge $\eta_{\rm eff}$ of the Bayesian predictor; Zhang’s shells carry GD error energy, transported between shells. Without transport each mode decays as $e^{-\lambda_ut}$: no ridge.'
+  - target: S01
+    relation: unrelated
+    note: 'Zhang’s lazy end is noiseless gradient flow with frozen $\Theta$, $e_u(t)=e^{-\lambda_ut}e_u(0)$, at finite size. S01 is the Bayesian posterior with kernel $K^L_{\rm GP}$ at fixed $P$, $N\to\infty$. Only the word lazy is shared.'
+  - target: S07
+    relation: unrelated
+    note: 'S07’s scalar $\rho$ is an isotropic dilation of the sample-space kernel at $P\propto N$. Le Pera–Nordio divide the isotropic scale out of layer-space Gram metrics and keep the shape. Different spaces; width and $P$ are not scaled there.'
+open_problems: [op-10]

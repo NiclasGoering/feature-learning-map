@@ -1,0 +1,88 @@
+id: S22
+slug: learning-as-rg-on-data
+title: 'Learning as RG on data: block-spin coarse-graining and information-theoretic relevance'
+kind: grouping
+family: rg
+sense: d
+maturity: partial
+claim: 'Learning read as RG on data: a normalised stochastic map $p(h|v)$ coarse-grains the data law exactly; papers differ in what selects it. Derived only in restricted settings (an identity, 1D decimation, one bottleneck threshold, a conditional theorem); a learned-filter flow is measured numerically.'
+formula: '$$e^{-\tilde{\mathcal H}_\Lambda[h]}=\sum_{v}p_\Lambda(h\mid v)\,e^{-\mathcal H(v)},\qquad\sum_he^{-\tilde{\mathcal H}_\Lambda[h]}=Z,\qquad \Lambda^\star=\arg\min_\Lambda\begin{cases}\Delta F_\Lambda\ \text{or}\ D_{\rm KL}(p\,\Vert\,p^{\rm RBM}_\Lambda)&\text{Mehta-Schwab}\\-I_\Lambda(h\!:\!e)&\text{Koch-Janusz-Ringel}\\I(v;h)-\beta\,I(h;e)&\text{Gordon et al.}\end{cases}$$'
+formula_note: '$v\in\{\pm1\}^D$ data spins with law $e^{-\mathcal H}/Z$, $h\in\{\pm1\}^N$ hidden spins, $e$ the environment of a block, $\beta$ the bottleneck trade-off (not $1/T$), $\Delta F_\Lambda=F^h_\Lambda-F^v$. The first two relations hold for any normalised $p_\Lambda$. Mehta-Schwab take $p_\Lambda\propto e^{-E_\Lambda}$ (an RBM); their $H^{\rm RG}_\Lambda$ equals $\tilde{\mathcal H}_\Lambda$ when $\mathcal H=H^{\rm RBM}_\Lambda[v]$ (Eq. (22)); $\Delta F$ and $D_{\rm KL}$ are distinct objectives.'
+regime:
+  width_limit: finite-exact
+  learning_rule: [gd]
+  conditions: 'No scaling limit: finite spin systems and small networks, temperature absorbed into couplings except in Koch-Janusz-Ringel. Data are binary (Ising, dimers) except Gong-Xia 2606.00157 (continuous, even radial energy) and Erdmenger (Gaussian layers, width 784-1024). Gordon: large buffer $L_B\gg L$, one most-relevant operator, explicit solution at $|H|=2$, iterative bottleneck equations (no network). Training: contrastive divergence, SGD on a mutual-information proxy, annealed Langevin diffusion.'
+status: phys
+status_note: 'Proved: Mehta-Schwab Eq. (21) (algebra), exact 1D decimation, Erdmenger Eq. (26), Gong-Xia theorems (conditional in 2606.00157). Physics, leading order: Gordon et al. Algorithm plus numerics: Koch-Janusz-Ringel. Proposal: Bény. The formula places printed objectives side by side (checked against their Eqs. (1), (8), (16)); the rewriting is this map’s.'
+members:
+  - paper: "1410.3831"
+    result: r1
+    statement: 'Algebra: with the coupling operator $T_\Lambda=-E_\Lambda+\mathcal H$ (Eq. (18)), the hidden-spin Hamiltonian of Kadanoff variational RG equals that of the RBM, $H^{\rm RG}_\Lambda[h]=H^{\rm RBM}_\Lambda[h]$ (Eq. (21)), for any Boltzmann machine. An identity of definitions; no training enters.'
+    mapping: 'Paper $\lambda\to\Lambda$, visible spins (paper $N$) $\to D$, hidden spins (paper $M$) $\to N$, data Hamiltonian $\mathbf H\to\mathcal H$, RBM energy $\mathbf E\to E_\Lambda$; temperature 1; $\mathcal Z$ is the RBM partition function, $Z$ the data one.'
+    equations: "Eqs. (18)-(21), Sec. III"
+    role: master
+  - paper: "1410.3831"
+    result: r2
+    statement: 'Algebra: exact RG means $\sum_he^{T_\Lambda}=1$ (Eq. (9)); with $T_\Lambda=-E_\Lambda+\mathcal H$ this is $\mathcal H=H^{\rm RBM}_\Lambda[v]$ (Eq. (22)), hence $D_{\rm KL}=0$. Otherwise Kadanoff $\Delta F$ (Eq. (8)) and the RBM $D_{\rm KL}$ (Eq. (16)) differ, which the paper calls distinct schemes. The trained 2D Ising stack (Fig. 3) is qualitative.'
+    mapping: 'As above; $H^{\rm RBM}_\Lambda[v]=-\ln\sum_he^{-E_\Lambda(v,h)}$ (Eq. (14)); $F^v=-\ln Z$, $F^h_\Lambda$ the hidden-spin free energy; contrastive divergence stands in for minimising $D_{\rm KL}$.'
+    equations: "Eqs. (8), (9), (14), (16), (17), (22), Fig. 3"
+    role: special-case
+  - paper: "1704.06279"
+    result: r1
+    statement: 'Algorithm and argument: any normalised local map $p_\Lambda(h|v)$ is an exact RG step, $\tilde Z=Z$ (Eqs. (17)-(18)). The paper argues, without proof, that maximising $I_\Lambda(h\!:\!e)$ (Eq. (1)) by SGD on an RBM picks filters with a compact short-range $\tilde{\mathcal H}$ (Eq. (19)); support: a 1D filter comparison and 2D numerics (Ising, dimers).'
+    mapping: 'Block $\mathcal V\to v$, hidden units $\mathcal H\to h$ (paper $N_h\le4$ $\to N$), environment $\mathcal E\to e$, parameters $\Lambda$, $\tilde{\rm H}\to\tilde{\mathcal H}$; $\beta$ is the inverse temperature of the data; the estimator uses a first-cumulant closure (Eq. (13)).'
+    equations: "Eqs. (1), (6), (13), (17)-(19), Supp. 1D Ising"
+    role: extension
+  - paper: "2012.01447"
+    result: r2
+    statement: 'Physics, leading order in $\epsilon=(\lambda_1/\lambda_0)^{L_B}$: at large buffer the encoder minimising $I(v;h)-\beta I(h;e)$ depends on $v$ only through $r_v$, a lowest-dimension primary matrix element, $p(h|v)\propto p(h)e^{\beta\epsilon^2r_v\langle r_v\rangle_h}$ (Eq. (4)); first transition at $\beta_{c,1}^{-1}=\epsilon^2+o(\epsilon^2)\to e^{-4\pi\Delta_1L_B/L}$ for $L\to\infty$ (Eq. (5)), the only one solved. One numerical check (critical 2D Ising, circumference 3).'
+    mapping: '$V,H,E\to v,h,e$; alphabet $|H|=2^N$ (explicit solution $|H|=2$); $L_B$ buffer, $L$ cylinder circumference (not depth); $\lambda_i$ transfer-matrix eigenvalues, $\Delta_1$ lowest scaling dimension; $\beta$ is the bottleneck trade-off, not $1/T$.'
+    equations: "Eqs. (3)-(5); App. Eqs. (22), (26) [PDF B9, C4]"
+    role: extension
+  - paper: "2606.00157"
+    result: r1
+    statement: 'Theorem, conditional: for input density $\propto e^{-\sum_r\theta_r(\sum_ix_i^2)^r}$, assume RG fixed points $\theta_r^*$ exist (none computed) and connected correlators of the feature layer stay invariant (Eq. (45)). With equal partition functions, annealed training to the unique optimum then gives $\tilde\theta_r^t\to\theta_r^*$ as $t\to\infty$. No experiments.'
+    mapping: 'Input $x\in\mathbb R^{N_{\rm paper}}\to v\in\mathbb R^D$, feature width $M\to N$, training-set size $S\to P$; $t$ plays the scale $\lambda$; paper $Z(\lambda)$ is a field rescaling, not the partition function; $\tau$ weight decay; $\kappa$ a multi-index.'
+    equations: "Thm 3.1 [Thm 1.1]; Eqs. (32)-(33), (45), (49)-(52)"
+    role: extension
+  - paper: "2212.00005"
+    result: r1
+    statement: 'Theorem: 1D Ising input, sigmoid network without hidden layer, annealed Langevin training to its trivial minimiser $W=0$. The output coupling $J_t$, defined by $Z(J)=e^{Dg(t)}\,\mathbb E\sum_ve^{J_t\sum_ju_ju_{j+1}}$ (Eq. (14)), tends to the decimation fixed point $J^*=0$ for the chosen $g(t)=(1-e^{-t})(\frac1D\ln Z-\ln2)$ (Eq. (29)). Thm 2 adds $L$ hidden layers.'
+    mapping: 'Spins $x_i\to v_i$ (paper $N\to D$), outputs $u_j$ (paper $M\to N$), hidden layers $L\to L$; $g(t)$ is chosen by hand; $\eta_t$ is the annealing noise, not the map $\eta$; $\lambda$ weight decay.'
+    equations: "Thm 1, Eqs. (14), (28)-(29); Thm 2"
+    role: special-case
+  - paper: "1301.3124"
+    result: r1
+    statement: 'Proposal, no theorem or numerics: a lattice state is built scale by scale, $\mu=\pi_1\circ\cdots\circ\pi_{j_{\max}}(e)$, by local stochastic maps $\pi_j$ inverting RG coarse-graining (a classical MERA, CORA); depth is scale. Fit: likelihood of local reduced states if local correlations fix the law (Sec. 3), else layer by layer (Sec. 3.1).'
+    mapping: 'Lattice sites (paper $N$) $\to D$, not a width; $\Gamma_j$ the lattice at scale $j$, about $\log_2D$ layers; $\mu\to p(v)$; paper $e$ is a fiducial coarsest state, not the environment $e$.'
+    equations: "Sec. 2, second unnumbered display; none numbered"
+    role: extension
+  - paper: "2107.06898"
+    result: r4
+    statement: 'Proved (1D Ising decimation): the normalised relative entropy $s^{(n)}$ of the step-$n$ law against the data law rises monotonically, $s^{(n+1)}>s^{(n)}$ (Eq. (26)), with $s^{(n)}\simeq K^2/(2\ln2)$ for $K\ll1$ (Eq. (29)). Along depth of tanh MLPs it is Monte Carlo only; the layer-to-step identification is called a structural analogy (Eq. (1)).'
+    mapping: '$K$ is the Ising coupling $J$ of Mehta-Schwab Eq. (24) ($K^{\prime}=\frac12\ln\cosh2K$, i.e. $\tanh K^{\prime}=\tanh^2K$); spins $\sigma_i\to v_i$, paper $N\to D$; $n$ decimation steps; $s=S/(D\ln2)$.'
+    equations: "Eqs. (1), (21), (26), (29)"
+    role: special-case
+disagreements:
+  - papers: ["1410.3831", "1704.06279"]
+    note: 'Koch-Janusz-Ringel (main text, Validation; Supp. section on contrastive-divergence RBMs) say their argument and dimer numerics disprove an exact mapping: KL-trained RBMs do not generally choose RG filters. Mehta-Schwab (Sec. III after Eq. (22)) already call variational RG and KL training distinct schemes and give Eq. (21) as an identity of definitions; they run no dimer test.'
+links:
+  - target: S09
+    relation: unrelated
+    note: 'Gordon first bottleneck transition: a supercritical pitchfork of the symmetric encoder, $m\propto\sqrt{\beta-\beta_{c,1}}$ (Eq. (33) [PDF C11]). Same Landau form as S09, but of the bottleneck Lagrangian in the trade-off $\beta$, not a network free energy $\tilde F$.'
+  - target: S10
+    relation: unrelated
+    note: 'RG-on-data objects are conditional laws $p(h|v)$ of the data and their information content ($I(v;h)$ is a compression rate). S10 is a prior volume $P(f)\lesssim2^{-a\mathcal K(f)+b}$ over functions of a network; no member computes a prior volume or complexity bound.'
+  - target: S14
+    relation: unrelated
+    note: 'S14 is supervised teacher-student inference on Gaussian inputs, error $\rho_0-q^*$ over overlaps. RG-on-data is unsupervised: the object is the input law and a map or a hierarchical generative model (Bény); no teacher, Bayes-optimal error or overlap matrix is computed.'
+  - target: S11
+    relation: unrelated
+    note: 'Mehta-Schwab $D_{\rm KL}(p\Vert p_\Lambda)$ is the population log-loss of an RBM density model ($L_P\to D_{\rm KL}+$ const in S11), but no member forms a posterior or an evidence law $\lambda_{\rm LC}\log P$; RG free energies are those of the data law.'
+  - target: S01
+    relation: unrelated
+    note: 'Erdmenger reviews $q^\ell=\sigma_w^2\,\mathbb E\,\varphi(\sqrt{q^{\ell-1}}z)^2+\sigma_b^2$ (Eq. (56)), the diagonal of $K^\ell_{\rm GP}$, but its KL of Eq. (83) is over the input law at fixed weights, not the weight-averaged posterior of S01.'
+  - target: S13
+    relation: unrelated
+    note: 'S13 integrates out eigenmodes of the data covariance to renormalise a ridge of a Gaussian-process predictor. Sense (d) coarse-grains configurations $v\to h$ by a stochastic map and tracks the data law; no ridge, predictor or eigenmode cutoff appears in any member.'
+open_problems: [op-06]

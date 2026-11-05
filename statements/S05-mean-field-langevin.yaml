@@ -198,3 +198,5 @@ members:
 reduces_to:
   - {target: S04, limit: "$L=1$, Gaussian readout integrated out: $\\kappa=1$, $\\eta=TP$ for a loss averaged over $P$ (algebra confirmed; no cited theorem covers a trainable Gaussian readout)", conjectural: true}
 open_problems: [op-02, op-03]
+links:
+  - {target: S23, relation: unrelated, note: "S05: $N\\to\\infty$ proximal Gibbs measure of two-layer Langevin training, likelihood scaled with $N$. Lee et al. also use the long-time Langevin Gibbs law, at fixed $\\beta$, $N=1$, over a depth chain: no mean-field limit, no neuron measure."}

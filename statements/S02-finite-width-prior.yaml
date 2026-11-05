@@ -141,3 +141,10 @@ members:
     role: rate
 reduces_to:
   - {target: S01, limit: "$N\\to\\infty$: $s\\to$ its mean, the prior becomes the NNGP prior"}
+links:
+  - {target: S17, relation: extended-by, note: "The vertex is S02's one-hidden-layer kernel covariance: $S=\\frac{g_w^2}N\\mathrm{Cov}_0(\\varphi\\varphi,\\varphi\\varphi)$, the $O(1/N)$ fourth cumulant, kept as $\\frac18S\\tilde f^4$ in the dual (Eq. 86 [PDF (B4)]). S17 adds the likelihood and the mode elimination."}
+  - {target: S18, relation: reproduced-by, note: "S02's cumulants are this recursion's solution: critical one input, $\\mathrm{Var}\\,K^L/(K^L_{\\rm GP})^2=\\nu L/N$ with $\\nu=c_\\varphi$ (5, 2, $\\frac23$); deep linear gives $2\\sum_\\ell N_\\ell^{-1}$, S02's $\\mathrm{Var}\\ln s$ at first order."}
+  - {target: S19, relation: reproduced-by, note: "For $L=1$: $U/N=\\kappa_4(f)=\\sum_3V$, $V=\\mathrm{Cov}(K^L,K^L)$, S02’s hidden-kernel covariance. One input: $3K^2\\,\\mathrm{Var}\\ln s=6K^2/N$ (linear), $15K^2/N$ (ReLU, $c_\\varphi=5$). Deeper: Naveh Eq. (41) recursion, not compared."}
+  - {target: S20, relation: extended-by, note: "Given the hidden kernel the output is Gaussian, so $G^{(4)}_c=\\sum_{3}\\mathrm{Cov}(K^1_{ab},K^1_{cd})=O(1/N)$, the S02 vertex. Here it is read as the local vertex $-24\\lambda\\int_{-\\Lambda}^{\\Lambda}\\prod K_W$; S20 adds $\\Lambda$ and $\\beta(\\lambda)$."}
+  - {target: S23, relation: unrelated, note: "S02 gives the random isotropic scale $s=\\prod_\\ell\\sigma_\\ell^2\\chi^2_{N_\\ell}/N_\\ell$ of the deep-linear prior kernel, $\\mathrm{Var}\\ln s\\simeq2\\sum_\\ell N_\\ell^{-1}$. Le Pera–Nordio’s isotropic scales $\\tau_r$ are deterministic, carry no width, and are divided out by trace normalisation."}
+  - {target: S24, relation: reproduced-by, note: "The rate $j$ is the Gärtner–Ellis rate of S02's scale factors $\\chi^2_{N_\\ell}/N_\\ell$ (EWA Eq. (43)); at second order $j\\simeq(\\rho-1)^2/4$ gives ${\\rm Var}\\,\\rho_\\ell=2/N_\\ell$, S02's ${\\rm Var}\\ln s=2\\sum_\\ell1/N_\\ell$ for deep linear networks."}

@@ -92,3 +92,7 @@ members:
 reduces_to:
   - {target: S04, limit: "symmetric branch: the prior kernel is the saddle of $F$ below the transition"}
 open_problems: [op-03, op-04]
+links:
+  - {target: S17, relation: unrelated, note: "'Critical', 'separatrix', 'nullcline' and 'fixed point' here describe a scale-free power-law spectrum and a scale-dependent flow field. There is no symmetry-breaking saddle, bifurcation of $F$ or critical control parameter."}
+  - {target: S22, relation: unrelated, note: "Gordon first bottleneck transition: a supercritical pitchfork of the symmetric encoder, $m\\propto\\sqrt{\\beta-\\beta_{c,1}}$ (Eq. (33) [PDF C11]). Same Landau form as S09, but of the bottleneck Lagrangian in the trade-off $\\beta$, not a network free energy $\\tilde F$."}
+  - {target: S23, relation: unrelated, note: "Le Pera–Nordio: instability = relevant ($\\lambda_a>1$) strain under depth transport; no order parameter computed. Chen et al.: fitted scaling ansatz in AdamW epoch. S09/Rubin et al.: Langevin-equilibrium saddle, first order in noise. Different control and ensemble: no contradiction."}

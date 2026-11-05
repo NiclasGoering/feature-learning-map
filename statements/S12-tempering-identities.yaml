@@ -141,3 +141,5 @@ members:
     role: check
 disagreements:
   - {papers: ["2106.06596", "2203.16481"], note: "Noci et al. attribute the cold optimum on random subsets to the prior (an untested inference; his CIFAR-10 subsets show almost no effect). Kapoor et al. and Nabarro et al. agree on the augmentation formula; they blame a misspecified augmented likelihood and curation or the prior respectively. Kapoor’s Fig. 11 varies the prior scale on full CIFAR-10, so it does not refute Noci."}
+links:
+  - {target: S21, relation: unrelated, note: "$\\tau=1/P$ counts data at $\\beta=1$ and is not a temperature; the sample loss becomes $P\\,\\mathrm{KL}_*$ with no prior. S12 tempers one fixed data set. Formally $e^{-P\\mathrm{KL}_*}$ is Gibbs at inverse temperature $P$ so (A.6) mirrors S12's $\\log Z(\\beta)$ integral."}

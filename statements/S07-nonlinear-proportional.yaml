@@ -14,7 +14,7 @@ members:
   - paper: "2209.04882"
     result: r1
     statement: "One hidden layer, zero-mean $\\varphi$, Gaussian equivalence, any $T$: $-\\frac1N\\log Z\\to\\min_\\rho F_B(\\rho)$, $F_B=j(\\rho)+\\frac1{2N}y^\\top(\\rho K^1_{\\rm GP}+\\eta I)^{-1}y+\\frac1{2N}\\log\\det(\\rho K^1_{\\rm GP}+\\eta I)$, $j=\\frac12(\\rho-1-\\ln\\rho)$, after eliminating the dual by $\\bar Q=1/(1+Q)$; mean $k^\\top(K^1_{\\rm GP}+\\frac\\eta\\rho I)^{-1}y$."
-    mapping: "$\\bar Q\\to\\rho$; $Q\\to1/\\rho-1$; $K/\\lambda_1\\to K^1_{\\rm GP}$; $T=1/\\beta\\to\\eta$; $\\alpha_1/P=1/N_1\\to\\kappa$; $\\frac12S\\to F_B$ + const ($P\\log\\beta$); $\\kappa_\\mu/\\lambda_1\\to k$. Under GE $\\rho$ is the readout norm $\\lambda_1\\Vert v\\Vert^2/N$ (pilot derivation, not in the paper)."
+    mapping: "$\\bar Q\\to\\rho$; $Q\\to1/\\rho-1$; $K/\\lambda_1\\to K^1_{\\rm GP}$; $T=1/\\beta\\to\\eta$; $\\alpha_1/P=1/N_1\\to\\kappa$; $\\frac12S\\to F_B$ + const ($P\\log\\beta$); $\\kappa_\\mu/\\lambda_1\\to k$. Under GE $\\rho$ is the readout norm $\\lambda_1\\Vert v\\Vert^2/N$ (identification by algebra; not printed in the paper)."
     equations: "Eqs. (6)-(7), Sec. II A; Methods C-E Eqs. (47)-(49), (56)"
     role: master
   - paper: "2209.04882"
@@ -252,3 +252,9 @@ disagreements:
   - {papers: ["2209.04882", "2605.29684"], note: "Deep closure: Pacelli nests the scalar in each layer, $K^R_\\ell=\\rho_\\ell\\Phi(K^R_{\\ell-1})$; the equivalent Wishart ansatz factorises it, $\\prod q_\\ell\\,\\Theta^L$. Equal for degree-one homogeneous $\\varphi$ (linear, ReLU), different for erf and sign (Pacelli SM Eqs. 96–97). Pacelli SM III B says the factorised replacement is not correct in general; which closure fits erf data is untested. [verified]"}
   - {papers: ["2307.11807", "2412.15911"], note: "In the locally connected CNN the $T=0$ mean moves ($K_R=\\frac1n\\sum_i\\bar Q_iK^{ii}$); the cross-patch terms are specific to the CNN. The output-pair matrix leaves the mean unchanged only at $T=0$ (it enters as the ridge $\\eta Q^{-1}$ at $T>0$). [verified]"}
 open_problems: [op-08, op-09]
+links:
+  - {target: S16, relation: unrelated, note: "Same contrast: S07's $\\rho$ rescales $K^1_{\\rm GP}$ at a fixed training set (Gaussian equivalence); here the kernel is fixed and the ridge shifts. In the mean, $\\rho K^1_{\\rm GP}$ at ridge $\\eta$ equals $K^1_{\\rm GP}$ at $\\eta/\\rho$; the variance is $\\rho$ times that."}
+  - {target: S17, relation: reproduced-by, note: "Linear $\\varphi$, one hidden layer: with $r=P/\\eta$ ($\\eta=\\kappa_{\\rm paper}$), $\\Lambda=P\\lambda$, $Y^2=Py^2$, the ridge $r(k)/r_0$ is $\\rho(k)$, $\\delta r/r_0=\\rho-1$ from $F_B'(\\rho)=0$ at $\\rho=1$, summed over modes above $k$. First order only; no $P\\propto N$ saddle."}
+  - {target: S20, relation: unrelated, note: "S07's order parameter comes from integrating out the hidden layer with the likelihood at $P\\propto N$. Here there is no data and no $P\\propto N$; the $1/N$ coupling is a fixed prior vertex."}
+  - {target: S23, relation: unrelated, note: "S07’s scalar $\\rho$ is an isotropic dilation of the sample-space kernel at $P\\propto N$. Le Pera–Nordio divide the isotropic scale out of layer-space Gram metrics and keep the shape. Different spaces; width and $P$ are not scaled there."}
+  - {target: S24, relation: reproduced-by, note: "Under Gaussian equivalence $F_B$ is S07's functional: $L=1$ identical with $\\kappa=1/N$; deep, the factorised closure $K_e=\\prod_\\ell\\rho_\\ell K^L_{\\rm GP}$. Pacelli's nested closure differs for erf. S07's matrix order parameters are not read here."}
