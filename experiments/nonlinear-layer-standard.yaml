@@ -1,0 +1,45 @@
+id: nonlinear-layer-standard
+title: "One nonlinear layer at P ∝ N: a scalar and a spike, no bulk change"
+date: "2026-11-05"
+regime: "NTK, P ∝ N (standard scaling, κ = 1/N)"
+regime_id: ntk-prop
+slot: nonlinear
+tests: [S07, S06]
+claim: >-
+  S07 assumes Gaussian equivalence: the hidden kernel changes only by one scalar and a rank-one spike
+  along the target. Exact posteriors of one-hidden-layer erf, ReLU and quadratic networks at P = N/2
+  (N up to 800) confirm that off the target the kernel changes only at O(1/N), with no bulk change. For erf,
+  S07's scalar and spike are quantitatively right. For hard targets, ReLU and quadratic networks add one or two
+  finite-rank modes (the constant direction, a few condensed or teacher-aligned neurons): feature learning by
+  O(1) neurons, still not a bulk change.
+formula: >-
+  $\langle K^1\rangle=(1-\tfrac1N)K_{\rm GP}+\kappa\rho\,(K_{\rm GP}v)(K_{\rm GP}v)^\top+\tfrac{\eta}{N}K_{\rm GP}(\rho K_{\rm GP}+\eta)^{-1},\qquad v=(\rho K_{\rm GP}+\eta)^{-1}y$
+verdict:
+  - {subject: "erf", outcome: "S07 right: readout scalar within 0.6%, spike within 4% at N = 800", tone: confirms}
+  - {subject: "ReLU", outcome: "scalar and spike plus the constant-direction mode; a teacher-aligned neuron when D < P", tone: mixed}
+  - {subject: "quadratic", outcome: "scalar and spike plus a few condensed neurons (expected to vanish at larger N); a teacher-aligned neuron when D < P", tone: mixed}
+  - {subject: "linear (control)", outcome: "exact, as S06 says", tone: confirms}
+setup: |-
+  - One hidden layer, readout integrated out exactly, standard scaling ($\kappa=1/N$), noise $\eta=0.1$.
+  - Activations: erf, ReLU, centred quadratic $(h^2-1)/\sqrt2$, and linear as a control.
+  - $\alpha=P/N=0.5$ with $N=100,200,400,800$ (ReLU up to 400), two data sets per $N\le400$; erf also at $\alpha=0.25$ and $1$ ($N\le200$).
+  - Inputs iid Gaussian with $D=2P$ and $D=P/4$. Target: a single-index function, hard ($\bar r=y^\top K_{\rm GP}^{-1}y/P=2$–12), plus a target drawn from the network itself ($\bar r\approx1$) and a weak one ($\bar r\approx0.3$).
+  - Sampler: HMC in JAX (float64), 4 chains, 150 warm-up + 500 trajectories; split-R-hat ≤ 1.02. Checks: linear networks and HMC on the Gaussian-equivalent model reproduce the exact quadrature; chains started at the teacher and at random agree.
+  - Every comparison is with the exact Gaussian-equivalent scale mixture (S07) on the same $N$, $P$, $D$ and data.
+numbers: |-
+  - Readout scalar $\rho$, sampled / S07 at $N=800$, $\alpha=0.5$ ($D=2P$, $D=P/4$): erf 1.006, 0.998; quadratic 0.89, 0.87; ReLU ($N=400$) 0.97, 0.89.
+  - Spike along the target $\hat y^\top(\langle K^1\rangle-K_{\rm GP})\hat y$, sampled / S07 (same runs): erf 0.96, 0.99; quadratic 2.2, 3.0; ReLU 1.3, 2.1.
+  - Off-target eigenvalue shift: $N\,\lvert\Delta\lambda/\lambda\rvert=0.2$–3.5 at every $N$ from 100 to 800 (S07: about 1), so the shift is $O(1/N)$.
+  - Residual of $\langle K^1\rangle$ against S07 off the target (erf, $D=2P$, RMS eigenvalue): 0.0075, 0.0072, 0.0047, 0.0037 at $N=100,200,400,800$.
+  - Against target hardness ($N=200$): for the target drawn from the network ($\bar r\approx1$), $\rho$ is within 1.5% of S07 for all three activations; for the hard single-index target ($\bar r=2.3$–9.9), erf is within 5.4%, ReLU 5–11% and quadratic 5–20% low, with the readout concentrated on a few neurons.
+  - Mean inverse kernel off the target $\langle(K^1+\eta)^{-1}\rangle$: posterior/prior = 0.999 (erf, $N=800$) and ≥ 0.99 elsewhere.
+figures:
+  - {file: sp_scalar_spike_vs_N.png, caption: "Readout scalar, spike along the target and inverse kernel along y: sampled over S07 against 1/N, for erf, ReLU and quadratic at D = 2P (solid) and D = P/4 (dashed)."}
+  - {file: bulk_shift_vs_N.png, caption: "Off-target relative eigenvalue shift against N: standard scaling (black) follows S07's 1/N line; μP (colour) lies 10–40× above it."}
+  - {file: sp_spike_vs_alpha.png, caption: "Spike along the target against α at the largest N: sampled, exact S07, and the η → 0 law α|y|²/(Pρ*)."}
+caveats:
+  - "One hidden layer only; one target family (single index) plus the drawn-from-the-network and weak controls."
+  - "α = 0.25 and 1 only for erf at N ≤ 200; the N-scaling is at α = 0.5."
+  - "Quadratic networks: neurons with large readout condense onto the hardest samples. The closure predicts this dies out exponentially in N, on a scale of N ≈ 200–400 for the hard target, not yet reached at N = 800."
+  - "At D < P, ReLU and quadratic networks align one neuron with the teacher direction (cos² ≈ 0.5–0.8): feature learning beyond Gaussian equivalence, but finite rank."
+status_note: "Run for the map (exact HMC); not peer reviewed."

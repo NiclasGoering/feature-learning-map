@@ -13,9 +13,10 @@ A public map of the theory literature on feature learning in neural networks, fo
 | `schema/mechanisms/<slug>.yaml` | Mechanism labels added by ingest sessions, one file each, merged into the `mechanism_label` vocabulary by the validator and the build. |
 | `schema/paper.schema.json` | JSON Schema for the front matter. Nodes marked `x-vocab` take their allowed values from `vocab.yaml`. |
 | `statements/S<NN>-<slug>.yaml` | The main statements: theorems or established physics results that several papers state in different notations, rewritten once in the map's notation, each with its member results (paper, equations, symbol mapping), the limit in which it reduces to another statement, and the disagreements between papers. A result points to its statement with an optional `canonical:` block. Format in `INGEST.md` section 8; `schema/statement.schema.json`. |
+| `experiments/<id>.yaml` | The map's own numerical experiments: exact posterior sampling run to test a statement or an open problem, with claim, verdict, set-up, numbers, caveats and figures (`experiments/figs/<id>/`). Shown on the Graph page as "new" chips in their regime cell and in the panels of the statements they test. `schema/experiment.schema.json`. |
 | `open-problems/op-NN-*.md` | One file per open problem. Papers point at them by id. |
 | `queue.yaml` | Papers waiting to be added, in priority order, with status `queued`, `needs-id`, `added` or `skipped`. |
-| `scripts/validate.py` | Checks papers, statements, open problems and the queue against the schema, the vocabulary, the length limits and the public-site rule. |
+| `scripts/validate.py` | Checks papers, statements, experiments, open problems and the queue against the schema, the vocabulary, the length limits and the public-site rule. |
 | `scripts/build.py` | Runs the validator, then builds the static site into `_site/` with one `data.json`. |
 | `scripts/flmap.py` | Loading code shared by both scripts. |
 | `site/` | The front end: five HTML pages (`overview.html`, published as the landing page; `table.html`; `graph.html`; mechanisms; open problems), one stylesheet, three scripts (`app.js`; `anim.js` for the overview animations; `graph.js` for the graph, with d3). No framework. |

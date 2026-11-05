@@ -8,7 +8,9 @@ overview.html also as the landing page index.html) and writes
 _site/data.json, compiled from papers/*.md, open-problems/*.md and queue.yaml.
 Results about gradient descent alone are left out of the site for now; results
 that compare Bayes with GD stay. Statements (statements/S<NN>-*.yaml) are emitted as
-data.statements (every statement is public).
+data.statements (every statement is public). The map's own experiments
+(experiments/<id>.yaml) are emitted as data.experiments, their figures copied to
+_site/experiments/<id>/.
 Preview locally with:  python -m http.server -d _site 8000
 """
 
@@ -165,6 +167,23 @@ def compile_statements(stmts, papers):
     return out
 
 
+def compile_experiments():
+    """Site records of the map's own experiments (the validator has checked them)."""
+    out = []
+    for path in flmap.experiment_files():
+        m = flmap.load_yaml(path.read_text(encoding="utf-8"))
+        rec = {k: m[k] for k in ("id", "title", "date", "regime", "regime_id", "tests", "claim", "verdict", "caveats")}
+        rec["slot"] = m.get("slot", "nonlinear")
+        for key in ("formula", "status_note"):
+            if m.get(key):
+                rec[key] = m[key]
+        rec["setup_html"] = md_to_html(m["setup"])
+        rec["numbers_html"] = md_to_html(m["numbers"])
+        rec["figures"] = [{"src": f"experiments/{m['id']}/{f['file']}", "caption": f["caption"]} for f in m.get("figures") or []]
+        out.append(rec)
+    return sorted(out, key=lambda x: (x["date"], x["id"]))
+
+
 def compile_open_problems(papers):
     out = []
     for path in flmap.open_problem_files():
@@ -213,6 +232,7 @@ def main():
         },
         "papers": papers,
         "statements": compile_statements(stmts, papers),
+        "experiments": compile_experiments(),
         "open_problems": compile_open_problems(papers),
         "queue": counts,
         "hidden_gd_only": {"papers": hidden_papers, "results": hidden_results},
@@ -221,8 +241,12 @@ def main():
         shutil.rmtree(OUT)
     shutil.copytree(SITE, OUT)
     shutil.copyfile(OUT / "overview.html", OUT / "index.html")   # the overview is the landing page
+    for x in data["experiments"]:
+        if x["figures"]:
+            shutil.copytree(flmap.EXPERIMENTS / "figs" / x["id"], OUT / "experiments" / x["id"])
     (OUT / "data.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-    print(f"Built {OUT.relative_to(flmap.ROOT)}/ with {len(papers)} paper(s), {len(data['statements'])} statement(s); "
+    print(f"Built {OUT.relative_to(flmap.ROOT)}/ with {len(papers)} paper(s), {len(data['statements'])} statement(s), "
+          f"{len(data['experiments'])} experiment(s); "
           f"{hidden_results} GD-only result(s) hidden, {hidden_papers} paper(s) with nothing else.")
     return 0
 

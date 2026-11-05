@@ -249,7 +249,7 @@ reduces_to:
   - {target: S06, limit: "linear $\\varphi$: $K_{\\rm GP}$ is the linear kernel, the equation is the deep linear one"}
   - {target: S01, limit: "$\\alpha\\to0$: $\\rho\\to1$"}
 disagreements:
-  - {papers: ["2209.04882", "2605.29684"], note: "Deep closure: Pacelli nests the scalar in each layer, $K^R_\\ell=\\rho_\\ell\\Phi(K^R_{\\ell-1})$; the equivalent Wishart ansatz factorises it, $\\prod q_\\ell\\,\\Theta^L$. Equal for degree-one homogeneous $\\varphi$ (linear, ReLU), different for erf and sign (Pacelli SM Eqs. 96–97). Pacelli SM III B says the factorised replacement is not correct in general; which closure fits erf data is untested. [verified]"}
+  - {papers: ["2209.04882", "2605.29684"], note: "Deep closure: Pacelli nests the scalar in each layer, $K^R_\\ell=\\rho_\\ell\\Phi(K^R_{\\ell-1})$; the equivalent Wishart ansatz factorises it, $\\prod q_\\ell\\,\\Theta^L$. Equal for degree-one homogeneous $\\varphi$ (linear, ReLU), different for erf and sign (Pacelli SM Eqs. 96–97). Pacelli SM III B says the factorised replacement is not correct in general. The map's deep-erf experiment rules out the nested closure; the factorised one is within a few per cent. [verified]"}
   - {papers: ["2307.11807", "2412.15911"], note: "In the locally connected CNN the $T=0$ mean moves ($K_R=\\frac1n\\sum_i\\bar Q_iK^{ii}$); the cross-patch terms are specific to the CNN. The output-pair matrix leaves the mean unchanged only at $T=0$ (it enters as the ridge $\\eta Q^{-1}$ at $T>0$). [verified]"}
 open_problems: [op-08, op-09]
 links:

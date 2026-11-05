@@ -16,6 +16,8 @@ SCHEMA = ROOT / "schema" / "paper.schema.json"
 MECHANISMS = ROOT / "schema" / "mechanisms"   # one file per mechanism label added by ingest
 STATEMENTS = ROOT / "statements"               # one file per main statement (S01-<slug>.yaml)
 STATEMENT_SCHEMA = ROOT / "schema" / "statement.schema.json"
+EXPERIMENTS = ROOT / "experiments"             # the map's own experiments (<id>.yaml, figures in figs/<id>/)
+EXPERIMENT_SCHEMA = ROOT / "schema" / "experiment.schema.json"
 
 GROUPING = ["learning_rule", "depth", "width_limit"]
 BANDS = ["setting", "dials", "scaling", "data", "method", "empirics"]
@@ -180,6 +182,10 @@ def load_statement_schema(vocab):
     return expand_schema(json.loads(STATEMENT_SCHEMA.read_text(encoding="utf-8")), vocab)
 
 
+def load_experiment_schema():
+    return json.loads(EXPERIMENT_SCHEMA.read_text(encoding="utf-8"))
+
+
 def key_to_filename(pid):
     """Paper id -> file stem: 2302.00375v2, cond-mat_9501082v1, doi-10.1103_PhysRevA.45.6056, ref-<slug>."""
     if pid.startswith("doi:"):
@@ -282,6 +288,11 @@ def paper_files():
 
 def open_problem_files():
     return sorted(p for p in OPEN_PROBLEMS.glob("op-*.md"))
+
+
+def experiment_files():
+    """experiments/<id>.yaml, sorted."""
+    return sorted(EXPERIMENTS.glob("*.yaml")) if EXPERIMENTS.exists() else []
 
 
 def statement_files():

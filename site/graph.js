@@ -985,6 +985,8 @@
             return [i ? " vs " : "", paperButton(k)];
           })));
       }),
+      expsTesting(s.id).length ? el("h3", null, "Tested by the map's own experiments") : null,
+      expsTesting(s.id).length ? el("div", { class: "rg-chips" }, expsTesting(s.id).map(expChip)) : null,
       ops.length ? el("h3", null, "Open problems next to it") : null,
       ops.length ? el("ul", { class: "plain" }, ops.map(function (o) {
         return el("li", null, el("a", { href: "open-problems.html#" + o.id }, o.rank + ". " + o.title));
@@ -1148,12 +1150,13 @@
     "ntk|prop": { pays: "volume $\\tfrac12\\log\\det K$; energy too if the target is hard", logz: "$\\Theta(N)$",
       moves: "the scale of $K$; the shape too if the target is hard", posterior: "scale-renormalised kernel",
       linear: ["S06"], nonlinear: ["S07"], ops: ["op-08", "op-06"], experiment: "ntk-prop",
-      note: "A surprising target ($\\bar r=y^\\top K_{\\rm GP}^{-1}y/P>1$) moves the scale; if it is surprising enough the energy competes with the volume and the shape can move too: feature learning without μP. Open for nonlinear layers (S07 assumes Gaussian equivalence)." },
+      note: "A surprising target ($\\bar r=y^\\top K_{\\rm GP}^{-1}y/P>1$) moves the scale; if it is surprising enough the energy competes with the volume and the shape can move too: feature learning without μP. New: for one nonlinear layer the kernel still moves only by a scalar and a spike along the target (S07 is right for erf; ReLU and quadratic add a few finite-rank modes), and for deep erf networks the nested closure fails." },
     "ntk|hd": { head: "teacher–student and learning curves at large $P$", all: ["S13", "S14"], ops: ["op-05"] },
     "mup|fixed": { pays: "energy", logz: "$\\Theta(N)$", moves: "the shape of $K$, toward the labels", posterior: "tilted law $\\rho$",
       all: ["S04", "S05", "S09"], ops: ["op-04", "op-03", "op-02"] },
     "mup|prop": { pays: "energy and volume", logz: "$\\Theta(N)$", moves: "shape and scale", posterior: "active research",
-      linear: ["S15"], nonlinear: [], ops: ["op-07"], experiment: "mup-prop", frontier: true },
+      linear: ["S15"], nonlinear: [], ops: ["op-07"], experiment: "mup-prop", frontier: true,
+      note: "New: one nonlinear layer has no finite limit either, and the activation decides who carries the growth: the readout (erf) or a few giant neurons (ReLU, quadratic)." },
     "mup|hd": { gap: "sparse: Bayesian posteriors in μP at high dimension" },
     "beyond|fixed": { pays: "energy dominates", logz: "$\\gg N$", moves: "the shape, strongly: $\\rho$ concentrates on the best features",
       posterior: "strong-tilt limit", mechanisms: ["ridge-atoms"], note: "No main statement yet; the results that reach this corner are under the mechanism “ridge atoms”." },
@@ -1211,12 +1214,20 @@
       h.el("span", { class: "rg-id" }, "results"), " ", h.el("span", { class: "rg-t" }, n.name + " · " + REGION[n.region].label + " (" + plural(n.np, "paper") + ")"));
   }
 
-  function expChips(regime) {
-    return (D.experiments || []).filter(function (x) { return x.regime_id === regime; }).map(function (x) {
-      return h.el("button", { type: "button", class: "rg-chip experiment", title: "The map's own experiment",
-        onclick: function (ev) { ev.stopPropagation(); openExperiment(x); } },
-        h.el("span", { class: "rg-id" }, "new"), " ", h.el("span", { class: "rg-t" }, x.title));
-    });
+  var TONE = { confirms: "holds", mixed: "partly", refutes: "fails" };
+
+  function expsTesting(id) {
+    return (D.experiments || []).filter(function (x) { return (x.tests || []).indexOf(id) >= 0; });
+  }
+
+  function expChips(regime, slot) {
+    return (D.experiments || []).filter(function (x) { return x.regime_id === regime && (!slot || (x.slot || "nonlinear") === slot); }).map(expChip);
+  }
+
+  function expChip(x) {
+    return h.el("button", { type: "button", class: "rg-chip experiment", title: "The map's own experiment: exact posterior sampling",
+      onclick: function (ev) { ev.stopPropagation(); openExperiment(x); } },
+      h.el("span", { class: "rg-id" }, "new"), " ", h.el("span", { class: "rg-t" }, x.title));
   }
 
   function openExperiment(x) {
@@ -1227,7 +1238,12 @@
       el("div", { class: "authors" }, x.regime + (x.tests && x.tests.length ? " · tests " + x.tests.join(", ") : "")),
       el("p", { class: "oneline" }, x.claim),
       x.formula ? el("div", { class: "gr-formula" }, x.formula) : null,
-      x.verdict ? el("p", null, el("strong", null, "Verdict: "), x.verdict) : null,
+      (x.verdict || []).length ? el("h3", null, "Verdict") : null,
+      (x.verdict || []).length ? el("ul", { class: "plain x-verdict" }, x.verdict.map(function (v) {
+        return el("li", { class: "x-" + v.tone }, el("span", { class: "x-tone" }, TONE[v.tone] || v.tone), " ",
+          el("strong", null, v.subject), el("span", { class: "muted" }, " — " + v.outcome));
+      })) : null,
+      x.status_note ? el("p", { class: "muted gr-fnote" }, x.status_note) : null,
       (x.figures || []).map(function (f) {
         return el("figure", { class: "gr-fig" }, el("img", { src: f.src, alt: f.caption, loading: "lazy" }), el("figcaption", null, f.caption));
       }),
@@ -1241,7 +1257,9 @@
       el("ul", { class: "plain" }, (x.tests || []).filter(function (t) { return sById[t]; }).map(function (t) {
         var n = sById[t];
         return el("li", null, el("button", { type: "button", class: "linklike gr-nbtn", onclick: function () { openStatement(n, false); } }, n.id + " · " + plainTex(n.s.title)));
-      }))
+      })),
+      (x.tests || []).filter(function (t) { return /^op-/.test(t); }).length ? el("h3", null, "Open problems it addresses") : null,
+      el("div", { class: "rg-chips" }, (x.tests || []).filter(function (t) { return /^op-/.test(t); }).map(opChip).filter(Boolean))
     ], "x:" + encodeURIComponent(x.id));
   }
 
@@ -1249,7 +1267,7 @@
 
   function cellOpen(c) {
     var out = (c.ops || []).map(opChip).filter(Boolean);
-    return out.concat(c.experiment ? expChips(c.experiment) : []);
+    return out.concat(c.experiment && !(c.linear || c.nonlinear) ? expChips(c.experiment) : []);
   }
 
   function gridCell(row, col) {
@@ -1264,11 +1282,12 @@
       el("dt", null, "posterior"), el("dd", null, c.posterior)) : el("p", { class: "rg-meta rg-head" }, c.head || "");
     var body;
     if (c.linear || c.nonlinear) {
-      var nl = chipList(c.nonlinear);
+      var nl = chipList(c.nonlinear), lin = chipList(c.linear);
+      var xnl = c.experiment ? expChips(c.experiment, "nonlinear") : [], xlin = c.experiment ? expChips(c.experiment, "linear") : [];
       body = el("div", { class: "rg-split" },
-        el("div", null, el("div", { class: "rg-sub" }, "linear"), el("div", { class: "rg-chips" }, chipList(c.linear))),
+        el("div", null, el("div", { class: "rg-sub" }, "linear"), el("div", { class: "rg-chips" }, lin, xlin)),
         el("div", null, el("div", { class: "rg-sub" }, "nonlinear"),
-          el("div", { class: "rg-chips" }, nl.length ? nl : el("span", { class: "rg-gap" }, el("strong", null, "open")))));
+          el("div", { class: "rg-chips" }, nl.length ? nl : el("span", { class: "rg-gap" }, el("strong", null, "no theory")), xnl)));
     } else {
       var chips = chipList(c.all);
       (c.mechanisms || []).forEach(function (m) { chips = chips.concat(mechanismChips(m).filter(Boolean)); });

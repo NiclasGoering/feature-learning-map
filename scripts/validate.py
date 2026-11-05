@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate papers/, statements/, open-problems/ and queue.yaml.
+"""Validate papers/, statements/, experiments/, open-problems/ and queue.yaml.
 
     python scripts/validate.py              # check the whole repository
     python scripts/validate.py draft.md     # also check draft.md as if it were in papers/
@@ -533,6 +533,49 @@ def check_statements(vocab, papers, op_ids, report):
     return stmts
 
 
+def check_experiments(stmts, op_ids, report):
+    """experiments/<id>.yaml: schema, file name = id, tested ids exist, figures exist, public-data rules."""
+    validator = Draft202012Validator(flmap.load_experiment_schema())
+    out = {}
+    if flmap.EXPERIMENTS.exists():
+        for p in sorted(flmap.EXPERIMENTS.iterdir()):
+            if p.name in (".gitkeep", "README.md", "figs"):
+                continue
+            if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*\.yaml", p.name):
+                report.error(rel(p), None, "experiments/ holds only <id>.yaml files and figs/")
+    for path in flmap.experiment_files():
+        where = rel(path)
+        text = path.read_text(encoding="utf-8")
+        scan_forbidden(where, text, report)
+        try:
+            meta = flmap.load_yaml(text)
+        except Exception as e:  # noqa: BLE001
+            report.error(where, None, f"cannot parse: {e}")
+            continue
+        if not isinstance(meta, dict):
+            report.error(where, None, "must be a YAML mapping")
+            continue
+        errors = sorted(validator.iter_errors(meta), key=lambda e: list(e.absolute_path))
+        for err in errors:
+            loc = ".".join(str(x) for x in err.absolute_path) or "(top level)"
+            report.error(where, loc, schema_message(err))
+        if errors:
+            continue
+        xid = meta["id"]
+        if path.name != f"{xid}.yaml":
+            report.error(where, "id", f"file must be named experiments/{xid}.yaml")
+        for t in meta["tests"]:
+            if t.startswith("S") and t not in stmts:
+                report.error(where, "tests", f"{t} is not a statement in statements/")
+            if t.startswith("op-") and t not in op_ids:
+                report.error(where, "tests", f"{t} is not an open problem in open-problems/")
+        for i, f in enumerate(meta.get("figures") or []):
+            if not (flmap.EXPERIMENTS / "figs" / xid / f["file"]).is_file():
+                report.error(where, f"figures.{i}.file", f"missing experiments/figs/{xid}/{f['file']}")
+        out[xid] = (path, meta)
+    return out
+
+
 def check_queue(paper_bases, report):
     where = "queue.yaml"
     if not flmap.QUEUE.exists():
@@ -629,6 +672,7 @@ def main(argv):
 
     check_mechanism_files(vocab, used_by, report)
     stmts = check_statements(vocab, metas, ctx["op_ids"], report)
+    exps = check_experiments(stmts, ctx["op_ids"], report)
     check_queue(set(bases), report)
 
     for line in report.lines:
@@ -637,7 +681,7 @@ def main(argv):
     if report.errors:
         print(f"\n{report.errors} error(s) in {n} paper file(s), statements/, open-problems/ and queue.yaml.")
         return 1
-    print(f"OK: {n} paper file(s), {len(stmts)} statement(s), {len(ctx['op_ids'])} open problem(s), queue.yaml.")
+    print(f"OK: {n} paper file(s), {len(stmts)} statement(s), {len(exps)} experiment(s), {len(ctx['op_ids'])} open problem(s), queue.yaml.")
     return 0
 
 

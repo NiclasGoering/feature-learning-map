@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "experiment.schema.json",
+  "title": "The map's own experiment (experiments/<id>.yaml)",
+  "description": "One file per numerical experiment run for the map to test a statement or an open problem. Figures live in experiments/figs/<id>/. Shown on the Graph page as a 'new' chip in its regime cell and in the panels of the statements it tests.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "title", "date", "regime", "regime_id", "tests", "claim", "verdict", "setup", "numbers", "caveats"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
+    "title": {"$ref": "#/$defs/text"},
+    "date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "regime": {"description": "Human-readable regime, e.g. 'NTK, P ∝ N'.", "$ref": "#/$defs/text"},
+    "regime_id": {
+      "description": "The Graph page's regime cell: row (ntk, mup, beyond) and column (fixed, prop, hd), or any.",
+      "type": "string",
+      "enum": ["ntk-fixed", "ntk-prop", "ntk-hd", "mup-fixed", "mup-prop", "mup-hd", "beyond-fixed", "beyond-prop", "beyond-hd", "any"]
+    },
+    "slot": {"description": "Which half of a split cell it belongs to (default nonlinear).", "type": "string", "enum": ["linear", "nonlinear"]},
+    "tests": {
+      "description": "Statement ids (S07) and open-problem ids (op-07) the experiment tests.",
+      "type": "array", "minItems": 1,
+      "items": {"type": "string", "pattern": "^(S[0-9]{2}|op-[0-9]{2})$"}
+    },
+    "claim": {"$ref": "#/$defs/text"},
+    "formula": {"$ref": "#/$defs/text"},
+    "verdict": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["subject", "outcome", "tone"],
+        "properties": {
+          "subject": {"$ref": "#/$defs/text"},
+          "outcome": {"$ref": "#/$defs/text"},
+          "tone": {"type": "string", "enum": ["confirms", "mixed", "refutes"]}
+        }
+      }
+    },
+    "setup": {"description": "Markdown.", "$ref": "#/$defs/text"},
+    "numbers": {"description": "Markdown (tables allowed).", "$ref": "#/$defs/text"},
+    "figures": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["file", "caption"],
+        "properties": {
+          "file": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+\\.(png|svg|jpg)$"},
+          "caption": {"$ref": "#/$defs/text"}
+        }
+      }
+    },
+    "caveats": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/text"}},
+    "status_note": {"$ref": "#/$defs/text"}
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1}
+  }
+}

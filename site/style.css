@@ -739,7 +739,17 @@ ul.dict li { padding: 0.6rem 0; border-bottom: 1px solid var(--line); }
 .gr-fig { margin: 0.8rem 0; }
 .gr-fig img { max-width: 100%; height: auto; display: block; background: #fff; }
 .gr-fig figcaption { font-size: 0.85rem; color: var(--fg-muted); font-style: italic; margin-top: 0.3rem; }
+.gr-numbers { overflow-x: auto; }
 .gr-numbers table { border-collapse: collapse; font-size: 0.85rem; }
+.gr-numbers ul { padding-left: 1.1rem; }
+.x-verdict li { margin: 0.35rem 0; padding-left: 0.5rem; border-left: 3px solid var(--line-strong); }
+.x-verdict .x-tone { font-variant: small-caps; font-weight: 600; }
+.x-verdict li.x-confirms { border-left-color: var(--mx-none); }
+.x-verdict li.x-confirms .x-tone { color: var(--mx-none); }
+.x-verdict li.x-mixed { border-left-color: var(--mx-high); }
+.x-verdict li.x-mixed .x-tone { color: var(--mx-high); }
+.x-verdict li.x-refutes { border-left-color: var(--mx-crit); }
+.x-verdict li.x-refutes .x-tone { color: var(--mx-crit); }
 .gr-numbers th, .gr-numbers td { padding: 0.2rem 0.6rem 0.2rem 0; border-bottom: 1px solid var(--line); text-align: left; }
 @media (max-width: 900px) {
   .rg-grid, .rg-any { grid-template-columns: 1fr; }

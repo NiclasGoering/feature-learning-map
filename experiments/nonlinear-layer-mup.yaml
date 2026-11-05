@@ -1,0 +1,42 @@
+id: nonlinear-layer-mup
+title: "One nonlinear layer in μP at P ∝ N: no finite limit, and the activation decides the split"
+date: "2026-11-05"
+regime: "μP and P ∝ N (κ = γ₀²)"
+regime_id: mup-prop
+slot: nonlinear
+tests: [S15, S07, op-07]
+claim: >-
+  At fixed γ₀ and P = N/2, no nonlinear network has a finite limit, as S15 found for linear networks, but the
+  growth is not the linear one. The fit needs readout × hidden-kernel spike to grow with N, and the activation
+  decides how the two share it. erf (bounded): the spike saturates and the readout takes the growth ($\rho\propto N$
+  instead of $\sqrt N$). ReLU: the linear growth, carried by one or two giant neurons. Quadratic: 2–3 giant
+  neurons and a nearly finite readout. Off-target bulk shifts are 10–40× S07's at N ≤ 256 and still decrease
+  with N.
+formula: >-
+  $$\begin{aligned}\text{erf:}\quad & \rho\simeq\gamma_0^2\,y^\top\langle(K^1+\eta)^{-1}\rangle y\propto N\\
+  \text{linear (S15):}\quad & \rho\simeq(\gamma_0^2P\bar r)^{1/2}\propto N^{1/2}\end{aligned}$$
+verdict:
+  - {subject: "linear (control)", outcome: "equals S15 to four digits: $\\rho\\propto\\sqrt N$", tone: confirms}
+  - {subject: "erf", outcome: "scalar and spike in structure, but S07's values fail: spike finite, $\\rho\\propto N$", tone: mixed}
+  - {subject: "ReLU", outcome: "ρ grows like the linear network, on 1–2 giant neurons", tone: mixed}
+  - {subject: "quadratic", outcome: "condensed onto 2–3 giant neurons; readout nearly finite ($\\rho\\propto N^{0.2}$)", tone: mixed}
+setup: |-
+  - The same one-hidden-layer model as the standard-scaling experiment, with $\kappa=\gamma_0^2$, $\gamma_0\in\{0.5,1\}$, $\alpha=0.5$, $D=2P$, $\eta=0.1$, single-index target.
+  - $N=64,128,256$, one data set per $N$ (erf at $\gamma_0=1$ also $N=512$, provisional).
+  - HMC as before: 4 chains, 400 warm-up + 400 trajectories; split-R-hat ≤ 1.02 except quadratic at $N=256$ (1.07–1.08).
+numbers: |-
+  - erf, $\gamma_0=1$: $\rho/(\gamma_0^2P)$ = 0.335, 0.375, 0.333 at $N=128,256,512$ (S07: 0.222, 0.183, 0.125). Flat means $\rho\propto N$; S07 falls as $N^{-1/2}$. ($N=64$ gives 0.91, one data set.)
+  - erf, $\gamma_0=1$: spike along the target 6.9, 7.0, 6.8 at $N=128,256,512$ (S07: 11.4, 15.7, 19.4): it saturates.
+  - ReLU, $\gamma_0=1$: $\rho/\rho_{\rm S07}$ = 0.79, 0.78, 0.75 at $N=64,128,256$ (same growth). Readout participation falls 0.08 → 0.02; one or two neurons carry 60–70% of the readout.
+  - Quadratic, $\gamma_0=1$: $\rho$ = 3.2, 3.7, 4.5 (S07: 10.0, 13.1, 19.3); spike 63, 75, 141 (S07: 9.9, 12.3, 19.0); 2–3 neurons carry 80–90% of the readout at every $N$.
+  - Off-target $\Delta\lambda/\lambda$ at $N=64,128,256$ ($\gamma_0=1$): erf −0.07, −0.10, −0.05; ReLU +0.15, +0.10, +0.07; quadratic +0.40, +0.20, +0.17; linear $-1/N$.
+  - A heuristic (not derived): if the hidden side grows as $s^k$ for an activation of degree $k$, minimising readout plus hidden cost gives $\rho\sim N^{1/(k+1)}$: 1 for bounded erf, 1/2 for ReLU, about 1/3 for quadratic (measured 0.2–0.25).
+figures:
+  - {file: mup_exponents.png, caption: "μP: readout ρ, spike along the target and yᵀ⟨(K¹+η)⁻¹⟩y/P against N for linear, erf, ReLU and quadratic networks at γ₀ = 0.5 and 1."}
+  - {file: bulk_shift_vs_N.png, caption: "Off-target relative eigenvalue shift: the μP points (colour) lie 10–40× above S07's 1/N line and decrease with N."}
+caveats:
+  - "Complete runs only up to N = 256; the erf N = 512 point comes from stationary chains during warm-up (the run was stopped by memory contention), without kernel statistics."
+  - "One data set per N, so the exponents carry about 20% data-set scatter; the erf ρ ∝ N rests on N = 128–512."
+  - "Quadratic μP: the number and placement of condensed neurons mixes slowly (R-hat up to 1.08)."
+  - "Whether the erf bulk shift decays as 1/N or slower needs N ≥ 512 with kernel statistics."
+status_note: "Run for the map (exact HMC); not peer reviewed. The erf N = 512 point is provisional."
