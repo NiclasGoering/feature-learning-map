@@ -75,6 +75,7 @@ One line per choice made where SPEC.md left room.
 - GD-only results that belong to a main statement (a `canonical.statement`) stay on the site: the mean-field Langevin results of S05 describe the Gibbs posterior the dynamics converges to.
 - The Mechanisms page lists every result under its FL type, then its mechanism label, as "In: setting · statement · paper, location".
 - Rows flag `gold` or `extracted` entries next to the arXiv links; `verified` entries carry no flag.
+- At the team's request (2026-11-06) every page ends with a "How to cite" block, reached from a Cite link in the header. Its one source is `CITATION.cff`, which GitHub's "Cite this repository" button also reads. The citation names the build date and commit, because the map changes as papers are added, and asks readers to cite the original paper for any result taken from the map.
 
 ## Content
 

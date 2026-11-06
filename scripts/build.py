@@ -11,6 +11,8 @@ that compare Bayes with GD stay. Statements (statements/S<NN>-*.yaml) are emitte
 data.statements (every statement is public). The map's own experiments
 (experiments/<id>.yaml) are emitted as data.experiments, their figures copied to
 _site/experiments/<id>/.
+CITATION.cff is emitted as data.citation (plain text and BibTeX, stamped with the
+build date and commit), shown as the "How to cite" block at the foot of every page.
 Preview locally with:  python -m http.server -d _site 8000
 """
 
@@ -32,6 +34,7 @@ import validate  # noqa: E402
 
 SITE = flmap.ROOT / "site"
 OUT = flmap.ROOT / "_site"
+CITATION = flmap.ROOT / "CITATION.cff"
 PARTICLES = {"van", "von", "de", "der", "den", "di", "da", "du", "le", "la", "del", "Ben", "Van", "De", "Von"}
 
 
@@ -202,6 +205,60 @@ def compile_open_problems(papers):
     return sorted(out, key=lambda o: o["rank"])
 
 
+TEX_ACCENTS = {"ä": r'{\"a}', "ö": r'{\"o}', "ü": r'{\"u}', "Ä": r'{\"A}', "Ö": r'{\"O}', "Ü": r'{\"U}',
+               "ß": r"{\ss}", "é": r"{\'e}", "è": r"{\`e}", "á": r"{\'a}", "ó": r"{\'o}", "í": r"{\'i}"}
+ASCII_FOLD = {"ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss", "é": "e", "è": "e", "á": "a", "ó": "o", "í": "i"}
+
+
+def commit_id():
+    """Short id of the commit being built: GITHUB_SHA on Actions, else git, else ''."""
+    sha = os.environ.get("GITHUB_SHA", "")
+    if not sha:
+        try:
+            sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=flmap.ROOT,
+                                 capture_output=True, text=True, check=True).stdout.strip()
+        except (OSError, subprocess.CalledProcessError):
+            sha = ""
+    return sha[:7]
+
+
+def compile_citation(built, repo):
+    """data.citation from CITATION.cff: how to cite this build of the map, or None without the file."""
+    if not CITATION.exists():
+        return None
+    cff = flmap.load_yaml(CITATION.read_text(encoding="utf-8"))
+    ref = cff.get("preferred-citation", cff)
+    people = ref["authors"]
+    title, url, year = ref["title"], ref["url"], str(ref["year"])
+    commit = commit_id()
+    version = f"version of {built}" + (f", commit {commit}" if commit else "")
+
+    def initials(given):
+        return " ".join(part[0] + "." for part in given.replace("-", " ").split())
+
+    names = [f"{a['family-names']}, {initials(a['given-names'])}" for a in people]
+    apa = names[0] if len(names) == 1 else ", ".join(names[:-1]) + ", & " + names[-1]
+    text = f"{apa} ({year}). {title} [Website; {version}]. {url}"
+
+    def tex(name):
+        return "".join(TEX_ACCENTS.get(ch, ch) for ch in name)
+
+    key = "".join(ASCII_FOLD.get(ch, ch) for ch in people[0]["family-names"].lower())
+    key = re.sub(r"[^a-z]", "", key) + year + "featurelearningmap"
+    note = version[0].upper() + version[1:] + (f". Source: \\url{{{repo}}}" if repo else "")
+    bibtex = "\n".join([
+        f"@misc{{{key},",
+        "  author       = {" + " and ".join(tex(a["family-names"]) + ", " + tex(a["given-names"]) for a in people) + "},",
+        f"  title        = {{{title}}},",
+        f"  year         = {{{year}}},",
+        f"  howpublished = {{\\url{{{url}}}}},",
+        f"  note         = {{{note}}}",
+        "}",
+    ])
+    return {"message": " ".join(cff["message"].split()), "text": text, "bibtex": bibtex,
+            "cff": f"{repo}/blob/main/CITATION.cff" if repo else ""}
+
+
 def main():
     if validate.main([]) != 0:
         print("Build stopped: fix the validation errors above.", file=sys.stderr)
@@ -221,9 +278,12 @@ def main():
     counts = {}
     for item in queue:
         counts[item["status"]] = counts.get(item["status"], 0) + 1
+    now = datetime.datetime.now(datetime.timezone.utc)
+    repo = repo_url()
     data = {
-        "generated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
-        "repo": repo_url(),
+        "generated": now.strftime("%Y-%m-%d %H:%M UTC"),
+        "repo": repo,
+        "citation": compile_citation(now.strftime("%Y-%m-%d"), repo),
         "vocab": {
             "fields": {name: {"label": f["label"], "band": f["band"], "multi": f["multi"],
                               "values": {s: {"label": v["label"], "desc": v["desc"]} for s, v in f["values"].items()}}

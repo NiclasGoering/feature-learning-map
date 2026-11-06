@@ -123,6 +123,17 @@ header nav a[aria-current="page"] { color: var(--fg); border-bottom: 1px solid v
   border-top: 1px solid var(--line);
 }
 
+/* "How to cite" block at the foot of every page (built by citeBlock in app.js) */
+.site-foot .cite { font-style: normal; color: var(--fg-muted); max-width: 52rem; margin: 0 0 1.2rem; }
+.site-foot .cite-h { font-size: 0.95rem; font-weight: 600; font-variant: small-caps; letter-spacing: 0.05em; color: var(--fg); margin: 0 0 0.35rem; }
+.site-foot .cite p { margin: 0 0 0.5rem; }
+.site-foot .cite-text span { color: var(--fg); }
+.site-foot .cite-bib summary { cursor: pointer; color: var(--fg-muted); }
+.site-foot .cite-bib pre { font-size: 0.8rem; line-height: 1.4; overflow-x: auto; padding: 0.6rem 0.8rem; margin: 0.4rem 0; border: 1px solid var(--line-strong); color: var(--fg); white-space: pre-wrap; overflow-wrap: anywhere; }
+.site-foot .cite-copy { font: inherit; font-size: 0.78rem; font-style: italic; color: var(--fg-muted); background: none; border: 1px solid var(--line-strong); padding: 0.05rem 0.45rem; cursor: pointer; }
+.site-foot .cite-copy:hover { color: var(--fg); }
+.site-foot .foot-meta { margin: 0; }
+
 main { padding: 1.2rem 1.5rem 0; }
 .lede { color: var(--fg-muted); max-width: 46rem; margin: 0 0 1.1rem; font-style: italic; }
 

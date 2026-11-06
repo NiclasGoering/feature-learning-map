@@ -22,6 +22,7 @@ A public map of the theory literature on feature learning in neural networks, fo
 | `site/` | The front end: five HTML pages (`overview.html`, published as the landing page; `table.html`; `graph.html`; mechanisms; open problems), one stylesheet, three scripts (`app.js`; `anim.js` for the overview animations; `graph.js` for the graph, with d3). No framework. |
 | `.github/workflows/` | `deploy.yml` builds and deploys to GitHub Pages on every push to `main`; `validate.yml` runs the validator and a build on every pull request. |
 | `.github/ISSUE_TEMPLATE/add-paper.yml` | Issue form for suggesting a paper (label `add-paper`). |
+| `CITATION.cff` | How to cite the map. GitHub's "Cite this repository" button reads it, and the build turns it into the "How to cite" block (plain text and BibTeX, stamped with the build date and commit) at the foot of every page. |
 | `INGEST.md` | Step-by-step instructions for ingest sessions that add papers. |
 | `SPEC.md` | The build brief. |
 | `DECISIONS.md` | Choices made where the brief left room, one per line. |

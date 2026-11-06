@@ -1,0 +1,32 @@
+# How to cite the map. GitHub reads this file for its "Cite this repository" button,
+# and scripts/build.py reads it for the "How to cite" block at the foot of every page.
+cff-version: 1.2.0
+message: >-
+  If you use the feature-learning map (its statements, its regime grid or its experiments),
+  please cite it as below, with the version you used. For any result taken from the map,
+  also cite the original paper: the map restates published results, and the papers are the sources.
+title: Feature-learning literature map
+type: dataset
+authors:
+  - family-names: Göring
+    given-names: Niclas
+url: https://niclasgoering.github.io/feature-learning-map/
+repository-code: https://github.com/NiclasGoering/feature-learning-map
+abstract: >-
+  A public map of the theory literature on feature learning in neural networks, for Bayesian
+  posteriors and gradient-based training: papers with structured entries, the main statements
+  rewritten in one notation, a regime grid, mechanisms, open problems and the map's own
+  numerical experiments.
+keywords:
+  - feature learning
+  - Bayesian neural networks
+  - neural network theory
+  - literature map
+preferred-citation:
+  type: website
+  title: Feature-learning literature map
+  authors:
+    - family-names: Göring
+      given-names: Niclas
+  year: 2026
+  url: https://niclasgoering.github.io/feature-learning-map/

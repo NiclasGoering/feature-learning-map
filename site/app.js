@@ -135,11 +135,67 @@
     var foot = $("#foot");
     if (foot) {
       var queued = D.queue.queued || 0;
-      foot.textContent = "Compiled " + D.generated + " from papers/*.md · " + D.papers.length +
+      foot.textContent = "";
+      if (D.citation) foot.appendChild(citeBlock(D.citation));
+      var meta = document.createElement("p");
+      meta.className = "foot-meta";
+      meta.textContent = "Compiled " + D.generated + " from papers/*.md · " + D.papers.length +
         " paper" + (D.papers.length === 1 ? "" : "s") + " · " + queued + " queued for ingest." +
         (D.hidden_gd_only && D.hidden_gd_only.results ? " For now the site shows Bayesian results and Bayes-vs-GD comparisons; " +
           D.hidden_gd_only.results + " results about gradient descent alone are left out." : "");
+      foot.appendChild(meta);
+      if (D.citation) {
+        var cite = $("#cite-link");
+        if (cite) cite.hidden = false;
+        // The block is built after page load, so a link to …#cite needs a scroll once the page has laid out.
+        if (location.hash === "#cite") window.addEventListener("load", function () {
+          setTimeout(function () { var t = document.getElementById("cite"); if (t) t.scrollIntoView(); }, 200);
+        });
+      }
     }
+  }
+
+  // "How to cite": data.citation is compiled from CITATION.cff by scripts/build.py.
+  function citeBlock(c) {
+    function node(tag, cls, text) {
+      var n = document.createElement(tag);
+      if (cls) n.className = cls;
+      if (text) n.textContent = text;
+      return n;
+    }
+    function copyButton(label, text) {
+      var b = node("button", "cite-copy", label);
+      b.type = "button";
+      b.addEventListener("click", function () {
+        var done = function () { b.textContent = "Copied"; setTimeout(function () { b.textContent = label; }, 1500); };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, function () {});
+      });
+      return b;
+    }
+    var sec = node("section", "cite");
+    sec.id = "cite";
+    sec.appendChild(node("h2", "cite-h", "How to cite"));
+    sec.appendChild(node("p", "cite-msg", c.message));
+    var text = node("p", "cite-text");
+    text.appendChild(node("span", "", c.text));
+    text.appendChild(document.createTextNode(" "));
+    text.appendChild(copyButton("Copy", c.text));
+    sec.appendChild(text);
+    var bib = node("details", "cite-bib");
+    bib.appendChild(node("summary", "", "BibTeX"));
+    bib.appendChild(node("pre", "", c.bibtex));
+    bib.appendChild(copyButton("Copy BibTeX", c.bibtex));
+    sec.appendChild(bib);
+    var more = node("p", "cite-more", "The date and commit above identify the build you are reading; the map changes as papers are added. ");
+    if (c.cff) {
+      more.appendChild(document.createTextNode("The same citation is in "));
+      var a = node("a", "", "CITATION.cff");
+      a.href = c.cff;
+      more.appendChild(a);
+      more.appendChild(document.createTextNode(", which GitHub's “Cite this repository” button reads."));
+    }
+    sec.appendChild(more);
+    return sec;
   }
 
   function setupTheme() {
