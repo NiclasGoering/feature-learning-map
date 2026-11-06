@@ -433,6 +433,12 @@ function onPalette() {
   RECS.forEach(function (r) { r.dirty = true; if (r.inst && r.active()) r.inst.redraw(); });
 }
 function setupPanel(details) {
+  if (details.classList.contains("ov-video")) {   // a computed clip instead of a canvas sketch: pause it when the panel closes
+    details.addEventListener("toggle", function () {
+      if (!details.open) details.querySelectorAll("video").forEach(function (v) { v.pause(); });
+    });
+    return null;
+  }
   var n = details.id.replace("anim-", "");
   var rec = { n: n, d: details, body: details.querySelector(".an-body"), inst: null, visible: false, raf: 0, last: 0, dirty: true };
   rec.active = function () { return details.open && rec.visible && !D.hidden; };

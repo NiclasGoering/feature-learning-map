@@ -24,6 +24,7 @@
   <a class="brand" href="./">Feature-learning map</a>
   <nav aria-label="Pages">
     <a href="./" aria-current="page">Overview</a>
+    <a href="deep-dive.html">Deep dive</a>
     <a href="table.html">Table</a>
     <a href="graph.html">Graph</a>
     <a href="mechanisms.html">Mechanisms</a>
@@ -41,6 +42,7 @@
 <div class="ov-head">
   <h1>Who pays for interpolation?</h1>
   <p class="lede">Energy, entropy and feature learning for Bayesian posteriors and gradient descent, on one page.</p>
+  <p class="ov-notation">A slower walk with computed animations, from the NTK through μP to the tilted neuron law, is on the <a href="deep-dive.html">Deep dive</a> page.</p>
   <p class="ov-notation">
     $W^\ell$ weights · $h^\ell$ hidden preactivations · $a$ readout · $N$ width · $L$ depth · $d$ input dimension ·
     $P$ samples $(x_i,y_i)$ · $\varphi$ activation · $\mathcal M$ interpolating set · $\varepsilon_{\rm gen}$ generalisation error
@@ -120,9 +122,18 @@
   $$\mathcal E(J)=\min\big\{\htmlClass{c-en}{\tfrac12y^\top(K^L)^{-1}y}:\ \htmlClass{c-ent}{\textstyle\sum_\ell J_\ell}\le J\big\}$$
   <p>On this Pareto front the optimum sits where the slope is $-1/\kappa$: NTK is the $J=0$ corner, μP an interior point, $\kappa\to\infty$ the far end. The GD counterpart is the lazy-to-rich transition driven by output or initialisation scale (<a class="cite" data-arxiv="1812.07956" href="https://arxiv.org/abs/1812.07956">Chizat et al. 2019</a>; <a class="cite" data-arxiv="2002.09277" href="https://arxiv.org/abs/2002.09277">Woodworth et al. 2020</a>).</p>
 
-  <details class="ov-flip ov-anim" id="anim-3a">
-    <summary>Animation: the energy–entropy Pareto front</summary>
-    <div class="an-body"></div>
+  <details class="ov-flip ov-anim ov-video" id="anim-3a">
+    <summary>Animation: one hidden layer from κ ≈ 0 (NTK) to κ → ∞, solved exactly</summary>
+    <div class="an-body">
+      <figure class="vid">
+        <div class="vid-tabs" role="group" aria-label="Target">
+          <button type="button" aria-pressed="true" data-src="media/law-kappa-bump.mp4">smooth target (bump)</button>
+          <button type="button" aria-pressed="false" data-src="media/law-kappa-hf.mp4">hard target ($\sin 9x$)</button>
+        </div>
+        <video controls playsinline preload="none" width="1920" height="1080" poster="media/law-kappa-bump.jpg"><source src="media/law-kappa-bump.mp4" type="video/mp4"></video>
+        <figcaption>The width-limit posterior of a one-hidden-layer tanh network on 12 points, solved on a grid at every $\kappa$ from $10^{-4}$ to 1000. Top: where the neurons $(w,b)$ sit, the <span class="c-ent">entropy</span> they spend, and the landscape they feel. Bottom: the fit, the kernel, and $S$, $\kappa E$ and $F=\kappa E-S$ against $\kappa$. At small $\kappa$ the law is the prior and all the cost is <span class="c-en">energy</span>; as $\kappa$ grows the neurons leave the prior for a few wells, spending entropy to lower the energy; as $\kappa\to\infty$ they condense onto a few steep features. <a href="deep-dive.html#kappa">More on the Deep dive page</a>.</figcaption>
+      </figure>
+    </div>
   </details>
 
   <h3>Feature learning needs an extensive $Z$ <a class="animlink" href="#anim-3b">▶ Animation</a></h3>
@@ -229,9 +240,14 @@
     <p class="ov-pl">Breaks when</p>
     <p>Run time is finite: mixing times grow like $e^{\text{barrier}/T}$, and where several saddles compete (T5) chains stay in one basin (<a href="open-problems.html#op-03">open problem 3</a>). Constant-step unadjusted Langevin or SGLD has a biased stationary law (<a class="cite" data-arxiv="1811.10072" href="https://arxiv.org/abs/1811.10072">Brosse, Durmus &amp; Moulines 2018</a>). Mini-batch SGD noise is neither isotropic nor at a fixed temperature, so plain SGD is not this dynamics.</p>
   </div>
-  <details class="ov-flip ov-anim" id="anim-4">
-    <summary>Animation: three costs for one neuron measure</summary>
-    <div class="an-body"></div>
+  <details class="ov-flip ov-anim ov-video" id="anim-4">
+    <summary>Animation: why the posterior is a tilted law (Bayes conditions iid neurons on their average)</summary>
+    <div class="an-body">
+      <figure class="vid">
+        <video controls playsinline preload="none" width="1920" height="1080" poster="media/law-tilt.jpg"><source src="media/law-tilt.mp4" type="video/mp4"></video>
+        <figcaption>One data point ($x_0=1$, $y_0=1.2$), μP. Left: $N$ prior neurons; middle: an exact posterior sample, the neurons of a network that hits $y_0$; right: the predicted single-site law $\rho\propto\mathcal N(z)\,\mathcal N(a)\,e^{\lambda a\tanh z}$. The data fix only the neurons' average, so each neuron leans a little (Sanov): the posterior neurons follow the tilt from $N\approx10$ on, and $-\tfrac1N\log Z_D\to\mathrm{KL}(\rho\Vert p_0)=1.41$ per neuron. At $N=1$ the single neuron must fit alone and sits on the curve $a\tanh z=y_0$. <a href="deep-dive.html#tilt">More on the Deep dive page</a>.</figcaption>
+      </figure>
+    </div>
   </details>
 </section>
 
@@ -244,9 +260,18 @@
   $$\nu^\star_L(h)\propto\mathcal N(h;0,K^{L-1})\,e^{\frac{\htmlClass{c-kap}{\kappa}}{2}\,(v^\top\varphi(h))^2},\qquad v=(K^L)^{-1}y,$$
   <p>so neurons aligned with the residual direction $v$ are up-weighted and <em>the kernel grows along the target</em>. For small $\kappa$ this is the small-$\gamma_0$ μP correction (<a class="cite" data-arxiv="2502.07998" href="https://arxiv.org/abs/2502.07998">Lauditi et al. 2025</a>); the order-$1/N$ adaptive-kernel theories share its target term and add a log-det tilt $-\tfrac{D_{\rm out}}{2N}\mathrm{Cov}_0\big(\varphi\varphi^\top,\varphi^\top(K+\eta I)^{-1}\varphi\big)$ for $D_{\rm out}$ outputs (<a class="cite" data-arxiv="2106.04110" href="https://arxiv.org/abs/2106.04110">Naveh &amp; Ringel 2021</a>; <a class="cite" data-arxiv="2112.15383" href="https://arxiv.org/abs/2112.15383">Seroussi et al. 2023</a>):</p>
   $$\delta K^L\approx\tfrac{\htmlClass{c-kap}{\kappa}}{2}\,\mathrm{Cov}_0\big(\varphi\varphi^\top,(v^\top\varphi)^2\big).$$
-  <details class="ov-flip ov-anim" id="anim-5">
-    <summary>Animation: the tilted single-site law as κ grows</summary>
-    <div class="an-body"></div>
+  <details class="ov-flip ov-anim ov-video" id="anim-5">
+    <summary>Animation: energy and entropy as data arrive, and the landscape each neuron sees</summary>
+    <div class="an-body">
+      <figure class="vid">
+        <div class="vid-tabs" role="group" aria-label="Target">
+          <button type="button" aria-pressed="true" data-src="media/law-landscape-bump.mp4">smooth target (bump)</button>
+          <button type="button" aria-pressed="false" data-src="media/law-landscape-hf.mp4">hard target ($\sin 9x$)</button>
+        </div>
+        <video controls playsinline preload="none" width="1920" height="1080" poster="media/law-landscape-bump.jpg"><source src="media/law-landscape-bump.mp4" type="video/mp4"></video>
+        <figcaption>One hidden tanh layer, μP ($\kappa=1$), infinite width, the training set growing from 1 to 64 points. Top: the fit; the law $\nu^\star(w,b)$; its <span class="c-ent">entropy density</span> $\nu^\star\log(\nu^\star/\nu_0)$; and the landscape $U(w)=\tfrac12|w|^2-\tfrac12a(w)^2$ with $a(w)=\sqrt\kappa\,v^\top\varphi_w(X)$, whose wells are where $\nu^\star\propto e^{-U}$ puts the neurons. Bottom: $F=\kappa E-S$ against $P$; the cost of each new point against its bound; and $F$ along laws that spend more or less entropy than Bayes, whose minimum is the Bayes law at every $P$. <a href="deep-dive.html#wells">More on the Deep dive page</a>.</figcaption>
+      </figure>
+    </div>
   </details>
 </section>
 
@@ -305,9 +330,14 @@
     <li><strong>In between.</strong> Finite-time annealing and SGD at a finite learning rate are non-equilibrium steady states, not Gibbs measures; constant-step SGLD targets a biased measure (<a class="cite" data-arxiv="1811.10072" href="https://arxiv.org/abs/1811.10072">Brosse, Durmus &amp; Moulines 2018</a>).</li>
   </ul>
   <p class="punch">Bayes generalises by the volume of bad interpolants, GD by the volume of their basins. Whether the two volumes agree, $C_{GD}\approx\mathrm{KL}$, is the volume question: to first order on small Boolean tasks (<a class="cite" data-arxiv="2006.15191" href="https://arxiv.org/abs/2006.15191">Mingard et al. 2021</a>), with a systematic GD advantage at proper initialisation and width (<a class="cite" data-arxiv="2407.03848" href="https://arxiv.org/abs/2407.03848">Peleg &amp; Hein 2024</a>); settling it is <a href="open-problems.html#op-10">open problem 10</a>.</p>
-  <details class="ov-flip ov-anim" id="anim-7">
-    <summary>Animation: Bayes against GD, and the quench against equilibrium</summary>
-    <div class="an-body"></div>
+  <details class="ov-flip ov-anim ov-video" id="anim-7">
+    <summary>Animation: gradient descent against the Bayes law, neuron by neuron</summary>
+    <div class="an-body">
+      <figure class="vid">
+        <video controls playsinline preload="none" width="1920" height="1080" poster="media/bayes-vs-gd.jpg"><source src="media/bayes-vs-gd.mp4" type="video/mp4"></video>
+        <figcaption>μP, width $N=65{,}536$, 12 points of a bump. Dots: 4,000 of <span class="c-gd">gradient descent's</span> neurons $(w,b)$ as it trains from a prior draw; shading: the Bayes law. Gradient descent moves each neuron until the points are fitted and then stops: its neurons lie on thin curves while the posterior fills broad clouds, and the energy of its features ends at 7.51 against 7.13 for Bayes. The quench lands close to equilibrium, not on it. <a href="deep-dive.html#counts">More on the Deep dive page</a>.</figcaption>
+      </figure>
+    </div>
   </details>
 </section>
 

@@ -406,6 +406,34 @@ ul.dict li { padding: 0.6rem 0; border-bottom: 1px solid var(--line); }
 .ov-flip { border: 1px dashed var(--line-strong); padding: 0.25rem 0.7rem; margin: 0.4rem 0; }
 .ov-flip > summary { cursor: pointer; color: var(--fg-muted); font-style: italic; }
 .ov-flip[open] { background: var(--bg-raised); }
+/* Computed clips (Deep dive; Overview panels). On the Deep dive a clip is wider than the text column, so the
+   small labels burned into the 1920-pixel frames stay legible; captions keep the column width. */
+.vid { margin: 0.9rem 0 1.2rem; }
+.vid video, .vid img { display: block; width: 100%; height: auto; background: #fff; border: 1px solid var(--line-strong); border-radius: 2px; }
+.vid figcaption { font-size: 0.9rem; line-height: 1.45; color: var(--fg-muted); margin: 0.45rem 0 0; }
+.dd-page .vid { width: min(84rem, calc(100vw - 2rem)); position: relative; left: 50%; transform: translateX(-50%); }
+.dd-page .vid figcaption, .dd-page .vid .vid-tabs { max-width: 62rem; margin-left: auto; margin-right: auto; }
+.vid-tabs { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0 0 0.45rem; }
+.vid-tabs button { font: inherit; font-size: 0.86rem; color: var(--fg-muted); background: none; border: 1px solid var(--line-strong); border-radius: 2px; padding: 0.1rem 0.65rem; cursor: pointer; }
+.vid-tabs button:hover { color: var(--fg); }
+.vid-tabs button[aria-pressed="true"] { color: var(--fg); border-color: var(--fg); }
+.dd-toc { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.4rem 1.4rem; font-size: 0.9rem; margin: 0.2rem 0 0.8rem; }
+.dd-toc > div > a { font-variant: small-caps; letter-spacing: 0.04em; font-weight: 600; text-decoration: none; }
+.dd-toc ol { margin: 0.25rem 0 0; padding-left: 1.4rem; color: var(--fg-faint); }
+.dd-toc li { margin: 0.1rem 0; }
+.dd-toc li a { color: var(--fg-muted); text-decoration: none; }
+.dd-toc li a:hover, .dd-toc > div > a:hover { color: var(--fg); }
+@media (max-width: 800px) { .dd-toc { grid-template-columns: 1fr; } }
+.dd-howto { font-size: 0.88rem; color: var(--fg-faint); font-style: italic; margin: 0 0 0.6rem; }
+.dd-part { margin: 2.2rem 0 1.1rem; padding-top: 0.9rem; border-top: 1.5px solid var(--rule); }
+.dd-part .dd-pn { margin: 0; font-variant: small-caps; letter-spacing: 0.08em; color: var(--fg-faint); }
+.ov-page .dd-part h2 { font-size: 1.5rem; margin: 0.1rem 0 0.35rem; }
+.dd-part .lede { margin: 0; }
+.dd-page section { scroll-margin-top: 1rem; }
+.dd-table { border-collapse: collapse; margin: 0.6rem 0 0.8rem; font-size: 0.92rem; }
+.dd-table th, .dd-table td { padding: 0.25rem 0.8rem 0.25rem 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.dd-table thead th { border-bottom: 1px solid var(--line-strong); font-weight: 600; color: var(--fg-muted); }
+.dd-table td:first-child { color: var(--fg-muted); white-space: nowrap; }
 .ov-status { border-top: 1.5px solid var(--rule); padding-top: 0.5rem; margin-top: 0.4rem; font-size: 0.85rem; color: var(--fg-muted); font-style: italic; }
 @media (max-width: 900px) { .ov-head h1 { font-size: 1.6rem; } .ov-page { font-size: 1rem; } }
 @media print {

@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>Deep dive · Feature-learning map</title>
+<meta name="description" content="From the NTK to μP to the tilted neuron law of the Bayesian posterior, with computed animations.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="style.css">
+<script>try { if (localStorage.getItem("flmap-theme") === "light") document.documentElement.dataset.theme = "light"; } catch (e) {}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script defer src="app.js"></script>
+</head>
+<body data-page="deep-dive">
+<a class="skip" href="#content">Skip to content</a>
+<header class="site">
+  <a class="brand" href="./">Feature-learning map</a>
+  <nav aria-label="Pages">
+    <a href="./">Overview</a>
+    <a href="deep-dive.html" aria-current="page">Deep dive</a>
+    <a href="table.html">Table</a>
+    <a href="graph.html">Graph</a>
+    <a href="mechanisms.html">Mechanisms</a>
+    <a href="open-problems.html">Open problems</a>
+  </nav>
+  <div class="head-tools">
+    <a id="add-paper" href="#" hidden>Suggest a paper</a>
+    <a id="cite-link" href="#cite" hidden>Cite</a>
+    <a id="repo-link" href="#" hidden>GitHub</a>
+    <button id="theme" type="button" aria-label="Switch colour theme">Light</button>
+  </div>
+</header>
+<main id="content" class="ov-page dd-page">
+
+<div class="ov-head">
+  <h1>From the NTK to the tilted neuron law</h1>
+  <p class="lede">Why wide networks trained the standard way stop learning features, how μP brings feature learning back, and what the Bayesian posterior of a wide one-hidden-layer μP network looks like, neuron by neuron. Every animation is computed, not drawn.</p>
+  <p class="ov-notation">
+    $\theta$ all parameters · $N$ width · $P$ training points $(x_i,y_i)$ · $r_i=f(x_i)-y_i$ residual · $K^{\rm NTK}$ tangent kernel ·
+    $K$ feature kernel · $\gamma$ output scale · $\kappa=\gamma^2/N$ · in Parts I–II $\eta$ is the learning rate, in Part III a small label-noise ridge, $K\to K+\eta I$
+  </p>
+  <p class="ov-legend">
+    <span class="c-ent">■ entropy (hidden layers)</span> <span class="c-en">■ energy (readout)</span> <span class="c-kap">■ exchange rate $\kappa$</span> <span class="c-gd">■ gradient descent</span>
+  </p>
+</div>
+
+<nav class="dd-toc" aria-label="Contents">
+  <div><a href="#ntk">I · The NTK: a Newton's law for networks</a>
+    <ol start="1"><li><a href="#params">A network is a point in parameter space</a></li><li><a href="#law">The law of motion</a></li><li><a href="#solvable">When the law can be solved</a></li><li><a href="#spectral-bias">Spectral bias</a></li><li><a href="#alignment">What it says about generalisation</a></li><li><a href="#ntk-misses">What the NTK misses</a></li></ol></div>
+  <div><a href="#mup">II · NTK against μP: why features freeze</a>
+    <ol start="7"><li><a href="#fl">What feature learning is</a></li><li><a href="#lazy">Why the NTK parametrisation is lazy</a></li><li><a href="#mnist">The same on MNIST</a></li><li><a href="#watch">Watching the kernel reorder</a></li></ol></div>
+  <div><a href="#bayes">III · The Bayesian view: the tilted neuron law</a>
+    <ol start="11"><li><a href="#filter">Bayes is a filter</a></li><li><a href="#counts">Bayes counts, gradient descent travels</a></li><li><a href="#mean-field">Neurons become a distribution</a></li><li><a href="#tilt">Why the law is tilted</a></li><li><a href="#derivation">The derivation in three steps</a></li><li><a href="#fixed-point">Solving the fixed point</a></li><li><a href="#wells">Why the neurons sit where they do</a></li><li><a href="#kappa">From NTK to κ → ∞</a></li><li><a href="#data">Adding data</a></li><li><a href="#lenses">One dial, two lenses</a></li><li><a href="#assumptions">What the derivation assumed</a></li><li><a href="#not-generalisation">Feature learning is not generalisation</a></li></ol></div>
+</nav>
+<p class="dd-howto">Each clip starts when you press play and pauses when you scroll past it; full screen shows the small labels best. Where a figure has two buttons above it, they switch between a smooth and a hard target.</p>
+
+<!-- ============================================================ Part I -->
+<div class="dd-part" id="ntk">
+  <p class="dd-pn">Part I</p>
+  <h2>The NTK: a Newton's law for networks</h2>
+  <p class="lede">Newton's law says how a body moves under a force. Gradient descent obeys a law of the same kind for the function a network computes, and in one limit the law can be solved.</p>
+</div>
+
+<section id="params">
+  <h2><span class="n">1</span>A network is a point in parameter space</h2>
+  <p>A network with weights $\theta\in\mathbb R^p$ computes one function $f_\theta$. Drawing $\theta$ from a Gaussian, as every initialisation does, draws a random function: the prior over weights is a prior over functions.</p>
+  <figure class="vid">
+    <video controls playsinline preload="none" width="2160" height="1080" poster="media/params-random-networks.jpg"><source src="media/params-random-networks.mp4" type="video/mp4"></video>
+    <figcaption>A tanh network with three hidden layers of width 4 (44 weights). Left: parameter space through a random two-dimensional projection, shaded by the Gaussian the weights are drawn from. Middle: the network, lines coloured by the sign of each weight, neurons shaded by how strongly they fire. Right: the function. One point is one network is one function; 37 quick draws show the spread of functions the Gaussian produces.</figcaption>
+  </figure>
+  <p>Training moves the point. Gradient descent on the squared loss $L(\theta)=\tfrac12\sum_{i=1}^P\big(f_\theta(x_i)-y_i\big)^2$ steps downhill, $\theta_{t+1}=\theta_t-\eta\,\nabla_\theta L(\theta_t)$, and the function bends onto the data.</p>
+  <figure class="vid">
+    <video controls playsinline preload="none" width="2160" height="1080" poster="media/params-gd-slice.jpg"><source src="media/params-gd-slice.mp4" type="video/mp4"></video>
+    <figcaption>The same network on 8 points, on a plane through parameter space that contains two exact fits, A and B (colour: training loss). Three runs of gradient descent restricted to the plane: two roll into valley A, one into valley B. Both valleys fit the 8 points, and the two functions differ between and beyond them: which fit you get depends on where you start.</figcaption>
+  </figure>
+</section>
+
+<section id="law">
+  <h2><span class="n">2</span>The law of motion</h2>
+  <p>In the small-step limit (gradient flow) the weights move as $\partial_t\theta=-\eta\sum_i r_i\,\nabla_\theta f_t(x_i)$, and the chain rule turns this into a law for the function itself:</p>
+  <div class="ov-key">
+  $$\partial_t f_t(x)=-\eta\sum_{i=1}^P K^{\rm NTK}_t(x,x_i)\,r_i,\qquad K^{\rm NTK}_t(x,x')=\nabla_\theta f_t(x)\cdot\nabla_\theta f_t(x').$$
+  </div>
+  <p>The neural tangent kernel (<a class="cite" data-arxiv="1806.07572" href="https://arxiv.org/abs/1806.07572">Jacot et al. 2018</a>) says how much the output at $x$ moves when one step is taken to fix the output at $x_i$.</p>
+  <figure class="vid">
+    <video controls playsinline preload="none" width="1920" height="1080" poster="media/ntk-one-pull.jpg"><source src="media/ntk-one-pull.mp4" type="video/mp4"></video>
+    <figcaption>One pull. A GELU network with three hidden layers of width 1024 is trained on the red point alone. The whole curve moves, and the shape of the move (bottom) is the kernel $K^{\rm NTK}(\cdot,x_i)$: a bump centred on the point.</figcaption>
+  </figure>
+  <figure class="vid">
+    <video controls playsinline preload="none" width="1920" height="1080" poster="media/ntk-all-pulls.jpg"><source src="media/ntk-all-pulls.mp4" type="video/mp4"></video>
+    <figcaption>All the pulls. Every training point adds its own bump, scaled by its residual (the bars); the bumps add up, and their sum is how the curve moves next. As the residuals shrink so do the bumps, and a point that is fitted stops pulling.</figcaption>
+  </figure>
+</section>
+
+<section id="solvable">
+  <h2><span class="n">3</span>When the law can be solved</h2>
+  <p>In general $K^{\rm NTK}_t$ depends on $\theta_t$, and the law is a nonlinear differential equation in $p$ dimensions. It closes when three conditions hold: gradient flow, infinite width in the NTK parametrisation ($\gamma=1$ in §8), and a positive-definite kernel. The kernel then stays at its initial value for the whole of training (<a class="cite" data-arxiv="1806.07572" href="https://arxiv.org/abs/1806.07572">Jacot et al. 2018</a>), and with $K=K^{\rm NTK}_0$ on the training points the law is linear:</p>
+  $$\partial_t r=-\eta Kr\ \Longrightarrow\ r(t)=e^{-\eta Kt}\,r(0),\qquad f_t(x)=f_0(x)-K(x,X)K^{-1}\big(I-e^{-\eta Kt}\big)\,r(0).$$
+  <p>As $t\to\infty$, $f_\infty(x)=f_0(x)+K(x,X)K^{-1}\big(y-f_0(X)\big)$: kernel regression with the tangent kernel.</p>
+  <figure class="vid">
+    <video controls playsinline preload="none" width="1920" height="1080" poster="media/ntk-closed-form.jpg"><source src="media/ntk-closed-form.mp4" type="video/mp4"></video>
+    <figcaption>The closed form against the trained network (width 1024, 12 points), with the residual in each eigenmode of $K$. In the NTK parametrisation the trained network (blue) and the formula with the kernel frozen at $t=0$ (dashed) move together. In μP they start alike and then part: both end up through the 12 points, but they disagree in between, by up to 1.7 on the way. A fixed kernel cannot describe μP.</figcaption>
+  </figure>
+</section>
+
+<section id="spectral-bias">
+  <h2><span class="n">4</span>Spectral bias</h2>
+  <p>Diagonalise the kernel on the data, $K=\sum_k\lambda_kv_kv_k^\top$. Each eigenmode is learned on its own clock:</p>
+  $$f_t(x)-f_0(x)=\sum_k\big(1-e^{-\eta\lambda_kt}\big)\,a_k\,\phi_k(x),\qquad \phi_k(x)=K(x,X)\,v_k/\lambda_k,\quad a_k=-v_k^\top r(0).$$
+  <p>Mode $k$ needs about $1/(\eta\lambda_k)$ steps. The large eigenvalues belong to smooth eigenfunctions, so smooth shapes are learned first and wiggly ones last: spectral bias.</p>
+  <figure class="vid">
+    <video controls playsinline preload="none" width="1920" height="1080" poster="media/ntk-spectral-bias.jpg"><source src="media/ntk-spectral-bias.mp4" type="video/mp4"></video>
+    <figcaption>The frozen-kernel solution, mode by mode, in log time. The smooth top modes ($\lambda_1=39$) are in after a step or two; the wiggliest of the 12 ($\lambda_{12}=0.033$) needs about 1,500. With every mode in, the sum passes through all 12 points: that is kernel regression.</figcaption>
+  </figure>
+</section>
+
+<section id="alignment">
+  <h2><span class="n">5</span>What it says about generalisation</h2>
+  <p>Off the data the network predicts with the kernel's eigenfunctions. A target whose power sits in the top eigenfunctions is learned from few samples; a target whose power sits in the tail needs many, however long one trains. The test error is set by how the target lines up with the kernel's spectrum: spectral alignment (<a class="cite" data-arxiv="2006.13198" href="https://arxiv.org/abs/2006.13198">Canatar, Bordelon &amp; Pehlevan 2021</a>).</p>
+  <figure class="vid">
+    <video controls playsinline preload="none" width="1920" height="1080" poster="media/ntk-spectral-alignment.jpg"><source src="media/ntk-spectral-alignment.mp4" type="video/mp4"></video>
+    <figcaption>One kernel, two targets: kernel regression with the same tangent kernel on a smooth target and on $\sin(12\pi x)$, from 2 to 400 training points (measured over 100 draws per $P$, against the theory of Canatar et al.). The kernel learns its modes from left to right. The smooth target's power is in the first modes and its test error falls; the high-frequency target's power is in the tail and its test error stays near 1.</figcaption>
+  </figure>
+</section>
+
+<section id="ntk-misses">
+  <h2><span class="n">6</span>What the NTK misses</h2>
+  <p>The closed form needs infinite width, the NTK parametrisation and small learning rates. Real networks are finite, are trained with large steps and with Adam, and large models are trained in μP. Above all the frozen kernel rules out what makes networks better than kernels: feature learning. A network can learn a target that sits in its kernel's tail only if the kernel itself moves. That is Part II.</p>
+</section>
+
+<!-- ============================================================ Part II -->
+<div class="dd-part" id="mup">
+  <p class="dd-pn">Part II</p>
+  <h2>NTK against μP: why features freeze, and how to unfreeze them</h2>
+  <p class="lede">Whether the hidden layers move as the width grows is decided by how the output and the learning rate are scaled.</p>
+</div>
+
+<section id="fl">
+  <h2><span class="n">7</span>What feature learning is</h2>
+  <p>Feature learning is movement of the hidden representation that does not vanish as the network grows: $\Delta h^\ell(x)=h^\ell_t(x)-h^\ell_0(x)$ stays of order one per neuron as $N\to\infty$. Equivalently, the hidden kernels $K^\ell$, and with them $K^{\rm NTK}$, move by an amount that does not shrink with the width.</p>
+</section>
+
+<section id="lazy">
+  <h2><span class="n">8</span>Why the NTK parametrisation is lazy</h2>
+  <p>Take one hidden layer, $f(x)=\tfrac{1}{\gamma\sqrt N}\sum_{i=1}^Na_i\,\varphi(h_i(x))$ with $h_i=w_i\cdot x/\sqrt d$ and all weights $\mathcal N(0,1)$, trained with learning rate $\eta\gamma^2$, the scaling that moves the function by $O(\eta)$ per step for every $\gamma$. One step of gradient descent changes</p>
+  $$\Delta a_i\sim\eta\,\frac{\gamma}{\sqrt N},\qquad \Delta h_i\sim\eta\,\frac{\gamma}{\sqrt N}=\eta\sqrt{\htmlClass{c-kap}{\kappa}},\qquad \Delta f\sim\frac{1}{\gamma\sqrt N}\sum_{i=1}^N\big(\varphi\,\Delta a_i+a_i\varphi'\,\Delta h_i\big)\sim\eta .$$
+  <table class="dd-table">
+    <thead><tr><th></th><th>$\gamma$</th><th>learning rate</th><th>$\kappa=\gamma^2/N$</th><th>function moves</th><th>hidden units move</th></tr></thead>
+    <tbody>
+      <tr><td>NTK</td><td>$1$</td><td>$\eta$</td><td>$1/N$</td><td>$O(\eta)$</td><td>$O(\eta/\sqrt N)\to0$: lazy</td></tr>
+      <tr><td>μP</td><td>$\gamma_0\sqrt N$</td><td>$\eta\gamma_0^2N$</td><td>$\gamma_0^2$</td><td>$O(\eta)$</td><td>$O(\eta\gamma_0)$: rich</td></tr>
+    </tbody>
+  </table>
+  <p>In the NTK parametrisation the function moves while every hidden unit stays where it started, so the kernel freezes and Part I applies. The standard PyTorch parametrisation at its largest stable learning rate ends up in the same kernel limit (<a class="cite" data-arxiv="2011.14522" href="https://arxiv.org/abs/2011.14522">Yang &amp; Hu 2021</a>). μP makes the output small and the learning rate large in proportion: the readout alone can no longer fit the data, so the hidden units must move. As a side effect the update per step no longer depends on $N$, so the best learning rate carries over from small to large widths.</p>
+  <p>The hidden movement $\Delta h\sim\eta\sqrt\kappa$ is the first appearance of the dial that runs through the whole map: <span class="c-kap">$\kappa=1/N$ in NTK, $\kappa=\gamma_0^2$ in μP</span>.</p>
+  <figure class="vid">
+    <video controls playsinline preload="none" width="1920" height="1080" poster="media/ntk-bump-change.jpg"><source src="media/ntk-bump-change.mp4" type="video/mp4"></video>
+    <figcaption>Does the bump change? The network of Part I trained in both parametrisations from the same start, with the kernel $\gamma^2K^{\rm NTK}_t(\cdot,x^*)$ at a test point. NTK: the bump keeps its shape, and the kernel moves by a few per cent. μP: the kernel reshapes itself around the data and changes by more than 250%. NTK adds up fixed shapes; μP changes its own shapes.</figcaption>
+  </figure>
+</section>
+
+<section id="mnist">
+  <h2><span class="n">9</span>The same on MNIST</h2>
+  <figure class="vid">
+    <video controls playsinline preload="none" width="1920" height="1080" poster="media/mup-mnist.jpg"><source src="media/mup-mnist.mp4" type="video/mp4"></video>
+    <figcaption>A ReLU network with four hidden layers trained by SGD on MNIST, at widths 32 (top) and 2048 (bottom), in NTK (left) and μP (right), with the same initialisation and minibatches. Curves: train and test error, and how far the function ($\Delta f$), the last hidden layer ($\Delta h$) and the readout ($\Delta a$) have moved. Strips: the change in the last hidden layer on two digits, and in the readout into their classes. At width 2048 the NTK network's hidden layer barely moves; the μP network's moves as much as at width 32.</figcaption>
+  </figure>
+</section>
+
+<section id="watch">
+  <h2><span class="n">10</span>Watching the kernel reorder</h2>
+  <p>Moving is not enough by itself; what matters is that the kernel moves the target to the front of its spectrum, where the clock of §4 is fast.</p>
+  <figure class="vid">
+    <video controls playsinline preload="none" width="1920" height="1080" poster="media/mup-watch-kernel.jpg"><source src="media/mup-watch-kernel.mp4" type="video/mp4"></video>
+    <figcaption>One tanh layer on 32 points of $\sin 9x$, by gradient flow from the same start. Left: the NTK limit ($N\to\infty$, kernel frozen exactly). Right: μP at $N=8192$. Middle row: the kernel $K_t(x,x')$. Bottom, the shelf: the target's power in each eigenmode of $K_t$, placed at the number of steps that mode needs, $\tau_k=P/\lambda_k$ (the loss here is averaged over the points). At the start 74% of the target sits in one mode that needs about 5.8 million steps. μP grows bright spots at the zeros of $\sin 9x$ and slides the target to the front, where it needs a few steps, and its test error falls below 0.5 at $t\approx1{,}700$. The NTK limit keeps its shelf and gets there at $t\approx2.8$ million, 1,600 times later.</figcaption>
+  </figure>
+</section>
+
+<!-- ============================================================ Part III -->
+<div class="dd-part" id="bayes">
+  <p class="dd-pn">Part III</p>
+  <h2>The Bayesian view: the tilted neuron law</h2>
+  <p class="lede">Gradient descent is a dynamical problem in billions of dimensions, solvable only where nothing moves. Bayes asks the static question first: of all the networks that fit, where is most of the prior mass? For a wide network with one hidden layer the answer is one law for every neuron.</p>
+</div>
+
+<p>Model of Part III: one hidden tanh layer with input $(x,1)$, so a neuron is a point $w=(w,b)$ in the plane with $\varphi_w(x)=\tanh\big((wx+b)/\sqrt2\big)$; $f(x)=\tfrac{1}{\gamma\sqrt N}\sum_ia_i\,\varphi_{w_i}(x)$; all parameters iid $\mathcal N(0,1)$; $\kappa=\gamma^2/N$, and μP is $\kappa=1$. Two targets on $[-1.5,1.5]$: a smooth bump, $2e^{-4x^2}-0.7$, and a hard one, $\sin 9x$.</p>
+
+<section id="filter">
+  <h2><span class="n">11</span>Bayes is a filter</h2>
+  <p>The posterior is the prior restricted to the networks that fit the data:</p>
+  $$p_B(\theta\mid D)=\frac{p_0(\theta)\,\mathbb 1[\theta\in\mathcal M]}{Z_D},\qquad Z_D=p_0(\mathcal M),\qquad \mathcal M=\{\theta:f_\theta(x_i)=y_i\ \forall i\}.$$
+  <p>The evidence $Z_D$ is the chance that a random network already fits; predictions average over the posterior.</p>
+  <figure class="vid">
+    <video controls playsinline preload="none" width="1920" height="1080" poster="media/bayes-filter.jpg"><source src="media/bayes-filter.mp4" type="video/mp4"></video>
+    <figcaption>Draw networks from the prior and keep the ones that fit. Left: a toy with one neuron and one point, where some draws land on the fit. Right: the real task, 12 points and networks of width 1024. None of 1000 draws fits all 12 points to within 0.05 (the closest misses by an RMSE of 0.55), and the chance is provably below $10^{-284}$. The interpolating set is far too small to be found by drawing from the prior; it has to be computed.</figcaption>
+  </figure>
+</section>
+
+<section id="counts">
+  <h2><span class="n">12</span>Bayes counts, gradient descent travels</h2>
+  <p>Bayes asks where most of the prior mass of the interpolating set lies. Gradient descent asks which fitting network it reaches first from its random start. The questions differ and the answers are often close; the Overview (<a href="./#gd-vs-bayes">§7</a>) casts them as equilibrium against a quench.</p>
+  <figure class="vid">
+    <video controls playsinline preload="none" width="1920" height="1080" poster="media/bayes-vs-gd.jpg"><source src="media/bayes-vs-gd.mp4" type="video/mp4"></video>
+    <figcaption>μP, width $N=65{,}536$, the 12-point bump. Dots: 4,000 of gradient descent's neurons $(w,b)$ as it trains from a prior draw; shading: the Bayes law of §15. Gradient descent moves each neuron until the 12 points are fitted and then stops, so its neurons lie on thin curves while the posterior fills broad clouds. The energy of its features ends at 7.51, against 7.13 for the Bayes law: close, but a quench is not equilibrium.</figcaption>
+  </figure>
+</section>
+
+<section id="mean-field">
+  <h2><span class="n">13</span>Neurons become a distribution</h2>
+  <p>Neurons are exchangeable, so a network is an average over its neurons, $f(x)=\tfrac{1}{\sqrt\kappa}\tfrac1N\sum_ia_i\,\varphi_{w_i}(x)$. As $N\to\infty$ at fixed $\kappa$ the average becomes an expectation over a law $\rho(w,a)$:</p>
+  $$f(x)\ \longrightarrow\ \frac{1}{\sqrt\kappa}\,\mathbb E_\rho\big[a\,\varphi_w(x)\big].$$
+  <p>Under the prior the readout $a$ is independent of $w$ with mean zero, so this average vanishes: a law that fits must couple each neuron's readout to its input weights. The rest of Part III finds that law.</p>
+  <figure class="vid">
+    <video controls playsinline preload="none" width="1920" height="1080" poster="media/law-neurons-function.jpg"><source src="media/law-neurons-function.mp4" type="video/mp4"></video>
+    <figcaption>Neurons drawn from the posterior law of the bump (μP), coloured by their readout, and the network they make. With 6 neurons it is a few tanh steps; with 796 the cloud takes the law's shape; as $N\to\infty$ the cloud becomes the density and the network its average, which interpolates the 12 points (largest error 0.54, 0.084 and 0.021 at $N=10$, 1000 and 65,536).</figcaption>
+  </figure>
+</section>
+
+<section id="tilt">
+  <h2><span class="n">14</span>Why the law is tilted</h2>
+  <p>Bayes conditions $N$ iid neurons on one number per data point: their average. Conditioning iid draws on an average tilts each of them exponentially, with one multiplier per constraint (Sanov's theorem, or Gibbs conditioning). For one point $(x_0,y_0)$, with $z=(wx_0+b)/\sqrt2$:</p>
+  $$\rho(z,a)\propto\mathcal N(z;0,1)\,\mathcal N(a;0,1)\,e^{\lambda a\tanh z},\qquad \lambda=\frac{\sqrt\kappa\,y_0}{K},\quad K=\mathbb E_\rho\big[\tanh^2z\big],$$
+  <p>and $-\tfrac1N\log Z_D\to\mathrm{KL}(\rho\Vert p_0)$, the price per neuron of fitting.</p>
+  <figure class="vid">
+    <video controls playsinline preload="none" width="1920" height="1080" poster="media/law-tilt.jpg"><source src="media/law-tilt.mp4" type="video/mp4"></video>
+    <figcaption>One point, $x_0=1$ and $y_0=1.2$, in μP. Exact posterior samples of $N$ neurons (middle) against the prior (left) and the predicted tilt (right, $\lambda=2.02$). From $N=10$ on no prior network reaches $y_0$, yet each posterior neuron only leans a little: its readout given its input follows $\lambda\tanh z$ (slope 1.81 at $N=1$, 2.00 from $N\approx10$). At $N=1$ the single neuron must fit alone and sits on the curve $a\tanh z=y_0$. The price is 1.41 nats per neuron.</figcaption>
+  </figure>
+</section>
+
+<section id="derivation">
+  <h2><span class="n">15</span>The derivation in three steps</h2>
+  <p>For $P$ points the same argument gives one law for every neuron. With the readout integrated out the derivation is exact up to the last step.</p>
+  <p><strong>1. Integrate out the readout (exact).</strong> Given the hidden weights, $f(X)=\tfrac{1}{\gamma\sqrt N}\Phi a$ with $\Phi_{\mu i}=\varphi_{w_i}(x_\mu)$ is linear in the Gaussian readout. Conditioning on $f(X)=y$ leaves</p>
+  $$p_B(W\mid D)\propto\prod_{i=1}^N\mathcal N(w_i;0,I)\;\exp\!\Big[-\tfrac{\gamma^2}{2}\,y^\top K_N^{-1}y-\tfrac12\log\det\big(2\pi K_N/\gamma^2\big)\Big],\qquad K_N=\tfrac1N\sum_{i=1}^N\varphi_{w_i}\varphi_{w_i}^\top,$$
+  <p>so the hidden weights enter only through the $P\times P$ kernel $K_N$, and the readout given them is a Gaussian conditioned on a linear constraint.</p>
+  <p><strong>2. Pull out one neuron (exact).</strong> One neuron changes the kernel by a rank-one term, $K_N=K_{-i}+\tfrac1N\varphi_{w_i}\varphi_{w_i}^\top$, and the Sherman–Morrison formula gives its law given all the others:</p>
+  $$p(w_i\mid W_{-i},D)\propto\mathcal N(w_i;0,I)\,(1+s_i)^{-1/2}\exp\!\Big[\frac{a_{-i}(w_i)^2}{2(1+s_i)}\Big],\qquad a_{-i}(w)=\sqrt\kappa\,y^\top K_{-i}^{-1}\varphi_w,\quad s_i=\tfrac1N\varphi_{w_i}^\top K_{-i}^{-1}\varphi_{w_i}.$$
+  <p>A neuron is up-weighted by the square of the readout the others would give it.</p>
+  <p><strong>3. Close the loop ($N\gg P$).</strong> The others' kernel becomes deterministic and the same for every neuron, $s_i=O(P/N)$ drops out, and the kernel must be the one the neurons produce. Putting the readout back (given $w$ it is Gaussian with unit variance), and with a small ridge $\eta$:</p>
+  <div class="ov-key">
+  $$\rho^\star(w,a)=\frac1Z\,\mathcal N(w;0,I)\,\mathcal N(a;0,1)\,e^{\sqrt{\htmlClass{c-kap}{\kappa}}\,a\,v^\top\varphi_w(X)},\qquad v=(K+\eta I)^{-1}y,\qquad K=\mathbb E_{\rho^\star}\big[\varphi_w(X)\,\varphi_w(X)^\top\big].$$
+  </div>
+  <p>The input weights alone follow $\nu^\star(w)\propto\mathcal N(w;0,I)\,e^{\frac{\kappa}{2}(v^\top\varphi_w(X))^2}$, the one-layer case of the Overview's tilted single-site law (<a href="./#energy-entropy">§5</a>), and given $w$ the readout is $\mathcal N\big(a(w),1\big)$ with $a(w)=\sqrt\kappa\,v^\top\varphi_w(X)$. The law fits by construction: $\tfrac{1}{\sqrt\kappa}\mathbb E_{\rho^\star}[a\,\varphi_w(X)]=K(K+\eta I)^{-1}y$, which is $y$ at $\eta=0$. Equivalently $\nu^\star$ minimises a convex functional, the free energy per neuron,</p>
+  $$F(\nu)=\htmlClass{c-ent}{\mathrm{KL}\big(\nu\Vert\mathcal N(0,I)\big)}+\htmlClass{c-kap}{\kappa}\,\htmlClass{c-en}{\tfrac12\,y^\top(K_\nu+\eta I)^{-1}y}=\htmlClass{c-ent}{-S}+\htmlClass{c-kap}{\kappa}\,\htmlClass{c-en}{E},\qquad -\tfrac1N\log Z_D\to F(\nu^\star).$$
+  <p>This is the fixed-$P$ μP posterior (<a class="cite" data-arxiv="2502.07998" href="https://arxiv.org/abs/2502.07998">Lauditi, Bordelon &amp; Pehlevan 2025</a>) written out for one hidden layer.</p>
+  <figure class="vid">
+    <video controls playsinline preload="none" width="1920" height="1080" poster="media/law-derivation.jpg"><source src="media/law-derivation.mp4" type="video/mp4"></video>
+    <figcaption>The three steps on one exact posterior sample: $N=8192$ neurons on 32 points of $\sin 9x$, μP, exact constraint ($\eta=0$). Step 1: the $8192\times32$ matrix of neuron outputs, each row a tanh step, and its kernel $K_N$. Step 2: the exact conditional of one neuron, which depends on the others only through $K_{-i}$; its rank-one term is $2\times10^{-4}$ of $K_N$. Goal: the 8,192 neurons sit where $\rho^\star$ puts them, and their readouts lean on $a(w)$ with slope 1.00 and spread 1.01.</figcaption>
+  </figure>
+</section>
+
+<section id="fixed-point">
+  <h2><span class="n">16</span>Solving the fixed point</h2>
+  <p>The obvious loop (draw neurons from $\rho$, build $K$, recompute $\rho$) does not converge: at the solution the map has an eigenvalue near $-23$, so every step overshoots and the loop flips between two laws for ever. A small step, $K\leftarrow0.95\,K+0.05\,K_{\rm new}$, converges geometrically. (The clips solve the law by Newton's method on the concave dual of $F$, in $P$ variables, and check the duality gap.)</p>
+  <figure class="vid">
+    <video controls playsinline preload="none" width="1920" height="1080" poster="media/law-fixed-point.jpg"><source src="media/law-fixed-point.mp4" type="video/mp4"></video>
+    <figcaption>The damped loop on the bump (12 points, μP, infinite width), starting from the prior. The neurons move into wells, the kernel changes and the fit improves; after 300 steps $F=11.889$, the minimum that Newton's method finds, with test error 0.0014.</figcaption>
+  </figure>
+</section>
+
+<section id="wells">
+  <h2><span class="n">17</span>Why the neurons sit where they do</h2>
+  <p>Write the law of the input weights as a Boltzmann factor, $\nu^\star(w)\propto e^{-U(w)}$, with the landscape</p>
+  <div class="ov-key">
+  $$U(w)=\underbrace{\tfrac12|w|^2}_{\text{prior bowl}}-\underbrace{\tfrac12\,a(w)^2}_{\text{readout gain}},\qquad a(w)=\sqrt{\htmlClass{c-kap}{\kappa}}\;v^\top\varphi_w(X),\quad v=(K+\eta I)^{-1}y.$$
+  </div>
+  <p>A neuron is pulled to where its outputs on the data line up with $v$, which weights most the parts of $y$ the current kernel fits worst, and is held back by the prior. A tanh neuron $(w,b)$ is a step at $x=-b/w$ with steepness $|w|$, so the wells say which steps the target needs:</p>
+  <ul>
+    <li>Bump: four lobes near $w\approx\pm4$, $b\approx\pm1.7$, which are steps on the bump's flanks, and two near $w\approx0$, neurons that act as constants. The wells are shallow (about 1.9 below the bottom of the bowl), so the law stays broad.</li>
+    <li>$\sin 9x$: thin streaks along the rays $b=-x_0w$, where $x_0$ is a zero of $\sin 9x$, at $|w|\approx10$–20: steep steps exactly where the target changes sign.</li>
+  </ul>
+  <p>Each readout then leans on $a(w)$. This is why the posterior's neurons form broad clouds over the wells, while gradient descent's neurons, which stop as soon as the data are fitted, lie on thin curves (§12). The next two sections show the landscape as the exchange rate and the data change.</p>
+</section>
+
+<section id="kappa">
+  <h2><span class="n">18</span>From NTK to κ → ∞</h2>
+  <p>The dial $\kappa$ sets the exchange rate between <span class="c-ent">entropy</span>, the cost of moving neurons away from the prior, and <span class="c-en">energy</span>, the readout's cost of fitting with the features it has. There are two ways to get lucky: keep typical features and pay the readout's energy, or move the features so that fitting is cheap and pay entropy instead.</p>
+  <ul>
+    <li><span class="c-kap">$\kappa\to0$</span> (NTK): entropy costs at rate one while energy is weighted by $\kappa$, so nothing moves. $\nu^\star$ is the prior, and Bayes is GP regression with the prior kernel $\mathbb E_{\nu_0}[\varphi\varphi^\top]$, the NNGP posterior (<a class="cite" data-arxiv="2006.10541" href="https://arxiv.org/abs/2006.10541">Hron et al. 2020</a>). That is not the tangent-kernel regression that gradient descent gives in NTK scaling.</li>
+    <li><span class="c-kap">$\kappa=1$</span> (μP): entropy is traded against energy, and neurons fill the wells.</li>
+    <li><span class="c-kap">$\kappa\to\infty$</span>: energy dominates. Neurons condense onto a few steep wells and buy the fit with a large entropy cost.</li>
+  </ul>
+  <p>Feature learning, in Bayes language, is lowering the entropy to lower the energy. With $S=-\mathrm{KL}\le0$, $F=\kappa E-S$ and $dF/d\kappa=E$.</p>
+  <figure class="vid">
+    <div class="vid-tabs" role="group" aria-label="Target">
+      <button type="button" aria-pressed="true" data-src="media/law-kappa-bump.mp4">smooth target (bump)</button>
+      <button type="button" aria-pressed="false" data-src="media/law-kappa-hf.mp4">hard target ($\sin 9x$)</button>
+    </div>
+    <video controls playsinline preload="none" width="1920" height="1080" poster="media/law-kappa-bump.jpg"><source src="media/law-kappa-bump.mp4" type="video/mp4"></video>
+    <figcaption>The law solved on a grid at every $\kappa$ from $10^{-4}$ to 1000 (12 points). Top: $\nu^\star(w,b)$, the entropy density $\nu^\star\log(\nu^\star/\nu_0)$ and the landscape $U$ (log colour). Bottom: the fit, the kernel $K(x,x_0)$, and $S$, $\kappa E$, $E$ and $F$ against $\kappa$. Bump at $\kappa=1$: $S=-4.76$, $\kappa E=7.13$, $F=11.9$. $\sin 9x$ at $\kappa=1$: $S=-57.2$, $\kappa E=77.7$, $F=135$; at $\kappa=1000$ the neurons reach radius 51 and $S=-867$. The energy falls smoothly with $\kappa$: one hidden layer has no phase transition.</figcaption>
+  </figure>
+</section>
+
+<section id="data">
+  <h2><span class="n">19</span>Adding data</h2>
+  <p>At fixed $\kappa$ the free energy grows as points arrive. A new point $(x',y')$ costs at most</p>
+  $$\Delta F\le\frac{\htmlClass{c-kap}{\kappa}\,\big(y'-\bar f(x')\big)^2}{2\big(s^2(x')+\eta\big)},$$
+  <p>with $\bar f$ the current posterior mean and $s^2(x')$ the posterior kernel's Schur complement at $x'$, its uncertainty there: surprising points are expensive, predictable ones nearly free.</p>
+  <figure class="vid">
+    <div class="vid-tabs" role="group" aria-label="Target">
+      <button type="button" aria-pressed="true" data-src="media/law-landscape-bump.mp4">smooth target (bump)</button>
+      <button type="button" aria-pressed="false" data-src="media/law-landscape-hf.mp4">hard target ($\sin 9x$)</button>
+    </div>
+    <video controls playsinline preload="none" width="1920" height="1080" poster="media/law-landscape-bump.jpg"><source src="media/law-landscape-bump.mp4" type="video/mp4"></video>
+    <figcaption>μP at infinite width, from 1 to 64 points. Top: the fit, the law, the entropy density and the landscape. Bottom: $F=\kappa E-S$ against $P$; the cost of each new point (grey) against its bound (orange); and $F$ along laws that spend more or less entropy than Bayes, which is U-shaped with its minimum at the Bayes law for every $P$. The bump is learned by 8 points, after which a new point costs at most 0.08. $\sin 9x$ jumps at the third point, when the oscillation appears, and reaches $F=158$ at 64 points, 13 times the bump.</figcaption>
+  </figure>
+  <figure class="vid">
+    <div class="vid-tabs" role="group" aria-label="Target">
+      <button type="button" aria-pressed="true" data-src="media/law-data-bump.mp4">smooth target (bump)</button>
+      <button type="button" aria-pressed="false" data-src="media/law-data-hf.mp4">hard target ($\sin 9x$)</button>
+    </div>
+    <video controls playsinline preload="none" width="1920" height="1080" poster="media/law-data-bump.jpg"><source src="media/law-data-bump.mp4" type="video/mp4"></video>
+    <figcaption>The same sweep in three regimes side by side: $\kappa=0$ (NTK: the prior's kernel), $\kappa=1$ (μP) and $\kappa=1000$, each with its kernel, its neurons and its entropy and energy bars. With few points the regimes look alike. On the bump all three learn, NTK far more slowly; on $\sin 9x$, from about 16 points μP and $\kappa=1000$ reorganise their kernels and neurons and lock onto the oscillation, while the NTK posterior never does.</figcaption>
+  </figure>
+  <figure class="vid">
+    <img src="media/law-learning-curves.png" width="1600" height="576" alt="Test error against the number of training points for the bump and for sin 9x, for kappa = 0, 1 and 1000." loading="lazy">
+    <figcaption>Test error (relative mean squared error, mean over 8 data sets) against $P$.</figcaption>
+  </figure>
+  <table class="dd-table">
+    <thead><tr><th>test error at $P=$</th><th>8</th><th>16</th><th>32</th><th>64</th></tr></thead>
+    <tbody>
+      <tr><td>bump, NTK ($\kappa=0$)</td><td>0.28</td><td>0.19</td><td>0.14</td><td>0.095</td></tr>
+      <tr><td>bump, μP ($\kappa=1$)</td><td>0.046</td><td>0.0023</td><td>0.0011</td><td>0.00024</td></tr>
+      <tr><td>bump, $\kappa=1000$</td><td>0.079</td><td>0.027</td><td>0.0023</td><td>0.0002</td></tr>
+      <tr><td>$\sin 9x$, NTK ($\kappa=0$)</td><td>1.4</td><td>1.2</td><td>1.1</td><td>1.1</td></tr>
+      <tr><td>$\sin 9x$, μP ($\kappa=1$)</td><td>1.5</td><td>0.58</td><td>0.17</td><td>0.014</td></tr>
+      <tr><td>$\sin 9x$, $\kappa=1000$</td><td>1.3</td><td>0.48</td><td>0.14</td><td>0.026</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="lenses">
+  <h2><span class="n">20</span>One dial, two lenses</h2>
+  <table class="dd-table">
+    <thead><tr><th></th><th>gradient descent (Parts I–II)</th><th>Bayes (Part III)</th></tr></thead>
+    <tbody>
+      <tr><td>feature learning is</td><td>the NTK moves</td><td>the hidden layers spend entropy</td></tr>
+      <tr><td>NTK, $\kappa=1/N$</td><td>the kernel is frozen, and training has a closed form</td><td>all energy: the posterior keeps the prior's kernel</td></tr>
+      <tr><td>μP, $\kappa=\gamma_0^2$</td><td>μP slows the readout, so the features must move</td><td>μP makes the readout expensive, so the features move</td></tr>
+    </tbody>
+  </table>
+  <p>The same exchange rate $\kappa$ decides both. For width much larger than data, the Bayesian answer is a fixed point for the kernel.</p>
+</section>
+
+<section id="assumptions">
+  <h2><span class="n">21</span>What the derivation assumed</h2>
+  <ul>
+    <li><strong>Width much larger than data</strong> ($N\gg P$ at fixed $P$): finitely many order parameters, so the saddle point is exact, and the dropped terms ($s_i$ and the $\log\det$ correction) are $O(P/N)$.</li>
+    <li><strong>One fixed point.</strong> With one hidden layer $F$ is convex, so there is a single phase; metastable phases need depth.</li>
+    <li><strong>A normalisable tilt.</strong> For tanh, $a(w)^2$ is bounded and the prior bowl wins at large $|w|$. For ReLU, $a(w)^2$ grows like $|w|^2$, as fast as the bowl, so above a threshold in $\kappa$ the tilt is not normalisable and this derivation breaks down (the Overview's $\kappa\to\infty$ corner, where the law sits on a few ridge atoms).</li>
+    <li><strong>Few data per neuron.</strong> At $P\propto N$ the dropped terms are as large as the kept ones, so the closure has to be resummed. In μP that regime is open (<a href="open-problems.html">op-07</a>); the map's own experiments find no finite limit there.</li>
+  </ul>
+</section>
+
+<section id="not-generalisation">
+  <h2><span class="n">22</span>Feature learning is not generalisation</h2>
+  <p>Every measure of feature learning on this page (how far the kernel moves, how much entropy the neurons spend) measures strength. Strength is not quality: networks move their features on random labels too.</p>
+  <figure class="vid">
+    <video controls playsinline preload="none" width="1920" height="1080" poster="media/fl-not-generalisation.jpg"><source src="media/fl-not-generalisation.mp4" type="video/mp4"></video>
+    <figcaption>The same μP network ($N=8192$, same start, same 32 inputs) trained by gradient flow on $\sin 9x$ (left) and on random labels of the same size (right). Both kernels move a lot, with $\Vert K_t-K_0\Vert/\Vert K_0\Vert$ reaching 5.1 and 7.6, but the test error is 0.057 on $\sin 9x$ and 2.37 on noise, worse than predicting zero. How far the kernel moves says nothing about whether the move helps.</figcaption>
+  </figure>
+  <p>Networks beat their kernels on hard targets because their features move, but moving alone guarantees nothing. What makes the moved features good is open (<a class="cite" data-arxiv="2507.19680" href="https://arxiv.org/abs/2507.19680">Göring et al. 2025</a>; op-04 on the <a href="open-problems.html">open-problems page</a>).</p>
+</section>
+
+<p class="ov-status">The animations were made by the map's team for a lecture on 6 November 2026, from exact computations described in each caption: grid solutions of the width-limit law (duality gaps below $10^{-7}$), exact finite-width posterior samples, and gradient flow. They have not been peer reviewed. §15 writes out, for one hidden layer, the fixed-$P$ μP posterior of Lauditi, Bordelon &amp; Pehlevan 2025; the scaling argument of §8 and the solution of §3–4 are standard.</p>
+
+</main>
+<footer id="foot" class="site-foot"></footer>
+</body>
+</html>

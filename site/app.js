@@ -889,6 +889,38 @@
     cards.forEach(function (c) { if (c.getAttribute("aria-controls") === target) show(c, true); });
   }
 
+  // Clips (Overview panels, Deep dive): one plays at a time, a clip pauses when it leaves the screen, and
+  // the buttons of a .vid-tabs row switch the figure's clip (the poster has the clip's name with .jpg).
+  function setupVideos() {
+    var vids = Array.prototype.slice.call(document.querySelectorAll("figure.vid video"));
+    if (!vids.length) return;
+    document.addEventListener("play", function (ev) {
+      vids.forEach(function (v) { if (v !== ev.target && !v.paused) v.pause(); });
+    }, true);
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (!e.isIntersecting && !e.target.paused) e.target.pause(); });
+      });
+      vids.forEach(function (v) { io.observe(v); });
+    }
+    document.querySelectorAll("figure.vid .vid-tabs").forEach(function (tabs) {
+      var video = tabs.parentNode.querySelector("video");
+      var buttons = Array.prototype.slice.call(tabs.querySelectorAll("button[data-src]"));
+      buttons.forEach(function (b) {
+        b.addEventListener("click", function () {
+          if (b.getAttribute("aria-pressed") === "true" || !video) return;
+          var playing = !video.paused, src = b.getAttribute("data-src");
+          buttons.forEach(function (o) { o.setAttribute("aria-pressed", String(o === b)); });
+          video.pause();
+          video.poster = src.replace(/\.mp4$/, ".jpg");
+          video.querySelector("source").src = src;
+          video.load();
+          if (playing) video.play();
+        });
+      });
+    });
+  }
+
   // ------------------------------------------------------------------- start
 
   function start(data) {
@@ -899,7 +931,7 @@
     if (PAGE === "table") initTable();
     else if (PAGE === "mechanisms") initMechanisms();
     else if (PAGE === "open-problems") initOpenProblems();
-    else if (PAGE === "overview") initOverview();
+    else if (PAGE === "overview" || PAGE === "deep-dive") initOverview();
     else if (PAGE === "graph" && window.FLGraph) {
       window.FLGraph.init(D, {
         vocab: V, el: el, lab: lab, labs: labs, desc: desc, authorShort: authorShort, math: math,
@@ -914,7 +946,9 @@
   }
 
   setupTheme();
+  setupVideos();
   if (PAGE === "overview") { setupFlip(); setupCards(); math(document.getElementById("content")); }
+  if (PAGE === "deep-dive") math(document.getElementById("content"));
   if (PAGE === "graph") math(document.querySelector(".gr-head"));
   fetch("data.json", { cache: "no-cache" })
     .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })

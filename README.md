@@ -19,7 +19,8 @@ A public map of the theory literature on feature learning in neural networks, fo
 | `scripts/validate.py` | Checks papers, statements, experiments, open problems and the queue against the schema, the vocabulary, the length limits and the public-site rule. |
 | `scripts/build.py` | Runs the validator, then builds the static site into `_site/` with one `data.json`. |
 | `scripts/flmap.py` | Loading code shared by both scripts. |
-| `site/` | The front end: five HTML pages (`overview.html`, published as the landing page; `table.html`; `graph.html`; mechanisms; open problems), one stylesheet, three scripts (`app.js`; `anim.js` for the overview animations; `graph.js` for the graph, with d3). No framework. |
+| `site/` | The front end: six HTML pages (`overview.html`, published as the landing page; `deep-dive.html`; `table.html`; `graph.html`; mechanisms; open problems), one stylesheet, three scripts (`app.js`; `anim.js` for the overview animations; `graph.js` for the graph, with d3). No framework. |
+| `site/media/` | The computed clips of the Deep dive page and of four Overview panels (MP4, H.264, index at the front so playback starts at once), one poster frame each (JPEG) and one still figure. They are renders of the team's lecture animations, whose code and data live outside this repository. |
 | `.github/workflows/` | `deploy.yml` builds and deploys to GitHub Pages on every push to `main`; `validate.yml` runs the validator and a build on every pull request. |
 | `.github/ISSUE_TEMPLATE/add-paper.yml` | Issue form for suggesting a paper (label `add-paper`). |
 | `CITATION.cff` | How to cite the map. GitHub's "Cite this repository" button reads it, and the build turns it into the "How to cite" block (plain text and BibTeX, stamped with the build date and commit) at the foot of every page. |
